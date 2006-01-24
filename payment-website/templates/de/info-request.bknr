@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_extra"
+  title="REGENWALD für SAMBOJA LESTARI - News"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<bos:send-info-request email="$(email)">
+		<p>
+			<span class="headline">
+				Vielen Dank für Ihr Interesse
+			</span>
+		</p>
+
+		<p>
+			Wir werden Ihnen gelegentlich Informationen über BOS und das Projekt Samboja Lestari per Email zuschicken.
+		</p>
+		<p>
+			Bei Fragen wenden Sie sich bitte per Email an service@create-rainforest.org.
+		</p>
+	</bos:send-info-request>
+</bknr:toplevel>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_main"
+  title="REGENWALD für SAMBOJA LESTARI"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<div id="content_main">
+		<div id="textbox_content_bigger">
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td colspan="2"><span class="headline">Ein m², der es in sich hat <br /></span></td>
+					<td align="center">
+						<img src="/images/pfeil_back.gif" width="10" height="9" alt="" />
+						<a href="javascript:history.back()" class="titlegray">
+							zurück
+						</a>
+					</td>		
+				</tr>
+				<tr><td height="16"> </td>
+				</tr>	
+				<tr>			
+					<td colspan="3">
+						Zur Finanzierung des Naturreservates hat BOS ein System zum symbolischen Landkauf entwickelt.
+						<br /><br />
+						<a href="bestellung" class="titlered">
+							Schaffen Sie Regenwald für nur 3 Euro pro m²!
+						</a> 
+						<br /><br />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						Sie finanzieren den Landkauf, ökologische Aufforstung, eine Baumschule, ökologische Landwirtschaft,
+						Zuckerpalmplantagen, Löhne für indonesische Mitarbeiter, Überwachung und Schutz des Gebietes,
+						Feuerbekämpfung, Umweltbildung, Infrastruktur, Forschung und Arboretum, Orang-Utan-Inseln und das
+						Malaienbärareal.
+					</td>
+					<td>
+						<img src="/images/projekt_pic.jpg" width="240" height="120" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<br />
+						Leisten Sie einen Beitrag für eine bessere Zukunft und beobachten Sie den Projektverlauf von Samboja
+						Lestari im Internet. Jeder m², den Sie symbolisch erwerben, wird Ihnen durch ein persönliches Profil
+						zugeordnet. Über ein Kennwort können Sie diese m² jederzeit leicht wieder finden.
+						Es können auch kurze Infotexte "auf" den jeweiligen m² hinterlassen werden, um sich mit anderen
+						Regenwaldsponsoren auszutauschen.  Besucher dieser Internetseite dürfen in alle m² und deren
+						persönliche Profile einblicken.
+						<br /><br />
+						<b>Beobachten Sie "Ihre" Fläche aus unterschiedlichen Perspektiven bei der Entwicklung. BOS bietet Ihnen
+						einen transparenten Einblick u.a. über Satellitenbilder und berichtet regelmäßig über die
+						Fortschritte vor Ort.</b>
+						<br /><br />
+						Unterstützen Sie das Projekt und Sie erhalten eine Regenwald-Urkunde. Sie können m² auch an Ihre
+						Freunde, Verwandten und Bekannten verschenken.
+						<br /><br />
+						Machen Sie mit und sehen Sie Regenwald wachsen!
+
+					</td>
+				</tr>
+				<tr>
+					<td height="6"> 
+					</td>
+				</tr>				
+			</table>	
+		</div>	
+	</div>
+	<!-- /container content_main -->
+</bknr:toplevel>

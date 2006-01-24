@@ -1,0 +1,186 @@
+(in-package :cl-user)
+
+(defpackage :bos.m2.config
+  (:export #:+width+
+	   #:+nw-utm-x+
+	   #:+nw-utm-y+
+	   #:+m2tile-width+
+	   #:+price-per-m2+
+
+	   #:*office-mail-address*
+	   #:*mail-amount*
+	   #:*pdf-base-directory*
+	   #:*cert-mail-directory*
+	   #:*cert-download-directory*
+	   #:*receipt-mail-directory*
+	   #:*receipt-download-directory*
+	   #:*cert-mail-template*
+	   #:*cert-download-template*
+	   #:*receipt-mail-template*
+	   #:*receipt-download-template*
+	   #:*num-coords-per-line*
+	   #:*cert-daemon-poll-seconds*
+	   #:*manual-contract-expiry-time*
+	   #:*online-contract-expiry-time*))
+
+(defpackage :bos.m2
+  (:use :cl
+	:cl-ppcre
+	:cl-interpol
+	:bknr.utils
+	:bknr.indices
+	:bknr.datastore
+	:bknr.user
+	:bknr.web
+	:bknr.images
+	:bknr.statistics
+	:bos.m2.config
+	:net.post-office
+	:cl-gd)
+  (:shadowing-import-from :cl-interpol #:quote-meta-chars)
+  (:export #:m2-store
+           #:*m2-store*
+
+           #:get-tile
+           #:ensure-tile
+	   #:get-map-tile
+	   #:ensure-map-tile
+	   #:tile-nw-x
+	   #:tile-nw-y
+	   #:tile-absolute-x
+	   #:tile-absolute-y
+	   #:tile-height
+	   #:tile-width
+	   #:image-tile-original-image
+	   #:image-tile-current-image
+	   #:image-tile-image
+	   #:image-tile-image-generated-time
+	   #:image-tile-changed-time
+	   #:image-tile-layers
+	   #:current-image
+
+	   #:background #:areas #:contracts #:palette
+
+           #:m2
+           #:get-m2
+           #:ensure-m2
+           #:m2-contract
+	   #:m2-num
+	   #:m2-num-string
+	   #:m2-num-to-utm
+           #:m2-x
+           #:m2-y
+	   #:m2-utm-x
+	   #:m2-utm-y
+	   #:escape-nl
+
+           #:sponsor
+           #:make-sponsor
+	   #:sponsor-p
+	   #:sponsor-master-code
+           #:sponsor-info-text
+           #:sponsor-country
+           #:sponsor-contracts
+           #:sponsor-set-info-text
+           #:sponsor-set-country
+	   #:sponsor-id
+	   #:country
+	   #:info-text
+
+           #:contract
+           #:make-contract
+	   #:contract-p
+           #:get-contract
+           #:contract-sponsor
+           #:contract-paidp
+           #:contract-date
+           #:contract-m2s
+	   #:contract-color
+	   #:contract-cert-issued
+           #:contract-set-paidp
+	   #:contract-price
+	   #:contract-issue-cert
+	   #:contract-pdf-pathname
+	   #:contract-pdf-url
+	   #:contract-download-only-p
+	   #:make-m2-javascript
+	   #:paidp
+
+	   #:allocation-area
+           #:make-allocation-area
+	   #:make-allocation-rectangle
+	   #:all-allocation-areas
+	   #:allocation-area-bounding-box
+	   #:allocation-area-active-p
+	   #:allocation-area-top
+	   #:allocation-area-left
+	   #:allocation-area-height
+	   #:allocation-area-width
+	   #:gauge
+	   #:allocation-area-contracts
+	   #:allocation-area-total-m2s
+	   #:allocation-area-free-m2s
+	   #:allocation-area-vertices
+	   #:allocation-area-percent-used
+	   #:left #:top #:width #:height #:active-p
+
+	   ;; bitmap routines for drawing of allocation areas
+	   #:make-vga-colors
+	   #:draw-contracts
+
+	   ;; pois
+	   #:*current-language*
+	   #:slot-string
+	   #:set-slot-string-values
+
+	   #:poi-image
+	   #:poi-image-poi
+	   #:poi-image-title
+	   #:poi-image-subtitle
+	   #:poi-image-description
+	   #:poi-airals
+	   #:airals
+	   #:poi-panoramas
+	   #:panoramas
+	   #:make-poi-image
+	   #:update-poi-image
+	   #:poi
+	   #:poi-name
+	   #:poi-published
+	   #:poi-title
+	   #:poi-subtitle
+	   #:poi-description
+	   #:poi-area
+	   #:poi-icon
+	   #:poi-images
+	   #:poi-complete
+	   #:title #:subtitle #:description ; for slot-string access
+	   #:make-poi
+	   #:update-poi
+	   #:find-poi
+	   
+	   #:poi-center-x
+	   #:poi-center-y
+	   #:make-poi-javascript
+
+	   ;; news
+	   #:news-item
+	   #:make-news-item
+	   #:update-news-item
+	   #:all-news-items
+	   #:news-item-time
+	   #:news-item-title
+	   #:news-item-text
+
+	   #:mail-fiscal-certificate-to-office
+	   #:mail-instructions-to-sponsor
+	   #:mail-transfer-indication
+	   #:mail-info-request
+	   #:mail-request-parameters
+
+	   #:*cert-download-directory*))
+
+(defpackage :bos.m2.cert-generator
+  (:use :cl :extensions :bos.m2.config :bknr.utils :cl-ppcre :cl-interpol :cl-gd)
+  (:shadowing-import-from :cl-interpol #:quote-meta-chars)
+  (:export #:cert-daemon))

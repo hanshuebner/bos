@@ -1,0 +1,53 @@
+Deployment des BOS-Servers
+==========================
+
+Vorbereitung
+------------
+
+  - CMUCL 19a installieren, so dass "lisp" im Pfad ist
+
+  - Komplettes cvs auschecken:
+      $ cvs -d :ext:bknr.net:/home/bknr/cvs co -d bknr.net .
+
+Image bauen
+-----------
+
+  - Im BOS-Verzeichnis eingeben
+      bknr.net/bos$ ./build.sh --clean
+    (--clean loescht fasls vor dem Kompilieren.)
+
+  - Heraus kommt das Imagefile "bos.core", das auf den Kundenserver
+    kopiert wird.
+
+
+Konfiguration
+-------------
+
+   - Das Image erwartet zum Start seine Konfigfiles im aktuellen
+     Verzeichnis.  Die Konfigfiles enthalten die beim Serverstart zu
+     uebergebenden Keywordparameter.  Sie koennen prinzipiell auch leer
+     sein, dann werden Defaults angekommen.  Die Konfigfiles sind
+     derzeit: "m2.rc" fuer die Datenbank sowie "web.rc" fuer den
+     Webserver.  Beispiele:
+
+     m2.rc:
+     --------
+       :directory "home:tmp/mein-store/"
+     --------
+
+     web.rc:
+     --------
+       :port 8888
+       :listeners 0
+     --------
+
+
+Startup
+-------
+
+   - Das Corefile starten mit:
+       $ lisp -core bos.core
+
+   - Zum Debuggen kann man auch eingeben:
+       $ lisp -core bos.core -nostart
+     Dann kann man das Image begutachten, bevor der Server gestartet ist.

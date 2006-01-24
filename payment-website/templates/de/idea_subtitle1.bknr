@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_main"
+  title="REGENWALD für SAMBOJA LESTARI"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<!-- container content_main -->
+	<div id="content_main">
+		<div id="textbox_content_bigger">
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td colspan="2">
+						<span class="headline">
+							Landwirtschaft, Aufforstung und Schutz <br /> - eine gute Kombination
+						</span>
+					</td>
+					<td align="center"><img src="/images/pfeil_back.gif" width="10" height="9" alt="" />
+						<a href="javascript:history.back()" class="titlegray">
+							zurück
+						</a>
+					</td>		
+				</tr>
+				<tr>
+					<td height="6" width="150"><img src="/images/trans.gif" width="160" height="6" alt="" /> </td>
+					<td><img src="/images/trans.gif" width="150" height="6" alt="" /></td>
+					<td width="150"><img src="/images/trans.gif" width="150" height="6" alt="" /></td>
+				</tr>				
+				<tr>
+					<td align="left"><img src="/images/pic_headline1b_big.jpg" width="149" height="180" alt="" border="0" /></td>
+					<td colspan="2">
+Während der frühen Aufforstungsphase bauen die indonesischen Landwirte gewinnbringende Agrarprodukte zwischen den neu gepflanzten Bäumen an. Landwirtschaft und Aufforstung beeinflussen sich positiv durch viele Faktoren. 
+					<br /><br />Agrarprodukte schützen die jungen Tropenbäume vor dem Überwuchern mit Alang-Alang-Gras. Bäume verbessern die Boden- qualität und spenden Schatten. 
+					<br /><br />		
+					Früchte wie Papaya und Ananas werden den Bauern garantiert von BOS abgekauft,  regional vermarktet oder dienen der Eigenversorgung. Allein für die Versorgung der Orang-Utans in der nahe gelegenen Rehabilitationsstation Wanariset werden rund 1000 kg Früchte täglich benötigt.</td>
+					<td></td>			
+				</tr>
+				<tr><td height="6"></td></tr>
+				<tr>
+					<td colspan="3">				
+					</td>			
+				</tr>	
+				<tr><td height="6"> </td></tr>
+				<tr>
+					<td colspan="2"><span class="headline">Das Schutz(ring)system</span></td>
+					<td rowspan="3">
+
+						<img src="/images/ring.jpg" width="215" height="150" border="0" alt="" />
+					</td>
+				</tr>
+				<tr><td height="6"> </td></tr>
+				<tr>
+					<td colspan="2">
+
+Rund um das Naturreservat wird ein <img
+src="/images/pfeil_link_on.gif" width="10" height="9" alt="" /> <a
+href="javascript:javascript:window_ringdetail();"
+class="content_green">Ring</a> aus Zuckerpalmplantagen angelegt. Über
+650 Familien werden vom Zucker als Hauptprodukt profitieren. Der Ring
+schützt das Naturreservat vor den gefürchteten Waldbränden als
+Feuerbarriere.<br /><br />Ein innerer Schutzring aus dicht wachsenden,
+stacheligen Salakpalmen verhindert das Eindringen von Menschen in das
+Schutzgebiet und das Ausbrechen von Orang-Utans. Die Früchte der
+Salakpalme sind zudem wohlschmeckende Nahrung für Mensch und Tier.
+
+					</td>
+				</tr>
+				<tr><td colspan="3">
+Ultraleichtflugzeuge und moderne Satellitentechnik unterstützen die ständige Überwachung der BOS-Projekte aus Luft und Weltraum. Illegaler Holzeinschlag sowie Brandrodung können so auch in Samboja Lestari sehr viel effektiver verfolgt werden.   
+					</td>
+				</tr>	
+			</table>		
+		</div>	
+	</div>	
+</bknr:toplevel>

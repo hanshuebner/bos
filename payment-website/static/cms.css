@@ -1,0 +1,53 @@
+/* definition fuer font-size generell */
+body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+	font-size: 150%;
+}
+
+h2 {
+	font-size: 130%;
+}
+
+h3 {
+	font-size: 120%;
+}
+
+h4 {
+	font-size: 110%;
+}
+
+h1, h2, h3, h4 {
+	font-weight: italic;
+}
+
+a.cmslink {
+	text-decoration: none;
+	color:#d0d0d0;
+	background-color:#118811;
+	padding-left:4px;
+	padding-right:4px;
+}
+
+a.cmslink:hover {
+	color:#118811;
+	background-color:#d0d0d0;
+}
+
+a.cmslink:active {
+	color:#118811;
+	background-color:#d0d0d0;
+}
+
+/* universal classes */
+
+.cmslink {
+	color:#118811;
+	background-color:#d0d0d0;
+}
+
+.footer {
+	font-size: 70%;
+}

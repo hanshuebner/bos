@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_extra"
+  title="REGENWALD für SAMBOJA LESTARI - Hilfe zur Satellitenkarte"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<h1 class="extra">Hilfe zur Satellitenkarte</h1>
+	<p class="text_content">
+		<p> Sie befinden sich in unserem Satelliten-Informationssystem.
+		Hier können Sie sich selbst ein Bild über das Projektgelände in Samboja Lestari machen, sowie nachsehen, wo
+		sich die von Ihnen gesponsorten Quadratmeter auf dem Gelände befinden. </p>
+		<p>
+		Auf der Übersichtskarte sehen Sie verschiedene Icons, die Sie anklicken können und die sie zu weiteren Bildern
+		führen:</p>
+		<span style="border-left:30px; border-right:30px">
+			<table border="0">
+				<tr>
+					<td width="20"> </td>
+					<td>
+						<img src="/images/punkt.gif" border="0" />
+					</td>
+					<td>
+						Hier befindet sich eine Einrichtung von BOS.
+					</td>
+					<td width="20"> </td>
+				</tr>
+				<tr>
+					<td width="20"> </td>
+					<td>
+						<img src="/images/palme.gif" border="0" />
+					</td>
+					<td>
+						Dieses Icon markiert einen sehenswürdigen Punkt auf dem Projektgelände.
+					</td>
+					<td width="20"> </td>
+				</tr>
+				<tr>
+					<td width="20"> </td>
+					<td>
+						<img src="/images/sale.gif" border="0" />
+					</td>
+					<td>
+						Verkaufsgebiet für Quadratmeter, hier können die Profile der
+						Quadratmetersponsoren einsehen.
+					</td>
+					<td width="20"> </td>
+				</tr>
+				<tr>
+					<td width="20"> </td>
+					<td>
+						<img src="/images/qm.gif" border="0" />
+					</td>
+					<td>
+						Hier sind "Ihre" Quadratmeter.  Dieses Icon wird nur angezeigt, wenn
+						Sie sich angemeldet haben.
+					</td>
+					<td width="20"> </td>
+				</tr>
+			</table>
+		</span>
+		<p> Über die Liste unter "Points of Interest" links gelangen Sie direkt zum von Ihnen angeklickten
+		sehenswürdigen Punkt. </p>
+		<p> Um aus einer der Unterebenen wieder zur Übersicht zu gelangen, klicken Sie bitte auf die links
+		oben angezeigte Übersichtskarte. </p>
+		<p> Falls Sie bereits Quadratmeter gesponsort haben, können Sie sich durch Eingabe Ihrer Sponsor-ID
+		und Ihres Kennworts oder Ihres Mastercodes in des Login-Feld links unten anmelden.  Sie haben
+		dann Zugriff auf Ihr Sponsoren-Profil und können Ihren Sponsoren-Status sowie ggf. Ihre Regenwald-Urkunde
+		im PDF-Format abrufen. </p>
+		<p> Wir wünschen Ihnen viel Spaß bei Ihrer virtuellen Entdeckungsreise nach Samboja Lestari! </p>
+	</p>					
+</bknr:toplevel>

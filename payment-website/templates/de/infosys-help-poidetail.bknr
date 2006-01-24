@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_extra"
+  title="REGENWALD für SAMBOJA LESTARI - Hilfe zur Satellitenkarte"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<h1 class="extra">Hilfe zur Satellitenkarte</h1>
+	<p class="text_content">
+		<p> Sie befinden sich in der Detail-Anzeige für einen interessanten Punkt (POI) auf dem Projektgelände
+		in Samboja Lestari.  Links oben in der Übersichtskarte bekommen Sie angezeigt, wo sich dieser POI
+		auf dem Gelände befindet.</p>
+		<p> Durch Klick auf einen der POI-Titel in der Liste links können Sie einen anderen POI anzeigen.</p>
+		<p> Oben rechts im Bild finden Sie sechs Detail-Fotos von diesem POI.  Durch Klick auf die
+		 Miniaturdarstellung können Sie das Foto vergrößert anzeigen.</p>
+		<p> Am unteren des Fotos finden Sie bis zu drei Schaltflächen mit den Titeln <strong>Sat-Karte</strong>,
+		<strong>Luftbild</strong> und <strong>Panorama</strong>.  Durch Klick auf eine der Schaltflächen können Sie
+		eine andere Ansicht des POI anzeigen.</p>
+		<p style="margin-left: 40px; margin-right: 40px;">
+		  <bl>
+		    <li><strong>Sat-Karte</strong> Ausschnitt aus dem Satellitenfoto des Projektgeländes von 2002</li>
+		    <li><strong>Luftbild</strong> Luftbild des POI, aufgenommen im Herbst 2004 von einem Leichtflugzeug</li>
+		    <li><strong>Panorama</strong> Panorama-Foto des POI, aufgenommen im Herbst des Jahres 2004.  Durch Klicken
+		        und Ziehen im Panoramabild können Sie die Ansicht verändern.</li>
+		  </bl>
+		</p>
+		<p> Durch Klick auf die Übersichtskarte links oben gelangen Sie wieder zurück zur POI-Übersicht.</p>
+	</p>
+</bknr:toplevel>

@@ -1,0 +1,117 @@
+<!--
+ ! DTD fuer Gesamtexport der Datenbank des BOS Onlinesystems
+ !
+ ! TODO:
+ !   - POI
+ !   - News-Artikel
+ !   - Systemkonfiguration
+ !   - Administrator-Accounts?
+ -->
+
+<!--
+ !
+ ! Erlaeuterungen:
+ !   - date bezeichnet den Zeitpunkt des Exports, nach ISO-Standard in der
+ !     Form "YYYY-MM-DD HH:MM:SS".
+ -->
+<!ELEMENT bos (sponsors?,allocation-areas?)>
+<!ATTLIST bos
+  date			CDATA	 #IMPLIED
+  >
+
+<!ELEMENT sponsors (sponsor*)>
+
+<!--
+ ! Sponsorenprofil
+ -->
+<!ELEMENT sponsor (contract*)>
+<!ATTLIST sponsor
+  database-id		CDATA	 #IMPLIED
+  profile-id		CDATA	 #REQUIRED
+  password		CDATA	 #IMPLIED
+  password-question	CDATA	 #IMPLIED
+  password-answer	CDATA	 #IMPLIED
+  full-name		CDATA	 #IMPLIED
+  email-address		CDATA	 #IMPLIED
+  info-text		CDATA	 #IMPLIED
+  country		CDATA	 #IMPLIED
+  >
+
+<!--
+ ! Verkaufstransaktion
+ -->
+<!ELEMENT contract (m2*)>
+<!ATTLIST contract
+  database-id		CDATA	 #IMPLIED
+  date			CDATA	 #REQUIRED
+  price			CDATA	 #REQUIRED
+  >
+
+<!--
+ ! Quadratmeter
+ !
+ ! Erlaeuterungen:
+ !   - Es werden sowohl die Koordinaten im UTM-Format als auch die interne
+ !     Quadratmeter-Nummer gespeichert.  Beim Import _muss_ sqm-num
+ !     angegeben sein, die uebrigen Werte sind optional aber werden,
+ !     falls angegeben, auf Uebereinstimmung mit sqm-num geprueft.
+ -->
+<!ELEMENT m2 EMPTY>
+<!ATTLIST m2
+  sqm-num		CDATA	 #REQUIRED
+  utm-x			CDATA	 #IMPLIED
+  utm-y			CDATA	 #IMPLIED
+  x			CDATA	 #IMPLIED
+  y			CDATA	 #IMPLIED
+  >
+
+<!--
+ ! Vergabegebiet
+ !
+ ! Alle Daten zur Beschreibung von Vergabegebieten und dem aktuellen
+ ! Zustand der Vergabe werden anhand von internen (x,y) Koordinaten gefuehrt.
+ -->
+<!ELEMENT allocation-areas (allocation-area*)>
+<!ELEMENT allocation-area (polygon,stripes?)>
+<!ATTLIST allocation-area
+  active		(yes|no) #REQUIRED
+  y                     CDATA    #REQUIRED
+  >
+
+<!--
+ ! Achsenparalleles Rechteck
+ -->
+<!ELEMENT rectangle EMPTY>
+<!ATTLIST rectangle
+  left			CDATA    #REQUIRED
+  top			CDATA    #REQUIRED
+  width			CDATA    #REQUIRED
+  height		CDATA    #REQUIRED
+  >
+
+<!--
+ ! Polygon dargestellt als Liste von Ecken.  Startpunkt ist gleichzeitig
+ ! Endpunkt und wird nicht doppelt aufgefuehrt.  Mindestens zwei Punkte
+ ! sind notwendig, damit sich ein Dreieck ergibt.
+ -->
+<!ELEMENT polygon (point,point,point*)>
+
+<!--
+ ! Punkt in der Ebene
+ -->
+<!ELEMENT point EMPTY>
+<!ATTLIST point
+  x			CDATA    #REQUIRED
+  y			CDATA    #REQUIRED
+  >
+
+<!--
+ ! Vergaberechteck
+ -->
+<!ELEMENT stripes (stripe*)>
+<!ELEMENT stripe (rectangle,seen?)>
+<!ATTLIST stripe
+  x			CDATA    #REQUIRED
+  y			CDATA    #REQUIRED
+  >
+<!ELEMENT seen (point*)>

@@ -1,0 +1,377 @@
+/* Basics */
+
+body {
+margin-top: 0px;
+margin-left: 0px;
+font-size: 100.1%;
+}
+
+/* area f&uuml;r usemap */
+#header_transgif {
+        margin-top : 1px;
+        margin-left : 195px;
+        height : 65px;
+        width : 575px;  
+        position : absolute;
+        z-index : 25;
+}
+
+/* Container */
+/* Container im oberen Bereich = header */
+#header {
+	position: relative;
+	z-index: 2;
+	margin-top: 25px;
+	margin-left: 50px;
+	width: 780px;
+	height: 92px;
+	visibility: visible;
+	display: block;
+	padding : 0px 0px 0px 0px;
+	background-repeat : no-repeat;
+}
+
+/* header für Extra- und News-Fenster */
+#header_extra {
+	position: relative;
+	z-index: 2;
+	margin-top: 5px;
+	margin-left: 5px;
+	width: 450px;
+	height: 40px;
+	visibility: visible;
+	display: block;
+	border-color : #666666;
+	border-style : solid;
+	border-width : 1px;
+	padding : 0px 0px 0px 0px;
+	background-image : url(../images/header_extra.gif);
+	background-repeat : no-repeat;
+}
+
+/* header für Infosystem Satellitenbild */
+#header_infosystem {
+	position: relative;
+	z-index: 2;
+	margin-top: 5px;
+	margin-left: 5px;
+	width: 740px;
+	height: 40px;
+	visibility: visible;
+	display: block;
+	border-color : #666666;
+	border-style : solid;
+	border-width : 1px;
+	padding : 0px 0px 0px 0px;
+	background-image : url(../images/header_infosystem.gif);
+	background-repeat : no-repeat;
+}
+
+#menue_banner
+{
+	position: absolute;
+	z-index: 8;
+}
+
+/* menueleiste im header - alte version */
+#menue_header 
+{
+	position: absolute;
+	z-index: 10;
+	margin-top: 56px;
+	margin-left: 235px;
+	font : normal normal 0.8em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	width: 550px;
+	height: 18px;
+	visibility: visible;
+	display: block;
+	color : Gray;
+	background-color: white;
+}
+
+/* menueleiste im header - neue version - linker bereich */
+#menue_header_left
+{	position: absolute;
+	z-index: 30;
+	margin-top: 75px;
+	margin-left: 30px;
+	font : normal normal 10px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	width: 150px;
+	height: 18px;
+	visibility: visible;
+	display: block;
+	color : Gray;
+}
+/* menueleiste im header - neue version - mittlerer bereich hauptmenue */
+#menue_header_main
+{	position: absolute;
+	z-index: 9;
+	margin-top: 74px;
+	margin-left: 184px;
+	width: 450px;
+	height: 15px;
+	visibility: visible;
+	display: block;
+	color : Gray;
+}
+/* menueleiste im header - neue version - rechter bereich hauptmenü */
+#menue_header_right
+{
+	position: absolute;
+	z-index: 100;
+	margin-top: 73px;
+	margin-left: 584px;
+	font : normal normal 11px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	width: 195px;
+	height: 17px;
+	visibility: visible;
+	display: block;
+	color: Gray;
+}
+
+/* menuepunkte mittlerer und rechter menue-container */
+#menue_header_main div, #menue_header_right div, #menue_header_left div
+{	height: 17px;
+	z-index: 15;
+	font : normal normal 11px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	visibility: visible;
+	display: block;
+	padding-top: 2px;
+	}
+
+#menue_header_main div
+{	float: left;
+	padding-left: 5px;
+	padding-right: 6px;
+	}
+#menue_header_right div
+{	float: left;
+	padding-left: 4px;
+	padding-right: 4px;
+	}
+
+
+/* Container im mittleren Bereich  = content */
+
+
+
+#content {
+	position: relative;
+	z-index: 2;
+	margin-top: 0px;
+	margin-left: 50px;
+	width: 780px;
+	height: 480px;
+	visibility: visible;
+	display: block;
+	border-right : 1px solid #CCCCCC;
+	border-bottom : 1px solid #CCCCCC;
+}
+
+/* Container im Extra-Fenster */
+#content_extra{
+	position: relative;
+	z-index: 4;
+	margin-left: 5px;
+	width: 450px;
+	visibility: visible;
+	display: block;
+	border-color : #CCCCCC;
+	border-style : solid;
+	border-width : 1px;
+}
+
+/* Container im Ringschema-Fenster */
+#content_extra{
+	position: relative;
+	z-index: 4;
+	margin-left: 5px;
+	width: 450px;
+	visibility: visible;
+	display: block;
+	border-color : #CCCCCC;
+	border-style : solid;
+	border-width : 1px;
+}
+
+/* Container im Infosystem-Fenster */
+
+#content_infosystem{
+	position: relative;
+	z-index: 4;
+	margin-left: 5px;
+	width: 740px;
+	visibility: visible;
+	display: block;
+	border-color : #CCCCCC;
+	border-style : solid;
+	border-width : 1px;
+}
+
+
+#content_left{
+	position: absolute;
+	z-index: 4;
+	width: 190px;
+	height: 480px;
+	visibility: visible;
+	display: block;
+	background-color : #E1E8DC;	
+	border-right : 1px solid #CCCCCC;
+	border-left : 1px solid #CCCCCC;
+	border-bottom : 1px solid #CCCCCC;
+}
+	
+#content_main {
+	position: absolute;
+	z-index: 5;
+	margin-top: 0px;
+	margin-left: 190px;
+	width: 400px;
+	max-height: 477px;
+	visibility: visible;
+	display: block;
+	}
+
+#content_right
+{
+	position: absolute;
+	z-index: 6;
+	margin-top: 0px;
+	margin-left: 591px;
+	width: 189px;
+	visibility: visible;
+	display: block;
+	height: 480px;
+	border-right : 1px solid #CCCCCC;
+	border-left: 1px solid #CCCCCC;
+	border-bottom : 1px solid #CCCCCC;
+	background-image : url(../images/bg_content_right.gif);
+}
+
+
+#newsbox1, #newsbox2, #newsbox3
+{
+	position: relative;
+	z-index: 20;
+	font : normal normal 0.6em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : normal;
+	text-decoration : none;
+	width: 160px;
+	visibility: visible;
+	display: block;
+	min-height: 80px;
+	max-width: 160px;
+}
+
+#newsbox1 {
+	margin-top: 58px;
+	margin-left: 10px;
+	}
+	
+#newsbox2 {
+	margin-top: 15px;
+	margin-left: 10px;
+	}
+	
+#newsbox3 {
+	margin-top: 15px;
+	margin-left: 10px;
+	}
+
+#newsarchive
+{	position: relative;
+	z-index: 20;
+	margin-top: 15px;
+	margin-left: 10px;
+	font : normal normal 0.7em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : normal;
+	text-decoration : none;
+	width: 160px;
+	height: 20px;
+	visibility: visible;
+	display: block;
+	max-height: 20px;
+	max-width: 160px;
+}
+
+#subscribe
+{
+	position: relative;
+	z-index: 20;
+	margin-top: 15px;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	padding: 4px 4px 6px 6px;
+	font : normal normal 0.6em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : normal;
+	text-decoration : none;
+	width: 165px;
+	visibility: visible;
+	display: block;
+	max-width: 165px;
+	border : 1px solid #CCCCCC;
+	background-color : White;
+}
+
+#helpbox
+{
+	position: relative;
+	z-index: 20;
+	margin-top: 35px;
+	margin-left: 10px;
+	font : normal normal 0.6em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #666666;
+	font-weight : normal;
+	text-decoration : none;
+	width: 160px;
+	visibility: visible;
+	display: block;
+	max-width: 160px;
+}
+
+/* Container im unteren Bereich - ältere Version */
+#footer {
+	position: relative;
+	z-index: 14;
+	margin-top: 0px;
+	margin-left: 50px;
+	width: 780px;
+	height: 20px;
+	visibility: visible;
+	display: block;
+	border : 1px solid #CCCCCC;
+}
+
+
+
+#menue_footer {
+	position: relative;
+	z-index: 15;
+	margin-top: 20px;
+	margin-left: 0px;
+	width: 186px;
+	height: 20px;
+	padding-top: 2px;
+	padding-left: 7px;
+	font : normal normal 0.9em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #666666;
+	visibility: visible;
+	display: block;
+	background-color: white;
+	border-bottom : 1px solid #CCCCCC;
+	border-top : 1px solid #CCCCCC;
+	bottom : 0px;
+}
+
+
+
+
+
+
+
+
+

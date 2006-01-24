@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  title="REGENWALD für SAMBOJA LESTARI"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<div id="content">
+		<div id="content_left"><!-- content left-->
+			<div id="textbox_left_form">		
+				<table border="0" cellpadding="1" cellspacing="0">
+					<tr>
+						<td></td>
+						<td colspan="2">
+							<img src="/images/step3.gif" width="120" height="20" border="0" alt="" />
+						</td>
+					</tr>
+					<tr><td colspan="4" height="40"></td></tr>
+				</table>			                                             
+			</div>	
+			<!-- footer -->	
+			<div id="menue_footer">	
+				<a href="javascript:window_extra('privacy')" class="footer">
+					Datenschutzinfo
+				</a>
+				l
+				<a href="javascript:window_extra('impressum')" class="footer">
+					Impressum
+				</a>
+			</div>
+			<!-- /footer -->	
+		</div>
+		<!-- /content left-->
+		<!-- container content_main -->
+		<div id="content_main">
+			<div id="textbox_content_big" >
+				<form action="mail-transfer" method="post"
+						enctype="application/x-www-form-urlencoded"
+						name="mailtransfer"
+						id="mailtransfer"
+						onsubmit="YY_checkform('mailtransfer','vorname','#q','0','Bitte das Feld \'Vorname\' ausfuellen.','name','#q','0','Bitte das Feld \'Name\' ausfuellen.','strasse','#q','0','Bitte das Feld \'Strasse\' ausfuellen.','plz','#q','0','Bitte das Feld \'PLZ\' ausfuellen.','ort','#q','0','Bitte das Feld \'Ort\' ausfuellen.');return document.MM_returnValue">
+					<input type="hidden" name="contract-id" value="$(contract-id)" />
+					<input type="hidden" name="donationcert-yearly" value="$(donationcert-yearly)" />
+					<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td colspan="3"><span class="headline">Ich möchte meine Spende überweisen.</span></td>
+						</tr>
+						<tr>
+							<td colspan="3" height="7"> </td>
+						</tr>
+						<tr>
+							<td colspan="3">
+Ich habe mich dazu entschieden einen Betrag von $(amount) Euro auf das Spendenkonto "Samboja Lestari" von BOS Deutschland e.V. zu überweisen.
+								<table border="0">
+									<tr><td>Kontonummer:</td><td>32 10 100</td></tr>
+									<tr><td>Bank:</td><td>Bank für Sozialwirtschaft</td></tr>
+									<tr><td>BLZ:</td><td>100 205 00</td></tr>
+								</table>
+								<strong>Bitte unbedingt den Verwendungszweck "SL ID $(contract-id)" auf dem Überweisungsformular angeben!</strong>
+								<br /> <br />
+								Meine Überweisung muss ich bei meiner Bank eigenständig veranlassen!
+							</td>
+						</tr>						
+						<tr>
+							<td colspan="3" height="7"> </td>
+						</tr>
+						<tr>
+							<td colspan="3" height="7"> </td>
+						</tr>
+						<tr>
+							<td height="10">Vorname:</td>
+							<td width="10"></td>
+							<td><input name="vorname" type="text" size="25" maxlength="30" /></td>
+						</tr>
+						<tr>
+							<td height="10">Name:</td>
+							<td width="10"></td>
+							<td><input name="name" type="text" size="25" maxlength="30" /></td>
+						</tr>
+						<tr>
+							<td height="10">Straße/Nr.:</td>
+							<td width="10"></td>
+							<td><input name="strasse" type="text" size="25" maxlength="30" /></td>
+						</tr>
+						<tr>
+							<td height="10">PLZ/Ort</td>
+							<td width="10"></td>
+							<td>
+								<input name="plz" type="text" size="5" maxlength="5" />
+								<input name="ort" type="text" size="13" maxlength="30" />
+							</td>
+						</tr>
+						<tr>
+							<td height="10">E-Mail:</td>
+							<td width="10"></td>
+							<td><input name="email" type="text" size="25" maxlength="30" /></td>
+						</tr>
+						<tr>
+							<td height="10">Telefon:</td>
+							<td width="10"></td>
+							<td><input name="telefon" type="text" size="25" maxlength="30" /></td>
+						</tr>							
+						<tr>
+							<td colspan="3" height="5"> </td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<bos:urkunde-per-post contract-id="$(contract-id)"
+									min-amount="30"
+									message="Ich möchte meine Regenwald-Urkunde per Post erhalten" />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3" height="20"> </td>
+						</tr>
+						<tr>
+			                          	<td align="right" colspan="3">
+								<input type="submit" class="form_big" name="action" value="Angaben an BOS mailen" />
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+		<div id="content_right">
+			<div id="helpbox">		
+				<strong>[Persönliche Daten]</strong>
+				<br />
+Wir reservieren gerne die von Ihnen gewünschten m². Für die Zusendung
+der entsprechenden Informationen (Regenwaldurkunde, Sponsorenprofil,
+Geokoordinaten, Spendenbescheinigung) benötigen wir unbedingt die
+Angabe Ihrer Daten. Nach erfolgter Überweisung erhalten Sie diese
+Informationen schriftlich oder per E-Mail von uns.
+				<br /><br /><br />
+				<strong>[Dieses Formular]</strong>
+				<br />
+				Bitte senden Sie dieses Formular per E-Mail direkt an uns. Sie können es auch
+				<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+				<a href="javascript:window.print();" class="more">
+					ausdrucken
+				</a>
+				und per Fax oder Post an unsere
+				Kontaktadresse schicken:
+				<br /><br />
+				BOS Deutschland e.V.
+				<br />
+				Schöneberger Ufer 69
+				<br />
+				10785 Berlin
+				<br /><br />
+				Fax: (030) 2636 7815
+		    	</div>		
+		</div>
+	</div>
+</bknr:toplevel>

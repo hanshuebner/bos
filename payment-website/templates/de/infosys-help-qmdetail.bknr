@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_extra"
+  title="REGENWALD für SAMBOJA LESTARI - Hilfe zur Satellitenkarte"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="hbebettp://headcraft.de/bos"
+  >
+	<h1 class="extra">Hilfe zur Satellitenkarte</h1>
+	<p class="text_content">
+		<p> Sie befinden sich in der Detailansicht für das Quadratmeter-Verkaufsgebiet.  Hier können Sie sehen, wie viele
+		Quadratmeter schon verkauft wurden.  Weiterhin können Sie die Profile der Sponsoren und die von ihnen dort hinterlegten
+		Mitteilungen sehen.</p>
+		<p> Wenn Sie angemeldet sind, werden Ihre "eigenen" Quadratmeter in der Satellitenkarte durch ein Icon (<img src="/images/qm.gif"
+		border="0" />) markiert.  Die "verkauften" Quadratmeter werden in der Satellitenkarte farbig hervorgehoben.  Durch Klick in die
+		Satellitenkarte in der Mitte des Bildschirms können Sie die "Quadratmeterlupe" verschieben.  Der so angeklickte, rot umrahmte
+		Bereich wird rechts oben vergrößert dargestellt.  Durch Klick auf einen "verkauften" und farbig hervorgehobenen Quadratmeterbereich
+		in der vergrößerten Darstellung können Sie das zugehörige Sponsorenprofil aufrufen.  Es wird unter dem Vergrößerungsbereich angezeigt
+		und kann "aufgezogen" werden, indem man die Maus hinein bewegt.</p>
+		<p> Unten rechts in der Satellitenkarte finden Sie das Ebenenauswahl-Menü, in dem sie einzelne Darstellungsebenen der Satellitenkarte
+		durch Klick auf den Namen der Ebene ein- und ausblenden können.</p>
+		<p>Folgende Ebenen stehen zur Verfügung:</p>
+		<p style="margin-left: 40px; margin-right: 40px;"> 
+		  <bl>
+		    <li><strong>Sat-Karte</strong> Die Satelliten-Karte stellt den Hintergrund der Karte dar </li>
+		    <li><strong>Verkaufsgebiete</strong> Gebiete mit zu verkaufenden Quadratmetern werden in grau dargestellt </li>
+		    <li><strong>Verkauft</strong> Verkaufte Quadratmeter werden unterschiedlich farbig dargestellt</li>
+		  </bl>
+		</p>
+		<p> Durch Klick auf die Übersichtskarte links oben gelangen Sie wieder zurück zur POI-Übersicht.</p>
+	</p>
+</bknr:toplevel>

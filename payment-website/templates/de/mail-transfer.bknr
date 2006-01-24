@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bknr:toplevel
+  title="REGENWALD für SAMBOJA LESTARI"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<bos:mail-transfer />
+	<!-- content 3teilig-->
+	<div id="content">
+		<div id="content_left"><!-- content left-->
+			<div id="textbox_left_form">		
+				<table border="0" cellpadding="1" cellspacing="0">
+					<tr>
+						<td></td>
+						<td colspan="2">
+							<img src="/images/step3.gif" width="120" height="20" border="0" alt="" />
+						</td>
+					</tr>
+					<tr><td colspan="4" height="40"></td></tr>
+				</table>			                                             
+			</div>	
+			<!-- footer -->	
+			<div id="menue_footer">	
+				<a href="javascript:window_extra('privacy')" class="footer">
+					Datenschutzinfo
+				</a>
+				l
+				<a href="javascript:window_extra('impressum')" class="footer">
+					Impressum
+				</a>
+			</div>
+			<!-- /footer -->	
+		</div>
+		<!-- /content left-->
+		<!-- container content_main -->
+		<div id="content_main">
+			<div id="textbox_content">
+				<table  border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td colspan="3">
+							<span class="headline">
+								Vielen Dank für Ihre Unterstützung
+							</span>
+						</td>
+						<td></td>
+					</tr>
+					<tr><td height="6"></td></tr>
+					<tr>
+						<td colspan="3">
+							<strong>Bitte geben Sie unbedingt die ID $(contract-id) als Verwendungszweck
+							Ihrer Überweisung an, damit wir Sie nach der Bearbeitung erreichen können!</strong>
+						</td>
+					</tr>
+					<tr><td height="6"></td></tr>
+					<tr>
+						<td colspan="3">
+								<table border="0">
+									<tr><td colspan="2">BOS Deutschland e.V.</td></tr>
+									<tr><td>Kontonummer:</td><td>32 10 100</td></tr>
+									<tr><td>Bank:</td><td>Bank für Sozialwirtschaft</td></tr>
+									<tr><td>BLZ:</td><td>100 205 00</td></tr>
+								</table>
+						</td>
+					</tr>
+					<tr><td height="6"></td></tr>
+					<tr>
+						<td colspan="3">
+							Wir melden uns direkt nach Eingang Ihrer Überweisung und
+							geben Ihnen die Informationen, die Sie benötigen, um Ihre Quadratmeter im Internet zu beobachten.
+							<br /><br />
+							<a href="index" class="more">
+								<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
+								Zurück zur Home Page
+							</a>
+						</td>
+						<td></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</bknr:toplevel>		

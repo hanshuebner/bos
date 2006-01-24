@@ -1,0 +1,490 @@
+/* definition fuer font-size generell */
+body {
+    font-size: 100.1%;
+  }
+
+
+
+/* textboxes for content */
+/* Box fuer Spenden und Infosystem-->  weiß mit Rand*/
+
+#textbox_left_top {
+	position: relative;
+	background-color: white;
+	z-index: 20;
+	width: 150px;
+	max-width: 150px;
+	padding-bottom: 0px;
+	margin : 58px 15px 10px 15px;
+	border-width: 1px;
+	border-style: solid solid solid solid;
+	border-color : Silver;
+	visibility: visible;
+	display: block;
+	font : normal normal 0.7em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	text-decoration : none;
+}
+
+/* Box fuer Infos auf den Zahlungsformularen -->  ohne Rand und höher*/
+#textbox_left_form {
+	position: relative;
+	z-index: 20;
+	width: 150px;
+	height: 398px;
+	max-width: 150px;
+	margin : 28px 15px 10px 15px;	
+	visibility: visible;
+	display: block;
+	font : normal normal 0.7em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : normal;
+	text-decoration : none;
+}
+
+/* Box fuer Satellitenbutton */	
+#textbox_left_down {
+	position: relative;
+	background-color: white;
+	z-index: 20;
+	width: 150px;
+	max-width: 150px;
+	height: 180px;
+	margin : 22px 15px 10px 15px;
+	border-width: 1px;
+	border-style: solid solid none solid;
+	border-color : Silver;
+	visibility: visible;
+	display: block;
+	font : normal normal 0.7em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : normal;
+	text-decoration : none;
+	background-image : url(../images/satellite_ganzneu2.gif);
+	background-repeat : no-repeat;
+	background-position : bottom;
+}	
+	
+#textbox_right
+	{
+	position: relative;
+	background-color: white;
+	z-index: 20;
+	width: 165px;
+	max-width: 170px;
+	margin-top: 45px;
+	margin-left: 10px;
+	margin-right: 10px;
+	border-width: 1px;
+	margin-bottom: 10px;
+	visibility: visible;
+	display: block;
+	font : normal normal 0.7em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : normal;
+	text-decoration : none;	
+}
+	
+/* Content-Box ohne overflow */
+#textbox_content
+{
+	position: relative;
+	z-index: 39;
+	line-height: 16px;
+	height: 447px;
+	width: 366px;
+	margin-top: 30px;
+	margin-left: 17px;
+	margin-right: 17px;
+	margin-bottom: 2px;
+	visibility: visible;
+	display: block;
+	max-height : 450px;
+	font : normal normal 10px Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+/* Content-Box mit overflow fuer Formulare und Inhaltsseiten = Texte */
+#textbox_content_big
+{
+	position: relative;
+	z-index: 39;
+	line-height: 16px;
+	height: 447px;
+	width: 370px;
+	margin-top: 30px;
+	margin-left: 17px;
+	margin-right: 17px;
+	margin-bottom: 2px;
+	visibility: visible;
+	display: block;
+	max-height : 450px;
+	overflow: auto;
+	font : normal normal 1.0em Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+/* Content-Box mit overflow fuer Formulare und Inhaltsseiten ohne content-right */
+#textbox_content_bigger
+{
+	position: relative;
+	z-index: 39;
+	line-height: 13px;
+	height: 447px;
+	width: 556px;
+	margin-top: 30px;
+	margin-left: 17px;
+	margin-right: 17px;
+	margin-bottom: 2px;
+	visibility: visible;
+	display: block;
+	max-height : 450px;
+	overflow: auto;
+	font : normal normal 1.0em Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+#textbox_form{
+	position: relative;
+	z-index: 39;
+	font-size: 10px;
+	line-height: 15px;
+	height: 500px;
+	width: 620px;
+	margin-top: 15px;
+	margin-left: 15px;
+	margin-right: 38px;
+	margin-bottom: 5px;
+	visibility: visible;
+	display: block;
+	background-color: #EAE7E6;
+	border-width: 1px;
+	border-style: solid solid solid solid;
+	border-color: #666666;
+}
+
+#textbox_right_top, #textbox_right_down
+{
+	position: relative;
+	z-index: 20;
+	font : normal normal 10px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : normal;
+	text-decoration : none;
+	width: 160px;
+	visibility: visible;
+	display: block;
+	max-width: 160px;
+	max-height : 400px;
+}
+	
+	
+#textbox_right_top
+{	
+	margin-top: 32px;
+	margin-left: 10px;
+	}
+
+ #textbox_right_down
+ {	
+	margin-top: 20px;
+	margin-left: 10px;
+	}
+
+/* Formulartabelle */
+#formTable td {
+	font : normal normal 1.0em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : normal;
+	text-decoration : none;
+	padding-left : 4px;
+	padding-right : 4px
+}
+
+.headline {
+	color: #256F16;
+	font-weight: bold;
+	font-size: 120%;
+}
+
+table {
+	font : normal normal 11px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : normal;
+	text-decoration : none;
+}
+			
+
+/* all font-classes for content, forms and links */
+
+#login {
+	font : normal normal 9px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : normal;
+	text-decoration : none;
+	margin:0
+}
+
+.login {
+	font : normal normal 9px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : normal;
+	text-decoration : none;
+	margin:0
+}
+
+.help_text
+{
+	font : normal normal 0.9em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #666666;
+	font-weight : normal;
+	text-decoration : none;
+}
+
+
+
+h1.extra
+{
+	font : bold normal 11px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #666666;
+	font-weight : bold;
+	text-decoration : none;
+	padding-top : 20px;
+	padding-left : 10px;
+	padding-bottom : 0px;
+}
+
+h1.ringschema
+{
+	font : bold normal 11px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size : 150%;
+	color : #666666;
+	font-weight : bold;
+	text-decoration : none;
+	padding-left : 10px;
+	padding-bottom : 0px;
+	text-align : center;
+}
+
+/* all font-classes for menu  und form*/
+p {
+	font : normal normal 11px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	margin-left : 10px;
+	margin-right : 10px;
+	margin-bottom : 20px;
+	text-align : left;
+}
+
+/* input-feld fuer logIn */
+input.login {
+	width: 100px;
+	height: 17px;
+	background-color: white;
+	font : normal normal 9px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : normal;
+	text-decoration : none;
+	text-align : left;
+	vertical-align : bottom;
+	
+}
+/* formularfelder  */
+.form_big {
+	height: 18px;
+	background-color: white;
+	font : normal normal 9px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : normal;
+	text-decoration : none;
+	padding : 1px;
+	vertical-align : top;
+}
+
+/* formularfelder  */
+.form_big_bold {
+	height: 18px;
+	background-color: white;
+	font : normal normal 9px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : bold;
+	text-decoration : none;
+	padding : 1px;
+	vertical-align : top;
+}
+
+/* alle link-definitionen */
+
+a.menue {
+        font : bold normal 1.0em Verdana, Geneva, Arial, Helvetica, sans-serif;
+        color : Gray;
+        font-weight : bold;
+        text-decoration : none;
+}
+
+a.menue:hover {
+        color : #990000;
+}
+a.menue:active {
+        color : #990000;
+}
+
+a.titlegreen {
+	font : bold normal 11px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #256F16;
+	font-weight : bold;
+	text-decoration : none;
+}
+
+a.titlegreen:hover {
+	color : #33CC00;
+}
+a.titlegreen:active {
+	color : #33CC00;
+}
+
+a.titlegray {
+	font : bold normal 11px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #666666;
+	font-weight : bold;
+	text-decoration : none;
+}
+
+a.titlegray:hover {
+	color : #33CC00;
+}
+a.titlegray:active {
+	color : #33CC00;
+}
+
+a.titlered {
+	font : bold normal 11px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #990000;
+	font-weight : bold;
+	text-decoration : none;
+}
+
+a.titlered:hover {
+	color : #CC3300;
+}
+a.titlered:active {
+	color : #CC3300;
+}
+
+a.more {
+	font : normal normal 10px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #339900;
+	text-decoration : none;
+}
+
+a.more:hover {
+	color : #33CC00;
+}
+a.more:active {
+	color : #33CC00;
+}
+
+a.content_green {
+	font : normal normal 11px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #339900;
+	text-decoration : none;
+}
+
+a.content_green:hover {
+	color : #33CC00;
+}
+
+a.content_green:active {
+	color : #33CC00;
+}
+
+a.content_black {
+	font : normal normal 11px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : Black;
+	text-decoration : none;
+}
+
+a.content_black:hover {
+	color : #990000;	
+}
+
+a.content_black:active {
+	color : #990000;	
+}
+
+span.footer_bold {
+	font : bold normal 10px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : gray;
+	font-weight : bold;
+	text-decoration : none;
+}
+
+a.footer_bold {
+	font : bold normal 10px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : gray;
+	font-weight : bold;
+	text-decoration : none;
+}
+
+a.footer_bold:hover {
+	color : #CC3300;
+}
+
+a.footer_bold:active {
+	color : #CC3300;
+}
+
+a.footer {
+	font : normal normal 0.7em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : gray;
+	text-decoration : none;
+}
+
+a.footer:hover {
+	color : #CC3300;
+}
+
+a.footer:active {
+	color : #CC3300;
+}
+
+ul.grey  {
+	font : normal normal 0.8em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	margin-left : 10px;
+	list-style-type : none;
+	list-style-position : inside;
+	list-style-image : url(../images/list_square_black.gif);
+	padding-left: 3px;
+	padding-right: 5px;
+}
+
+
+
+
+#footer_print_top, #footer_print_bottom
+{
+	z-index: 24;
+	margin-top: 0px;
+	width: 410px;
+	height: 25px;
+	font : normal normal 10px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : gray;
+	visibility: visible;
+	display: block;	
+	}
+	
+#footer_print_bottom 
+{
+	border-top: 1px solid #CCCCCC;
+}
+
+	
+
+#footer_print_top div, #footer_print_bottom div
+{
+	float: right;
+	height: 15px;
+	z-index: 15;
+	font : normal normal 10px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	visibility: visible;
+	display: block;
+	padding-left: 4px;
+	padding-right: 3px;
+	padding-top: 6px;
+}

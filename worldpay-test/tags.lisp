@@ -1,0 +1,136 @@
+(in-package :worldpay-test)
+
+(enable-interpol-syntax)
+
+(defun emit-without-quoting (str)
+  ;; das ist fuer WPDISPLAY
+  (let ((s (cxml::chained-handler *html-sink*)))
+    (cxml::maybe-close-tag s)
+    (map nil (lambda (c) (cxml::write-rune (char-code c) s)) str)))
+
+(defun language-options-1 (current-language)
+  (loop for (language-symbol language-name) in (website-languages)
+	do (if (equal language-symbol current-language)
+	       (html ((:option :value (format nil "/~a/index" language-symbol) :selected "selected") " " (:princ language-name) " "))
+	       (html ((:option :value (format nil "/~a/index" language-symbol)) " " (:princ language-name) " ")))))
+
+(define-bknr-tag language-chooser (name)
+  (html ((:select :name name)
+	 (language-options-1 (current-website-language)))))
+
+(define-bknr-tag language-options ()
+  (language-options-1 (current-website-language)))
+
+(define-bknr-tag worldpay-receipt ()
+  (emit-without-quoting "<WPDISPLAY ITEM=banner>"))
+
+(define-bknr-tag process-payment (&key children)
+  (with-template-vars (cartId email country)
+    (let* ((contract (get-contract (parse-integer cartId)))
+	   (sponsor (contract-sponsor contract)))
+      (change-slot-values sponsor 'bknr.web::email email)
+      (sponsor-set-country sponsor country)
+      (contract-set-paidp contract t)
+      (setf (get-template-var :master-code) (sponsor-master-code sponsor))
+      (setf (get-template-var :sponsor-id) (sponsor-id sponsor))))
+  (mapc #'emit-template-node children))
+
+(define-bknr-tag generate-cert ()
+  (with-template-vars (gift email name address)
+    (let ((contract (find-store-object (parse-integer (get-template-var :contract-id)))))
+      (contract-issue-cert contract name address)
+      (bknr.web::redirect-request :target (if gift "index"
+					      (format nil "profil_setup?name=~A&email=~A&sponsor-id=~A"
+						      (uriencode-string name) (uriencode-string email)
+						      (store-object-id (contract-sponsor contract))))))))
+
+(define-bknr-tag urkunde-per-post (&key contract-id min-amount message)
+  (let ((contract (get-contract (parse-integer contract-id))))
+    (when (>= (contract-price contract) (parse-integer min-amount))
+      (html (checkbox-field "mail-certificate" message :checked nil)))))
+
+(define-bknr-tag maybe-base (&key href)
+  (when (and href
+	     (not (equal "" href)))
+    (html ((:base "href" href)))))
+
+(define-bknr-tag buy-sqm (&key children)
+  (with-template-vars (numsqm numsqm1 action gift donationcert-yearly)
+    (let* ((numsqm (parse-integer (or numsqm numsqm1)))
+	   ;; Wer ueber dieses Formular bestellt, ist ein neuer Sponsor,
+	   ;; also ein neues Sponsorenobjekt anlegen.  Eine Profil-ID
+	   ;; wird automatisch zugewiesen, sonstige Daten haben wir zu
+	   ;; diesem Zeitpunkt noch nicht.
+	   ;; XXX Überweisung wird nur für die deutsche Website
+	   ;; angeboten, was passenderweise durch die folgende
+	   ;; Überprüfung auch sicher gestellt wurde.  Sollte man aber
+	   ;; eventuell noch mal prüfen und sicher stellen.
+	   (manual-transfer (or (scan #?r"rweisen" action)
+				(scan #?r"rweisung" action)))
+           (sponsor (make-sponsor))
+           (price (* numsqm 3))
+           (contract (make-contract sponsor numsqm :expires (+ (if manual-transfer
+								   bos.m2::*manual-contract-expiry-time*
+								   bos.m2::*online-contract-expiry-time*)
+							       (get-universal-time))))
+	   (language (session-variable :language)))
+      (setf (get-template-var :worldpay-url)
+            (if manual-transfer
+                (format nil "ueberweisung?contract-id=~a&amount=~a&numsqm=~a~@[&donationcert-yearly=1~]"
+                        (store-object-id contract)
+                        price
+                        numsqm
+			donationcert-yearly)
+                (format nil "https://select.worldpay.com/wcc/purchase?instId=~a&cartId=~a&amount=~a&currency=EUR&lang=~a&desc=~a&MC_sponsorid=~a&MC_password=~a&MC_donationcert-yearly=~A&MC_gift=~A" ; &testMode=100 für test
+			*worldpay-installation-id*
+                        (store-object-id contract)
+                        price
+			language
+                        (encode-urlencoded (format nil "~a qm Regenwald in Samboja Lestari" numsqm))
+			(store-object-id sponsor)
+			(sponsor-master-code sponsor)
+			(if donationcert-yearly "1" "0")
+			(if gift "1" "0"))))))
+  (mapc #'emit-template-node children))
+
+(define-bknr-tag mail-transfer ()
+  (with-query-params ((get-template-var :request) contract-id vorname name strasse plz ort email telefon mail-certificate donationcert-yearly)
+    (mail-transfer-indication contract-id vorname name strasse plz ort email telefon mail-certificate donationcert-yearly)))
+
+(define-bknr-tag when-certificate (&key children)
+  (let ((sponsor (bknr-request-user (get-template-var :request))))
+    (when (some #'(lambda (contract)
+		    (contract-pdf-pathname contract))
+		(sponsor-contracts sponsor))
+      (mapc #'emit-template-node children))))
+
+(define-bknr-tag send-info-request (&key children email)
+  (mail-info-request email)
+  (mapc #'emit-template-node children))
+
+(define-bknr-tag save-profile (&key children)
+  (let ((sponsor (bknr-request-user (get-template-var :request))))
+    (with-template-vars (email name password infotext anonymize)
+      (when anonymize
+	(change-slot-values sponsor
+			    'full-name nil
+			    'info-text nil
+			    'email nil))
+      (when name
+	(change-slot-values sponsor 'full-name name))
+      (when email
+	(change-slot-values sponsor 'bknr.web::email email))
+      (when password
+	(set-user-password sponsor password))
+      (when infotext
+	(change-slot-values sponsor 'info-text infotext)))
+    (setf (get-template-var :sponsor-id) (format nil "~D" (store-object-id sponsor)))
+    (setf (get-template-var :country) (sponsor-country sponsor))
+    (setf (get-template-var :infotext) (sponsor-info-text sponsor))
+    (setf (get-template-var :name) (user-full-name sponsor))
+    (setf (get-template-var :sqm-x) (format nil "~,3f" (m2-utm-x (first (contract-m2s (first (sponsor-contracts sponsor)))))))
+    (setf (get-template-var :sqm-y) (format nil "~,3f" (m2-utm-y (first (contract-m2s (first (sponsor-contracts sponsor)))))))
+    (setf (get-template-var :numsqm)
+	  (format nil "~D"
+		  (apply #'+ (mapcar #'(lambda (contract) (length (contract-m2s contract))) (sponsor-contracts sponsor))))))
+  (mapc #'emit-template-node children))

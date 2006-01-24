@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_extra"
+  title="REGENWALD für SAMBOJA LESTARI - Überweisungsformular drucken"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<div id="noprint"><!-- container wird nicht mitgedruckt -->
+		<table border="0">
+			<tr>
+				<td colspan="3" height="20"> </td>
+			</tr>
+			<tr>
+				<td colspan="3" align="right">Bitte überprüfen Sie ggf. vor dem Drucken Ihre Druckereinstellungen.</td>
+			</tr>
+			<tr>	
+				<td colspan="2"> </td>										
+				<td align="right" height="30">
+				<input class="form_big" type="button" value="Seite drucken" onclick="self.print(); return false;" id="drucken" name="drucken" /> 		
+				</td>
+			</tr>
+		</table>
+	</div>
+	<!-- content_main -->
+	<table id="formTable" width="100%" border="0" cellspacing="10" cellpadding="0">
+		<tr>
+			<td colspan="3" height="10"><h1 class="extra">Meine Überweisung für das BOS-Projekt "Samboja Lestari"</h1>	
+			</td>
+		</tr>		
+		<tr>
+			<td colspan="3" height="20"> </td>
+		</tr>
+		<tr>
+			<td colspan="3">
+			Ich überweise den Betrag von $(Betrag) Euro<br />
+			auf das Spendenkonto "Samboja Lestari" von BOS Deutschland e.V.<br /><br />
+			Kontonummer:XXXXXXXXXXX<br />
+			BLZ:XXXXXXXXXXX<br />
+			Bank:XXXXXXXXXXXX<br /><br />
+			Verwendungszweck: $(Transaktionsnummer)<br />
+			<strong>bitte unbedingt auf dem Überweisungsformular angeben!</strong>
+                         </td>
+		</tr>						
+		<tr>
+			<td colspan="3" height="20"> </td>
+		</tr>
+		
+		<tr>
+			<td>Vorname:</td>
+			<td width="10"></td>
+			<td>$(vorname)</td>
+		</tr>
+		<tr>
+			<td>Name:</td>
+			<td></td>
+			<td>$(name)</td>
+		</tr>
+		<tr>
+			<td>Straße/Nr.:</td>
+			<td></td>
+			<td>$(strasse)</td>
+		</tr>
+		<tr>
+			<td>PLZ/Ort</td>
+			<td> </td>
+			<td>$(plz) $(ort)</td>
+		</tr>
+		<tr>
+			<td>E-Mail:</td>
+			<td> </td>
+		<td>$(email)</td>
+		</tr>
+		<tr>
+			<td>Telefon:</td>
+			<td> </td>
+			<td>$(telefon)</td>
+		</tr>							
+		<tr>
+			<td colspan="3" height="15"> </td>
+		</tr>
+		<tr>
+			<td colspan="3" >
+				<span class="help_text">
+					BOS garantiert:
+					<br />
+					Ihre Daten werden lediglich für die Reservierung "Ihrer" m2 benötigt.
+					<br />
+					Die Bestimmungen des Datenschutzgesetzes werden eingehalten. Diese Daten werden nicht an Dritte
+					weitergegeben.
+				</span>
+				<br />
+				<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+				<a href="javascript:window_extra('privacy')" class="more">
+					Datenschutzinfo
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" height="15"> </td>
+		</tr>
+		<tr>
+			<td colspan="3"> 
+				<div id="footer_print_top" align="center">
+					<div>
+						<a href="mailto:mail@bosf-deutschland.de" class="footer_bold">
+							mail@bosf-deutschland.de
+						</a>
+					</div>
+					<div style="padding-left:115px"> </div>
+					<div>
+						<span class="footer_bold">
+							BOS Deutschland e.V.
+						</span>
+					</div>
+				</div>
+				<div id="footer_print_bottom" align="center">
+					<div>Telefon: +49.30.26 36 78 33</div>
+					<div>l</div>
+					<div>D-10785 Berlin </div>
+					<div>l</div>
+					<div>Schöneberger Ufer 69</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+</bknr:toplevel>

@@ -1,0 +1,257 @@
+
+.BreadCrumbs {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #ABB49E;
+}
+.SpaltenBK {
+	background-color: #E0E7DC;
+	padding: 10px;
+}
+.KarteRahmen {
+	border: 1px solid #ABB49E;
+	background-color: #FFFFFF;
+}
+.InfoKopf {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #004600;
+	background-color: #9ED57D;
+	padding-right: 10px;
+	padding-left: 10px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #8A3426;
+
+}
+.InfoZelle {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+.FormSponsorenID {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	height: 18px;
+	width: 118px;
+	font-size: 10px;
+	color: #000000;
+	border: 1px solid #ABB49E;
+}
+.FormKennwort {
+
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	height: 18px;
+	width: 95px;
+	font-size: 10px;
+	color: #000000;
+	border: 1px solid #ABB49E;
+}
+.InfoZelleKennwort {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	padding-left: 10px;
+	font-weight:bold;
+}
+.InfoZelleSubmit {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	padding-right: 10px;
+
+}
+.KarteFelder {
+	border: 1px solid #ABB49E;
+	background-color: #FFFFFF;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+
+}
+#UebersichtPosition {
+	background-color: #CF6654;
+	border: 1px solid #8A3426;
+	visibility: hidden;
+}
+#Ueberschrift {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+	color: #666666;
+}
+#Untertitel {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+}
+.Navigation {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #000000;
+	text-decoration: none;
+}
+.Navigation:hover {
+	color: #8A3426;
+}
+.ThumbRahmen {
+	border: 1px solid #FFFFFF;
+
+}
+.Faehnchen {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	background-color: #CDCDCC;
+	padding-right: 5px;
+	padding-left: 5px;
+	margin-bottom: 2px;
+	line-height: 150%;
+//	height: 15px;
+}
+.FaehnchenLink {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	text-decoration: none;
+}
+.FaehnchenLink:hover {
+	color: #8A3426;
+}
+.ThumbRahmenAussen {
+	border-top: 2px solid #FFFFFF;
+	border-right: 0px none;
+	border-bottom: 2px solid #FFFFFF;
+	border-left: 0px none;
+
+}
+.NavigationAktiv {
+
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #8A3426;
+	text-decoration: none;
+}
+
+.PoiNavigation {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	line-height: 150%;
+	text-decoration: none;
+}
+.PoiNavigation:hover {
+	color: #8A3426;
+}
+.PoiNavigationAktiv {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #8A3426;
+	line-height: 150%;
+}
+.submitButton {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 0px;
+	color: #FFFFFF;
+	text-decoration: none;
+	background-color: #FFFFFF;
+	height: 0px;
+	width: 0px;
+	border: 0px none #FFFFFF;
+}
+.Laden {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #8A3426;
+	text-decoration: none;
+	background-color: #FFFFFF;
+
+}
+.Ladeschirm {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #8A3426;
+	text-decoration: none;
+	background-color: #FFFFFF;
+	border: 1px solid #8A3426;
+
+}
+.Links {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	font-weight:bold;
+	text-decoration: none;
+	padding-left:4px;
+}
+.Links:hover {
+	color: #8A3426;
+}
+
+/* data iframe for javascript loading */
+
+div#data {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	visibility: hidden;
+}
+
+/* POI menu */
+
+.PoiMenuItem {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	background-color: #CDCDCC;
+	padding-right: 5px;
+	padding-left: 5px;
+	margin-bottom: 2px;
+	height: 12px;
+	text-decoration: none;
+}
+
+.PoiMenuItemActive {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	background-color: #000000;
+	color: #CDCDCC;
+	padding-right: 5px;
+	padding-left: 5px;
+	margin-bottom: 2px;
+	height: 12px;
+	text-decoration: none;
+}
+
+.LayersMenuItem {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	background-color: #ffffff;
+	padding-right: 5px;
+	padding-left: 5px;
+	margin-bottom: 2px;
+	height: 12px;
+	text-decoration: none;
+}
+
+.LayersMenuItemActive {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	background-color: #000000;
+	color: #ffffff;
+	padding-right: 5px;
+	padding-left: 5px;
+	margin-bottom: 2px;
+	height: 12px;
+	text-decoration: none;
+}
+

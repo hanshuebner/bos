@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_main"
+  title="REGENWALD für SAMBOJA LESTARI - Über BOS"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<div id="content_main">
+		<div id="textbox_content">
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td colspan="3"><span class="headline">BOS Foundation</span></td>
+					<td></td>				
+				</tr>
+				<tr>
+					<td height="15"></td>
+				</tr>
+				<tr>
+					<td>
+						Die <b>Borneo Orangutan Survival Foundation</b> (BOS) ist die weltweit größte Organisation zur Rettung der vom Aussterben bedrohten
+						Orang-Utans. Ihr Lebensraum, der Regenwald mit seiner Artenvielfalt, wird in Zusammenarbeit mit der lokalen Bevölkerung geschützt.
+						BOS ist eine indonesische Nicht-Regierungs-Organisation, die im Jahr 1991 gegründet wurde.
+						<br /><br />
+						Die Aufgabenschwerpunkte von BOS in Indonesien sind:
+						<br /><br />
+						<ul>
+							<li>
+								Konfiszierung illegal gehaltener Orang-Utans, Malaienbären und anderer Arten
+							</li>
+							<li>
+								Rehabilitation der Orang-Utans in Stationen
+							</li>
+							<li>
+								Auswilderung der Tiere in geschützte Regenwaldgebiete
+							</li>
+							<li>
+								Rettung und Umsiedlung von gefährdeten Orang-Utans und anderen Arten
+							</li>
+							<li>
+								Aufforstung und  Schutz von Regenwald 
+							</li>
+							<li>
+								Schaffung von Alternativen für die lokale Bevölkerung
+							</li>
+							<li>
+								Umweltbildung und Aufklärung der lokalen Bevölkerung
+							</li>
+							<li>
+								Überwachung von Schutzgebieten
+							</li> 
+							<li>
+								Auswertung von Satellitenbildern
+							</li>
+							<li>
+								und vieles mehr.
+							</li>
+						</ul>
+						<br />
+						Die Projekte von BOS werden aufgrund der sehr schwierigen wirtschaftlichen Lage in Indonesien hauptsächlich durch ausländische Spendengelder finanziert.
+ 					</td>
+				</tr>				
+			</table>		
+		</div>	
+	</div>
+	<div id="content_right">
+		<div id="textbox_right_top">
+			<table id="rightTable" border="0" cellpadding="0" cellspacing="0">
+				
+				<tr><td height="30"></td></tr>			
+				<tr>
+					<td colspan="2"><img src="/images/bos-logo.gif" width="116" height="85" alt="" /></td>
+				</tr>	
+				<tr>
+					<td colspan="2">Möchten Sie gerne mehr über die Projekte von BOS erfahren?
+					<br /><br />
+					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+					<a href="http://www.bos-deutschland.de" target="_blank" class="more">
+						bos-deutschland.de
+					</a>
+					<br />
+					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+					<a href="http://www.savetheorangutan.info" target="_blank" class="more">
+						savetheorangutan.info
+					</a>
+					<br /><br />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">Dort finden Sie auch Links zu unseren BOS- Schwesterorganisationen weltweit.</td>
+				</tr>		
+			</table>			
+		</div>
+	</div>
+</bknr:toplevel>

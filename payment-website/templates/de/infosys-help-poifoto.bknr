@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_extra"
+  title="REGENWALD für SAMBOJA LESTARI - Hilfe zur Satellitenkarte"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<h1 class="extra">Hilfe zur Satellitenkarte</h1>
+	<p class="text_content">
+		<p> Sie befinden sich in der Detail-Anzeige für einen interessanten Punkt (POI) auf dem Projektgelände
+		in Samboja Lestari.  Links oben in der Übersichtskarte bekommen Sie angezeigt, wo sich dieser POI
+		auf dem Gelände befindet.</p>
+		<p> Das angezeigte Bild zeigt eine Ansicht des POI.  Durch Klick auf eines der sechs rechts oben
+		angezeigten kleinen Bilder können Sie weitere Ansichten des POI sehen.  Klicken Sie auf "Zurück",
+		um zurück zur Ansicht des Satellitenkarten-Ausschnitts des POI zu kommen.</p>
+		<p> Durch Klick auf die Übersichtskarte links oben gelangen Sie wieder zurück zur POI-Übersicht.</p>
+	</p>
+</bknr:toplevel>

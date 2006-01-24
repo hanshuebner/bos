@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_main"
+  title="REGENWALD für SAMBOJA LESTARI"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<!-- container content_main -->
+	<div id="content_main">
+		<div id="textbox_content">
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td colspan="3">
+						<a href="idea" class="titlegreen">
+							Samboja Lestari - kreative Aufforstung in Borneo. <br />
+							Eine Zufluchtstätte für bedrohte Tierarten
+						</a>
+					</td>
+					<td></td>				
+				</tr>
+				<tr><td height="6"> </td></tr>				
+				<tr>
+					<td colspan="3" align="left">
+						<a href="idea" class="titlegreen">
+							<img src="/images/start_pic_headline1.jpg" width="363" height="120" alt="" border="0" />
+						</a>
+					</td>
+					<td></td>			
+				</tr>
+				<tr><td height="6"></td></tr>
+				<tr>
+					<td colspan="3">
+BOS schafft durch ein einzigartiges Aufforstungskonzept die vielleicht
+letzte Zufluchtstätte für Orang-Utans, Malaienbären und andere
+bedrohte Arten in Borneo. Die Fortschritte können Sie direkt hier im
+Internet beobachten.
+					<br />
+					...
+					<a href="idea" class="more">
+						mehr
+					</a>
+					</td>
+					<td></td>				
+				</tr>
+				<tr><td height="10"></td></tr>
+				
+				<tr>
+					<td>
+						<a href="headline2" class="titlegreen">
+							Der Schlüssel zum Erfolg - die lokale Bevölkerung
+						</a>
+					</td>
+					<td></td>
+					<td>
+						<a href="headline3" class="titlegreen">
+							Orang-Utan, Malaienbär und Nashornvogel
+						</a>
+					</td>
+					<td></td>				
+				</tr>
+				<tr><td height="6"> </td></tr>				
+				<tr>
+					<td align="left">
+						<a href="headline2" class="titlegreen">
+							<img src="/images/start_pic_headline2b.jpg" width="175" height="92" alt="" border="0" />
+						</a>
+					</td>
+					<td><img src="/images/trans.gif" width="16" height="1" alt="" border="0" /></td>
+					<td align="left">
+						<a href="headline3" class="titlegreen">
+							<img src="/images/start_pic_headline3.jpg" width="175" height="92" border="0" alt="" />
+						</a>
+					</td>
+					<td></td>			
+				</tr>
+				<tr><td height="6"></td></tr>
+				<tr>
+					<td>Naturschutz und Bedürfnisse der Bevölkerung dürfen sich nicht im Wege stehen. 
+						<br />
+						...
+						<a href="headline2" class="more">
+							mehr
+						</a>						
+					</td>
+					<td></td>
+					<td>Orang-Utans gehören zu den unmittelbar vom Aussterben bedrohten Menschenaffen. 
+					<br />
+					...
+					<a href="headline3" class="more">
+						mehr
+					</a> 
+					</td>
+					<td></td>				
+				</tr>
+			</table>		
+		</div>	
+	</div>
+	<div id="content_right">
+		<bos:news-headlines />
+		<div id="newsarchive">
+			<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
+			<a href="javascript:window_news('archive')" class="menue">
+				<strong>NEWS im ARCHIV</strong>
+			</a> 
+		</div>	
+		<div id="subscribe">
+			<form style="margin:0px" name="form" method="post">
+				<input value="news" name="list" type="hidden"/>
+				<strong>Infos direkt nach Hause? </strong><br />
+					Ihre E-Mail-Adresse:
+					<br /><br />
+					<input type="text" class="form_big" name="email" size="20" maxlength="40" value="" />
+					<input value="ja" class="form_big" name="action" type="submit" onclick="return send_info_request();" />
+			</form> 
+		</div>	
+	</div>
+</bknr:toplevel>

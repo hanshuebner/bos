@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  suppress-xml-headers="1"
+  >
+	<head>
+		<base href="http://createrainforest.org/quittung" />
+		<link rel="stylesheet" href="/static/toplevel_style.css" />
+		<link rel="stylesheet" href="/static/content_style.css" />
+		<script src="/static/bos.js" type="text/javascript"><!-- x -->	
+		</script> 
+             <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8" />-->
+		<title>REGENWALD f&uuml;r SAMBOJA LESTARI</title>
+	</head>
+	<body>
+		
+		<!-- link zurueck zur startseite via header -->
+		<map id="startseite" name="startseite">
+			<area shape="rect" coords="3,3,650,47" href="index" alt="zur Startseite" />
+		</map>
+		<!-- /link zur&uuml;ck -->	
+		
+		<!-- header and menu_top -->
+		<div id="header">
+			<div id="menue_header_left">
+			BOS Deutschland e.V.
+			</div>
+			<div id="header_transgif">
+				<img src="/images/trans.gif" width="575" height="65" alt="" border="0" usemap="#startseite" />
+			</div>
+		</div>
+		<!-- /header and menu_top -->
+		<!-- content 3teilig-->
+		<div id="content">
+			<!-- /content left-->
+			<!-- container content_main -->
+			<div id="content_main">
+				<div id="textbox_content_big" >
+					<form method="post" action="profil_setup">
+						<input type="hidden" name="cartId" value="$(cartId)" />
+						<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
+							<tr>
+								<td colspan="3">
+									<span class="titlegray">
+										Hier entsteht die Website "create rainforest".
+										Bitte schauen Sie in ein paar Wochen wieder
+										vorbei!
+									</span>
+								</td>
+							</tr>
+						</table>
+					 </form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
