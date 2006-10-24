@@ -67,3 +67,5 @@ Download-Urkunden erzeugt werden sollen")
 ;; Vertraege
 (defparameter *manual-contract-expiry-time* (* 42 24 3600))
 (defparameter *online-contract-expiry-time* (* 3600))
+
+(defvar *website-url* "http://change-me")

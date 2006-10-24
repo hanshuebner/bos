@@ -1,4 +1,4 @@
-
+// -*- Java -*- Script
 // ***  extrafenster fuer impressum, kontakt etc. *** //
 function window_extra(target) { 
 	mywin=open(target,"detailwin","width=482,height=600,status=no,toolbar=no,menubar=no,resizable=yes,scrollbars=yes,left=100,top=100");
@@ -22,9 +22,18 @@ function window_news(target) {
 // ***  extrafenster fuer satellitenkarte *** //
 function window_infosys() {
 	var language = document.location.pathname.substr(1, 2); // XXX funktioniert nur mit 2-buchstaben-abkuerzungen von sprachen
-	mywin=open("/infosystem/" + language + "/satellitenkarte.htm",
-			"infowin",
-			"width=740,height=500,status=no,toolbar=no,menubar=no,resizable=no,scrollbars=no,left=250,top=50");
+	var url = "/infosystem/" + language + "/satellitenkarte.htm";
+
+	var sponsorid_input = document.getElementById('sponsorid-input');
+	var password_input = document.getElementById('password-input');
+
+	if (sponsorid_input && password_input) {
+	    url += "?__sponsorid=" + sponsorid_input.value + "&__password=" + password_input.value;
+	}
+	
+	mywin=open(url,
+		   "infowin",
+		   "width=740,height=500,status=no,toolbar=no,menubar=no,resizable=no,scrollbars=no,left=250,top=50");
 	mywin.focus();
 };
 

@@ -19,13 +19,13 @@
       (loop for allocation-area in (all-allocation-areas)
 	    do (html
 		(:tr
-		 (:td (cmslink (format nil "/allocation-area/~D" (store-object-id allocation-area))
+		 (:td (cmslink (format nil "allocation-area/~D" (store-object-id allocation-area))
 			(:princ-safe (store-object-id allocation-area))))
 		 (:td (if (allocation-area-active-p allocation-area) (html "yes") (html "no")))
 		 (:td (:princ-safe (allocation-area-total-m2s allocation-area)))
 		 (:td (:princ-safe (allocation-area-free-m2s allocation-area)))
 		 (:td (:princ-safe (round (allocation-area-percent-used allocation-area))) "%")))))
-     (:p (cmslink "/create-allocation-area" "Create new allocation area")))))
+     (:p (cmslink "create-allocation-area" "Create new allocation area")))))
 
 (defmethod handle-object-form ((handler allocation-area-handler) action allocation-area req)
   (with-bos-cms-page (req :title "Allocation Area")
@@ -115,18 +115,14 @@
 					  (t
 					   90))
 		       for source-x = (if (< tile-x left) (- 90 copy-width) 0)
-		       do (with-store-image (tile-image (image-tile-image (get-map-tile x y)))
-			    (cl-gd:copy-image tile-image
-					      cl-gd:*default-image*
-					      source-x source-y
-					      dest-x dest-y
-					      copy-width copy-height))
+		       do (cl-gd:copy-image (image-tile-image (get-map-tile x y))
+					    cl-gd:*default-image*
+					    source-x source-y
+					    dest-x dest-y
+					    copy-width copy-height)
 		       do (incf dest-x copy-width))
 	      do (incf dest-y copy-height))
 	(cl-gd:draw-polygon vertices :color (elt colors 1))
-	#+(or)
-	(draw-contracts cl-gd:*default-image* left top width height colors
-			(allocation-area-contracts allocation-area))
 	(emit-image-to-browser req cl-gd:*default-image* :png)))))
 
 (defclass create-allocation-area-handler (admin-only-handler form-handler)
@@ -158,8 +154,8 @@
 	 ((:form :method "POST" :enctype "multipart/form-data"))
 	 ((:table :border "0")
 	  (:tr ((:td :colspan "2")
-		(:h2 "Create from Adobe Illustrator path")))
-	  (:tr (:td "File: ") (:td ((:input :type "file" :name "ai-file" :value "*.ai"))))
+		(:h2 "Create from list of UTM coordinates")))
+	  (:tr (:td "File: ") (:td ((:input :type "file" :name "text-file" :value "*.txt"))))
 	  (:tr (:td (submit-button "upload" "upload")))
 	  (:tr ((:td :colspan "2")
 		(:h2 "Create by choosing rectangular area")))
@@ -176,42 +172,35 @@
 	      req)))
 
 (defmethod handle-form ((handler create-allocation-area-handler) (action (eql :upload)) req)
-  (let ((uploaded-ai-file (cdr (find "ai-file" (request-uploaded-files req) :test #'equal :key #'car))))
+  (let ((uploaded-text-file (cdr (find "text-file" (request-uploaded-files req) :test #'equal :key #'car))))
     (cond
-      ((not uploaded-ai-file)
-       (with-bos-cms-page (req :title "No Illustrator file uploaded")
+      ((not uploaded-text-file)
+       (with-bos-cms-page (req :title "No Text file uploaded")
 	 (:h2 "File not uploaded")
-	 (:p "Please upload your Adobe Illustrator file containing the allocation polygon")))
+	 (:p "Please upload your text file containing the allocation polygon UTM coordinates")))
       (t
-       (with-bos-cms-page (req :title #?"Importing allocation polygons from illustrator file $(uploaded-ai-file)")
+       (with-bos-cms-page (req :title #?"Importing allocation polygons from text file $(uploaded-text-file)")
 	 (handler-case
-	     (loop for vertices in (polygons-from-illustrator-file uploaded-ai-file)
-		   for i from 1
-		   while vertices
-		   do (handler-case
-			  (let ((existing-area (find (coerce vertices 'list)
+	     (let* ((vertices (polygon-from-text-file uploaded-text-file))
+		    (existing-area (find (coerce vertices 'list)
 						     (class-instances 'allocation-area)
 						     :key #'(lambda (area) (coerce (allocation-area-vertices area) 'list))
 						     :test #'equal)))
-			    (if existing-area
-				(html (:p (:h2 "Polygon already imported")
-					  "The polygon " (:princ-safe vertices) " has already been "
-					  "imported as "
-					  (cmslink (format nil "/allocation-area/~D" (store-object-id existing-area))
-					    "allocation area " (:princ-safe (store-object-id existing-area)))))
-				(let ((allocation-area (make-allocation-area vertices)))
-				  (html (:p (:h2 "Successfully imported polygon number " (:princ-safe i))
-					    "The polygon "
-					    (cmslink (format nil "/allocation-area/~D" (store-object-id allocation-area))
-					      (:princ-safe (store-object-id allocation-area)))
-					    " has been successfully imported")))))
-			(error (e)
-			  (html (:p (:h2 "Error importing polygon number " (:princ-safe i))
-				    "The polygon " (:princ-safe vertices) " could not be imported"
-				    (:pre (:princ-safe e)))))))
+	       (if existing-area
+		   (html (:p (:h2 "Polygon already imported")
+			     "The polygon " (:princ-safe vertices) " has already been "
+			     "imported as "
+			     (cmslink (format nil "allocation-area/~D" (store-object-id existing-area))
+			       "allocation area " (:princ-safe (store-object-id existing-area)))))
+		   (let ((allocation-area (make-allocation-area vertices)))
+		     (html (:p (:h2 "Successfully imported new allocation area")
+			       "The polygon "
+			       (cmslink (format nil "allocation-area/~D" (store-object-id allocation-area))
+				 (:princ-safe (store-object-id allocation-area)))
+			       " has been successfully imported")))))
 	   (error (e)
 	     (html
-	      (:h2 "Error reading the Illustrator file")
+	      (:h2 "Error reading the text file")
 	      (:p "Please make sure that the uploaded file only contains a simple path.")
 	      (:p "The error encountered is:")
 	      (:pre (:princ-safe e))))))))))
@@ -225,6 +214,35 @@
 	    do (error "expected ~A but read ~A from file ~A" regex line file))
     (error (e)
 	(error "error ~A on file ~A while waiting for ~A" e file regex))))
+
+(defun ensure-float (x)
+  (typecase x
+    (float t)
+    (integer t)
+    (t (error "invalid number ~S" x))))
+
+(defun scale-coordinate (name min x)
+  (unless (and (>= x min)
+	       (<= x (+ min +width+)))
+    (error "invalid ~A coordinate ~A (must be between ~A and ~A)" name x min (+ min +width+)))
+  (round (- x min)))
+
+(defun parse-point (line)
+  (destructuring-bind (x y) (read-from-string (format nil "(~A)" line))
+    (cons (scale-coordinate 'x +nw-utm-x+ x)
+	  (scale-coordinate 'y +nw-utm-y+ y))))
+
+(defun polygon-from-text-file (filename)
+  (coerce (with-open-file (input-file filename)
+	    (loop
+	       for line-number from 1
+	       for line = (read-line input-file nil)
+	       while line
+	       collect (handler-case
+			   (parse-point line)
+			 (error (e)
+			   (error "~A in line ~A" e line-number)))))
+	  'vector))
 
 (defun parse-illustrator-point (line)
   (destructuring-bind (x y type &rest foo) (split " " line)

@@ -1,6 +1,7 @@
 (in-package :bos.build)
 
 (handler-bind ((style-warning #'muffle-warning))
+  (asdf:operate 'asdf:load-op :aserve)
   (asdf:operate 'asdf:load-op :bos.web))
 
 ;;;
@@ -27,14 +28,14 @@
 
 (defun start-webserver ()
   (apply #'bos.m2::reinit (read-configuration "m2.rc"))
-  (apply #'bos.web::reinit (read-configuration "web.rc"))
+  (apply #'bos.web::init (read-configuration "web.rc"))
   (bknr.cron::start-cron))
 
 (defun start-slime ()
   (swank::create-swank-server 4005 :spawn #'swank::simple-announce-function t))
 
 (defun reload-global-table ()
-  (loop for lib-entry in sys::*global-table*
+  (loop for lib-entry in (reverse sys::*global-table*)
 	for (sap . lib-path) = lib-entry
 	when lib-path
 	do (let ((new-sap (sys::dlopen (namestring lib-path)
@@ -50,6 +51,7 @@
 
 (defun init ()
   (fix-dpd)
+  (asdf:oos 'asdf:load-op :bos.web)
   (format t "BOS Online-System~%")
   (when *cert-daemon*
     (format t "; starting certificate generation daemon, slime and webserver not started~%")

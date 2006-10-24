@@ -1,7 +1,7 @@
 (in-package :cl-user)
 
 (asdf:defsystem :bos.m2
-    :depends-on (:bknr :bknr-modules :net.post-office)
+    :depends-on (:bknr :bknr-modules :net.post-office :cl-mime :iconv)
     :components ((:file "packages")
 		 (:file "config" :depends-on ("packages"))
 		 (:file "utils" :depends-on ("config"))

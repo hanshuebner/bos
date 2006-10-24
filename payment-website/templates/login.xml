@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:bos="http://createrainforest.org">
+ <bos:admin-login-page>
+  <head>
+   <title>Please login in to the BOS CMS</title>
+   <link rel="stylesheet" href="/static/cms.css" />
+  </head>
+  <body>
+   <img src="/images/bos-logo.gif" width="348" height="255"/>
+   
+   <p>Please log in to the BOS CMS</p>
+  
+   <form method="post">
+    <table>
+     <tr>
+      <td>Username</td>
+      <td><input name="__username"/></td>
+     </tr>
+     <tr>
+      <td>Password</td>
+      <td><input name="__password" type="password"/></td>
+     </tr>
+     <tr>
+      <td colspan="2">
+       <input type="submit" name="action" value="login"/>
+      </td>
+     </tr>
+    </table>
+   </form>
+  </body>
+ </bos:admin-login-page>
+</html>

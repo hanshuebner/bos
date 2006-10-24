@@ -5,6 +5,7 @@
 	<head>
 		<title>Satellitenkarte - Samboja Lestari</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" charset="utf-8" />
+		<meta http-equiv="imagetoolbar" content="no"/>
 
 		<link href="../satellitenkarte_style.css" rel="stylesheet"/>
 		<script language="JavaScript" type="text/JavaScript" src="messages.js"></script>
@@ -143,7 +144,7 @@
 		  </form>	   
 		</div>
 	</div>
-	<div id="UebersichtKlein" style="position:absolute; width:138px; height:132px; z-index:10; left: 10px; top: 79px;" class="KarteRahmen"> 
+	<div id="UebersichtKlein" style="position:absolute; width:138px; height:76px; z-index:10; left: 10px; top: 79px;" class="KarteRahmen"> 
 	  <table width="138" border="0" cellspacing="0" cellpadding="0">
 		<tr> 
 		  <td class="InfoKopf">Übersichtskarte</td>
@@ -151,7 +152,7 @@
 		<tr> 
 		  <td align="center" valign="middle"><div id="UebersichtPosition" style="position:absolute; width:4px; height:4px; z-index:5"><img src="../bilder/spacer.gif" width="4" height="4" border="0"/></div>
 		   <a href="#" class="Navigation" onclick="Uebersicht_anzeigen(); self.focus();">
-		    <img src="../bilder/uebersichtskarte_klein.gif" width="118" height="118" border="0"/>
+		    <img src="../bilder/uebersichtskarte_klein.gif" width="118" height="62" border="0"/>
 		   </a>
 		  </td>
 		</tr>
@@ -200,7 +201,7 @@
 	  <div id="Faehnchen" style="position:absolute; width:120px; height:15px; z-index:7; left: 169px; top: 100px; visibility: hidden;">
 	   <img src="../bilder/spacer.gif" width="1" height="1"/>
 	  </div>
-	  <div id="Uebersichthome" style="position:absolute; width:140px; height:20px; z-index:6; left: 10px; top: 220px; visibility: inherit;" class="Navigation">
+	  <div id="Uebersichthome" style="position:absolute; width:140px; height:20px; z-index:6; left: 10px; top: 164px; visibility: inherit;" class="Navigation">
 	   Points of Interest 
 	   <div id="UebersichtPoiNavi" style="position:absolute; width:125px; height:80px; z-index:7; left: 19px; top: 17px; visibility: inherit;"></div>
 	  </div>
@@ -302,7 +303,7 @@
 		<div id="ThumbLink5" style="position:absolute; width:55px; height:55px; z-index:4; top: 73px; left: 60px; visibility: inherit;"><a href="#" onClick="ThumbVergoessern(5)"><img src="../bilder/spacer.gif" width="55" height="55" border="0"/></a></div>
 		<div id="ThumbLink6" style="position:absolute; width:55px; height:55px; z-index:4; top: 73px; left: 117px; visibility: inherit;"><a href="#" onClick="ThumbVergoessern(6)"><img src="../bilder/spacer.gif" width="55" height="55" border="0"/></a></div>
 	  </div>
-	  <div id="home" style="position:absolute; width:140px; height:20px; z-index:6; left: 10px; top: 218px; visibility: inherit;" class="NavigationAktiv">
+	  <div id="home" style="position:absolute; width:140px; height:20px; z-index:6; left: 10px; top: 164px; visibility: inherit;" class="NavigationAktiv">
 	   Points of Interest
 	   <div id="PoiNavi" style="position:absolute; width:125px; height:80px; z-index:7; left: 19px; top: 17px; visibility: inherit;"></div>
 	  </div>
@@ -310,6 +311,12 @@
 	<div id="qmDetail" style="position:absolute; width:1px; height:1; z-index:4; left: 0px; top: 0px; visibility: hidden;"> 
 	  <div id="qmDetailKarte" style="position:absolute; width:360px; height:390px; z-index:1; left: 169px; top: 100px; visibility: inherit;" class="KarteRahmen"> 
 		<div id="qmLupe" style="position:absolute; width:36px; height:24px; z-index:11; visibility: inherit;"><img src="../bilder/lupe.gif" width="36" height="24"/></div>
+		<div id="selected_contract" style="position:absolute; z-index:10; visibility: inherit;">
+		 <img id="selected_contract_img" src="../bilder/spacer.gif" width="1" height="1"/>
+		</div>
+		<div id="own_contract" style="position:absolute; z-index:10; visibility: inherit;">
+		 <img id="own_contract_img" src="../bilder/spacer.gif" width="1" height="1"/>
+		</div>
 		<div id="LayersMenu" class="KarteRahmen" style="position: absolute; bottom: 31px; right: 1px; z-index: 15; visibility: inherit;">
 		  <table width="90" border="0" cellspacing="0" cellpadding="0">
 		    <tr> 
@@ -398,6 +405,12 @@
 	   "verkaufte" m²
 	  </div>
 	  <div id="qmAusschnitt" style="position:absolute; width:200px; height:115px; z-index:7; left: 172px; top: 512px; visibility: inherit;">
+		<div id="lupe_selected_contract" style="position:absolute; z-index:10; visibility: inherit;">
+		 <img id="lupe_selected_contract_img" src="../bilder/spacer.gif" width="1" height="1"/>
+		</div>
+		<div id="lupe_own_contract" style="position:absolute; z-index:10; visibility: inherit;">
+		 <img id="lupe_own_contract_img" src="../bilder/spacer.gif" width="1" height="1"/>
+		</div>
 		<table width="1800" height="1800" border="0" cellpadding="0" cellspacing="0">
 		  <tr>
 			<td><img name="qmlupe11" width="450" height="450" id="qmlupe11"/></td>

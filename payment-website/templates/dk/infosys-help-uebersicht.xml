@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_extra"
+  title="RAINFOREST for SAMBOJA LESTARI - Guide to the Satellite Map"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<h1 class="extra">About the satellite map</h1>
+	<p class="text_content">
+		<p> You find yourself in our satellite information system. Here you can see for yourself 
+		how the project area in Samboja Lestari looks like. 
+		Furthermore, you can look up where the square metres you have sponsored are located.  </p>
+		<p>
+		On the main map you see several icons you can click at, which will then lead you to further images:</p>
+		<span style="border-left:30px; border-right:30px">
+			<table border="0">
+				<tr>
+					<td width="20"> </td>
+					<td>
+						<img src="/images/punkt.gif" border="0" />
+					</td>
+					<td>
+						Here is one facility run by BOS.
+					</td>
+					<td width="20"> </td>
+				</tr>
+				<tr>
+					<td width="20"> </td>
+					<td>
+						<img src="/images/palme.gif" border="0" />
+					</td>
+					<td>
+						This icon marks a point of interest in the project area.
+					</td>
+					<td width="20"> </td>
+				</tr>
+				<tr>
+					<td width="20"> </td>
+					<td>
+						<img src="/images/sale.gif" border="0" />
+					</td>
+					<td>
+						Sales area for square metres. Here, profiles of square metre sponsors can be looked at. 
+					</td>
+					<td width="20"> </td>
+				</tr>
+				<tr>
+					<td width="20"> </td>
+					<td>
+						<img src="/images/qm.gif" border="0" />
+					</td>
+					<td>
+						Here are 'your' square metres. This icon only comes up if you are registered. 
+					</td>
+					<td width="20"> </td>
+				</tr>
+			</table>
+		</span>
+		<p> By clicking at the 'point of interest' list on the left, 
+		    you will get directly to the point of interest you wish to look at. </p>
+		<p> In order to get back to the main menu from one of the sublevels, 
+		    please click at the main map on the top left. </p>
+		<p> In case you already have sponsored square metres, you can register on the bottom left 
+		    by entering your sponsor-ID, password or mastercode into the login-area. You then have access 
+		    to your sponsor profile. You are able to recall your sponsor status; 
+		    and you have access to your rainforest-certificate as PDF document. </p>
+		<p> We wish you lots of fun on your virtual expedition to Samboja Lestari!</p>
+	</p>					
+</bknr:toplevel>

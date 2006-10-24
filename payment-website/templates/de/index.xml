@@ -42,6 +42,8 @@ Internet beobachten.
 					<a href="idea" class="more">
 						mehr
 					</a>
+					<br />
+					<br />
 					</td>
 					<td></td>				
 				</tr>
@@ -109,7 +111,7 @@ Internet beobachten.
 		<div id="subscribe">
 			<form style="margin:0px" name="form" method="post">
 				<input value="news" name="list" type="hidden"/>
-				<strong>Infos direkt nach Hause? </strong><br />
+				<strong>Infos direkt nach Hause? </strong><br /><br />
 					Ihre E-Mail-Adresse:
 					<br /><br />
 					<input type="text" class="form_big" name="email" size="20" maxlength="40" value="" />

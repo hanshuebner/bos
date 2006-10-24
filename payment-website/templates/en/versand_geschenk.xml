@@ -20,7 +20,6 @@
 	
 		<!-- header and menu_top -->
 		<div id="header">
-
 			<div id="menue_banner">
 				<img src="../images/header_ganzneu.gif" border="0" />
 			</div>
@@ -28,7 +27,6 @@
 			<div id="menue_header_left">
 				BOS Deutschland e.V.
 			</div>
-
 		</div>
 		<!-- /header and menu_top -->
 		<!-- content 3teilig-->
@@ -75,10 +73,10 @@
 					<div id="textbox_content_big" >
 						<form name="formular" method="post" action="versand_quittung">
 							<input type="hidden" name="sponsor-id" value="$(sponsor-id)" />
-							<input type="hidden" name="master-code" value="$(master-code)" />
 							<input type="hidden" name="contract-id" value="$(cartId)" />
 							<input type="hidden" name="email" value="$(email)" />
-							<input type="hidden" name="next-step-name" value="weiter" />
+							<input type="hidden" name="gift" value="$(MC_gift)" />
+							<input type="hidden" name="next-step-name" value="fertig" />
 							<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
 									<td colspan="3"><span class="headline">Ihre Zahlung war erfolgreich:</span></td>
@@ -99,8 +97,7 @@
 								</tr>		
 								<tr>
 									<td colspan="3">
-										Ist das der Name, der auf der Regenwald-Urkunde als
-										Sponsor eingetragen werden soll?
+										Bitte geben Sie den Namen des Beschenkten für die Urkunde ein:
 									</td>
 								</tr>	
 								<tr>
@@ -109,7 +106,7 @@
 									</td>
 									<td></td>
 									<td>
-										<input type="text" class="form_big" size="35" name="name" value="$(name)" />
+										<input type="text" class="form_big" size="35" name="name" value="" />
 									</td>
 								</tr>
 								<tr>
@@ -117,8 +114,7 @@
 								</tr>	
 								<tr>
 									<td colspan="3">
-										Bitte überprüfen bzw. korrigieren Sie die angegebene Adresse für den Versand
-										Ihrer Regenwald-Urkunde:
+										Bitte geben Sie die Versandadresse für die Regenwaldurkunde ein.
 									</td>
 								</tr>
 								<tr>
@@ -131,6 +127,7 @@
 <!-- left-aligned in order to aid formatting -->
 <textarea cols="24" rows="3" name="address">$(name)
 $(address)
+$(postcode)
 $(country)</textarea>
 									</td>
 								</tr>

@@ -10,7 +10,7 @@ vbellwait 0
 msgminwait 0
 msgwait 0
 
-chdir /home/bknr/bos
+chdir bknr-svn/projects/bos
 
 screen -t webserver lisp -core bos.core
 #logfile screen.log

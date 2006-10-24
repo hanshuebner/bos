@@ -161,7 +161,7 @@
 										Die Bestimmungen des Datenschutzgesetzes werden eingehalten. Daten werden nicht an Dritte
 										weitergegeben.
 									</span>
-									<br />
+									
  									<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
 									<a href="javascript:window_extra('privacy')" class="more">
 										Datenschutzinformation
@@ -193,7 +193,7 @@
  									<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
 									<a href="javascript:show_disclaimer()" class="more">
 										Verzichtsklausel
-									</a> gelesen und stimme ihr zu. <br /> <br />
+									</a> gelesen und stimme ihr zu. <br /> 
 								</td>
 							</tr>
 							<tr>

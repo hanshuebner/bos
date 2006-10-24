@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  suppress-xml-headers="1"
+  >
+	<head>
+		<base href="$(website-url)/de/quittung" />
+		<link rel="stylesheet" href="/static/toplevel_style.css" />
+		<link rel="stylesheet" href="/static/content_style.css" />
+		<script src="/static/bos.js" type="text/javascript"><!-- x -->	
+		</script> 
+             <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8" />-->
+		<title>REGENWALD f&uuml;r SAMBOJA LESTARI</title>
+	</head>
+	<body>
+		
+		<!-- header and menu_top -->
+		<div id="header">
+
+			<div id="menue_banner">
+				<a href="index">
+					<img src="/images/header_ganzneu.gif" border="0" />
+				</a>
+			</div>
+
+			<div id="menue_header_left">
+				BOS Deutschland e.V.
+			</div>
+
+		</div>
+		<!-- /header and menu_top -->
+		<!-- content 3teilig-->
+		<div id="content">
+			<div id="content_left"><!-- content left-->
+				<div id="textbox_left_form">		
+					<table border="0" cellpadding="1" cellspacing="0">
+						<tr>
+							<td></td>
+							<td colspan="2">
+								<img src="/images/step3.gif" width="120" height="20" border="0" alt="" />
+							</td>
+						</tr>
+						<tr><td colspan="4" height="40"></td></tr>
+						<tr>
+							<td> </td>
+							<td colspan="2"><span class="link_titlered">Herzlichen Dank</span><br /><br /></td>
+							<td></td>				
+						</tr>
+						<tr>
+							<td></td>
+							<td colspan="2">
+								für Ihre Unterstützung und das Vertrauen, das Sie BOS damit entgegen bringen.
+								<br /><br />
+								Die von Ihnen gesponserten m² sind in guten Händen.
+							</td>
+							<td></td>				
+						</tr>
+					</table>	                                                         
+				</div>	
+				<!-- footer -->	
+				<div id="menue_footer">	
+					<a href="javascript:window_extra('privacy')" class="footer">
+						Datenschutzinfo
+					</a>
+					l
+					<a href="javascript:window_extra('impressum')" class="footer">
+						Impressum
+					</a>
+				</div>
+				<!-- /footer -->	
+			</div>
+			<!-- /content left-->
+			<!-- container content_main -->
+			<div id="content_main">
+				<div id="textbox_content_big" >
+					<bos:process-payment>
+						<form method="post" action="generate-cert">
+							<input type="hidden" name="contract-id" value="$(cartId)" />
+							<input type="hidden" name="__sponsorid" value="$(sponsor-id)" />
+							<input type="hidden" name="__password" value="$(master-code)" />
+							<input type="hidden" name="email" value="$(email)" />
+							<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
+								<tr>
+									<td colspan="3"><span class="headline">Ihre Zahlung war erfolgreich:</span></td>
+								</tr>
+								<tr>
+									<td colspan="3" height="140">
+										<bos:worldpay-receipt />
+									</td>							
+								</tr>
+								<tr>
+									<td colspan="3" height="10"> </td>
+								</tr>
+								<tr>
+									<td colspan="3" height="1" bgcolor="#c0c0c0"> </td>
+								</tr>
+								<tr>
+									<td colspan="3" height="10"> </td>
+								</tr>
+								
+								<tr>
+									<td colspan="3" height="15">Auf welchen Namen sollen wir Ihre Regenwald-Urkunde ausstellen? </td>
+								</tr>	
+								<tr>
+									<td height="30">Name:</td>
+									<td></td>
+									<td><input type="text" class="form_big" size="35" name="name" value="$(name)" /></td>
+								</tr>
+								<tr>
+									<td colspan="3" height="8">
+										<span class="help_text">
+											Wir &Auml;bernehmen den Namen, der in diesem Eingabefeld angegeben wird.
+											Bitte korrigieren Sie bei Bedarf die angezeigte Eingabe.
+										</span> 
+									</td>
+								</tr>	
+								<tr>
+									<td colspan="3" height="10"> </td>
+								</tr>
+								<tr>
+									<td colspan="3" height="1" bgcolor="#c0c0c0"> </td>
+								</tr>
+											
+								<tr>
+									<td height="12"></td>
+								</tr>
+								<tr>
+					                          	<td colspan="3" align="right">
+										<input type="submit" class="form_big" name="Button"
+											onclick="javascript:return confirm('Ist der Name korrekt angegeben?');"
+											value="speichern und weiter" />
+								  	</td>
+								</tr>
+							</table>
+						 </form>
+					</bos:process-payment>
+				</div>
+			</div>
+			<div id="content_right">
+				<div id="helpbox">		
+					<br /><br />
+					[<strong>Zahlungsbest&auml;tigung</strong>]
+					<br />
+					Diese Zahlungsbest&auml;tigung von WorldPay ist bereits per E-Mail unterwegs zu Ihnen. Sollten Sie wider
+					Erwarten keine Nachricht erhalten, wenden Sie sich bitte an
+					<br />
+						<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+						<a href="mailto:service@create-rainforest.org" class="more">
+							service@create-rainforest.org
+						</a>
+					<br /><br /><br />
+					
+					[<strong>Regenwald-Urkunde</strong>]
+					<br />
+					Schon ab 1 m&sup2; erhalten Sie eine
+					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+					<a href="javascript:window_extra('certificat')" class="more">
+						Urkunde
+					</a>
+					als pdf-Download in Ihrem eigenen Sponsoren-Profil.
+					<br /><br /><br /><br /><br /><br /><br />			
+			 	</div>
+			</div>
+		</div>
+	</body>
+</html>

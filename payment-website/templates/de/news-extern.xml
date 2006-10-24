@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_main"
+  title="REGENWALD für SAMBOJA LESTARI"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<!-- container content_main -->
+	<div id="content_main">
+		<div id="textbox_content">
+			<bos:news-item />
+		</div>	
+	</div>
+	<div id="content_right">
+		<div id="subscribe">
+			<form style="margin:0px" name="form" method="post">
+				<input value="news" name="list" type="hidden"/>
+				<strong>Infos direkt nach Hause? </strong><br /><br />
+					Ihre E-Mail-Adresse:
+					<br /><br />
+					<input type="text" class="form_big" name="email" size="20" maxlength="40" value="" />
+					<input value="ja" class="form_big" name="action" type="submit" onclick="return send_info_request();" />
+			</form> 
+		</div>	
+	</div>
+</bknr:toplevel>

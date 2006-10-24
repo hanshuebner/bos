@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<head>
+		<link rel="stylesheet" href="/static/toplevel_style.css" />
+		<link rel="stylesheet" href="/static/content_style.css" />
+		<script src="/static/bos.js" type="text/javascript"><!-- x -->	
+		</script> 
+		<script src="/static/bos_en.js" type="text/javascript"><!-- x -->	
+		</script> 
+             <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8" />-->
+		<title>$(title)</title>
+	</head>
+<body>
+
+	<!-- header and menu_top -->
+	<div id="header">
+
+		<div id="menue_banner">
+			<a href="index">
+				<img src="../images/header_ganzneu.gif" border="0" />
+			</a>
+		</div>
+
+		<div id="menue_header_left">
+		BOS Foundation
+		</div>
+
+		<div id="menue_header_main">
+			<div>l</div>
+			<div>
+				<a href="idea" class="menue"
+						title="What exactly is happening.">
+					project
+				</a>
+			</div>
+			<div>l</div>
+			<div>
+				<a href="bestellung" class="menue"
+						title="Join us!">
+					donation
+				</a>
+			</div>
+			<div>l</div>	
+			<div>
+				<a href="bos" class="menue"
+						title="BOS Foundation">
+					BOS
+				</a>
+			</div>
+			<div>l</div>	
+			<div>
+				<a href="javascript:window_infosys()" class="menue"
+						title="Move to satellite map.">
+					satellite map
+				</a>
+			</div>
+			<div>l</div>
+			<div>
+				<a href="contact" class="menue"
+						title="Contact us.">
+					contact
+				</a>
+			</div>	
+			<div>l</div>		
+		</div>
+	</div>
+	<!-- /header and menu_top -->
+
+	<!-- content 3teilig-->
+		<bknr:tag-body />
+	<!-- /content 3teilig-->
+
+	</body>
+</html>

@@ -34,8 +34,11 @@
 	:bknr.web
 	:bknr.images
 	:bknr.statistics
+	:bknr.rss
 	:bos.m2.config
 	:net.post-office
+	:cxml
+	:cl-mime
 	:cl-gd)
   (:shadowing-import-from :cl-interpol #:quote-meta-chars)
   (:export #:m2-store
@@ -95,11 +98,13 @@
            #:contract-paidp
            #:contract-date
            #:contract-m2s
+	   #:contract-bounding-box
 	   #:contract-color
 	   #:contract-cert-issued
            #:contract-set-paidp
 	   #:contract-price
 	   #:contract-issue-cert
+	   #:contract-worldpay-trans-id
 	   #:contract-pdf-pathname
 	   #:contract-pdf-url
 	   #:contract-download-only-p
@@ -174,9 +179,9 @@
 
 	   #:mail-fiscal-certificate-to-office
 	   #:mail-instructions-to-sponsor
-	   #:mail-transfer-indication
 	   #:mail-info-request
-	   #:mail-request-parameters
+	   #:mail-manual-sponsor-data
+	   #:mail-worldpay-sponsor-data
 
 	   #:*cert-download-directory*))
 

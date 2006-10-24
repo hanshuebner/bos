@@ -1,5 +1,8 @@
 // JavaScript Document -*- Java -*-
 
+// Originally written by Matthias, Systemtakt neue Medien GbR
+// This program needs a lot of refactoring.
+
 // XXX bei klick auf Ã¼bersichtskarte bleiben die links der poi-thumbnails aktiv
 // XXX beim schliessen des opener-fensters funktioniert "m2 kaufen" nicht mehr
 
@@ -30,7 +33,6 @@ var poi = new Array; // Array in dem die Daten fuer die POI gespeichert werden
 var qm = new Array; // Array in dem die Daten fuer die QM gespeichert werden
 var uebersicht_icons = new Array;  // Array in dem die Daten fuer die Icons der Übersichtskarte gespeichert werden
 var profil = new Array; // Array in dem die Daten fuer das Profil gespeichert werden
-var n_qm = new Array; // Array in dem die Daten fuer das nachbar-Quadratmeter gespeichert werden
 var n_profil = new Array; // Array in dem die Daten fuer das Nachbar-Profil gespeichert werden
 
 var loginstatus = false; // Status ob Anwender eingeloggt sind wird ueber login_pruefen() gefuellt
@@ -78,7 +80,7 @@ function msg(key)
     }
 }
 
-function schreibe_debugger(text) {
+function dbg(text) {
     // Schriebt einen Text in die Debugger-Ebene
     debugger_text = debugger_text + text;
     document.getElementById("debugger").innerHTML = debugger_text;
@@ -133,7 +135,7 @@ function init() {
 	close();
     }
     
-    schreibe_debugger("<br/> init() <br/>");
+    dbg("<br/> init() <br/>");
     // initialisierung startet die Ladefuntkionen
     // parst den URL-String und trennt logout, sponsorid und passwort
     // Debugger anzeigen oder ausblenden
@@ -154,7 +156,7 @@ function poi_laden() {
 
     timer = 0;
 
-    schreibe_debugger("<br/> -> lade POI");
+    dbg("<br/> -> lade POI");
     poicomplete = false;
     window.frames['data'].window.location.replace(http_pfad + "/poi-javascript");
     poi_warten(); // starten der Wartenfunktion
@@ -180,7 +182,7 @@ function poi_warten() {
     // poicomplet ist dei letzte Variable im Script daher wenn sie gesetzt ist ist das Ende erreicht
     if (poicomplete) {
 	// wenn der Datensatz komplett geladen ist wird der timer auf Null gesetzt und je nachdem ob sich eingeloggt wurde oder nicht die loginueberpruefung oder die Punkterzeugung gestartet
-	schreibe_debugger("<br/> -> <b>POI geladen! login: " + login + "</b>");
+	dbg("<br/> -> <b>POI geladen! login: " + login + "</b>");
 	document.getElementById("Info3Text").innerHTML = '<b>' + msg('Anzahl Sponsoren') + '</b><br />'
 	 + anzahlSponsoren
 	 + '<br /><br /><b>' + msg('Anzahl verkaufte mÂ²') + '</b><br />'
@@ -190,14 +192,16 @@ function poi_warten() {
 	}
 	UebersichtNavi();
 	qm_zusammenfassen();
+	icon_versatz(); 
+	poi_faehnchen_erzeugen();
     } else {
 	// wenn der Datensatz noch nicht komplett geladen ist wird der timer eroeht und die Funktion nochmal gestartet
 	timer++; 
 	if (timer < 100) {
-	    schreibe_debugger("."); 
+	    dbg("."); 
 	    setTimeout("poi_warten()", 100);
 	} else {
-	    schreibe_debugger("<br/> -> <b>POI konnten nicht geladen werden</b>");
+	    dbg("<br/> -> <b>POI konnten nicht geladen werden</b>");
 	    alert(msg('Fehler beim Laden der POI-Informationen, bitte probieren Sie es spÃ¤ter noch einmal'));
 	}
     }
@@ -215,6 +219,14 @@ function login_pruefen() {
     timer = 0;
     var user = document.form0.__sponsorid.value;
     var password = document.form0.__password.value;
+
+    var current_url = '' + document.location;
+
+    if (user == '' && current_url.match(/__sponsorid/)) {
+	user = current_url.replace(/.*__sponsorid=([^?]*).*/, "$1");
+	password = current_url.replace(/.*__password=([^?]*).*/, "$1");
+    }
+
     var url = http_pfad + "/sponsor-login";
     if (user != "") {
 	url += "?__sponsorid=" + user + "&__password=" + password;
@@ -222,7 +234,7 @@ function login_pruefen() {
     loginstatus = undefined;
     window.frames['data'].window.location.replace(url);
 
-    schreibe_debugger("<br/> -> lade Login-Status - url ist " + url + '<br/>');
+    dbg("<br/> -> lade Login-Status - url ist " + url + '<br/>');
 
     login_warten(); // Wartefunktion starten
 
@@ -239,23 +251,23 @@ function login_warten() {
     // wenn loginstatus gesetzt ist ist das Ende erreicht
 
     if (loginstatus) { 
-	schreibe_debugger("<br/> -> <b>Login-Status geladen: " + loginstatus + "</b>");
+	dbg("<br/> -> <b>Login-Status geladen: " + loginstatus + "</b>");
 	// wenn loginstatus gesetzt ist wir timer auf Null gesetzt
 	// wenn lohinstatus = "login-failed" ist wird eine Fehlermeldung eingeblendet
 	if (loginstatus == "not-logged-in") {
-	    schreibe_debugger("<br/> -> <b>nicht eingeloggt!</b>");
+	    dbg("<br/> -> <b>nicht eingeloggt!</b>");
 	}
 
 	if (loginstatus == "login-failed") {
 	    document.getElementById("Loginfehler").style.visibility = 'visible';
-	    schreibe_debugger("<br/> -> <b>Login fehlgeschlagen!</b>");
+	    dbg("<br/> -> <b>Login fehlgeschlagen!</b>");
 	}
 	// wenn lohinstatus = "logged-in" ist wird das Anmeldefeld ausgelendet, das Logoutfeld eingeblendet und die Sponsorid angezeigt
 	// danach werden die Punkte erzuegt und die Quadratmeter geladen
 	if (loginstatus == "logged-in") {
 	    document.getElementById("Anmelden").style.visibility = "hidden";
 	    document.getElementById("SponsorInfo").style.visibility = "visible";
-	    schreibe_debugger("<br/> -> <b>Login erfolgreich!</b>");
+	    dbg("<br/> -> <b>Login erfolgreich!</b>");
 	} else {
 	    document.getElementById("Anmelden").style.visibility = "visible";
 	    document.getElementById("SponsorInfo").style.visibility = "hidden";
@@ -266,10 +278,10 @@ function login_warten() {
 	// wenn der Datensatz noch nicht komplett geladen ist wird der timer eroeht und die Funktion nochmal gestartet	
 	timer++; 
 	if (timer < 100) {
-	    schreibe_debugger("."); 
+	    dbg("."); 
 	    setTimeout("login_warten()", 100);
 	} else {
-	    schreibe_debugger("<br/> -> <b>Loginstatus konnten nicht geladen werden</b>");
+	    dbg("<br/> -> <b>Loginstatus konnten nicht geladen werden</b>");
 	}
     }
     return true;
@@ -278,7 +290,7 @@ function login_warten() {
 function ausloggen() {
     // Seesion loeschen -> ausloggen
     window.frames['data'].window.location.replace(http_pfad + "/logout");
-    schreibe_debugger("<br/> -> ausloggen");
+    dbg("<br/> -> ausloggen");
     qm_laden();
     return true;
 }
@@ -289,12 +301,11 @@ function qm_laden() {
     timer = 0;
 
     profil_variable = 'profil';
-    qm_variable = 'qm';
 
     m2complete = false;
     window.frames['data'].window.location.replace(http_pfad + "/m2-javascript/");
 
-    schreibe_debugger("<br/> -> lade Quadratmeter ");
+    dbg("<br/> -> lade Quadratmeter ");
     qm_warten(); // Wartefunktion starten
     return true;
 }
@@ -303,29 +314,26 @@ function qm_warten() {
     // Wartefunktion, da das Laden etwas traege ist wartet dieses Script bis derf Datensatz komplatt geladen ist
     // m2complete ist die letzte Variable im Script daher wenn sie gesetzt ist ist das Ende erreicht
     if (m2complete) {
-	// wenn m2complete gelden ist wird qm_erzeugen() gestartet und der timer auf Null gesetzt
-	schreibe_debugger("<br/> -> <b>Quadratmeter geladen!</b>");		
+	dbg("<br/> -> <b>Quadratmeter geladen!</b>");		
 	poi_laden();
     } else {
 	// wenn der Datensatz noch nicht komplett geladen ist wird der timer eroeht und die Funktion nochmal gestartet
 	timer++; 
 	if (timer < 100) {
-	    schreibe_debugger("."); 
+	    dbg("."); 
 	    setTimeout("qm_warten()", 100);
 	} else {
-	    schreibe_debugger("<br/> -> <b>qm konnten nicht geladen werden</b>");
+	    dbg("<br/> -> <b>qm konnten nicht geladen werden</b>");
 	}
     }
     return true;
 }
 
 var profil_variable;
-var qm_variable;
 
-function qm_fertig(_profil, _qms) {
+function qm_fertig(_profil) {
     if (_profil) {
 	eval(profil_variable + " = _profil;");
-	eval(qm_variable + " = _qms;");
     }
     m2complete = true;
 }
@@ -337,23 +345,16 @@ function n_qm_laden() {
     // der Datensatz wird vorher auf Nullwerte gesetzt damit fals keine Daten in der URL enthalten sind der Quadratmeter als unverkauft angezeigt wird
     m2complete = false;
     timer=0;
-    n_profil = [];
-    n_profil['name'] = msg("noch nicht verkauft");
-    n_profil['country'] = "";
-    n_profil['anzahl'] = 0;
-    n_profil['datum'] = "";
-    n_profil['nachricht'] = "";
-    n_qm = [];
-    n_qm[1] = false;
-    n_qm[1] = false;
+    n_profil = {
+	name: msg("noch nicht verkauft")
+    };
 
     profil_variable = 'n_profil';
-    qm_variable = 'n_qm';
 
     m2complete = false;
     window.frames['data'].window.location.replace(http_pfad + "/m2-javascript/" + fremd_x + "/" + fremd_y);
     n_qm_warten(); // Wartefunktion starten
-    schreibe_debugger("<br/> -> lade Nachbar-Quadratmeter (" + fremd_x + "/" + fremd_y + ")");		
+    dbg("<br/> -> lade Nachbar-Quadratmeter (" + fremd_x + "/" + fremd_y + ")");		
     return true;
 }
 
@@ -361,9 +362,9 @@ function n_qm_warten() {
     // Wartefunktion, da das Laden etwas traege ist wartet dieses Script bis derf Datensatz komplatt geladen ist
     // m2complete ist die letzte Variable im Script daher wenn sie gesetzt ist ist das Ende erreicht
     if (m2complete) {
-	// timer wird auf Nullgesetzt und n_qm_erzeugen wird gestartet
+	// timer wird auf Nullgesetzt und display_selected_contract wird gestartet
 	timer = 0;
-	schreibe_debugger("<br/> -> <b>Nachbar-Quadratmeter geladen!</b>");		
+	dbg("<br/> -> <b>Nachbar-Quadratmeter geladen!</b>");		
 	// text fuer das Nachbarprofil wird zusammengesetzt
 	if (n_profil['name'] == msg("noch nicht verkauft")) {
 	    var text = '<table width="155" border="0" cellspacing="0" cellpadding="0"><tr><td colspan="2" class="PoiNavigation">'
@@ -381,8 +382,8 @@ function n_qm_warten() {
 		+ '</td></tr><tr> <td colspan="2" class="PoiNavigation"><img src="/infosystem/bilder/spacer.gif" width="1" height="10"/></td></tr>'
 		+ '<tr> <td width="60" class="PoiNavigation">' + msg('gesponsort') + ':</td><td class="PoiNavigation">'
 		+ n_profil['anzahl']
-		+ ' mÂ²</td></tr><tr> <td width="60" class="PoiNavigation">' + msg('seit') + ':</td><td class="PoiNavigation">'
-		+ n_qm[1]['datum']
+		+ ' mÂ²</td></tr><tr> <td width="60" class="PoiNavigation">'
+		+ msg('seit') + ':</td><td class="PoiNavigation">' + n_profil.contracts[0].date
 		+ '</td></tr><tr> <td colspan="2" class="PoiNavigation"><img src="/infosystem/bilder/spacer.gif" width="1" height="20"/></td></tr>'
 		+ '<tr> <td colspan="2" class="PoiNavigation">'
 		+ n_profil['nachricht']
@@ -390,77 +391,90 @@ function n_qm_warten() {
 	}
 	// Inhalt der Ueberschrift und des Infotextes werden gesetzt
 	document.getElementById("qmLaden").style.visibility = "hidden";
-	if (n_qm[1]) {
+	if (n_profil.contracts) {
 	    document.getElementById("Ueberschrift").innerHTML = msg("Verkaufte mÂ²");
 	} else {
 	    document.getElementById("Ueberschrift").innerHTML = msg("zu verkaufen!");
 	}
 	document.getElementById("qmInfoText").innerHTML = text;
-	n_qm_erzeugen();
+	display_selected_contract();
     } else {
 	// wenn der Datensatz noch nicht komplett geladen ist wird der timer eroeht und die Funktion nochmal gestartet	
 	timer++; 
 	if (timer < 100) {
 	    setTimeout("n_qm_warten()", 100);
 	} else {
-	    document.getElementById("qmLaden").style.visibility = "hidden"; schreibe_debugger("<br/> -> <b>Nachbar-Quadratmeter konnten nicht geladen werden</b>");
+	    document.getElementById("qmLaden").style.visibility = "hidden"; dbg("<br/> -> <b>Nachbar-Quadratmeter konnten nicht geladen werden</b>");
 	}
     }
     return true;
 }
 
-function n_qm_erzeugen() {
-    // Erzeugen der Nachbarquadratmeter	
-    // alte qm loeschen
-    if (n_zeilen > 0) {
-	for (var i  = 1; i < n_zeilen; i++) {
-	    var loeschen = eval("document.getElementById('n_qm" + i + "')");
-	    document.getElementById("qmAusschnitt").removeChild(loeschen);
-	}
-	schreibe_debugger("<br/> -> " + n_zeilen + " zeilen geloescht");		
-    }
-    // aktuelle qm einzeichnen
-    n_zeilen = 1;
-    objekt = n_qm[1];
+function load_contract_image(contract, image, factor, color) 
+{
+    var container = image.parentNode;
 
-    if (objekt['qm_x']) {
-    	schreibe_debugger("<br/> -> Es sollen " + objekt['qm_x'].length + " erzeugt werden");			
-	for (i=1; i < objekt['qm_x'].length; i++) {
-	
-	    // neue Ebene erstellen, Ebene ist abhaengig von <Uebersicht>
-	    var neueebene=document.createElement("DIV");
-	    document.getElementById("qmAusschnitt").appendChild(neueebene);
-			
-	    // Testen ob Icon links oder rechts steht --> Ebene muß um 150 px versetzt werden oder nicht
-	    var x = parseInt(Math.round(objekt['qm_x'][i] - x_anf) * 5);
-	    var y = parseInt(Math.round(objekt['qm_y'][i] - y_anf) * 5);
-	    var width=5;
-	    while (objekt['qm_y'][i] == objekt['qm_y'][(i + 1)]) {
-		width += 5;
-		i++;
-	    }
-	    // definieren der Styles
-	    neueebene.style.position="absolute";
-	    neueebene.style.left = x + "px";
-	    neueebene.style.top = y + "px";
-	    neueebene.style.height = "5px";
-	    neueebene.style.width = width + "px";
-	    neueebene.style.zIndex ="9";
-	    neueebene.style.visibility = "inherit";
-	    neueebene.id = "n_qm" + n_zeilen;		
-	    neueebene.align = "left";
-	    neueebene.innerHTML = '<img src="/infosystem/bilder/gelb.gif" height="5" width="' + width + '"/>';
-	    n_zeilen++;
-	}
+    if (!color) {
+	color = 'ffff00';
     }
-    schreibe_debugger("<br/> -> " + n_zeilen + " zeilen fuer die Nachbar-Quadratmeter erzeugt");		
-    return n_zeilen;
+
+    container.style.visibility = 'hidden';
+    image.onload = function () {
+	this.parentNode.style.visibility = 'inherit';
+    }
+    image.src = '/contract-image/' + contract.id + '/' + color;
+    image.width = contract.width * factor;
+    image.height = contract.height * factor;
+
+    // Falls der Vertrag aus dem angezeigten Bereich herausragt, wird das bild entsprechend geclipped.
+    container.style.clip
+	= 'rect('
+	+ Math.max(0,  y_anf - contract.top) * factor + 'px '
+	+ Math.min(contract.width, contract.width - (contract.left + contract.width - x_anf - 360)) * factor + 'px '
+	+ Math.min(contract.height, contract.height - (contract.top + contract.height - y_anf - 360)) * factor + 'px '
+	+ Math.max(0, x_anf - contract.left) * factor + 'px'
+	+ ')';
+
+    container.style.left = (contract.left - x_anf) * factor + 'px';
+    container.style.top = (contract.top - y_anf) * factor + 'px';
+
+}
+
+function display_selected_contract()
+{
+    // Anzeigen der ausgewÃ¤hlten Nachbarquadratmeter
+
+    if (n_profil.contracts) {
+	var contract = n_profil.contracts[0];
+
+	load_contract_image(contract,
+			    document.getElementById('selected_contract_img'),
+			    1);
+	load_contract_image(contract,
+			    document.getElementById('lupe_selected_contract_img'),
+			    5);
+    } else {
+	document.getElementById('selected_contract_img').src = '../bilder/spacer.gif';
+	document.getElementById('lupe_selected_contract_img').src = '../bilder/spacer.gif';
+    }
+}
+
+function display_own_sqm()
+{
+    var contract = profil.contracts[0];
+    var img = document.getElementById('own_contract_img');
+    var enlarged_image = document.getElementById('lupe_own_contract_img');
+
+    load_contract_image(contract, img, 1, "ff0000");
+    load_contract_image(contract, enlarged_image, 5, "ff0000");
 }
 
 function qm_zusammenfassen() {
     // zusammenfassen mehererer Quadratmeterfähnchen zu einem Fähnchen.
-    // es wird geprüft, ob sich auf der Detailkarte des qm noch mehr qm azeigen lassen dadurch wird die Darstellung der Fähnchen vereinfacht
+    // es wird geprüft, ob sich auf der Detailkarte des qm noch mehr qm anzeigen lassen dadurch wird die Darstellung der Fähnchen vereinfacht
 
+    return;
+    
     var i=1;
     while (qm[i]) {
 	var qmV = qm[i];
@@ -499,7 +513,6 @@ function qm_zusammenfassen() {
 	}
 	i++;
     }
-    icon_versatz(); 
     return true;
 }
 
@@ -560,20 +573,14 @@ function icon_versatz() {
 	index++;
 	i++;
     }
-    var i=1;
-    while (qm[i]) {
-	if (qm[i]['status'] == "mitte") {
-	    var qmV = qm[i];
-	    var uebV = uebersicht_icons[index];
-	    uebersicht_icons[index] = new Array;
-	    uebersicht_icons[index]['x'] = qmV['x'];
-	    uebersicht_icons[index]['y'] = qmV['y'];
-	    uebersicht_icons[index]['icon'] = "qm";			
-	    uebersicht_icons[index]['name'] = msg("meine mÂ²");
-	    uebersicht_icons[index]['id'] = i;
-	}
-	index++;		
-	i++;
+    if (profil.contracts) {
+	var contract = profil.contracts[0];
+	uebersicht_icons[index++] = {
+	    x: contract.left,
+	    y: contract.top,
+	    icon: 'qm',
+	    name: msg("meine mÂ²")
+	};
     }
 
     var i=1;
@@ -584,7 +591,7 @@ function icon_versatz() {
 	    var vergleichV_x = uebersicht_icons[j]['x'] + 240;			
 	    var vergleichV_y = uebersicht_icons[j]['y'] + 240;
 	    versatz = kollisonsabfrage(uebV_x + 240, uebV_y + 240, vergleichV_x, vergleichV_y);
-	    // if (versatz[0]) {schreibe_debugger("<br/> -> POI[" + i + "] Richtungsaenderungvorschlag: " + versatz[0]);}
+	    // if (versatz[0]) {dbg("<br/> -> POI[" + i + "] Richtungsaenderungvorschlag: " + versatz[0]);}
 	    var test = new Array;
 	    test[0] = versatz[0];
 	    var versatz_index = versatz[0] + 1;
@@ -595,7 +602,7 @@ function icon_versatz() {
 		versatz_index--;
 		if (versatz_index < 1) {versatz_index = 4;}
 		k++;
-		// schreibe_debugger("<br/> -> Richtungsaenderungstest bei " + versatz_index + " Fehler: " + richtungsfehler);
+		// dbg("<br/> -> Richtungsaenderungstest bei " + versatz_index + " Fehler: " + richtungsfehler);
 
 		if (versatz_index == 1) {
 		    richtungsfehler = false;
@@ -606,7 +613,7 @@ function icon_versatz() {
 			    test = kollisonsabfrage(((uebV_x + 240) + versatz[versatz_index]), (uebV_y + 240) , testV_x, testV_y);
 			    if (test[0] != 0) {
 				richtungsfehler = true; 
-				// schreibe_debugger("<br/> -> Kollision mit " + l);
+				// dbg("<br/> -> Kollision mit " + l);
 			    }
 			}
 		    }
@@ -621,7 +628,7 @@ function icon_versatz() {
 			    test = kollisonsabfrage((uebV_x + 240), ((uebV_y + 240) + versatz[versatz_index]), testV_x, testV_y);
 			    if (test[0] != 0) {
 				richtungsfehler = true;
-				// schreibe_debugger("<br/> -> Kollision mit " + l);
+				// dbg("<br/> -> Kollision mit " + l);
 			    }
 			}
 		    }
@@ -636,7 +643,7 @@ function icon_versatz() {
 			    test = kollisonsabfrage(((uebV_x + 240) + versatz[versatz_index]), (uebV_y + 240) , testV_x, testV_y);
 			    if (test[0] != 0) {
 				richtungsfehler = true;
-				// schreibe_debugger("<br/> -> Kollision mit " + l);
+				// dbg("<br/> -> Kollision mit " + l);
 			    }
 			}
 		    }
@@ -651,7 +658,7 @@ function icon_versatz() {
 			    test = kollisonsabfrage((uebV_x + 240), ((uebV_y + 240) + versatz[versatz_index]), testV_x, testV_y);
 			    if (test[0] != 0) {
 				richtungsfehler = true;
-				// schreibe_debugger("<br/> -> Kollision mit " + l);
+				// dbg("<br/> -> Kollision mit " + l);
 			    }
 			}
 		    }
@@ -664,7 +671,7 @@ function icon_versatz() {
 		if (versatz_index == 2) {uebersicht_icons[i]['y'] = uebersicht_icons[i]['y'] + versatz[versatz_index];}
 		if (versatz_index == 3) {uebersicht_icons[i]['x'] = uebersicht_icons[i]['x'] + versatz[versatz_index];}				
 		if (versatz_index == 4) {uebersicht_icons[i]['y'] = uebersicht_icons[i]['y'] + versatz[versatz_index];}
-		// schreibe_debugger("<br/> -> versetze POI[" + i + "] durch POI[" + j + "] nach " + versatz_index + " um " + versatz[versatz_index] + "<br/>");
+		// dbg("<br/> -> versetze POI[" + i + "] durch POI[" + j + "] nach " + versatz_index + " um " + versatz[versatz_index] + "<br/>");
 		uebV_x = uebersicht_icons[i]['x'];			
 		uebV_y = uebersicht_icons[i]['y'];
 	    }
@@ -672,11 +679,9 @@ function icon_versatz() {
 	}
 	i++;
     }
-
-    pkt_erzeugen();
 }
 
-function pkt_erzeugen() {
+function poi_faehnchen_erzeugen() {
     // Erzeugen der Faehnchen fuer die POI, der array wird durchlaufen und die entsprechenden Informationen in Ebenen dargestellt
     var i = 1;
     while (uebersicht_icons[i]) {
@@ -688,8 +693,10 @@ function pkt_erzeugen() {
 	var x = parseInt(Math.round(uebersicht_icons[i]['x'] / 30) + 170 - 8);
 	var y = parseInt(Math.round(uebersicht_icons[i]['y'] / 30) + 101 - 8);
 
-			
-	if (y > 360 + 99 - 13) (y = 360 + 99 -13);
+	// "aha!"
+	if (y > 360 + 99 - 13) {
+	    y = 360 + 99 - 13;
+	}
 
 	// definieren der Styles
 	neueebene.style.position="absolute";
@@ -702,24 +709,24 @@ function pkt_erzeugen() {
 			
 	neueebene.align = "left";
 	var faehnchentext = msg(uebersicht_icons[i]['name']);
-	var index = uebersicht_icons[i]['id'];
 	if (uebersicht_icons[i]['icon'] == "sale") {
+	    var index = uebersicht_icons[i]['id'];
 	    neueebene.innerHTML = '<a href="#" onClick="qmDetail_anzeigen(' + poi[index]['x'] + ', ' + poi[index]['y'] + ', 0);" class="FaehnchenLink" onMouseOver="faehnchen_einblenden(' + (x + 17) + ', ' + y + ', &quot;' + faehnchentext + '&quot;)" onMouseOut="faehnchen_ausblenden();"><img src="/images/' + uebersicht_icons[i]['icon'] + '.gif" border="0"/></a>';
 	} else if (uebersicht_icons[i]['icon'] == "qm") {
-	    neueebene.innerHTML = '<a href="#" onClick="qmDetail_anzeigen(' + qm[index]['x'] + ', ' + qm[index]['y'] + ',' + index + ');" onMouseOver="faehnchen_einblenden(' + (x + 17) + ', ' + y + ', &quot;' + faehnchentext + '&quot;)" onMouseOut="faehnchen_ausblenden();"><img src="/images/qm.gif" border="0"/></a>';
+	    neueebene.innerHTML = '<a href="#" onClick="qmDetail_anzeigen(' + profil.contracts[0].left + ', ' + profil.contracts[0].top + ', 0);" onMouseOver="faehnchen_einblenden(' + (x + 17) + ', ' + y + ', &quot;' + faehnchentext + '&quot;)" onMouseOut="faehnchen_ausblenden();"><img src="/images/qm.gif" border="0"/></a>';
 	} else {
 	    neueebene.innerHTML = '<a href="#" onClick="PoiDetail_anzeigen(' + uebersicht_icons[i]['id'] + ');" class="FaehnchenLink" onMouseOver="faehnchen_einblenden(' + (x + 17) + ', ' + y + ', &quot;' + faehnchentext + '&quot;)" onMouseOut="faehnchen_ausblenden();"><img src="/images/' + uebersicht_icons[i]['icon'] + '.gif" border="0" /></a>';
 	}				
 	i++;
     }
-    schreibe_debugger("<br/> -> <b>" + (i-1) + " Faehnchen erzeugt</b>");		
+    dbg("<br/> -> <b>" + (i-1) + " Faehnchen erzeugt</b>");		
     return true;
 
 }
 function poi_pos_setzen(objekt, i) {
     // qm setzen	
 
-    schreibe_debugger("<br> -> Position gestezt");
+    dbg("<br> -> Position gestezt");
     var x_obj = parseInt(Math.floor(objekt['x'] - x_anf));
     var y_obj = parseInt(Math.floor(objekt['y'] - y_anf));
 
@@ -738,7 +745,7 @@ function poi_pos_setzen(objekt, i) {
 
 function qm_pos_setzen(objekt, i) {
     // qm setzen	
-    schreibe_debugger("<br> -> Position gestezt");
+    dbg("<br> -> Position gestezt");
     var x_obj = parseInt(Math.floor(objekt['x'] - x_anf));
     var y_obj = parseInt(Math.floor(objekt['y'] - y_anf));
 
@@ -806,6 +813,10 @@ function Uebersicht_anzeigen() {
     // Ebenen entsprechen ein- oder ausblenden
     hide_poi_panorama();
     hide_poi_luftbild();
+
+    n_profil = {};
+    display_selected_contract();
+
     show_page("uebersicht");
     document.getElementById("qmDetail").style.visibility = "hidden";
     document.getElementById("PoiDetail").style.visibility = "hidden";
@@ -813,7 +824,7 @@ function Uebersicht_anzeigen() {
     document.getElementById("UebersichtPosition").style.visibility = "hidden";
     document.getElementById("Ueberschrift").innerHTML = start_ueberschrift;
     document.getElementById("Untertitel").innerHTML = "";	
-    schreibe_debugger("<br/> -> <b>Uebersicht anzeigen</b>");		
+    dbg("<br/> -> <b>Uebersicht anzeigen</b>");		
     return true;
 }
 
@@ -924,7 +935,7 @@ function PoiDetail_anzeigen(index) {
     x_anf = Math.max(0, Math.round((the_poi['x'] - 180) / 90) * 90);
     y_anf = Math.min(10440, Math.round((the_poi['y'] - 180) / 90) * 90);
 
-    schreibe_debugger("<br/> -> Kacheln laden");
+    dbg("<br/> -> Kacheln laden");
     // Kacheln von Server holen und dem entsprechenden Bild zuordnen	
     for (var x = 0; x < 4; x++) {
 	for (var y = 0; y < 4; y++) {
@@ -958,7 +969,7 @@ function PoiDetail_anzeigen(index) {
 
     // setzen des Positionskaestchens auf der kleinen Übersichtskarte	
     uebersicht_x = parseInt(((the_poi['x'] / 10800) * 118) + 8);
-    uebersicht_y = parseInt(((the_poi['y'] / 10800) * 118) + 8);
+    uebersicht_y = parseInt(((the_poi['y'] / 10800) * 118) + 8) - 37;
 
     document.getElementById("UebersichtPosition").style.left = uebersicht_x + "px";
     document.getElementById("UebersichtPosition").style.top = uebersicht_y + "px";	
@@ -992,7 +1003,7 @@ function PoiDetail_anzeigen(index) {
     document.getElementById("Uebersicht").style.visibility = "hidden";
     document.getElementById("PoiDetail").style.visibility = "visible";	
     document.getElementById("UebersichtPosition").style.visibility = "visible";
-    schreibe_debugger("<br/> -> <b>POI-Detailansicht anzeigen</b>");
+    dbg("<br/> -> <b>POI-Detailansicht anzeigen</b>");
     return true;
 }
 
@@ -1014,7 +1025,7 @@ function ThumbVergoessern(bild) {
     document.getElementById("PoiInfoText").innerHTML =  poi[aktuelles_objekt]['imagetext'][bild - 1];		
     document.getElementById("Ueberschrift").innerHTML = poi[aktuelles_objekt]['imageueberschrift'][bild - 1];
     document.getElementById("Untertitel").innerHTML = poi[aktuelles_objekt]['imageuntertitel'][bild - 1];
-    schreibe_debugger("<br/> -> <b>POI-Foto-Detailansicht anzeigen</b>");
+    dbg("<br/> -> <b>POI-Foto-Detailansicht anzeigen</b>");
     return true;
 }
 
@@ -1044,17 +1055,19 @@ function load_sqm_tiles() {
 
     for (var x = 0; x < 4; x++) {
 	for (var y = 0; y < 4; y++) {
-	    var img = eval("document.qmimg" + (x + 1) + "" + (y + 1));
-	    img.src = http_pfad + "/overview/" + (x_anf + (x * 90 )) + "/" + (y_anf + (y * 90 )) + "/" + active_layer_names().join("/");
+	    
+	    var img = document["qmimg" + (x + 1) + "" + (y + 1)];
+	    img.src = http_pfad + "/overview/" + (x_anf + (x * 90)) + "/" + (y_anf + (y * 90)) + "/" + active_layer_names().join("/");
 
-	    var img = eval("document.qmlupe" + (x + 1) + "" + (y + 1));
-	    img.src = http_pfad + "/overview/" + (x_anf + (x * 90 )) + "/" + (y_anf + (y * 90 )) + "/" + active_layer_names().join("/");
+	    var img = document["qmlupe" + (x + 1) + "" + (y + 1)];
+	    img.src = http_pfad + "/overview/" + (x_anf + (x * 90)) + "/" + (y_anf + (y * 90)) + "/" + active_layer_names().join("/");
 
 	}
     }
 }
 	
-function qmDetail_anzeigen(x_koord, y_koord, objekt) {
+function qmDetail_anzeigen(x_koord, y_koord, objekt)
+{
     // Funktion zum Anzeigen der "meine qm" Karte
     // Funktion zur Anzeige der POIs im Detail
     aktuelles_objekt = objekt;
@@ -1063,20 +1076,21 @@ function qmDetail_anzeigen(x_koord, y_koord, objekt) {
     // alte Kacheln loeschen
     for (var x = 0; x < 4; x++) {
 	for (var y = 0; y < 4; y++) {
-	    var img = eval("document.img" + (x + 1) + "" + (y + 1));
+	    var img = document["img" + (x + 1) + "" + (y + 1)];
 	    img.src = "/infosystem/bilder/spacer.gif";
 
-	    var img = eval("document.qmlupe" + (x + 1) + "" + (y + 1));
+	    var img = document["qmlupe" + (x + 1) + "" + (y + 1)];
 	    img.src = "/infosystem/bilder/spacer.gif";
 	}
     }
 	
-    // Koordinaten auf einen geraden Wert innerhalb des Rasters rechen (es sind nur Vielfache von 90 gueltig),
-    // Startwert der Kacheln ermitteln
+    // Koordinaten auf einen geraden Wert innerhalb des Rasters
+    // umrechnen (es sind nur Vielfache von 90 gueltig), Startwert der
+    // Kacheln ermitteln
     x_anf = Math.max(0, Math.round((x_koord - 180) / 90) * 90);
     y_anf = Math.min(10440, Math.round((y_koord - 180) / 90) * 90);
 	
-    schreibe_debugger("<br/> -> Kacheln laden (" + x_anf + " / " + y_anf + ")");		
+    dbg("<br/> -> Kacheln laden (" + x_anf + " / " + y_anf + ")");		
     // Kacheln von Server holen und dem entsprechenden Bild zuordnen
 
     load_sqm_tiles(x_anf, y_anf);
@@ -1086,24 +1100,14 @@ function qmDetail_anzeigen(x_koord, y_koord, objekt) {
 	var loeschen = eval("document.getElementById('qm" + i + "')");
 	document.getElementById("qmAusschnitt").removeChild(loeschen);
     }
-    schreibe_debugger("<br/> -> " + erzeugte_zeilen + " zeilen geloescht");
-
-    // fremde Quadratmeter löschen
-    if (n_zeilen > 0) {
-	for (var i  = 1; i < n_zeilen; i++) {
-	    var loeschen = eval("document.getElementById('n_qm" + i + "')");
-	    document.getElementById("qmAusschnitt").removeChild(loeschen);
-	}
-	schreibe_debugger("<br/> -> " + n_zeilen + " zeilen geloescht");		
-	n_zeilen = 0;
-    }
+    dbg("<br/> -> " + erzeugte_zeilen + " zeilen geloescht");
 
     // qm loeschen
     for (var i  = 1; i <= erzeugte_positionen; i++) {
 	var loeschen = eval("document.getElementById('pos" + i + "')");
 	document.getElementById("qmDetailKarte").removeChild(loeschen);
     }
-    schreibe_debugger("<br/> -> " + erzeugte_positionen + " Positionen geloescht");
+    dbg("<br/> -> " + erzeugte_positionen + " Positionen geloescht");
 
     x_obj = parseInt(Math.floor(x_koord - x_anf));
     y_obj = parseInt(Math.floor(y_koord - y_anf));
@@ -1125,15 +1129,19 @@ function qmDetail_anzeigen(x_koord, y_koord, objekt) {
 			
 	    i++;
 	}	
-	schreibe_debugger("<br/> -> " + erzeugte_positionen + " Quadratmeterpositionen");
-	schreibe_debugger("<br/> -> " + erzeugte_zeilen + " zeilen fuer Quadratmeter eingezeichnet");
+	dbg("<br/> -> " + erzeugte_positionen + " Quadratmeterpositionen");
+	dbg("<br/> -> " + erzeugte_zeilen + " zeilen fuer Quadratmeter eingezeichnet");
 	
     }
     // setzen des Positionskaestchens auf der kleinen Übersichtskarte	
-    var uebersicht_x = parseInt(((x_koord / 10800) * 118) + 14)
-	var uebersicht_y = parseInt(((y_koord / 10800) * 118 ) + 10)
-	if (uebersicht_y < 13) {uebersicht_y = 13};
-    if (uebersicht_x > 125) {uebersicht_x = 125};
+    var uebersicht_x = parseInt(((x_koord / 10800) * 118) + 14);
+    var uebersicht_y = parseInt(((y_koord / 10800) * 118 ) + 10) - 37;
+    if (uebersicht_y < 13) {
+	uebersicht_y = 13;
+    }
+    if (uebersicht_x > 125) {
+	uebersicht_x = 125;
+    }
 
     document.getElementById("UebersichtPosition").style.left = uebersicht_x + "px";	
     document.getElementById("UebersichtPosition").style.top = uebersicht_y + "px";	
@@ -1145,7 +1153,7 @@ function qmDetail_anzeigen(x_koord, y_koord, objekt) {
 	    + '<tr> <td width="60" class="PoiNavigation">' + msg('Land') + ':</td><td class="PoiNavigation">' + profil['country'] + '</td></tr>'
 	    + '<tr> <td colspan="2" class="PoiNavigation"><img src="/infosystem/bilder/spacer.gif" width="1" height="10"/></td></tr>'
 	    + '<tr> <td width="60" class="PoiNavigation">' + msg('gesponsort') + ':</td><td class="PoiNavigation">' + profil['anzahl'] + ' mÂ²</td></tr>'
-	    + '<tr> <td width="60" class="PoiNavigation">' + msg('seit') + ':</td><td class="PoiNavigation">' + qm[aktuelles_objekt]['datum'] + '</td></tr>'
+	    + '<tr> <td width="60" class="PoiNavigation">' + msg('seit') + ':</td><td class="PoiNavigation">' + qm[aktuelles_objekt]['date'] + '</td></tr>'
 	    + '<tr> <td colspan="2" class="PoiNavigation"><img src="/infosystem/bilder/spacer.gif" width="1" height="20"/></td></tr>'
 	    + '<tr> <td colspan="2" class="PoiNavigation">' + profil['nachricht'] + '</td></tr>'
 	    + '</table>';
@@ -1185,7 +1193,11 @@ function qmDetail_anzeigen(x_koord, y_koord, objekt) {
     element.onmousedown = maus_gedrueckt;
     element.onmouseup = maus_losgelassen;
 
-    schreibe_debugger("<br/> -> <b>qm-Detailansicht anzeigen</b>");
+    if (profil.contracts) {
+	display_own_sqm();
+    }
+
+    dbg("<br/> -> <b>qm-Detailansicht anzeigen</b>");
     return true;
 }
 

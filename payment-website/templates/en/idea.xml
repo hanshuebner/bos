@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_main"
+  title="RAINFOREST for SAMBOJA LESTARI"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<!-- container content_main -->
+	<div id="content_main">
+		<div id="textbox_content">
+			<table  border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td colspan="2">
+						<span class="headline">
+							Samboja Lestari - Creative reforestation
+							<br />
+							A sanctuary for Borneo
+						</span>
+					</td>
+					<td align="center"><img src="/images/pfeil_back.gif" width="10" height="9" alt="" />
+						<a href="javascript:history.back()" class="titlegray">
+							back
+						</a>
+					</td>		
+				</tr>
+				<tr><td height="6"> </td></tr>				
+				<tr>
+					<td colspan="3" align="left"><img src="/images/start_pic_headline1.jpg" width="363" height="120" alt="" border="0" /></td>
+					<td></td>			
+				</tr>
+				<tr><td height="6"></td></tr>
+				<tr>
+					<td colspan="3">
+						By means of a unique reforestation concept BOS is creating a sanctuary for orangutans, sunbears and other endangered species on Borneo -maybe the last one.
+Satellite pictures here on the internet make it possible to observe the progress of this concept.
+						<br /><br />
+						During the last decades the once species-rich rainforest of 
+						<a href="javascript:window_infosys()" class="titlegreen">
+							Samboja Lestari
+						</a>
+						was cleared and burnt down relentlessly.
+Nutrient-consuming elephant grass took over completely. What remained was an ecological waste land.
+Nowadays it is already visible that this doesn't have to stay - since 2001 BOS is creating new rainforest. An innovative concept of reforestation and protection is changing this area of over 16 mio sqm into a natural habitat again. In tropical Borneo plants grow much faster than in Europe. Already within a few years the first orangutans can be released to share their freedom with other animals A nature reserve is being created for the permanent use of humans, animals and plants in Samboja Lestari ("eternal Samboja").
+					</td>
+					<td></td>				
+				</tr>				
+			</table>		
+		</div>	
+	</div>
+	<div id="content_right">
+		<div id="textbox_right_top">
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td colspan="2">
+						<a href="idea_subtitle1" class="titlegreen">
+							Agriculture, reforestation and protection
+						</a>
+					</td>
+				</tr>	
+				<tr><td height="6"></td></tr>			
+				<tr>
+					<td> During the early stage of reforestion Indonesian farmers plant profitable agricultural products among the newly planted trees.</td>
+					<td valign="top" align="right">
+						<a href="idea_subtitle1" class="titlegreen">
+							<img src="/images/projekt_pic_headline1b.jpg" width="69" height="120" alt="" border="0" />
+						</a>
+					</td>
+				</tr>
+				
+				<tr>
+					<td colspan="2">
+						...
+						<a href="idea_subtitle1" class="more">
+							more
+						</a>
+					</td>
+				</tr>	
+				<tr><td height="10"> </td></tr>		
+			</table>
+		
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td colspan="2">
+						<a href="idea_subtitle2" class="titlegreen">
+							A square metre with a certain knack
+						</a>
+					</td>
+				</tr>	
+				<tr><td height="6"> </td></tr>			
+				<tr>
+					<td>
+						<a href="idea_subtitle2" class="titlegreen">
+							<img src="/images/projekt_pic_headline1c.gif" width="163" height="80" border="0" alt="" />
+						</a>
+					</td>
+				</tr>
+				<tr><td height="4"> </td></tr>
+				
+				<tr>
+					<td colspan="2">
+						 To finance the nature reserve, BOS has created a system of symbolical land-purchasing.
+						<br />
+						...
+						<a href="idea_subtitle2" class="more">
+							more
+						</a>
+					</td>
+				</tr>			
+			</table>
+		</div>	
+	</div>
+</bknr:toplevel>

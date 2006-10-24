@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<head>
+		<link rel="stylesheet" href="/static/toplevel_style.css" />
+		<link rel="stylesheet" href="/static/content_style.css" />
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed"
+		      href="/rss/news" />
+		<script src="/static/bos.js" type="text/javascript"><!-- x -->	
+		</script> 
+             <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8" />-->
+		<title>$(title)</title>
+	</head>
+	<body>
+		<!-- header and menu_top -->
+		<div id="header">
+
+			<div id="menue_banner">
+				<a href="/de/index">
+					<img src="/images/header_ganzneu.gif" border="0" />
+				</a>
+			</div>
+
+			<div id="menue_header_left">
+			BOS Deutschland e.V.
+			</div>
+			<div id="menue_header_main">
+				<div>l</div>
+				<div>
+					<a href="/de/idea" class="menue"
+							title="Was genau passiert.">
+						Projekt
+					</a>
+				</div>
+				<div>l</div>
+				<div>
+					<a href="/de/bestellung" class="menue"
+							title="Machen Sie mit!">
+						Spenden
+					</a>
+				</div>
+				<div>l</div>	
+				<div>
+					<a href="/de/bos" class="menue"
+							title="BOS Foundation">
+						BOS
+					</a>
+				</div>
+				<div>l</div>	
+				<div>
+					<a href="javascript:window_infosys()" class="menue"
+							title="Satellitenkarte">
+						Satellitenkarte
+					</a>
+				</div>
+				<div>l</div>
+				<div>
+					<a href="/de/contact" class="menue"
+							title="Kontakten Sie uns.">
+						Kontakt
+					</a>
+				</div>	
+				<div>l</div>		
+			</div>
+			<div id="menue_header_right" align="right">
+				<select name="language" style="width:125px;"
+						onchange="jumpMenu('parent', this, 0)">
+ 					<bos:language-options />
+				</select>
+			</div>
+		</div>
+		<!-- /header and menu_top -->
+	
+		<!-- content 3teilig-->
+		<div id="content">
+			<div id="content_left">
+			<!-- content left-->
+				<div id="textbox_left_top">
+					<table border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td colspan="4" height="10">
+							</td>
+						</tr>
+						<tr>
+							<td width="6"> 
+							</td>
+							<td colspan="2">
+								<strong>Schaffen Sie Regenwald!</strong>
+								<br /><br />
+							</td>
+							<td>
+							</td>				
+						</tr>
+						<tr>
+							<td>
+							</td>
+							<td colspan="2" >
+								<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
+								<a href="/de/bestellung" class="content_black">
+									Spenden Sie!
+								</a>					
+							</td>
+							<td> 
+							</td>				
+						</tr>
+						<tr><td colspan="3" height="5"></td></tr>
+						<tr>
+							<td colspan="4" valign="bottom">
+								<a href="/de/bestellung" class="content_black">
+									<img src="/images/spenden.jpg" width="150" height="71" border="0" alt="" />
+								</a>
+							</td>			
+						</tr>
+						<tr><td colspan="3" height="15"></td></tr>
+					</table>
+				</div>			
+				<div id="textbox_left_down">
+					<table border="0" cellpadding="0" cellspacing="0">
+						<tr><td colspan="4" height="6"></td></tr>
+						<tr>
+							<td width="6"> </td>
+							<td colspan="2">
+								<strong>Satellitenkarte</strong>
+								<br /></td>
+							<td></td>				
+						</tr>
+						<tr><td colspan="3" height="5"></td></tr>
+						<tr>
+							<td></td>
+							<td colspan="2">
+								<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
+								<a href="javascript:window_infosys()"
+										class="content_black">
+									Es dreht sich um m².
+								</a>
+							</td>
+							<td></td>				
+						</tr>		
+						<tr>
+							<td colspan="3" height="88">
+							<a href="javascript:window_infosys()">
+								<img src="/images/trans.gif" width="149" height="108" border="0" alt="" />
+							</a>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id="textbox_left_login">
+				    <form>
+					<table border="0" cellpadding="0" cellspacing="0">
+						<tr><td colspan="4" height="6"></td></tr>
+						<tr>
+							<td width="6"> </td>
+							<td colspan="2"><strong>Sponsor-ID</strong></td>
+							<td width="6"></td>				
+						</tr>
+						<tr>
+							<td width="6"> </td>
+							<td colspan="2"><input id="sponsorid-input" type="text" name="__sponsorid"/></td>
+							<td width="6"></td>				
+						</tr>
+						<tr>
+							<td width="6"> </td>
+							<td colspan="2"><strong>Kennwort</strong></td>
+							<td width="6"></td>				
+						</tr>
+						<tr>
+							<td width="6"> </td>
+							<td colspan="2"><input id="password-input" class="password-input" type="password" name="__password"/>
+							<img onclick="window_infosys()" class="login-button" src="/infosystem/bilder/submit.gif"/></td>
+							<td width="6"></td>				
+						</tr>
+					</table>
+				    </form>
+				</div>
+				<!-- footer -->	
+				<div id="menue_footer">	
+					<a href="javascript:window_extra('/de/privacy')" class="footer">
+						Datenschutzinfo
+					</a>
+					l
+					<a href="javascript:window_extra('/de/impressum')" class="footer">
+						Impressum
+					</a>
+				</div>
+				<!-- /footer -->	
+			</div>
+			<!-- /content left-->
+				<bknr:tag-body />
+			<!-- /content 3teilig-->
+		</div>
+	</body>
+</html>

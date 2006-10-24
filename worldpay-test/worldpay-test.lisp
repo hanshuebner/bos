@@ -24,7 +24,7 @@
 
 (defmethod find-template-pathname ((handler worldpay-template-handler) template-name &key request)
   (when (scan #?r"(^|.*/)handle-sale" template-name)
-    (with-query-params (request cartId email name address country transStatus lang MC_gift MC_donationcert-yearly testMode)
+    (with-query-params (request cartId name address country transStatus lang MC_gift)      
       (unless (website-supports-language lang)
 	(setf lang *default-language*))
       (let ((contract (get-contract (parse-integer cartId))))
@@ -36,14 +36,10 @@
 	  ((equal "C" transStatus)
 	   (setf template-name #?"/$(lang)/sponsor_canceled"))
 	  ((< (contract-price contract) *mail-certificate-threshold*)
-	   (mail-request-parameters request (format nil "Spenderdaten - Sponsor-ID ~D Contract-ID ~D"
-						    (store-object-id (contract-sponsor contract))
-						    (store-object-id contract)))
+	   (mail-worldpay-sponsor-data request)
 	   (setf template-name #?"/$(lang)/quittung"))
 	  (t
-	   (mail-request-parameters request (format nil "Spenderdaten - Sponsor-ID ~D Contract-ID ~D"
-						    (store-object-id (contract-sponsor contract))
-						    (store-object-id contract)))
+	   (mail-worldpay-sponsor-data request)
 	   (when (<= *mail-fiscal-certificate-threshold* (contract-price contract))
 	     (mail-fiscal-certificate-to-office contract name address country))
 	   (setf template-name (if (and MC_gift (equal MC_gift "1")) #?"/$(lang)/versand_geschenk" #?"/$(lang)/versand_info")))))))
@@ -96,7 +92,7 @@ language preference weights."
   ())
 
 (defmethod handle ((handler index-handler) req)
-  (redirect (format nil "/~a/index" (or (find-browser-prefered-language req)
+  (redirect (format nil "/~A/index" (or (find-browser-prefered-language req)
 					*default-language*))
 	    req))
 
@@ -108,8 +104,8 @@ language preference weights."
   (with-query-params (req logout)
     (when logout
       (bknr.web::drop-session (bknr-request-session req))))
-  (redirect "/infosystem/satellitenkarte.htm"
-	    req))
+  (let ((language (session-variable :language)))
+    (redirect #?"/infosystem/$(language)/satellitenkarte.htm" req)))
 
 (defclass certificate-handler (object-handler)
   ()
@@ -119,6 +115,24 @@ language preference weights."
   (unless contract
     (setf contract (find-if #'contract-pdf-pathname (sponsor-contracts (bknr-request-user req)))))
   (redirect (format nil "/certificates/~D.pdf" (store-object-id contract)) req))
+
+(defclass statistics-handler (admin-only-handler prefix-handler)
+  ())
+
+(defmethod handle ((handler statistics-handler) req)
+  (let ((stats-name (parse-url req)))
+    (cond
+      (stats-name
+       (redirect (format nil "~A.svg" stats-name) req))
+      (t
+       (with-bos-cms-page (req :title "Statistics browser")
+	 (:p
+	  ((:select :id "selector" :onchange "return statistic_selected()")
+	   (dolist (file (directory (merge-pathnames #p"images/statistics/*.svg" *website-directory*)))
+	     (html ((:option :value (pathname-name file))
+		    (:princ-safe (pathname-name file)))))))
+	 ((:p :id "stats"))
+	 ((:script :type "text/javascript") "statistic_selected()"))))))
 
 (defclass print-certificate-handler (admin-only-handler object-handler)
   ()
@@ -173,13 +187,13 @@ language preference weights."
 		(find-browser-prefered-language req)
 		*default-language*)))))
 
-(defun publish-worldpay-test (&key website-directory website-url (vhosts :wild))
+(defun publish-worldpay-test (&key website-directory website-url (worldpay-test-mode t) (vhosts :wild))
   (setf *website-directory* website-directory)
 
   (when website-url
     (setf *website-url* website-url))
 
-  (setf bknr.web::*login-default-url* "/admin")
+  (setf *worldpay-test-mode* worldpay-test-mode)
 
   (make-instance 'bos-website
 		 :name "BOS Website"
@@ -187,6 +201,7 @@ language preference weights."
 					("/edit-poi-image" edit-poi-image-handler)
 					("/edit-sponsor" edit-sponsor-handler)
 					("/contract" contract-handler)
+					("/reports-xml" reports-xml-handler)
 					("/complete-transfer" complete-transfer-handler)
 					("/edit-news" edit-news-handler)
 					("/make-poi" make-poi-handler)
@@ -198,6 +213,7 @@ language preference weights."
 					("/create-allocation-area" create-allocation-area-handler)
 					("/allocation-area" allocation-area-handler)
 					("/allocation-area-gfx" allocation-area-gfx-handler)
+					("/contract-image" contract-image-handler)
 					("/certificate" certificate-handler)
 					("/cert-regen" cert-regen-handler)
 					("/admin" admin-handler)
@@ -209,6 +225,8 @@ language preference weights."
 					("/create-contract" create-contract-handler)
 					("/pay-contract" pay-contract-handler)
 					("/cancel-contract" cancel-contract-handler)
+					("/statistics" statistics-handler)
+					("/rss" rss-handler)
 					("/" redirect-handler
 					 :to "/index")
 					("/index" index-handler)
@@ -217,13 +235,14 @@ language preference weights."
 					 :command-packages ((:bos . :worldpay-test)
 							    (:bknr . :bknr.web))))
 		 :modules '(user images stats)
-		 :admin-navigation '(("user" . "/user/")
-				     ("sponsor" . "/edit-sponsor/")
-				     ("news" . "/edit-news/")
-				     ("poi" . "/edit-poi/")
-				     ("languages" . "/languages")
-				     ("allocation area" . "/allocation-area/")
-				     ("logout" . "/logout"))
+		 :admin-navigation '(("user" . "user/")
+				     ("sponsor" . "edit-sponsor/")
+				     ("statistics" . "statistics/")
+				     ("news" . "edit-news/")
+				     ("poi" . "edit-poi/")
+				     ("languages" . "languages")
+				     ("allocation area" . "allocation-area/")
+				     ("logout" . "logout"))
 		 :authorizer (make-instance 'bos-authorizer)
 		 :site-logo-url "/images/bos-logo.gif"
 		 :style-sheet-urls '("/static/cms.css")

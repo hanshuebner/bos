@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<head>
+		<link rel="stylesheet" href="/static/toplevel_style.css" />
+		<link rel="stylesheet" href="/static/content_style.css" />
+		<script src="/static/bos.js" type="text/javascript"><!-- x -->	
+		</script> 
+		<title>Scheme for the "ring"</title>
+	</head>
+	<body>
+		<div id="content_extra">
+			<h1 class="ringschema">Scheme for the "ring"</h1>
+			<img src="/images/ring_detail_en.jpg" />
+		</div>
+		<div style="padding:10px">
+			<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
+			<a href="javascript:window.close()" class="more">
+				close window
+			</a>
+		</div>
+	</body>
+</html>

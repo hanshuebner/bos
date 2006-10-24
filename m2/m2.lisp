@@ -40,7 +40,8 @@
 (define-persistent-class m2 ()
   ((x :read)
    (y :read)
-   (contract :update :relaxed-object-reference t))
+   (contract :update :relaxed-object-reference t)
+   (my-slot :read))
   (:default-initargs :contract nil)
   (:class-indices (m2-index :index-type tiled-index
 			    :slots (x y)
@@ -157,6 +158,7 @@
 ;;; CONTRACT-PAIDP (contract) => boolean
 ;;; CONTRACT-DATE (contract) => Universal-Timestamp
 ;;; CONTRACT-M2S (contract) => list of m2
+;;; CONTRACT-BOUNDING-BOX (contract) => (list left top width height)
 ;;;
 ;;; CONTRACT-SET-PAIDP (contract newval) => newval
 
@@ -179,10 +181,13 @@
    (paidp :update)
    (m2s :read)
    (color :read)
+   (download-only :read)
    (cert-issued :read)
+   (worldpay-trans-id :update :initform nil)
    (expires :read :documentation "universal time which specifies the time the contract expires (is deleted) when it has not been paid for" :initform nil))
   (:default-initargs
       :m2s nil
+    :download-only nil
     :color (random-elt *claim-colors*)
     :cert-issued nil
     :expires (+ (get-universal-time) *manual-contract-expiry-time*)))
@@ -227,10 +232,13 @@
   (* (length (contract-m2s contract)) +price-per-m2+))
 
 (defmethod contract-download-only-p ((contract contract))
-  (< (contract-price contract) *mail-amount*))
+  (or (contract-download-only contract)
+      (< (contract-price contract) *mail-amount*)))
 
-(defmethod contract-fdf-pathname ((contract contract))
-  (merge-pathnames (make-pathname :name (format nil "~D" (store-object-id contract))
+(defmethod contract-fdf-pathname ((contract contract) language)
+  (merge-pathnames (make-pathname :name (format nil "~D-~(~A~)"
+                                                (store-object-id contract)
+                                                language)
 				  :type "fdf")
 		   (if (contract-download-only-p contract) *cert-download-directory* *cert-mail-directory*)))
 
@@ -244,11 +252,11 @@
 (defmethod contract-pdf-url ((contract contract))
   (format nil "/~:[~;print-~]certificate/~A" (not (contract-download-only-p contract)) (store-object-id contract)))
 
-(defmethod contract-issue-cert ((contract contract) name &optional address)
+(defmethod contract-issue-cert ((contract contract) name &key address language)
   (if (contract-cert-issued contract)
       (warn "can't re-issue cert for ~A" contract)
       (progn
-	(make-certificate contract name :address address)
+	(make-certificate contract name :address address :language language)
 	(unless (contract-download-only-p contract)
 	  (mail-certificate-to-office contract address))
 	(change-slot-values contract 'cert-issued t))))
@@ -260,26 +268,53 @@
 	       image-tiles))
     image-tiles))
 
+(defmethod contract-bounding-box ((contract contract))
+  (let (min-x min-y max-x max-y)
+    (dolist (m2 (contract-m2s contract))
+      (setf min-x (min (m2-x m2) (or min-x (m2-x m2))))
+      (setf min-y (min (m2-y m2) (or min-y (m2-y m2))))
+      (setf max-x (max (m2-x m2) (or max-x (m2-x m2))))
+      (setf max-y (max (m2-y m2) (or max-y (m2-y m2)))))
+    (list min-x min-y (1+ (- max-x min-x)) (1+ (- max-y min-y)))))
+
 (defun tx-make-contract (sponsor m2-count &key date paidp expires)
   (warn "Old tx-make-contract transaction used, contract dates may be wrong")
   (tx-do-make-contract sponsor m2-count :date date :paidp paidp :expires expires))
 
-(deftransaction do-make-contract (sponsor m2-count &key date paidp expires)
+(deftransaction do-make-contract (sponsor m2-count &key date paidp expires download-only)
   (let ((m2s (find-free-m2s m2-count)))
     (if m2s
-	(make-object 'contract
-		     :sponsor sponsor
-		     :date date
-		     :paidp paidp
-		     :m2s m2s
-		     :expires expires)
+	(let ((contract (make-object 'contract
+				     :sponsor sponsor
+				     :date date
+				     :paidp paidp
+				     :m2s m2s
+				     :expires expires
+				     :download-only download-only)))
+	  (bknr.rss::add-item "news" contract)
+	  contract)
 	(warn "can't create contract, ~A square meters for ~A could not be allocated" m2-count sponsor))))
 
-(defun make-contract (sponsor m2-count &key (date (get-universal-time)) paidp (expires (+ (get-universal-time) *manual-contract-expiry-time*)))
+(defun make-contract (sponsor m2-count
+                      &key (date (get-universal-time))
+                      paidp
+                      (expires (+ (get-universal-time) *manual-contract-expiry-time*))
+                      download-only)
   (unless (and (integerp m2-count)
 	       (plusp m2-count))
     (error "number of square meters must be a positive integer"))
-  (do-make-contract sponsor m2-count :date date :paidp paidp :expires expires))
+  (let ((contract (do-make-contract sponsor m2-count :date date :paidp paidp :expires expires :download-only download-only)))
+    (unless contract
+      (send-system-mail :subject "Contact creation failed - Allocation areas exhaused"
+			:text (format nil "A contract for ~A square meters could not be created, presumably because no
+suitable allocation area was found.  Please check the free allocation
+areas and add more space.
+
+Sponsor-ID: ~A
+"
+				      m2-count (store-object-id sponsor)))
+      (error "could not create contract, allocation areas exhausted?"))
+    contract))
 
 (defun number-of-sold-sqm ()
   (let ((retval 0))
@@ -297,30 +332,20 @@
   "Erzeugt das Quadratmeter-Javascript für die angegebenen Contracts"
   (with-output-to-string (*standard-output*)
     (let ((paid-contracts (remove nil (sponsor-contracts sponsor) :key #'contract-paidp)))
-      (format t "profil = [];~%")
-      (format t "qms = [ undefined ];~%")
+      (format t "profil = {};~%")
       (format t "profil['id'] = ~D;~%" (store-object-id sponsor))
       (format t "profil['name'] = ~S;~%" (string-safe (or (user-full-name sponsor) "[anonym]")))
       (format t "profil['country'] = ~S;~%" (or (sponsor-country sponsor) "[unbekannt]"))
       (format t "profil['anzahl'] = ~D;~%" (loop for contract in paid-contracts
 								  sum (length (contract-m2s contract))))
       (format t "profil['nachricht'] = '~A';~%" (string-safe (sponsor-info-text sponsor)))
+      (format t "profil['contracts'] = [ ];~%")
       (loop for contract in paid-contracts
-	    for m2s = (sort (copy-list (contract-m2s contract)) #'(lambda (a b) (if (eql (m2-y a) (m2-y b))
-										    (< (m2-x a) (m2-x b))
-										    (< (m2-y a) (m2-y b)))))
-	    do (progn
-		 (format t "var qm = [];~%")
-		 (format t "qm['x'] = ~D;~%" (m2-x (first (contract-m2s contract))))
-		 (format t "qm['y'] = ~D;~%" (m2-y (first (contract-m2s contract))))
-		 (format t "qm['datum'] = ~S;~%" (format-date-time (contract-date contract) :show-time nil))
-		 (format t "qm['qm_x'] = [0, ~D~{,~D~}];~%"
-			 (m2-x (first m2s))
-			 (mapcar #'m2-x (cdr m2s)))
-		 (format t "qm['qm_y'] = [0, ~D~{,~D~}];~%"
-			 (m2-y (first m2s))
-			 (mapcar #'m2-y (cdr m2s)))
-		 (format t "qms.push(qm);~%"))))))
+	    do (destructuring-bind (left top width height) (contract-bounding-box contract)
+		 (format t "profil.contracts.push({ id: ~A, left: ~A, top: ~A, width: ~A, height: ~A, date: ~S });~%"
+			 (store-object-id contract)
+			 left top width height
+			 (format-date-time (contract-date contract) :show-time nil)))))))
 
 (defun delete-directory (pathname)
   (when (probe-file pathname)
@@ -338,9 +363,10 @@
     #-(or allegro cmu)
     ...))
 
-(defun reinit (&key delete directory)
+(defun reinit (&key delete directory website-url)
   (format t "~&; Startup Quadratmeterdatenbank...~%")
   (force-output)
+  (setf *website-url* website-url)
   (unless directory
     (error ":DIRECTORY parameter not set in m2.rc"))
   (when delete
@@ -363,3 +389,6 @@
 		   (make-contract sponsor
 				  (random-elt (cons (1+ (random 300)) '(1 1 1 1 1 5 5 10 10 10 10 10 10 10 10 10 10 10 10 10 30 30 30)))
 				  :paidp t))))
+
+
+	       

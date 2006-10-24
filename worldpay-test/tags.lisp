@@ -25,12 +25,13 @@
   (emit-without-quoting "<WPDISPLAY ITEM=banner>"))
 
 (define-bknr-tag process-payment (&key children)
-  (with-template-vars (cartId email country)
+  (with-template-vars (cartId transId email country)
     (let* ((contract (get-contract (parse-integer cartId)))
 	   (sponsor (contract-sponsor contract)))
       (change-slot-values sponsor 'bknr.web::email email)
+      (change-slot-values contract 'bos.m2::worldpay-trans-id transId)
       (sponsor-set-country sponsor country)
-      (contract-set-paidp contract t)
+      (contract-set-paidp contract (format nil "~A: paid via worldpay" (format-date-time)))
       (setf (get-template-var :master-code) (sponsor-master-code sponsor))
       (setf (get-template-var :sponsor-id) (sponsor-id sponsor))))
   (mapc #'emit-template-node children))
@@ -38,7 +39,7 @@
 (define-bknr-tag generate-cert ()
   (with-template-vars (gift email name address)
     (let ((contract (find-store-object (parse-integer (get-template-var :contract-id)))))
-      (contract-issue-cert contract name address)
+      (contract-issue-cert contract name :address address :language (session-variable :language))
       (bknr.web::redirect-request :target (if gift "index"
 					      (format nil "profil_setup?name=~A&email=~A&sponsor-id=~A"
 						      (uriencode-string name) (uriencode-string email)
@@ -55,7 +56,7 @@
     (html ((:base "href" href)))))
 
 (define-bknr-tag buy-sqm (&key children)
-  (with-template-vars (numsqm numsqm1 action gift donationcert-yearly)
+  (with-template-vars (numsqm numsqm1 action gift donationcert-yearly download-only)
     (let* ((numsqm (parse-integer (or numsqm numsqm1)))
 	   ;; Wer ueber dieses Formular bestellt, ist ein neuer Sponsor,
 	   ;; also ein neues Sponsorenobjekt anlegen.  Eine Profil-ID
@@ -69,38 +70,43 @@
 				(scan #?r"rweisung" action)))
            (sponsor (make-sponsor))
            (price (* numsqm 3))
-           (contract (make-contract sponsor numsqm :expires (+ (if manual-transfer
-								   bos.m2::*manual-contract-expiry-time*
-								   bos.m2::*online-contract-expiry-time*)
-							       (get-universal-time))))
+           (contract (make-contract sponsor numsqm
+                                    :download-only download-only
+                                    :expires (+ (if manual-transfer
+                                                    bos.m2::*manual-contract-expiry-time*
+                                                    bos.m2::*online-contract-expiry-time*)
+                                                (get-universal-time))))
 	   (language (session-variable :language)))
       (setf (get-template-var :worldpay-url)
             (if manual-transfer
-                (format nil "ueberweisung?contract-id=~a&amount=~a&numsqm=~a~@[&donationcert-yearly=1~]"
+                (format nil "ueberweisung?contract-id=~A&amount=~A&numsqm=~A~@[&donationcert-yearly=1~]"
                         (store-object-id contract)
                         price
                         numsqm
 			donationcert-yearly)
-                (format nil "https://select.worldpay.com/wcc/purchase?instId=~a&cartId=~a&amount=~a&currency=EUR&lang=~a&desc=~a&MC_sponsorid=~a&MC_password=~a&MC_donationcert-yearly=~A&MC_gift=~A" ; &testMode=100 für test
+                (format nil "https://select.worldpay.com/wcc/purchase?instId=~A&cartId=~A&amount=~A&currency=EUR&lang=~A&desc=~A&MC_sponsorid=~A&MC_password=~A&MC_donationcert-yearly=~A&MC_gift=~A~@[~A~]"
 			*worldpay-installation-id*
                         (store-object-id contract)
                         price
 			language
-                        (encode-urlencoded (format nil "~a qm Regenwald in Samboja Lestari" numsqm))
+                        (encode-urlencoded (format nil "~A ~A in Samboja Lestari"
+                                                   numsqm
+                                                   (if (string-equal language "de") "qm Regenwald" "sqm rain forest")))
 			(store-object-id sponsor)
 			(sponsor-master-code sponsor)
 			(if donationcert-yearly "1" "0")
-			(if gift "1" "0"))))))
+			(if gift "1" "0")
+			(when *worldpay-test-mode* "&testMode=100"))))))
   (mapc #'emit-template-node children))
 
 (define-bknr-tag mail-transfer ()
-  (with-query-params ((get-template-var :request) contract-id vorname name strasse plz ort email telefon mail-certificate donationcert-yearly)
-    (mail-transfer-indication contract-id vorname name strasse plz ort email telefon mail-certificate donationcert-yearly)))
+  (mail-manual-sponsor-data (get-template-var :request)))
 
 (define-bknr-tag when-certificate (&key children)
   (let ((sponsor (bknr-request-user (get-template-var :request))))
     (when (some #'(lambda (contract)
-		    (contract-pdf-pathname contract))
+		    (and (contract-download-only-p contract)
+			 (contract-pdf-pathname contract)))
 		(sponsor-contracts sponsor))
       (mapc #'emit-template-node children))))
 
@@ -134,3 +140,8 @@
 	  (format nil "~D"
 		  (apply #'+ (mapcar #'(lambda (contract) (length (contract-m2s contract))) (sponsor-contracts sponsor))))))
   (mapc #'emit-template-node children))
+
+(define-bknr-tag admin-login-page (&key children)
+  (if (admin-p (bknr-request-user (get-template-var :request)))
+      (html (:head ((:meta :http-equiv "refresh" :content "0; url=/admin"))))
+      (mapc #'emit-template-node children)))

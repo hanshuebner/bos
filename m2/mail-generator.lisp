@@ -2,25 +2,23 @@
 
 (enable-interpol-syntax)
 
-(defun make-mail-header (&key from to subject (date (format-date-time (get-universal-time) :mail-style t)) (content-type "text/plain; charset=utf-8"))
-  (format nil "X-Mailer: BKNR-BOS-mailer
-Date: ~a
-From: ~a
-To: ~a
-Subject: ~a
-Content-Type: ~a
-
-"
-	  date from to subject content-type))
-
-(defun send-system-mail (&key (to *office-mail-address*) (subject "(no subject") (text "(no text)") (content-type "text/plain; charset=UTF-8"))
+(defun send-system-mail (&key (to *office-mail-address*) (subject "(no subject") (text "(no text)") (content-type "text/plain; charset=UTF-8") more-headers)
   (send-smtp "localhost" *mail-sender* to
-	     (make-mail-header :from *mail-sender*
-			       :to to
-			       :subject subject
-			       :content-type content-type)
-	     text))
-
+	     (format nil "X-Mailer: BKNR-BOS-mailer
+Date: ~A
+From: ~A
+To: ~A
+Subject: ~A
+Content-Type: ~A
+~@[~*~%~]~A"
+		     (format-date-time (get-universal-time) :mail-style t)
+		     *mail-sender*
+		     to
+		     subject
+		     content-type
+		     (not more-headers)
+		     text)))
+  
 (defun mail-info-request (email)
   (send-system-mail :subject "Mailinglisten-Eintrag"
 		    :text #?"Bitte in die Info-Mailingliste aufnehmen:
@@ -34,7 +32,7 @@ $(email)
     (send-system-mail :subject #?"Druckauftrag fuer Spender-Urkunde"
 		      :text #?"Bitte die folgende Urkunde ausdrucken und versenden:
 
-http://create-rainforest.org/print-certificate/$(contract-id)
+$(*website-url*)/print-certificate/$(contract-id)
 
 Versandadresse:
 
@@ -83,27 +81,106 @@ aller Waldbewohner und natuerlich der lokalen Bevoelkerung Indonesiens.
 
 Das Team von BOS Deutschland e.V.")))
 
-(defun mail-transfer-indication (contract-id vorname name strasse plz ort email telefon mail-certificate donationcert-yearly)
-  (let ((contract (store-object-with-id (parse-integer contract-id))))
-    (send-system-mail :subject #?"Ueberweisungsformular fuer Contract-ID $(contract-id)"
-		      :content-type "text/html; charset=UTF-8"
-		      :text (format nil "
+(defun format-vcard (field-list)
+  (with-output-to-string (s)
+    (labels
+	((ensure-list (thing)
+	   (if (listp thing) thing (list thing)))
+	 (vcard-field (field-spec &rest values)
+	   (let* ((values (mapcar (lambda (value) (or value "")) (ensure-list values)))
+		  (encoded-values (mapcar (lambda (string) (cl-qprint:encode (iconv:iconv "UTF-8" "ISO-8859-1" (or string ""))
+									     :encode-newlines t)) values)))
+	     (format s "~{~A~^;~}:~{~@[~A~]~^;~}~%"
+		     (append (ensure-list field-spec)
+			     (unless (equal values encoded-values)
+			       '("CHARSET=ISO-8859-1" "ENCODING=QUOTED-PRINTABLE")))
+		     encoded-values))))
+      (dolist (field field-list)
+	(when field
+	  (apply #'vcard-field field))))))
+
+(defun make-vcard (&key contract-id sponsor-id worldpay-transaction-id
+		   donationcert-yearly gift
+		   vorname nachname
+		   name
+		   address postcode country
+		   strasse ort
+		   email tel)
+  (format-vcard
+   `((BEGIN "VCARD")
+     (VERSION "2.1")
+     (REV ,(format-date-time (get-universal-time) :xml-style t))
+     (FN ,(if name name (format nil "~A ~A" vorname nachname)))
+     ,(when vorname
+	`(N ,nachname ,vorname nil nil nil))
+     ,(when address
+	`((ADR DOM HOME) nil nil ,address nil nil ,postcode ,country))
+     ,(when strasse
+	`((ADR DOM HOME) nil nil ,strasse ,ort nil ,postcode ,country))
+     ,(when tel
+	`((TEL WORK HOME) ,tel))
+     ((EMAIL PREF INTERNET) ,email)
+     ((URL WORK) ,(format nil "~A/edit-sponsor/~A" *website-url* sponsor-id))
+     (NOTE ,(format nil "Contract ID: ~A~%Sponsor ID: ~A~%~@[WorldPay Transaction ID: ~A~%~]Donationcert yearly: ~A~%Gift: ~A~%"
+		    contract-id
+		    sponsor-id
+		    worldpay-transaction-id
+		    (if donationcert-yearly "Yes" "No")
+		    (if gift "Yes" "No")))
+     (END "VCARD"))))
+
+(defun worldpay-callback-request-to-vcard (request)
+  (with-query-params (request cartId
+			      transId
+			      MC_sponsorid
+			      MC_donationcert-yearly
+			      MC_gift
+			      name
+			      address
+			      postcode
+			      country
+			      email
+			      tel)
+    (make-vcard :contract-id cartId
+		:sponsor-id MC_sponsorid
+		:worldpay-transaction-id transId
+		:donationcert-yearly MC_donationcert-yearly
+		:gift MC_gift
+		:name name
+		:address address
+		:postcode postcode
+		:country country
+		:email email
+		:tel tel)))
+
+(defun mail-manual-sponsor-data (req)
+  (with-query-params (req contract-id vorname name strasse plz ort email telefon mail-certificate donationcert-yearly)
+    (let* ((contract (store-object-with-id (parse-integer contract-id)))
+	   (sponsor-id (store-object-id (contract-sponsor contract)))
+	   (mime (make-instance 'multipart-mime
+				:subtype "mixed"
+				:content (list (make-instance 'text-mime
+							      :type "text"
+							      :subtype "html"
+							      :charset "utf-8"
+							      :encoding :quoted-printable
+							      :content (format nil "
 <html>
  <body>
    <h1>Ueberweisungsformulardaten:</h1>
    <table border=\"1\">
-    <tr><td>Contract-ID</td><td>~@[~a~]</td></tr>
-    <tr><td>Anzahl sqm</td><td>~a</td></tr>
-    <tr><td>Vorname</td><td>~@[~a~]</td></tr>
-    <tr><td>Name</td><td>~@[~a~]</td></tr>
-    <tr><td>Strasse</td><td>~@[~a~]</td></tr>
-    <tr><td>PLZ</td><td>~@[~a~]</td></tr>
-    <tr><td>Ort</td><td>~@[~a~]</td></tr>
-    <tr><td>Email</td><td>~@[~a~]</td></tr>
-    <tr><td>Telefon</td><td>~@[~a~]</td></tr>~@[
+    <tr><td>Contract-ID</td><td>~@[~A~]</td></tr>
+    <tr><td>Anzahl sqm</td><td>~A</td></tr>
+    <tr><td>Vorname</td><td>~@[~A~]</td></tr>
+    <tr><td>Name</td><td>~@[~A~]</td></tr>
+    <tr><td>Strasse</td><td>~@[~A~]</td></tr>
+    <tr><td>PLZ</td><td>~@[~A~]</td></tr>
+    <tr><td>Ort</td><td>~@[~A~]</td></tr>
+    <tr><td>Email</td><td>~@[~A~]</td></tr>
+    <tr><td>Telefon</td><td>~@[~A~]</td></tr>~@[
     <tr><td></td></tr>
-    <tr><td>Urkunde per Post</td><td>~a</td></tr>
-    <tr><td>Spendenbescheinigung am Jahresende</td><td>~a</td></tr>~]
+    <tr><td>Urkunde per Post</td><td>~A</td></tr>
+    <tr><td>Spendenbescheinigung am Jahresende</td><td>~A</td></tr>~]
    </table>
    <p>Email & Adresse fuer Cut&Paste:</p>
    <pre>
@@ -113,22 +190,66 @@ Das Team von BOS Deutschland e.V.")))
 ~A
 ~A ~A
    </pre>
-   <p><a href=\"http://create-rainforest.org/complete-transfer/~a\">Link zum Sponsor-Datensatz</a></p>
+   <p><a href=\"~A/complete-transfer/~A\">Link zum Sponsor-Datensatz</a></p>
  </body>
 </html>
 "
-				    contract-id
-				    (length (contract-m2s contract))
-				    vorname name strasse plz ort email telefon
-				    (if mail-certificate "ja" "nein")
-				    (if donationcert-yearly "ja" "nein")
-				    email vorname name strasse plz ort
-				    contract-id))))
+									     contract-id
+									     (length (contract-m2s contract))
+									     vorname name strasse plz ort email telefon
+									     (if mail-certificate "ja" "nein")
+									     (if donationcert-yearly "ja" "nein")
+									     email vorname name
+									     strasse plz ort
+									     *website-url* contract-id))
+					       (make-instance 'text-mime
+							      :type "text"
+							      :subtype (format nil "xml; name=\"contract-~A.xml\"" contract-id)
+							      :charset "utf-8"
+							      :encoding :quoted-printable
+							      :content (format nil "
+<sponsor>
+ ~{<~A>~A</~A>~}
+</sponsor>
+"
+									       (apply #'append (mapcar #'(lambda (cons)
+													   (list (car cons)
+														 (if (find #\Newline (cdr cons))
+														     (format nil "<![CDATA[~A]]>" (cdr cons))
+														     (cdr cons))
+														 (car cons)))
+												       (all-request-params req)))))
+					       (make-instance 'text-mime
+							      :type "text"
+							      :subtype (format nil "x-vcard; name=\"contract-~A.vcf\"" contract-id)
+							      :charset "utf-8"
+							      :content (make-vcard :contract-id contract-id
+										   :sponsor-id sponsor-id
+										   :donationcert-yearly donationcert-yearly
+										   :vorname vorname
+										   :nachname name
+										   :strasse strasse
+										   :postcode plz
+										   :ort ort
+										   :email email
+										   :tel telefon))))))
+      (send-system-mail :subject (format nil "Ueberweisungsformular-Spenderdaten - Sponsor-ID ~D Contract-ID ~D"
+					 sponsor-id contract-id)
+			:content-type "multipart/mixed"
+			:more-headers t
+			:text (with-output-to-string (s) (print-mime s mime t t))))))
 
-(defun mail-request-parameters (req subject)
-  (send-system-mail :subject subject
-		    :content-type "text/html; charset=UTF-8"
-		    :text (format nil "
+(defun mail-worldpay-sponsor-data (req)
+  (with-query-params (req cartId)
+    (let* ((contract (store-object-with-id (parse-integer cartId)))
+	   (mime (make-instance 'multipart-mime
+				:subtype "mixed"
+				:content (list (make-instance 'text-mime
+							      :type "text"
+							      :subtype "html"
+							      :charset "utf-8"
+							      :encoding :quoted-printable
+							      :content (format nil "
 <table border=\"1\">
  <tr>
   <th>Parameter</th>
@@ -137,4 +258,35 @@ Das Team von BOS Deutschland e.V.")))
  ~{<tr><td>~A</td><td>~A</td></tr>~}
 </table>
 "
-				  (apply #'append (mapcar #'(lambda (cons) (list (car cons) (cdr cons))) (all-request-params req))))))
+									       (apply #'append (mapcar #'(lambda (cons) (list (car cons) (cdr cons)))
+												       (sort (copy-list (all-request-params req))
+													     #'string-lessp
+													     :key #'car)))))
+					       (make-instance 'text-mime
+							      :type "text"
+							      :subtype (format nil "xml; name=\"contract-~A.xml\"" (store-object-id contract))
+							      :charset "utf-8"
+							      :encoding :quoted-printable
+							      :content (format nil "
+<sponsor>
+ ~{<~A>~A</~A>~}
+</sponsor>
+"
+									       (apply #'append (mapcar #'(lambda (cons)
+									       (list (car cons)
+										     (if (find #\Newline (cdr cons))
+											 (format nil "<![CDATA[~A]]>" (cdr cons))
+											 (cdr cons))
+										     (car cons)))
+												       (all-request-params req)))))
+					       (make-instance 'text-mime
+							      :type "text"
+							      :subtype (format nil "x-vcard; name=\"contract-~A.vcf\"" (store-object-id contract))
+							      :charset "utf-8"
+							      :content (worldpay-callback-request-to-vcard req))))))
+      (send-system-mail :subject (format nil "Online-Spenderdaten - Sponsor-ID ~D Contract-ID ~D"
+					 (store-object-id (contract-sponsor contract))
+					 (store-object-id contract))
+			:content-type "multipart/mixed"
+			:more-headers t
+			:text (with-output-to-string (s) (print-mime s mime t t))))))

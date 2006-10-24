@@ -30,20 +30,25 @@
 	(when count
 	  (setf count (parse-integer count)))
 	(with-bos-cms-page (req :title "Sponsor search results")
-	  (:table
-	   (:tr (:th "ID") (:th "Date") (:th "Email") (:th "Name"))
+	  ((:table :border "1")
+	   (:tr (:th "ID") (:th "Date") (:th "Email") (:th "Name") (:th "SQM") (:th "Country") (:th "Cert-Type") (:th "Paid by"))
 	   (dolist (sponsor (sort (remove-if-not #'sponsor-contracts (class-instances 'sponsor))
 				  #'> :key #'(lambda (sponsor) (contract-date (first (sponsor-contracts sponsor))))))
 	     (when (or count
 		       (or (ignore-errors (scan regex (user-full-name sponsor)))
 			   (ignore-errors (scan regex (user-email sponsor)))))
-	       (html (:tr (:td (cmslink #?"/edit-sponsor/$((store-object-id sponsor))" (:princ-safe (store-object-id sponsor))))
-			  (:td (:princ-safe (format-date-time (contract-date (first (sponsor-contracts sponsor))) :show-time nil)))
-			  (:td (:princ-safe (or (user-email sponsor) "<unknown>")))
-			  (:td (:princ-safe (or (user-full-name sponsor) "<unknown>")))))
+	       (let ((contract (first (sponsor-contracts sponsor))))
+		 (html (:tr (:td (cmslink #?"edit-sponsor/$((store-object-id sponsor))" (:princ-safe (store-object-id sponsor))))
+			    (:td (:princ-safe (format-date-time (contract-date contract) :show-time nil)))
+			    (:td (:princ-safe (or (user-email sponsor) "<unknown>")))
+			    (:td (:princ-safe (or (user-full-name sponsor) "<unknown>")))
+			    (:td (:princ-safe (length (contract-m2s contract))))
+			    (:td (:princ-safe (sponsor-country sponsor)))
+			    (:td (:princ-safe (if (contract-download-only-p contract) "Download" "Print")))
+			    (:td (:princ-safe (contract-paidp contract))))))
 	       (when (eql (incf found) count)
 		 (return))))
-	   (:tr ((:th :colspan "4") (:princ-safe (format nil "~A sponsor~:p ~A" found (if count "shown" "found"))))))))
+	   (:tr ((:th :colspan "7") (:princ-safe (format nil "~A sponsor~:p ~A" found (if count "shown" "found"))))))))
       (return-from handle-object-form)))
   (with-bos-cms-page (req :title "Find or Create Sponsor")
     (html
@@ -58,16 +63,24 @@
        (:tr (:td "Show new sponsors (enter count)")
 	    (:td (text-field "count" :size 4)))
        (:tr (:td (submit-button "search" "search")))
+       (:tr (:td "") (:td ((:a :class "cmslink"
+			       :href "/reports-xml/all-contracts?download=contracts.xls")
+			   "Download complete sponsor DB in XML format")))
        (:tr ((:th :colspan "2" :align "left")
 	     (:h2 "Create sponsor")))
        (:tr (:td "Date (DD.MM.YYYY)")
 	    (:td (text-field "date" :size 10 :value (format-date-time (get-universal-time) :show-time nil))))
        (:tr (:td "Number of square meters")
-	    (:td (text-field "numsqm" :size 5))
-	    (:tr (:td "Country code (2 chars)")
-		 (:td (text-field "country" :size 2 :value "DE"))))
+	    (:td (text-field "numsqm" :size 5)))
+       (:tr (:td "Country code (2 chars)")
+            (:td (text-field "country" :size 2 :value "DE")))
        (:tr (:td "Email-Address")
 	    (:td (text-field "email" :size 40)))
+       (:tr (:td "Language for certificate")
+            (:td ((:select :name "language")
+                  (loop
+                     for (language-symbol language-name) in (website-languages)
+                     do (html ((:option :value language-symbol) (:princ-safe language-name)))))))
        (:tr (:td "Name for certificate")
 	    (:td (text-field "name" :size 20)))
        (:tr (:td "Postal address for certificate"
@@ -78,10 +91,10 @@
   (apply #'encode-universal-time 0 0 0 (mapcar #'parse-integer (split #?r"\." date-string))))
 
 (defmethod handle-object-form ((handler edit-sponsor-handler) (action (eql :create)) (sponsor (eql nil)) req)
-  (with-query-params (req numsqm country email name postaladdress date)
+  (with-query-params (req numsqm country email name postaladdress date language)
     (let* ((sponsor (make-sponsor :email email :country country))
 	   (contract (make-contract sponsor (parse-integer numsqm) :paidp t :date (date-to-universal date))))
-      (contract-issue-cert contract name postaladdress)
+      (contract-issue-cert contract name :address postaladdress :language language)
       (redirect (format nil "/edit-sponsor/~D" (store-object-id sponsor)) req))))
 
 (defun contract-checkbox-name (contract)
@@ -121,9 +134,15 @@
 		    (:td (:princ-safe (format-date-time (contract-date contract) :show-time nil)))
 		    (:td (:princ-safe (length (contract-m2s contract))))
 		    (:td (:princ-safe (if (contract-paidp contract) "paid" "not paid")))
-		    (:td (cmslink (format nil "/cert-regen/~A" (store-object-id contract)) "Regenerate Certificate")
+		    (:td (cmslink (format nil "cert-regen/~A" (store-object-id contract)) "Regenerate Certificate")
 			 (when (probe-file (contract-pdf-pathname contract))
-			   (html :br (cmslink (contract-pdf-url contract) "Show Certificate"))))))))
+			   (html :br (cmslink (contract-pdf-url contract) "Show Certificate")))
+			 (when (contract-worldpay-trans-id contract)
+			   (html :br ((:a :class "cmslink"
+					  :target "_new"
+					  :href (format nil "https://select.worldpay.com/wcc/admin?op-transInfo-~A=1"
+							(contract-worldpay-trans-id contract)))
+				      "Show WorldPay transaction"))))))))
       (:p (submit-button "save" "save")
 	  (submit-button "delete" "delete" :confirm "Really delete this sponsor?"))))))
 
@@ -177,6 +196,11 @@
 		  (:td (:princ-safe (format-date-time (contract-date contract)))))
 	     (:tr (:td "Country code (2 chars)")
 		  (:td (text-field "country" :size 2 :value "DE")))
+             (:tr (:td "Language")
+                  (:td ((:select :name "language")
+                        (loop
+                           for (language-symbol language-name) in (website-languages)
+                           do (html ((:option :value language-symbol) (:princ-safe language-name)))))))
 	     (:tr (:td "Name for certificate")
 		  (:td (text-field "name" :size 50)))
 	     (:tr (:td "Email-Address")
@@ -186,19 +210,20 @@
 	     (:tr (:td (submit-button "process" "process" :formcheck "javascript:return check_complete_sale()"))))))))))
 
 (defmethod handle-object-form ((handler complete-transfer-handler) (action (eql :process)) contract req)
-  (with-query-params (req email name postaladdress country)
+  (with-query-params (req email name postaladdress country language)
     (with-bos-cms-page (req :title "Square meter sale completion")
       (if (contract-paidp contract)
 	  (html (:h2 "This sale has already been completed"))
 	  (progn
 	    (html (:h2 "Completing square meter sale"))
 	    (sponsor-set-country (contract-sponsor contract) country)
-	    (contract-set-paidp contract t)
-	    (contract-issue-cert contract name postaladdress)
+	    (contract-set-paidp contract (format nil "~A: wire transfer processed by ~A"
+						 (format-date-time) (user-login (bknr-request-user req))))
+	    (contract-issue-cert contract name :address postaladdress :language language)
 	    (when email
 	      (html (:p "Sending instruction email to " (:princ-safe email)))
 	      (mail-instructions-to-sponsor contract email))))
-    (:p (cmslink (format nil "/edit-sponsor/~D" (store-object-id (contract-sponsor contract)))
+    (:p (cmslink (format nil "edit-sponsor/~D" (store-object-id (contract-sponsor contract)))
 	  "click here") " to edit the sponsor's database entry"))))
 
 (defclass m2-javascript-handler (prefix-handler)
@@ -220,10 +245,10 @@
 	(with-http-body (req *ent*)
 	  (let ((*standard-output* *html-stream*))
 	    (princ "<script language=\"JavaScript\">") (terpri)
-	    (princ "var profil; var qms;") (terpri)
+	    (princ "var profil;") (terpri)
 	    (when (and sponsor (find-if #'contract-paidp (sponsor-contracts sponsor)))
 	      (princ (make-m2-javascript sponsor)) (terpri))
-	    (princ "parent.qm_fertig(profil, qms);") (terpri)
+	    (princ "parent.qm_fertig(profil);") (terpri)
 	    (princ "</script>") (terpri)))))))
 
 (defclass sponsor-login-handler (page-handler)
@@ -266,25 +291,24 @@
       ((:table)
        (:tr (:td "Name")
 	    (:td (text-field "name" :size 40)))
-       (if (contract-download-only-p contract)
-	 (html
-	  (:tr (:td (submit-button "make-download" "make-download"))))
-	 (html
+       (:tr (:td "Language")
+            (:td ((:select :name "language")
+                  (loop
+                     for (language-symbol language-name) in (website-languages)
+                     do (html ((:option :value language-symbol) (:princ-safe language-name)))))))
+       (unless (contract-download-only-p contract)
+         (html
 	  (:tr (:td "Address")
-	       (:td (textarea-field "address")))
-	  (:tr (:td (submit-button "make-print" "make-print"))))))))))
+	       (:td (textarea-field "address")))))
+       (html
+        (:tr (:td (submit-button "regenerate" "regenerate")))))))))
 
 (defun confirm-cert-regen (req)
   (with-bos-cms-page (req :title "Certificate generation request has been created")
     (html
      "Your certificate generation request has been created, please wait a few seconds before checking the PDF file")))
 
-(defmethod handle-object-form ((handler cert-regen-handler) (action (eql :make-print)) (contract contract) req)
-  (with-query-params (req name address)
-    (bos.m2::make-certificate contract name :address address))
-  (confirm-cert-regen req))
-
-(defmethod handle-object-form ((handler cert-regen-handler) (action (eql :make-download)) (contract contract) req)
-  (with-query-params (req name)
-    (bos.m2::make-certificate contract name))
+(defmethod handle-object-form ((handler cert-regen-handler) (action (eql :regenerate)) (contract contract) req)
+  (with-query-params (req name address language)
+    (bos.m2::make-certificate contract name :address address :language language))
   (confirm-cert-regen req))

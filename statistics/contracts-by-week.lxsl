@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:loop="http://informatik.hu-berlin.de/loop">
+ <xsl:output method="xml"/>
+ 
+ <xsl:template match="/response">
+  <xsl:variable name="year">
+   <xsl:value-of select="substring(/response/week[1]/@key, 1, 4)"/>
+  </xsl:variable>
+  <xsl:variable name="max_contracts">
+   <xsl:for-each select="week">
+    <xsl:sort select="@contracts" data-type="number" order="descending"/>
+    <xsl:if test="position()=1"><xsl:value-of select="@contracts"/></xsl:if>
+   </xsl:for-each>
+  </xsl:variable>
+  <graphData>
+   <sets>
+    <set title="Contracts" marker-type="triangle" color="green">
+     <xsl:for-each select="week">
+      <measure>
+       <xvalue><xsl:value-of select="@week-first-yday"/></xvalue>
+       <yvalue><xsl:value-of select="@contracts"/></yvalue>
+      </measure>
+     </xsl:for-each>
+    </set>
+   </sets>
+   <minx>1</minx>
+   <maxx>365</maxx>
+   <miny>0</miny>
+   <maxy><xsl:value-of select="$max_contracts"/></maxy>
+   <title>Contracts by week for year <xsl:value-of select="$year"/></title>
+   <xvalues>
+    <xsl:for-each select="month">
+     <xvalue>
+      <value><xsl:value-of select="@start-yday"/></value>
+      <label><xsl:value-of select="@name"/></label>
+      <gridline>true</gridline>
+     </xvalue>
+    </xsl:for-each>
+   </xvalues>
+   <yvalues>
+    <loop:for name="i" from="20" to="$max_contracts" step="20">
+     <yvalue>
+      <value><xsl:value-of select="$i"/></value>
+      <label><xsl:value-of select="$i"/></label>
+      <gridline>true</gridline>
+     </yvalue>
+    </loop:for>
+   </yvalues>
+  </graphData>
+ </xsl:template>
+</xsl:stylesheet>

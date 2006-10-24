@@ -16,7 +16,7 @@
 	     (html "logged in as " (html-link (bknr-request-user *req*)))
 	     (html "not logged in"))
 	 " - current content language is "
-	(cmslink "/change-language"
+	(cmslink "change-language"
 	  (:princ-safe (current-website-language))
 	  " ("
 	  (:princ-safe (language-name (current-website-language)))

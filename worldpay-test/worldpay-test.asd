@@ -28,12 +28,16 @@
 	       (:file "poi-handlers" :depends-on ("web-utils"))
 	       (:file "boi-handlers" :depends-on ("web-utils"))
 	       (:file "contract-handlers" :depends-on ("web-utils"))
+	       (:file "contract-image-handler" :depends-on ("web-utils"))
+	       (:file "reports-xml-handler" :depends-on ("boi-handlers"))
 	       (:file "sponsor-handlers" :depends-on ("web-utils"))
 	       (:file "news-handlers" :depends-on ("web-utils"))
 	       (:file "allocation-area-handlers" :depends-on ("web-utils"))
 	       (:file "languages-handler" :depends-on ("web-utils"))
 	       (:file "tags" :depends-on ("web-utils"))
 	       (:file "news-tags" :depends-on ("web-utils"))
+	       (:file "news-rss" :depends-on ("web-utils"))
+	       (:file "contract-rss" :depends-on ("web-utils"))
 	       (:file "worldpay-test" :depends-on ("news-tags" "tags" "map-handlers" "map-browser-handler" "poi-handlers"
 							       "boi-handlers" "contract-handlers" "sponsor-handlers" "news-handlers"
 							       "allocation-area-handlers"))

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_extra"
+  title="RAINFOREST for SAMBOJA LESTARI - Guide to the Satellite Map"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<h1 class="extra">Guide to the Satellite Map</h1>
+	<p class="text_content">
+		<p>You are in the detail display for a point of interest (POI) in the project area Samboja Lestari. 
+		On the top left in the overview map you can see where this POI is located. 
+		</p>
+		<p> By clicking on one of the POI titles in the list you can choose another POI.</p>
+		<p> Above Right  in the picture you find six detail photos of this POI.   
+		 By clicking on the miniature you can increase the chosen photo.
+ </p>
+		<p> At the lower edge of the photo are up to three buttons with the titles  <strong>Sat map</strong>,
+		<strong>Luftbild</strong> and <strong>Panorama</strong>.  
+		By clickng on one of the buttons you can choose a different view of the POI</p>
+		<p style="margin-left: 40px; margin-right: 40px;">
+		  <bl>
+		    <li><strong>Sat-Karte</strong> Cutout from the satellite photo of the project area of 2002.  </li>
+		    <li><strong>Aerial photograph </strong> Aerial photograph of the POI, taken up in the autumn 2004 of a light airplane.  </li>
+		    <li><strong>Panorama</strong> Panorama photo of the POI, taken in the autumn 2004.  
+				By clicking and dragging in the panorama picture you can change the view</li>
+		  </bl>
+		</p>
+		<p> Click on the overview map on the top left to return to the POI overview.</p>
+	</p>
+</bknr:toplevel>

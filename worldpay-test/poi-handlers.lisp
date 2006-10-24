@@ -93,12 +93,12 @@
 	     (:td (cond
 		    ((poi-area poi)
 		     (html (:princ-safe (format nil "~D/~D " (first (poi-area poi)) (second (poi-area poi)))))
-		     (cmslink (format nil "/map-browser/~A/~A?chosen-url=~A"
+		     (cmslink (format nil "map-browser/~A/~A?chosen-url=~A"
 				      (first (poi-area poi)) (second (poi-area poi))
 				      (uriencode-string (format nil "~A?action=save&" (uri-path (request-uri req)))))
 		       "[relocate]"))
 		    (t
-		     (cmslink (format nil "/map-browser/?chosen-url=~A"
+		     (cmslink (format nil "map-browser/?chosen-url=~A"
 				      (uriencode-string (format nil "~A?action=save&" (uri-path (request-uri req)))))
 		       "[choose]")))))
 	(:tr (:td "icon")
@@ -127,7 +127,7 @@
 	      (unless (eql 6 (length (poi-images poi)))
 		(html
 		 :br
-		 (cmslink (format nil "/edit-poi-image/?poi=~A" (store-object-id poi)) "[new]")))))
+		 (cmslink (format nil "edit-poi-image/?poi=~A" (store-object-id poi)) "[new]")))))
 	(:tr (:td "airal view")
 	     (:td (if (poi-airals poi)
 		      (html ((:a :href (format nil "/image/~D" (store-object-id (first (poi-airals poi))))
@@ -213,7 +213,7 @@
       ; just open the image to make sure that gd can process it
       )
     (change-slot-values poi 'panoramas (list (import-image uploaded-file
-							:class-name 'store-image))))
+							   :class-name 'store-image))))
   (redirect (format nil "/edit-poi/~D"
 		    (store-object-id poi)) req))
 

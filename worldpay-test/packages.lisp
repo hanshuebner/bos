@@ -2,6 +2,7 @@
 
 (defpackage :worldpay-test
   (:use :cl
+	:date-calc
 	:extensions
 	:cl-user
 	:cl-interpol
@@ -11,7 +12,7 @@
 	:xhtml-generator
 	:cxml
 	:puri
-	:mime
+	#+(or) :mime
 	:acl-compat.socket
 	:acl-compat.mp
         :bknr.web
@@ -21,6 +22,7 @@
 	:bknr.user
 	:bknr.images
 	:bknr.cron
+	:bknr.rss
         :bos.m2
 	:bos.m2.config)
   (:shadowing-import-from :cl-interpol #:quote-meta-chars)

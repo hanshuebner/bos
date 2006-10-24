@@ -4,6 +4,9 @@
 (defparameter *worldpay-installation-id* 103530
   "Installation-ID für Worldpay")
 
+;; Worldpay Test Mode
+(defparameter *worldpay-test-mode* t)
+
 ;; URL für BASE HREFs
 (defparameter *website-url* "http://create-rainforest.org")
 

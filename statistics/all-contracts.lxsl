@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:loop="http://informatik.hu-berlin.de/loop">
+ <xsl:output method="xml"/>
+
+ <xsl:template match="/response">
+  <xsl:variable name="total_sqms_sold">
+   <xsl:value-of select="sum(contract/@sqm-count)"/>
+  </xsl:variable>
+  <graphData>
+   <sets>
+    <set title="Contracts" marker-type="none" color="#00ff00">
+     <xsl:for-each select="contract">
+      <measure>
+       <xvalue><xsl:value-of select="@universal-time"/></xvalue>
+       <yvalue><xsl:value-of select="@sqm-count + sum(preceding-sibling::*/@sqm-count)"/></yvalue>
+      </measure>
+     </xsl:for-each>
+    </set>
+   </sets>
+   <minx><xsl:value-of select="/response/contract[1]/@universal-time"/></minx>
+   <maxx><xsl:value-of select="/response/contract[last()]/@universal-time"/></maxx>
+   <miny>0</miny>
+   <maxy><xsl:value-of select="$total_sqms_sold"/></maxy>
+   <title>Total square meters sold</title>
+   <xvalues>
+    <xsl:for-each select="/response/contract">
+     <xsl:choose>
+
+      <xsl:when test="(substring(preceding-sibling::*[1]/@date-time, 5, 2) != substring(@date-time, 5, 2)) and (substring(@date-time, 5, 2) = '01')">
+       <xvalue>
+        <value><xsl:value-of select="@universal-time"/></value>
+        <label>Q1/<xsl:value-of select="substring(@date-time, 1, 4)"/></label>
+        <gridline>true</gridline>
+       </xvalue>
+      </xsl:when>
+
+      <xsl:when test="(substring(preceding-sibling::*[1]/@date-time, 5, 2) != substring(@date-time, 5, 2)) and (substring(@date-time, 5, 2) = '04')">
+       <xvalue>
+        <value><xsl:value-of select="@universal-time"/></value>
+        <label>Q2/<xsl:value-of select="substring(@date-time, 1, 4)"/></label>
+        <gridline>true</gridline>
+       </xvalue>
+      </xsl:when>
+
+      <xsl:when test="(substring(preceding-sibling::*[1]/@date-time, 5, 2) != substring(@date-time, 5, 2)) and (substring(@date-time, 5, 2) = '07')">
+       <xvalue>
+        <value><xsl:value-of select="@universal-time"/></value>
+        <label>Q3/<xsl:value-of select="substring(@date-time, 1, 4)"/></label>
+        <gridline>true</gridline>
+       </xvalue>
+      </xsl:when>
+
+      <xsl:when test="(substring(preceding-sibling::*[1]/@date-time, 5, 2) != substring(@date-time, 5, 2)) and (substring(@date-time, 5, 2) = '10')">
+       <xvalue>
+        <value><xsl:value-of select="@universal-time"/></value>
+        <label>Q4/<xsl:value-of select="substring(@date-time, 1, 4)"/></label>
+        <gridline>true</gridline>
+       </xvalue>
+      </xsl:when>
+
+     </xsl:choose>
+    </xsl:for-each>
+   </xvalues>
+   <yvalues>
+    <loop:for name="i" from="10000" to="$total_sqms_sold" step="10000">
+     <yvalue>
+      <value><xsl:value-of select="$i"/></value>
+      <label><xsl:value-of select="$i"/></label>
+      <gridline>true</gridline>
+     </yvalue>
+    </loop:for>
+   </yvalues>
+  </graphData>
+ </xsl:template>
+</xsl:stylesheet>

@@ -19,7 +19,7 @@
 	  (:ul
 	   (dolist (news-item (all-news-items))
 	     (let ((id (store-object-id news-item)))
-	       (html (:li (cmslink #?"/edit-news/$(id)"
+	       (html (:li (cmslink #?"edit-news/$(id)"
 				   (:princ-safe (format-date-time (news-item-time news-item)))
 				   " - "
 				   (:princ-safe (or (news-item-title news-item language) "[no title in this language]")))))))))

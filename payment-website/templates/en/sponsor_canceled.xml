@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  suppress-xml-headers="1"
+  >
+	<head>
+		<base href="$(website-url)/en/sponsor_canceled" />
+		<link rel="stylesheet" href="/static/toplevel_style.css" />
+		<link rel="stylesheet" href="/static/content_style.css" />
+		<script src="/static/bos.js" type="text/javascript"><!-- x -->	
+		</script> 
+             <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8" />-->
+		<title>RAINFOREST for SAMBOJA LESTARI</title>
+	</head>
+	<body>
+		
+		<!-- header and menu_top -->
+		<div id="header">
+
+			<div id="menue_banner">
+				<a href="index">
+					<img src="../images/header_ganzneu.gif" border="0" />
+				</a>
+			</div>
+
+			<div id="menue_header_left">
+			BOS Deutschland e.V.
+			</div>
+			<div id="menue_header_main">
+				<div>l</div>
+						<div>
+				<a href="idea" class="menue"
+						title="What exactly is happening.">
+					project
+				</a>
+			</div>
+			<div>l</div>
+			<div>
+				<a href="bestellung" class="menue"
+						title="Join us!">
+					donation
+				</a>
+			</div>
+			<div>l</div>	
+			<div>
+				<a href="bos" class="menue"
+						title="BOS Foundation">
+					BOS
+				</a>
+			</div>
+			<div>l</div>	
+			<div>
+				<a href="javascript:window_infosys()" class="menue"
+						title="Move to satellite map.">
+					satellite map
+				</a>
+			</div>
+			<div>l</div>
+			<div>
+				<a href="contact" class="menue"
+						title="Contact us.">
+					contact
+				</a>
+			</div>	
+				<div>l</div>		
+			</div>
+		</div>
+		<!-- /header and menu_top -->
+		<!-- content 3teilig-->
+		<div id="content">
+			<div id="content_left"><!-- content left-->
+				<div id="textbox_left_form">		
+				</div>	
+				<!-- footer -->	
+				<div id="menue_footer">	
+					<a href="javascript:window_extra('privacy')" class="footer">
+						privacy statement
+					</a>
+					l
+					<a href="javascript:window_extra('impressum')" class="footer">
+						imprint
+					</a>
+				</div>
+				<!-- /footer -->	
+			</div>
+			<!-- /content left-->
+			<!-- container content_main -->
+			<div id="content_main">
+				<div id="textbox_content_big" >
+					<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td colspan="3"><span class="headline">Your transaction has been cancelled.</span></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div id="content_right">
+				<div id="helpbox">		
+					<br /><br />
+					[<strong>payment interrupted</strong>]
+			 	</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -4,12 +4,16 @@
 (enable-interpol-syntax)
 
 (defmacro with-xml-response (req &body body)
-  `(with-http-response (req *ent* :content-type "text/xml")
-    (with-http-body (req *ent*)
-      (let ((*xml-sink* (make-character-stream-sink net.html.generator:*html-stream* :canonical nil)))
-	(with-xml-output *xml-sink*
-	  (with-element "response"
-	    ,@body))))))
+  `(with-http-response (,req *ent* :content-type "text/xml")
+     (with-query-params (,req download)
+       (when download
+	 (setf (reply-header-slot-value ,req :content-disposition)
+	       (format nil "attachment; filename=~A" download))))
+     (with-http-body (,req *ent*)
+       (let ((*xml-sink* (make-character-stream-sink net.html.generator:*html-stream* :canonical nil)))
+	 (with-xml-output *xml-sink*
+	   (with-element "response"
+	     ,@body))))))
 
 (defmacro with-xml-error-handler (req &body body)
   `(handler-case
@@ -82,7 +86,9 @@
 	(when (contract-paidp contract)
 	  (error "contract has already been paid for"))
 	(with-transaction (:contract-paid)
-	  (contract-set-paidp contract t)
+	  (contract-set-paidp contract (format nil "~A: manually set paid by ~A"
+					       (format-date-time)
+					       (user-login (bknr-request-user req))))
 	  (when name
 	    (setf (user-full-name (contract-sponsor contract)) name))))
       (with-xml-response ()

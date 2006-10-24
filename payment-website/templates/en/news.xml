@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_extra"
+  title="RAINFOREST for SAMBOJA LESTARI - News"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<bos:news-item />
+	<h1 class="extra">
+		<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
+		<a href="javascript:window_news('../archive')" class="more">
+			NEWS in ARCHIVE
+		</a>
+	</h1>					
+</bknr:toplevel>

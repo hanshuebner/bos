@@ -15,7 +15,7 @@ body {
 	width: 150px;
 	max-width: 150px;
 	padding-bottom: 0px;
-	margin : 58px 15px 10px 15px;
+	margin : 5px 15px 10px 15px;
 	border-width: 1px;
 	border-style: solid solid solid solid;
 	border-color : Silver;
@@ -33,7 +33,7 @@ body {
 	width: 150px;
 	height: 398px;
 	max-width: 150px;
-	margin : 28px 15px 10px 15px;	
+	margin : 5px 15px 10px 15px;	
 	visibility: visible;
 	display: block;
 	font : normal normal 0.7em Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -50,9 +50,9 @@ body {
 	width: 150px;
 	max-width: 150px;
 	height: 180px;
-	margin : 22px 15px 10px 15px;
+	margin : 0px 15px 10px 15px;
 	border-width: 1px;
-	border-style: solid solid none solid;
+	border-style: solid solid solid solid;
 	border-color : Silver;
 	visibility: visible;
 	display: block;
@@ -64,6 +64,34 @@ body {
 	background-repeat : no-repeat;
 	background-position : bottom;
 }	
+	
+/* Login-Formular auf der HP */	
+#textbox_left_login {
+	position: relative;
+	background-color: white;
+	z-index: 20;
+	width: 150px;
+	max-width: 150px;
+	height: 85px;
+	margin : 0px 15px 0px 15px;
+	border-width: 1px;
+	border-style: solid solid solid solid;
+	border-color : Silver;
+	visibility: visible;
+	display: block;
+	font : normal normal 0.7em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : normal;
+	text-decoration : none;
+}
+
+.password-input {
+	width: 115px;
+}
+
+.login-button {
+	top: 5px;
+}
 	
 #textbox_right
 	{

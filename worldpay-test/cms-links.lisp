@@ -5,7 +5,7 @@
 
 (defmethod html-edit-link ((sponsor sponsor))
   (html
-   (cmslink (format nil "/edit-sponsor/~D" (store-object-id sponsor))
+   (cmslink (format nil "edit-sponsor/~D" (store-object-id sponsor))
      (:princ-safe (format nil "edit sponsor #~D" (store-object-id sponsor))))))
 
 (defmethod html-link ((sponsor sponsor))
@@ -13,7 +13,7 @@
 
 (defmethod html-link ((contract contract))
   (html
-   (cmslink (format nil "/contract/~D" (store-object-id contract))
+   (cmslink (format nil "contract/~D" (store-object-id contract))
      (:princ-safe (format nil "contract #~D" (store-object-id contract))))))
 
 (defmethod object-url ((poi poi))

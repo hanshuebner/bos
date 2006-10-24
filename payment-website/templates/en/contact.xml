@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_main"
+  title="RAINFOREST for SAMBOJA LESTARI - Contact"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<div id="content_main">
+		<div id="textbox_content">
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td colspan="3"><span class="headline">Contact</span>
+					</td>
+					<td>
+					</td>				
+				</tr>
+				<tr>
+					<td height="15">
+					</td>
+				</tr>
+				<tr>
+					<td>Please contact us, if you have any questions.<br />
+						We look forward to receiving your ideas and will answer your questions at any time.
+						<br /><br />
+						BOS Deutschland e.V.<br />
+						Schöneberger Ufer 69<br />
+						D - 10785 Berlin 
+						<br /><br />	
+						Telefon:   +49.30.26 36 78 33<br />
+						Fax:       +49.30.26 36 78 15<br /><br />
+						E-Mail:
+						<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+						<a href="mailto:info@bos-deutschland.de" class="more">
+							info@bos-deutschland.de
+						</a>
+						<br /><br /><br /><br /><br /><br />
+						We will answer all your inquiries as soon as possible. Please be patient.
+						<br />
+					</td>					
+				</tr>				
+			</table>		
+		</div>	
+	</div>
+	<div id="content_right">
+		<div id="textbox_right_top">
+			<table id="rightTable" border="0" cellpadding="0" cellspacing="0">				
+				<tr>
+					<td height="30">
+					</td>
+				</tr>			
+				<tr>
+					<td colspan="2"><img src="/images/bos-logo.gif" width="116" height="85" alt="" />
+					</td>
+				</tr>	
+				<tr>
+					<td height="10">
+					</td>
+				</tr>		
+				<tr>
+					<td colspan="2">Would you like to know more about projects run by BOS?
+					<br /><br />
+					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+					<a href="http://www.savetheorangutan.info" target="_blank" class="more">
+						savetheorangutan.info
+					</a>
+					<br />
+					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+					<a href="http://www.bos-deutschland.de" target="_blank" class="more">
+						bos-deutschland.de
+					</a>
+					<br /><br />
+					</td>
+				</tr>
+				<tr>
+					<td>On these webpages you will also find links to our BOS partner organisations worldwide.
+					</td>
+				</tr>	
+			</table>
+		</div>		
+	</div>
+</bknr:toplevel>
