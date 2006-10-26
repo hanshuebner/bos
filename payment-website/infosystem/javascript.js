@@ -841,14 +841,16 @@ function hide_poi_luftbild() {
 }
 
 function show_poi_panorama() {
+    var the_poi = poi[aktuelles_objekt];
     help_page = 'panorama';
     hide_poi_luftbild();
-    if (poi[aktuelles_objekt]['panorama']) {
+    if (the_poi.panoramas) {
+	var panorama_id = the_poi.panoramas[0];
 	document.getElementById("Panorama").style.visibility = "visible";
 	document.getElementById("PoiInfoText").innerHTML = msg('Das Laden des Panoramas dauert einen Moment und benötigt Java in Ihrem Browser.<br /><br />Klicken und Ziehen Sie mit der Maus, um sich im Panorama umzusehen!');
 	document.getElementById("PanoramaApplet").innerHTML
 	    = '<applet archive="/static/ptviewer.jar" code="ptviewer.class" width="360" height="340"> '
-	    + ' <param name="file" value="/image/' + poi[aktuelles_objekt]['panorama'] + '" />'
+	    + ' <param name="file" value="/image/' + panorama_id + '" />'
 	    + ' <param name="cursor" value="MOVE" />'
 	    + ' <param name="auto" value=".2" />'
 	    + '</applet>';
@@ -896,7 +898,7 @@ function PoiDetail_anzeigen(index) {
     if (the_poi['luftbild']) {
 	poi_menu_items.push([ msg('Luftbild'), show_poi_luftbild ]);
     }
-    if (the_poi['panorama']) {
+    if (the_poi.panoramas) {
 	poi_menu_items.push([ msg('Panorama'), show_poi_panorama ]);
     }
 
