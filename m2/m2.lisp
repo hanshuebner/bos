@@ -181,7 +181,7 @@
    (paidp :update)
    (m2s :read)
    (color :read)
-   (download-only :read)
+   (download-only :update)
    (cert-issued :read)
    (worldpay-trans-id :update :initform nil)
    (expires :read :documentation "universal time which specifies the time the contract expires (is deleted) when it has not been paid for" :initform nil))
@@ -234,6 +234,9 @@
 (defmethod contract-download-only-p ((contract contract))
   (or (contract-download-only contract)
       (< (contract-price contract) *mail-amount*)))
+
+(deftransaction contract-set-download-only-p (contract newval)
+  (setf (contract-download-only contract) newval))
 
 (defmethod contract-fdf-pathname ((contract contract) language)
   (merge-pathnames (make-pathname :name (format nil "~D-~(~A~)"

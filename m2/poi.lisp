@@ -129,26 +129,38 @@
 						      (not (poi-published poi))))
 				  (store-objects-with-class 'poi))
 		       #'(lambda (poi-1 poi-2) (string-lessp (slot-string poi-1 'title language) (slot-string poi-2 'title language)))))
-      (format t "var poi = [];~%")
-      (format t "poi['symbol'] = ~S;~%" (poi-name poi))
-      (format t "poi['icon'] = ~S;~%" (poi-icon poi))
-      (format t "poi['name'] = ~S;~%" (slot-string poi 'title language))
-      (format t "poi['untertitel'] = ~S;~%" (slot-string poi 'subtitle language))
-      (format t "poi['text'] = ~S;~%" (escape-nl (slot-string poi 'description language)))
-      (format t "poi['x'] = ~D;~%" (poi-center-x poi))
-      (format t "poi['y'] = ~D;~%" (poi-center-y poi))
-      (format t "poi['thumbnail'] = ~D;~%" (length (poi-images poi)))
+      (format t "
+var poi = { symbol: ~S,
+            icon: ~S,
+            name: ~S,
+            untertitel: ~S,
+            text: ~S,
+            x: ~D,
+            y: ~D,
+            thumbnail: ~D
+};
+"
+	      (poi-name poi)
+	      (poi-icon poi)
+	      (slot-string poi 'title language)
+	      (slot-string poi 'subtitle language)
+	      (escape-nl (slot-string poi 'description language))
+	      (poi-center-x poi)
+	      (poi-center-y poi)
+	      (length (poi-images poi)))
+      (format t "poi.thumbnail = ~D;~%" (length (poi-images poi)))
       (when (poi-airals poi)
-	(format t "poi['luftbild'] = ~D;~%" (store-object-id (first (poi-airals poi)))))
+	(format t "poi.luftbild = ~D;~%" (store-object-id (first (poi-airals poi)))))
       (when (poi-panoramas poi)
-	(format t "poi['panorama'] = ~D;~%" (store-object-id (first (poi-panoramas poi)))))
+	(let ((panorama-ids (mapcar #'store-object-id (poi-panoramas poi))))
+	  (format t "poi.panoramas = [ ~D~{, ~D~} ];~%" (first panorama-ids) (rest panorama-ids))))
       (loop for slot-name in '(title subtitle description)
 	    for javascript-name in '("imageueberschrift" "imageuntertitel" "imagetext")
 	    for slot-values = (mapcar #'(lambda (image)
 					  (escape-nl (slot-string image slot-name language)))
 				      (poi-images poi))
 	    when slot-values
-	    do (format t "poi[~S] = [~S~{, ~S~}];~%" javascript-name (car slot-values) (cdr slot-values)))
+	    do (format t "poi.~A = [ ~S~{, ~S~} ];~%" javascript-name (car slot-values) (cdr slot-values)))
       (format t "pois.push(poi);~%"))
     (dolist (allocation-area (remove-if (complement #'allocation-area-active-p) (class-instances 'allocation-area)))
       (destructuring-bind (x y) (allocation-area-center allocation-area)

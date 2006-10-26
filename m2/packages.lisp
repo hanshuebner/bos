@@ -102,6 +102,7 @@
 	   #:contract-color
 	   #:contract-cert-issued
            #:contract-set-paidp
+	   #:contract-set-download-only-p
 	   #:contract-price
 	   #:contract-issue-cert
 	   #:contract-worldpay-trans-id

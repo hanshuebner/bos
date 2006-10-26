@@ -205,8 +205,10 @@
 		  (:td (text-field "name" :size 50)))
 	     (:tr (:td "Email-Address")
 		  (:td (text-field "email" :size 20)))
-	     (:tr (:td "Postal address for certificate"
-		       (:td (textarea-field "postaladdress" :rows 5 :cols 40))))
+	     (unless (contract-download-only-p contract)
+	       (html
+		(:tr (:td "Postal address for certificate"
+			  (:td (textarea-field "postaladdress" :rows 5 :cols 40))))))
 	     (:tr (:td (submit-button "process" "process" :formcheck "javascript:return check_complete_sale()"))))))))))
 
 (defmethod handle-object-form ((handler complete-transfer-handler) (action (eql :process)) contract req)

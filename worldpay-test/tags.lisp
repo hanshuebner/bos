@@ -100,7 +100,12 @@
   (mapc #'emit-template-node children))
 
 (define-bknr-tag mail-transfer ()
-  (mail-manual-sponsor-data (get-template-var :request)))
+  (with-query-params ((get-template-var :request) contract-id mail-certificate)
+    (let* ((contract (store-object-with-id (parse-integer contract-id)))
+	   (download-only (or (< (contract-price contract) *mail-certificate-threshold*)
+			      (not mail-certificate))))
+      (contract-set-download-only-p contract download-only)
+      (mail-manual-sponsor-data (get-template-var :request)))))
 
 (define-bknr-tag when-certificate (&key children)
   (let ((sponsor (bknr-request-user (get-template-var :request))))

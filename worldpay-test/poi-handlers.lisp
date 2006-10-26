@@ -140,15 +140,16 @@
 			    :br
 			    (submit-button "upload-airal" "upload-airal")))))
 	(:tr (:td "panorama view")
-	     (:td (if (poi-panoramas poi)
-		      (html ((:a :href (format nil "/image/~D" (store-object-id (first (poi-panoramas poi))))
-				 :target "_new")
-			     " view ")
-			    (submit-button "delete-panorama" "delete-panorama" :confirm "Really delete the panorama image?"))
-		      (html "Upload new panorama view"
-			    ((:input :type "file" :name "image-file"))
-			    :br
-			    (submit-button "upload-panorama" "upload-panorama")))))
+	     (:td (dolist (panorama (poi-panoramas poi))
+		    (html (:princ-safe (format-date-time (blob-timestamp panorama)))
+			  ((:a :href (format nil "/image/~D" (store-object-id panorama)) :target "_new" :class "cmslink")
+			   " view ")
+			  (submit-button "delete-panorama" "delete-panorama" :confirm "Really delete this panorama image?")
+			  :br))
+		  (html "Upload new panorama view"
+			((:input :type "file" :name "image-file"))
+			:br
+			(submit-button "upload-panorama" "upload-panorama"))))
 	(:tr (:td (submit-button "save" "save") (submit-button "delete" "delete" :confirm "Really delete the POI?"))))))))
 
 (defmethod handle-object-form ((handler edit-poi-handler)
@@ -212,8 +213,9 @@
     (cl-gd:with-image-from-file* (uploaded-file)
       ; just open the image to make sure that gd can process it
       )
-    (change-slot-values poi 'panoramas (list (import-image uploaded-file
-							   :class-name 'store-image))))
+    (change-slot-values poi 'panoramas (cons (import-image uploaded-file
+							   :class-name 'store-image)
+					     (poi-panoramas poi))))
   (redirect (format nil "/edit-poi/~D"
 		    (store-object-id poi)) req))
 
@@ -221,9 +223,10 @@
 			       (action (eql :delete-panorama))
 			       (poi poi)
 			       req)
-  (let ((panoramas (poi-panoramas poi)))
-    (change-slot-values poi 'panoramas nil)
-    (mapc #'delete-object panoramas))
+  (with-query-params (req panorama-id)
+    (let ((panorama (find-store-object (parse-integer panorama-id))))
+      (change-slot-values poi 'panoramas (remove panorama (poi-panoramas poi)))
+      (mapc #'delete-object panorama)))
   (redirect (format nil "/edit-poi/~D"
 		    (store-object-id poi)) req))
 
