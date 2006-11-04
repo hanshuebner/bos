@@ -4,7 +4,7 @@
 
 function check_complete_sale() {
 
-    if (document.form.name.value == "") {
+    if (document.form.name && (document.form.name.value == "")) {
 	alert('Missing name for certificate');
 	return false;
     }
@@ -32,7 +32,7 @@ function check_complete_sale() {
 
     var send_cert_message;
 
-    if (document.form.postaladdress.value.match(/^\s*$/)) {
+    if (document.form.postaladdress && document.form.postaladdress.value.match(/^\s*$/)) {
 	send_cert_message = 'No printed certificate will be mailed\n';
     } else {
 	send_cert_message = 'Printed certificate will be mailed to:\n' + document.form.postaladdress.value;
