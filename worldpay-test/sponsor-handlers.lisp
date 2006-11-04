@@ -201,18 +201,12 @@
                         (loop
                            for (language-symbol language-name) in (website-languages)
                            do (html ((:option :value language-symbol) (:princ-safe language-name)))))))
-	     (:tr (:td "Name for certificate")
-		  (:td (text-field "name" :size 50)))
 	     (:tr (:td "Email-Address")
 		  (:td (text-field "email" :size 20)))
-	     (unless (contract-download-only-p contract)
-	       (html
-		(:tr (:td "Postal address for certificate"
-			  (:td (textarea-field "postaladdress" :rows 5 :cols 40))))))
 	     (:tr (:td (submit-button "process" "process" :formcheck "javascript:return check_complete_sale()"))))))))))
 
 (defmethod handle-object-form ((handler complete-transfer-handler) (action (eql :process)) contract req)
-  (with-query-params (req email name postaladdress country language)
+  (with-query-params (req email country language)
     (with-bos-cms-page (req :title "Square meter sale completion")
       (if (contract-paidp contract)
 	  (html (:h2 "This sale has already been completed"))
@@ -221,7 +215,6 @@
 	    (sponsor-set-country (contract-sponsor contract) country)
 	    (contract-set-paidp contract (format nil "~A: wire transfer processed by ~A"
 						 (format-date-time) (user-login (bknr-request-user req))))
-	    (contract-issue-cert contract name :address postaladdress :language language)
 	    (when email
 	      (html (:p "Sending instruction email to " (:princ-safe email)))
 	      (mail-instructions-to-sponsor contract email))))

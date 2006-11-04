@@ -100,11 +100,22 @@
   (mapc #'emit-template-node children))
 
 (define-bknr-tag mail-transfer ()
-  (with-query-params ((get-template-var :request) contract-id mail-certificate)
+  (with-query-params ((get-template-var :request)
+		      contract-id mail-certificate
+		      name vorname strasse plz ort)
     (let* ((contract (store-object-with-id (parse-integer contract-id)))
 	   (download-only (or (< (contract-price contract) *mail-certificate-threshold*)
 			      (not mail-certificate))))
       (contract-set-download-only-p contract download-only)
+      (contract-issue-cert contract (format nil "~A ~A" vorname name)
+			   :address (format nil "~A ~A~%~A~%~A ~A"
+					    vorname name
+					    strasse
+					    plz ort)
+			   :language (session-variable :language))
+      (loop
+	 do (sleep 1)
+	 until (probe-file (contract-pdf-pathname contract)))
       (mail-manual-sponsor-data (get-template-var :request)))))
 
 (define-bknr-tag when-certificate (&key children)
