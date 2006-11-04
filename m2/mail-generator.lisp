@@ -88,8 +88,7 @@ Das Team von BOS Deutschland e.V.")))
 	(when field
 	  (apply #'vcard-field field))))))
 
-(defun make-vcard (&key contract-id sponsor-id worldpay-transaction-id
-		   donationcert-yearly gift
+(defun make-vcard (&key sponsor-id
 		   vorname nachname
 		   name
 		   address postcode country
@@ -110,17 +109,14 @@ Das Team von BOS Deutschland e.V.")))
 	`((TEL WORK HOME) ,tel))
      ((EMAIL PREF INTERNET) ,email)
      ((URL WORK) ,(format nil "~A/edit-sponsor/~A" *website-url* sponsor-id))
-     (NOTE ,(format nil "Contract ID: ~A~%Sponsor ID: ~A~%~@[WorldPay Transaction ID: ~A~%~]Donationcert yearly: ~A~%Gift: ~A~%"
-		    contract-id
-		    sponsor-id
-		    worldpay-transaction-id
-		    (if donationcert-yearly "Yes" "No")
-		    (if gift "Yes" "No")))
+     (NOTE ,note)
      (END "VCARD"))))
 
 (defun worldpay-callback-request-to-vcard (request)
   (with-query-params (request cartId
 			      transId
+			      authAmountString
+			      cardType
 			      MC_sponsorid
 			      MC_donationcert-yearly
 			      MC_gift
@@ -130,20 +126,35 @@ Das Team von BOS Deutschland e.V.")))
 			      country
 			      email
 			      tel)
-    (make-vcard :contract-id cartId
-		:sponsor-id MC_sponsorid
-		:worldpay-transaction-id transId
-		:donationcert-yearly MC_donationcert-yearly
-		:gift MC_gift
-		:name name
-		:address address
-		:postcode postcode
-		:country country
-		:email email
-		:tel tel)))
+    (let ((contract (store-object-with-id (parse-integer cartId))))
+      (make-vcard :sponsor-id MC_sponsorid
+		  :note (format nil "Paid-by: Worldpay
+Contract ID: ~A
+Sponsor ID: ~A
+Number of sqms: ~A
+Amount: ~A
+Payment type: ~A
+WorldPay Transaction ID: ~A
+Donationcert yearly: ~A
+Gift: ~A
+"
+				cartId
+				sponsor-id
+				(length (contract-m2s contract))
+				authAmountString
+				cardType
+				transId
+				(if MC_donationcert-yearly "Yes" "No")
+				(if MC_gift "Yes" "No"))
+		  :name name
+		  :address address
+		  :postcode postcode
+		  :country country
+		  :email email
+		  :tel tel))))
 
 (defun mail-manual-sponsor-data (req)
-  (with-query-params (req contract-id vorname name strasse plz ort email telefon mail-certificate donationcert-yearly)
+  (with-query-params (req contract-id vorname name strasse plz ort email telefon donationcert-yearly)
     (let* ((contract (store-object-with-id (parse-integer contract-id)))
 	   (sponsor-id (store-object-id (contract-sponsor contract)))
 	   (mime (make-instance 'multipart-mime
@@ -168,7 +179,6 @@ Das Team von BOS Deutschland e.V.")))
     <tr><td>Email</td><td>~@[~A~]</td></tr>
     <tr><td>Telefon</td><td>~@[~A~]</td></tr>~@[
     <tr><td></td></tr>
-    <tr><td>Urkunde per Post</td><td>~A</td></tr>
     <tr><td>Spendenbescheinigung am Jahresende</td><td>~A</td></tr>~]
    </table>
    <p>Email & Adresse fuer Cut&Paste:</p>
@@ -186,7 +196,6 @@ Das Team von BOS Deutschland e.V.")))
 									     contract-id
 									     (length (contract-m2s contract))
 									     vorname name strasse plz ort email telefon
-									     (if mail-certificate "ja" "nein")
 									     (if donationcert-yearly "ja" "nein")
 									     email vorname name
 									     strasse plz ort
@@ -212,8 +221,20 @@ Das Team von BOS Deutschland e.V.")))
 							      :type "text"
 							      :subtype (format nil "x-vcard; name=\"contract-~A.vcf\"" contract-id)
 							      :charset "utf-8"
-							      :content (make-vcard :contract-id contract-id
-										   :sponsor-id sponsor-id
+							      :content (make-vcard :sponsor-id sponsor-id
+										   :note (format nil "Paid-by: Manual money transfer
+Contract ID: ~Annn
+Sponsor ID: ~A
+Number of sqms: ~A
+Amount: EUR~A.00
+Donationcert yearly: ~A
+"
+												 contract-id
+												 sponsor-id
+												 (length (contract-m2s contract))
+												 (* 3 (length (contract-m2s contract)))
+												 (if donationcert-yearly "Yes" "No"))
+										   :contract-id contract-id
 										   :donationcert-yearly donationcert-yearly
 										   :vorname vorname
 										   :nachname name
