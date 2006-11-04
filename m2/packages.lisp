@@ -37,6 +37,7 @@
 	:bknr.rss
 	:bos.m2.config
 	:net.post-office
+	:kmrcl
 	:cxml
 	:cl-mime
 	:cl-gd)

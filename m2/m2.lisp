@@ -260,8 +260,6 @@
       (warn "can't re-issue cert for ~A" contract)
       (progn
 	(make-certificate contract name :address address :language language)
-	(unless (contract-download-only-p contract)
-	  (mail-certificate-to-office contract address))
 	(change-slot-values contract 'cert-issued t))))
 
 (defmethod contract-image-tiles ((contract contract))
@@ -332,17 +330,17 @@ Sponsor-ID: ~A
       ""))
 
 (defun make-m2-javascript (sponsor)
-  "Erzeugt das Quadratmeter-Javascript für die angegebenen Contracts"
+  "Erzeugt das Quadratmeter-Javascript fÃ¼r die angegebenen Contracts"
   (with-output-to-string (*standard-output*)
     (let ((paid-contracts (remove nil (sponsor-contracts sponsor) :key #'contract-paidp)))
       (format t "profil = {};~%")
-      (format t "profil['id'] = ~D;~%" (store-object-id sponsor))
-      (format t "profil['name'] = ~S;~%" (string-safe (or (user-full-name sponsor) "[anonym]")))
-      (format t "profil['country'] = ~S;~%" (or (sponsor-country sponsor) "[unbekannt]"))
-      (format t "profil['anzahl'] = ~D;~%" (loop for contract in paid-contracts
+      (format t "profil.id = ~D;~%" (store-object-id sponsor))
+      (format t "profil.name = ~S;~%" (string-safe (or (user-full-name sponsor) "[anonym]")))
+      (format t "profil.country = ~S;~%" (or (sponsor-country sponsor) "[unbekannt]"))
+      (format t "profil.anzahl = ~D;~%" (loop for contract in paid-contracts
 								  sum (length (contract-m2s contract))))
-      (format t "profil['nachricht'] = '~A';~%" (string-safe (sponsor-info-text sponsor)))
-      (format t "profil['contracts'] = [ ];~%")
+      (format t "profil.nachricht = '~A';~%" (string-safe (sponsor-info-text sponsor)))
+      (format t "profil.contracts = [ ];~%")
       (loop for contract in paid-contracts
 	    do (destructuring-bind (left top width height) (contract-bounding-box contract)
 		 (format t "profil.contracts.push({ id: ~A, left: ~A, top: ~A, width: ~A, height: ~A, date: ~S });~%"

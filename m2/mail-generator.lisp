@@ -27,17 +27,6 @@ Content-Type: ~A
 $(email)
 "))
 
-(defun mail-certificate-to-office (contract address)
-  (let ((contract-id (store-object-id contract)))
-    (send-system-mail :subject #?"Druckauftrag fuer Spender-Urkunde"
-		      :text #?"Bitte die folgende Urkunde ausdrucken und versenden:
-
-$(*website-url*)/print-certificate/$(contract-id)
-
-Versandadresse:
-
-$(address)")))
-
 (defun mail-fiscal-certificate-to-office (contract name address country)
   (format t "mail-fiscal-certificate-to-office: ~a name: ~a address: ~a country: ~a~%" contract name address country))
 
@@ -232,7 +221,12 @@ Das Team von BOS Deutschland e.V.")))
 										   :postcode plz
 										   :ort ort
 										   :email email
-										   :tel telefon))))))
+										   :tel telefon))
+					       (make-instance 'mime
+							      :type "application"
+							      :subtype (format nil "pdf; name=\"contract-~A.pdf\"" contract-id)
+							      :encoding :base64
+							      :content (file-contents (contract-pdf-pathname contract)))))))
       (send-system-mail :subject (format nil "Ueberweisungsformular-Spenderdaten - Sponsor-ID ~D Contract-ID ~D"
 					 sponsor-id contract-id)
 			:content-type "multipart/mixed"
