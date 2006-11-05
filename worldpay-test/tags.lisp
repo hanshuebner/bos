@@ -40,6 +40,7 @@
   (with-template-vars (gift email name address)
     (let ((contract (find-store-object (parse-integer (get-template-var :contract-id)))))
       (contract-issue-cert contract name :address address :language (session-variable :language))
+      (mail-worldpay-sponsor-data (get-template-var :request))
       (bknr.web::redirect-request :target (if gift "index"
 					      (format nil "profil_setup?name=~A&email=~A&sponsor-id=~A"
 						      (uriencode-string name) (uriencode-string email)
@@ -112,11 +113,6 @@
 					    strasse
 					    plz ort)
 			   :language (session-variable :language))
-      (loop
-	 do (progn
-	      (format t "~&; waiting for generation of certificate, contract-id ~A" contract-id)
-	      (sleep 2))
-	 until (probe-file (contract-pdf-pathname contract)))
       (mail-manual-sponsor-data (get-template-var :request)))))
 
 (define-bknr-tag when-certificate (&key children)

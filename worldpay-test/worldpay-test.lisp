@@ -27,6 +27,7 @@
     (with-query-params (request cartId name address country transStatus lang MC_gift)      
       (unless (website-supports-language lang)
 	(setf lang *default-language*))
+      (bos.m2::remember-worldpay-params cartId (all-request-params request))
       (let ((contract (get-contract (parse-integer cartId))))
 	(cond
 	  ((not (typep contract 'contract))
@@ -36,10 +37,8 @@
 	  ((equal "C" transStatus)
 	   (setf template-name #?"/$(lang)/sponsor_canceled"))
 	  ((< (contract-price contract) *mail-certificate-threshold*)
-	   (mail-worldpay-sponsor-data request)
 	   (setf template-name #?"/$(lang)/quittung"))
 	  (t
-	   (mail-worldpay-sponsor-data request)
 	   (when (<= *mail-fiscal-certificate-threshold* (contract-price contract))
 	     (mail-fiscal-certificate-to-office contract name address country))
 	   (setf template-name (if (and MC_gift (equal MC_gift "1")) #?"/$(lang)/versand_geschenk" #?"/$(lang)/versand_info")))))))
