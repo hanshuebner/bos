@@ -263,6 +263,11 @@
 	(make-certificate contract name :address address :language language)
 	(unless (contract-download-only-p contract)
 	  (make-certificate contract name :address address :language language :print t))
+	(loop
+	 do (progn
+	      (format t "~&; waiting for generation of certificate, contract-id ~A" (store-object-id contract))
+	      (sleep 2))
+	   until (probe-file (contract-pdf-pathname contract)))
 	(change-slot-values contract 'cert-issued t))))
 
 (defmethod contract-image-tiles ((contract contract))

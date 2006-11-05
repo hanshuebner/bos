@@ -113,22 +113,11 @@ Das Team von BOS Deutschland e.V.")))
      (NOTE ,note)
      (END "VCARD"))))
 
-(defun worldpay-callback-request-to-vcard (request)
-  (with-query-params (request cartId
-			      transId
-			      authAmountString
-			      cardType
-			      MC_sponsorid
-			      MC_donationcert-yearly
-			      MC_gift
-			      name
-			      address
-			      postcode
-			      country
-			      email
-			      tel)
-    (let ((contract (store-object-with-id (parse-integer cartId))))
-      (make-vcard :sponsor-id MC_sponsorid
+(defun worldpay-callback-params-to-vcard (params)
+  (labels ((param (name)
+	     (cdr (assoc name params :test #'string-equal))))
+    (let ((contract (store-object-with-id (parse-integer (param 'cartId)))))
+      (make-vcard :sponsor-id (param 'MC_sponsorid)
 		  :note (format nil "Paid-by: Worldpay
 Contract ID: ~A
 Sponsor ID: ~A
@@ -139,54 +128,54 @@ WorldPay Transaction ID: ~A
 Donationcert yearly: ~A
 Gift: ~A
 "
-				cartId
+				(param 'cartId)
 				(store-object-id (contract-sponsor contract))
 				(length (contract-m2s contract))
-				authAmountString
-				cardType
-				transId
-				(if MC_donationcert-yearly "Yes" "No")
-				(if MC_gift "Yes" "No"))
-		  :name name
-		  :address address
-		  :postcode postcode
-		  :country country
-		  :email email
-		  :tel tel))))
+				(param 'authAmountString)
+				(param 'cardType)
+				(param 'transId)
+				(if (param 'MC_donationcert-yearly) "Yes" "No")
+				(if (param 'MC_gift) "Yes" "No"))
+		  :name (param 'name)
+		  :address (param 'address)
+		  :postcode (param 'postcode)
+		  :country (param 'country)
+		  :email (param 'email)
+		  :tel (param 'tel)))))
 
 (defun mail-contract-data (contract type mime-parts)
   (unless (contract-download-only-p contract)
-	(push (make-instance 'mime
-			     :type "application"
-			     :subtype (format nil "pdf; name=\"contract-~A.pdf\"" (store-object-id contract))
-			     :encoding :base64
-			     :content (file-contents (contract-pdf-pathname contract :print t)))
-	      mime-parts))
-      (send-system-mail :subject (format nil "~A-Spenderdaten - Sponsor-ID ~D Contract-ID ~D"
-					 type
-					 (store-object-id (contract-sponsor contract))
-					 (store-object-id contract))
-			:content-type "multipart/mixed"
-			:more-headers t
-			:text (with-output-to-string (s)
-				(print-mime s 
-					    (make-instance 'multipart-mime
-							   :subtype "mixed"
-							   :content mime-parts)
-					    t t)))
-      (unless (contract-download-only-p contract)
-	(delete-file (contract-pdf-pathname contract :print t))))
+    (push (make-instance 'mime
+			 :type "application"
+			 :subtype (format nil "pdf; name=\"contract-~A.pdf\"" (store-object-id contract))
+			 :encoding :base64
+			 :content (file-contents (contract-pdf-pathname contract :print t)))
+	  mime-parts))
+  (send-system-mail :subject (format nil "~A-Spenderdaten - Sponsor-ID ~D Contract-ID ~D"
+				     type
+				     (store-object-id (contract-sponsor contract))
+				     (store-object-id contract))
+		    :content-type "multipart/mixed"
+		    :more-headers t
+		    :text (with-output-to-string (s)
+			    (print-mime s 
+					(make-instance 'multipart-mime
+						       :subtype "mixed"
+						       :content mime-parts)
+					t t)))
+  (unless (contract-download-only-p contract)
+    (delete-file (contract-pdf-pathname contract :print t))))
 
 (defun mail-manual-sponsor-data (req)
   (with-query-params (req contract-id vorname name strasse plz ort email telefon donationcert-yearly)
     (let* ((contract (store-object-with-id (parse-integer contract-id)))
 	   (sponsor-id (store-object-id (contract-sponsor contract)))
 	   (parts (list (make-instance 'text-mime
-							      :type "text"
-							      :subtype "html"
-							      :charset "utf-8"
-							      :encoding :quoted-printable
-							      :content (format nil "
+				       :type "text"
+				       :subtype "html"
+				       :charset "utf-8"
+				       :encoding :quoted-printable
+				       :content (format nil "
 <html>
  <body>
    <h1>Ueberweisungsformulardaten:</h1>
@@ -207,63 +196,76 @@ Gift: ~A
  </body>
 </html>
 "
-									     contract-id
-									     (length (contract-m2s contract))
-									     vorname name strasse plz ort email telefon
-									     (if donationcert-yearly "ja" "nein")
-									     *website-url* contract-id email))
-					       (make-instance 'text-mime
-							      :type "text"
-							      :subtype (format nil "xml; name=\"contract-~A.xml\"" contract-id)
-							      :charset "utf-8"
-							      :encoding :quoted-printable
-							      :content (format nil "
+							contract-id
+							(length (contract-m2s contract))
+							vorname name strasse plz ort email telefon
+							(if donationcert-yearly "ja" "nein")
+							*website-url* contract-id email))
+			(make-instance 'text-mime
+				       :type "text"
+				       :subtype (format nil "xml; name=\"contract-~A.xml\"" contract-id)
+				       :charset "utf-8"
+				       :encoding :quoted-printable
+				       :content (format nil "
 <sponsor>
  ~{<~A>~A</~A>~}
 </sponsor>
 "
-									       (apply #'append (mapcar #'(lambda (cons)
-													   (list (car cons)
-														 (if (find #\Newline (cdr cons))
-														     (format nil "<![CDATA[~A]]>" (cdr cons))
-														     (cdr cons))
-														 (car cons)))
-												       (all-request-params req)))))
-					       (make-instance 'text-mime
-							      :type "text"
-							      :subtype (format nil "x-vcard; name=\"contract-~A.vcf\"" contract-id)
-							      :charset "utf-8"
-							      :content (make-vcard :sponsor-id sponsor-id
-										   :note (format nil "Paid-by: Manual money transfer
+							(apply #'append (mapcar #'(lambda (cons)
+										    (list (car cons)
+											  (if (find #\Newline (cdr cons))
+											      (format nil "<![CDATA[~A]]>" (cdr cons))
+											      (cdr cons))
+											  (car cons)))
+										(all-request-params req)))))
+			(make-instance 'text-mime
+				       :type "text"
+				       :subtype (format nil "x-vcard; name=\"contract-~A.vcf\"" contract-id)
+				       :charset "utf-8"
+				       :content (make-vcard :sponsor-id sponsor-id
+							    :note (format nil "Paid-by: Manual money transfer
 Contract ID: ~A
 Sponsor ID: ~A
 Number of sqms: ~A
 Amount: EUR~A.00
 Donationcert yearly: ~A
 "
-												 contract-id
-												 sponsor-id
-												 (length (contract-m2s contract))
-												 (* 3 (length (contract-m2s contract)))
-												 (if donationcert-yearly "Yes" "No"))
-										   :vorname vorname
-										   :nachname name
-										   :strasse strasse
-										   :postcode plz
-										   :ort ort
-										   :email email
-										   :tel telefon)))))
+									  contract-id
+									  sponsor-id
+									  (length (contract-m2s contract))
+									  (* 3 (length (contract-m2s contract)))
+									  (if donationcert-yearly "Yes" "No"))
+							    :vorname vorname
+							    :nachname name
+							    :strasse strasse
+							    :postcode plz
+							    :ort ort
+							    :email email
+							    :tel telefon)))))
       (mail-contract-data contract "Ueberweisungsformular" parts))))
 
+(defvar *worldpay-params-hash* (make-hash-table :test #'equal))
+
+(defun remember-worldpay-params (contract-id params)
+  "Remember the parameters sent in a callback request from Worldpay so that they can be mailed to the BOS office later on"
+  (setf (gethash contract-id *worldpay-params-hash*) params))
+
+(defun get-worldpay-params (contract-id)
+  (or (prog1
+	  (gethash contract-id *worldpay-params-hash*)
+	(remhash contract-id *worldpay-params-hash*))
+      (error "cannot find WorldPay callback params for contract ~A~%" contract-id)))
+
 (defun mail-worldpay-sponsor-data (req)
-  (with-query-params (req cartId)
-    (let* ((contract (store-object-with-id (parse-integer cartId)))
+  (with-query-params (req contract-id)
+    (let* ((contract (store-object-with-id (parse-integer contract-id)))
+	   (params (get-worldpay-params contract-id))
 	   (parts (list (make-instance 'text-mime
-							      :type "text"
-							      :subtype "html"
-							      :charset "utf-8"
-							      :encoding :quoted-printable
-							      :content (format nil "
+				       :type "text"
+				       :subtype "html"
+				       :charset "utf-8"
+				       :encoding :quoted-printable
+				       :content (format nil "
 <table border=\"1\">
  <tr>
   <th>Parameter</th>
@@ -272,30 +274,30 @@ Donationcert yearly: ~A
  ~{<tr><td>~A</td><td>~A</td></tr>~}
 </table>
 "
-									       (apply #'append (mapcar #'(lambda (cons) (list (car cons) (cdr cons)))
-												       (sort (copy-list (all-request-params req))
-													     #'string-lessp
-													     :key #'car)))))
-					       (make-instance 'text-mime
-							      :type "text"
-							      :subtype (format nil "xml; name=\"contract-~A.xml\"" (store-object-id contract))
-							      :charset "utf-8"
-							      :encoding :quoted-printable
-							      :content (format nil "
+							(apply #'append (mapcar #'(lambda (cons) (list (car cons) (cdr cons)))
+										(sort (copy-list params)
+										      #'string-lessp
+										      :key #'car)))))
+			(make-instance 'text-mime
+				       :type "text"
+				       :subtype (format nil "xml; name=\"contract-~A.xml\"" (store-object-id contract))
+				       :charset "utf-8"
+				       :encoding :quoted-printable
+				       :content (format nil "
 <sponsor>
  ~{<~A>~A</~A>~}
 </sponsor>
 "
-									       (apply #'append (mapcar #'(lambda (cons)
-									       (list (car cons)
-										     (if (find #\Newline (cdr cons))
-											 (format nil "<![CDATA[~A]]>" (cdr cons))
-											 (cdr cons))
-										     (car cons)))
-												       (all-request-params req)))))
-					       (make-instance 'text-mime
-							      :type "text"
-							      :subtype (format nil "x-vcard; name=\"contract-~A.vcf\"" (store-object-id contract))
-							      :charset "utf-8"
-							      :content (worldpay-callback-request-to-vcard req)))))
+							(apply #'append (mapcar #'(lambda (cons)
+										    (list (car cons)
+											  (if (find #\Newline (cdr cons))
+											      (format nil "<![CDATA[~A]]>" (cdr cons))
+											      (cdr cons))
+											  (car cons)))
+										params))))
+			(make-instance 'text-mime
+				       :type "text"
+				       :subtype (format nil "x-vcard; name=\"contract-~A.vcf\"" (store-object-id contract))
+				       :charset "utf-8"
+				       :content (worldpay-callback-params-to-vcard params)))))
       (mail-contract-data contract "WorldPay" parts))))
