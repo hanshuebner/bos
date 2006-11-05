@@ -134,19 +134,6 @@ language preference weights."
 	 ((:p :id "stats"))
 	 ((:script :type "text/javascript") "statistic_selected()"))))))
 
-(defclass print-certificate-handler (admin-only-handler object-handler)
-  ()
-  (:default-initargs :class 'contract))
-
-(defmethod handle-object ((handler print-certificate-handler) contract req)
-  (let ((pdf (file-contents (merge-pathnames (make-pathname :type "pdf"
-							    :name (format nil "~D" (store-object-id contract)))
-					     *cert-mail-directory*))))
-    (with-http-response (req *ent* :content-type "application/pdf")
-      (setf (request-reply-content-length req) (length pdf))
-      (with-http-body (req *ent* :external-format '(unsigned-byte 8))
-	(write-sequence pdf *html-stream*)))))
-
 (defclass admin-handler (admin-only-handler page-handler)
   ())
 
@@ -219,7 +206,6 @@ language preference weights."
 					("/admin" admin-handler)
 					("/languages" languages-handler)
 					("/infosystem" infosystem-handler)
-					("/print-certificate" print-certificate-handler)
 					("/overview" image-tile-handler)
 					("/enlarge-overview" enlarge-tile-handler)
 					("/create-contract" create-contract-handler)

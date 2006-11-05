@@ -14,7 +14,6 @@
 (defun fill-form (fdf-pathname pdf-pathname output-pathname)
   (handler-case
       (progn
-        (ignore-errors (run-tool "recode" (list "utf-8..latin-1" (unix-namestring fdf-pathname))))
         (cond
           ((unix-namestring pdf-pathname)
            (run-tool "pdftk" (list (unix-namestring pdf-pathname)

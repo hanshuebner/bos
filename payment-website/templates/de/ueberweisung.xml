@@ -103,16 +103,6 @@ Ich habe mich dazu entschieden einen Betrag von $(amount) Euro auf das Spendenko
 							<td><input name="telefon" type="text" size="25" maxlength="30" /></td>
 						</tr>							
 						<tr>
-							<td colspan="3" height="5"> </td>
-						</tr>
-						<tr>
-							<td colspan="3">
-								<bos:urkunde-per-post contract-id="$(contract-id)"
-									min-amount="30"
-									message="Ich möchte meine Regenwald-Urkunde per Post erhalten" />
-							</td>
-						</tr>
-						<tr>
 							<td colspan="3" height="20"> </td>
 						</tr>
 						<tr>

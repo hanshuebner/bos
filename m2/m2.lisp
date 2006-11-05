@@ -238,28 +238,31 @@
 (deftransaction contract-set-download-only-p (contract newval)
   (setf (contract-download-only contract) newval))
 
-(defmethod contract-fdf-pathname ((contract contract) language)
+(defmethod contract-fdf-pathname ((contract contract) &key language print)
+  (when (and print
+	     (contract-download-only-p contract))
+    (error "no print fdf for download-only contract ~A" contract))
   (merge-pathnames (make-pathname :name (format nil "~D-~(~A~)"
                                                 (store-object-id contract)
                                                 language)
 				  :type "fdf")
-		   (if (contract-download-only-p contract) *cert-download-directory* *cert-mail-directory*)))
+		   (if print *cert-mail-directory* *cert-download-directory*)))
 
-(defmethod contract-pdf-pathname ((contract contract))
+(defmethod contract-pdf-pathname ((contract contract) &key print)
   (merge-pathnames (make-pathname :name (format nil "~D" (store-object-id contract))
 				  :type "pdf")
-		   (if (contract-download-only-p contract)
-		       bos.m2::*cert-download-directory*
-		       bos.m2::*cert-mail-directory*)))
+		   (if print bos.m2::*cert-mail-directory* bos.m2::*cert-download-directory*)))
 
 (defmethod contract-pdf-url ((contract contract))
-  (format nil "/~:[~;print-~]certificate/~A" (not (contract-download-only-p contract)) (store-object-id contract)))
+  (format nil "/certificate/~A" (store-object-id contract)))
 
 (defmethod contract-issue-cert ((contract contract) name &key address language)
   (if (contract-cert-issued contract)
       (warn "can't re-issue cert for ~A" contract)
       (progn
 	(make-certificate contract name :address address :language language)
+	(unless (contract-download-only-p contract)
+	  (make-certificate contract name :address address :language language :print t))
 	(change-slot-values contract 'cert-issued t))))
 
 (defmethod contract-image-tiles ((contract contract))

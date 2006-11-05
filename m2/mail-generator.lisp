@@ -89,6 +89,7 @@ Das Team von BOS Deutschland e.V.")))
 	  (apply #'vcard-field field))))))
 
 (defun make-vcard (&key sponsor-id
+		   note
 		   vorname nachname
 		   name
 		   address postcode country
@@ -139,7 +140,7 @@ Donationcert yearly: ~A
 Gift: ~A
 "
 				cartId
-				sponsor-id
+				(store-object-id (contract-sponsor contract))
 				(length (contract-m2s contract))
 				authAmountString
 				cardType
@@ -153,13 +154,34 @@ Gift: ~A
 		  :email email
 		  :tel tel))))
 
+(defun mail-contract-data (contract type mime-parts)
+  (unless (contract-download-only-p contract)
+	(push (make-instance 'mime
+			     :type "application"
+			     :subtype (format nil "pdf; name=\"contract-~A.pdf\"" (store-object-id contract))
+			     :encoding :base64
+			     :content (file-contents (contract-pdf-pathname contract :print t)))
+	      mime-parts))
+      (send-system-mail :subject (format nil "~A-Spenderdaten - Sponsor-ID ~D Contract-ID ~D"
+					 type
+					 (store-object-id (contract-sponsor contract))
+					 (store-object-id contract))
+			:content-type "multipart/mixed"
+			:more-headers t
+			:text (with-output-to-string (s)
+				(print-mime s 
+					    (make-instance 'multipart-mime
+							   :subtype "mixed"
+							   :content mime-parts)
+					    t t)))
+      (unless (contract-download-only-p contract)
+	(delete-file (contract-pdf-pathname contract :print t))))
+
 (defun mail-manual-sponsor-data (req)
   (with-query-params (req contract-id vorname name strasse plz ort email telefon donationcert-yearly)
     (let* ((contract (store-object-with-id (parse-integer contract-id)))
 	   (sponsor-id (store-object-id (contract-sponsor contract)))
-	   (mime (make-instance 'multipart-mime
-				:subtype "mixed"
-				:content (list (make-instance 'text-mime
+	   (parts (list (make-instance 'text-mime
 							      :type "text"
 							      :subtype "html"
 							      :charset "utf-8"
@@ -181,15 +203,7 @@ Gift: ~A
     <tr><td></td></tr>
     <tr><td>Spendenbescheinigung am Jahresende</td><td>~A</td></tr>~]
    </table>
-   <p>Email & Adresse fuer Cut&Paste:</p>
-   <pre>
-~A
-
-~A ~A
-~A
-~A ~A
-   </pre>
-   <p><a href=\"~A/complete-transfer/~A\">Link zum Sponsor-Datensatz</a></p>
+   <p><a href=\"~A/complete-transfer/~A?email=~A\">Zahlungseingang bestätigen</a></p>
  </body>
 </html>
 "
@@ -197,9 +211,7 @@ Gift: ~A
 									     (length (contract-m2s contract))
 									     vorname name strasse plz ort email telefon
 									     (if donationcert-yearly "ja" "nein")
-									     email vorname name
-									     strasse plz ort
-									     *website-url* contract-id))
+									     *website-url* contract-id email))
 					       (make-instance 'text-mime
 							      :type "text"
 							      :subtype (format nil "xml; name=\"contract-~A.xml\"" contract-id)
@@ -223,7 +235,7 @@ Gift: ~A
 							      :charset "utf-8"
 							      :content (make-vcard :sponsor-id sponsor-id
 										   :note (format nil "Paid-by: Manual money transfer
-Contract ID: ~Annn
+Contract ID: ~A
 Sponsor ID: ~A
 Number of sqms: ~A
 Amount: EUR~A.00
@@ -234,32 +246,19 @@ Donationcert yearly: ~A
 												 (length (contract-m2s contract))
 												 (* 3 (length (contract-m2s contract)))
 												 (if donationcert-yearly "Yes" "No"))
-										   :contract-id contract-id
-										   :donationcert-yearly donationcert-yearly
 										   :vorname vorname
 										   :nachname name
 										   :strasse strasse
 										   :postcode plz
 										   :ort ort
 										   :email email
-										   :tel telefon))
-					       (make-instance 'mime
-							      :type "application"
-							      :subtype (format nil "pdf; name=\"contract-~A.pdf\"" contract-id)
-							      :encoding :base64
-							      :content (file-contents (contract-pdf-pathname contract)))))))
-      (send-system-mail :subject (format nil "Ueberweisungsformular-Spenderdaten - Sponsor-ID ~D Contract-ID ~D"
-					 sponsor-id contract-id)
-			:content-type "multipart/mixed"
-			:more-headers t
-			:text (with-output-to-string (s) (print-mime s mime t t))))))
+										   :tel telefon)))))
+      (mail-contract-data contract "Ueberweisungsformular" parts))))
 
 (defun mail-worldpay-sponsor-data (req)
   (with-query-params (req cartId)
     (let* ((contract (store-object-with-id (parse-integer cartId)))
-	   (mime (make-instance 'multipart-mime
-				:subtype "mixed"
-				:content (list (make-instance 'text-mime
+	   (parts (list (make-instance 'text-mime
 							      :type "text"
 							      :subtype "html"
 							      :charset "utf-8"
@@ -298,10 +297,5 @@ Donationcert yearly: ~A
 							      :type "text"
 							      :subtype (format nil "x-vcard; name=\"contract-~A.vcf\"" (store-object-id contract))
 							      :charset "utf-8"
-							      :content (worldpay-callback-request-to-vcard req))))))
-      (send-system-mail :subject (format nil "Online-Spenderdaten - Sponsor-ID ~D Contract-ID ~D"
-					 (store-object-id (contract-sponsor contract))
-					 (store-object-id contract))
-			:content-type "multipart/mixed"
-			:more-headers t
-			:text (with-output-to-string (s) (print-mime s mime t t))))))
+							      :content (worldpay-callback-request-to-vcard req)))))
+      (mail-contract-data contract "WorldPay" parts))))

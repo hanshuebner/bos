@@ -27,13 +27,15 @@
 ;; bzw. im Dateisystem für den Download durch den Spender abgelegt
 ;; werden.
 
-(defun make-certificate (contract name &key (address "") (language "en"))
+(defun make-certificate (contract name &key print (address "") (language "en"))
   "Erzeugen einer FDF-Datei für das Ausfüllen der Urkunde.  Wenn das
 optionale address-Argument übergeben wird, wird die Urkunde per Post
 verschickt und entsprechend eine andere Vorlage ausgewählt als für den
 Download der Urkunde"
   (let ((sponsor (contract-sponsor contract)))
-    (make-fdf-file (contract-fdf-pathname contract language)
+    (make-fdf-file (contract-fdf-pathname contract
+					  :language language
+					  :print print)
 		   :datum (format-date-time (contract-date contract) :show-time nil)
 		   :name name
 		   :address address
