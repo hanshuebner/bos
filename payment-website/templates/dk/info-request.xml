@@ -1,25 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<bknr:toplevel
-  template="toplevel_extra"
-  title="RAINFOREST for SAMBOJA LESTARI - News"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<bknr:toplevel template="toplevel_extra" title="Regnskov i SAMBOJA LESTARI - Nyheder" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
 	<bos:send-info-request email="$(email)">
 		<p>
 			<span class="headline">
-				Many thanks for your interest.
+				Vi takker for din interesse.
 			</span>
 		</p>
 
 		<p>
-			We are pleased to send you informations by about BOS and our project in Samboja Lestari.
+			Vi sender dig gerne information om BOS og vores projekter i Samboja Lestari.
 		</p>
 		<p>
-			If you have questions please contact: service@create-rainforest.org.
+			Hvis du har nogen spørgsmål, kontakt venligst: service@create-rainforest.org.
 		</p>
 	</bos:send-info-request>
 </bknr:toplevel>

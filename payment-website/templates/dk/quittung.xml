@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  suppress-xml-headers="1"
-  >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos" suppress-xml-headers="1">
 	<head>
-		<base href="$(website-url)/en/quittung" />
-		<link rel="stylesheet" href="/static/toplevel_style.css" />
-		<link rel="stylesheet" href="/static/content_style.css" />
+		<base href="$(website-url)/en/quittung"></base>
+		<link rel="stylesheet" href="/static/toplevel_style.css"></link>
+		<link rel="stylesheet" href="/static/content_style.css"></link>
 		<script src="/static/bos.js" type="text/javascript"><!-- x -->	
 		</script> 
              <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8" />-->
-		<title>RAINFOREST for SAMBOJA LESTARI</title>
+		<title>Regnskov i SAMBOJA LESTARI</title>
 	</head>
 	<body>
 		
@@ -23,12 +17,12 @@
 
 			<div id="menue_banner">
 				<a href="index">
-					<img src="../images/header_ganzneu.gif" border="0" />
+					<img src="../images/header_ganzneu.gif" border="0"></img>
 				</a>
 			</div>
 
 			<div id="menue_header_left">
-				BOS Foundation
+				Foreningen BOS
 			</div>
 
 		</div>
@@ -41,21 +35,21 @@
 						<tr>
 							<td></td>
 							<td colspan="2">
-								<img src="/images/step3.gif" width="120" height="20" border="0" alt="" />
+								<img src="/images/step3.gif" width="120" height="20" border="0" alt=""></img>
 							</td>
 						</tr>
 						<tr><td colspan="4" height="40"></td></tr>
 						<tr>
 							<td> </td>
-							<td colspan="2"><span class="link_titlered">Thank you</span><br /><br /></td>
+							<td colspan="2"><span class="link_titlered">Tak</span><br></br><br></br></td>
 							<td></td>				
 						</tr>
 						<tr>
 							<td></td>
 							<td colspan="2">
-								for your support and for trusting  in BOS.
-								<br /><br />
-								The square metre(s) you sponsor are in good hands.
+								for din støtte og for din tilld til BOS.
+								<br></br><br></br>
+								Kvardratmeterne du har sponseret er i gode hænder.
 							</td>
 							<td></td>				
 						</tr>
@@ -76,20 +70,20 @@
 			<!-- /content left-->
 			<!-- container content_main -->
 			<div id="content_main">
-				<div id="textbox_content_big" >
+				<div id="textbox_content_big">
 					<bos:process-payment>
 						<form method="post" action="generate-cert">
-							<input type="hidden" name="contract-id" value="$(cartId)" />
-							<input type="hidden" name="__sponsorid" value="$(sponsor-id)" />
-							<input type="hidden" name="__password" value="$(master-code)" />
-							<input type="hidden" name="email" value="$(email)" />
+							<input type="hidden" name="contract-id" value="$(cartId)"></input>
+							<input type="hidden" name="__sponsorid" value="$(sponsor-id)"></input>
+							<input type="hidden" name="__password" value="$(master-code)"></input>
+							<input type="hidden" name="email" value="$(email)"></input>
 							<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
-									<td colspan="3"><span class="headline">Your payment has been successful:</span></td>
+									<td colspan="3"><span class="headline">Din betaling er modtaget:</span></td>
 								</tr>
 								<tr>
 									<td colspan="3" height="140">
-										<bos:worldpay-receipt />
+										<bos:worldpay-receipt></bos:worldpay-receipt>
 									</td>							
 								</tr>
 								<tr>
@@ -103,17 +97,17 @@
 								</tr>
 								
 								<tr>
-									<td colspan="3" height="15">What name will you have issued your Rainforest certificate in? </td>
+									<td colspan="3" height="15">I hvilket navn skal vi udstede dit Regnskovs diplom? </td>
 								</tr>	
 								<tr>
-									<td height="30">Name:</td>
+									<td height="30">Navn:</td>
 									<td></td>
-									<td><input type="text" class="form_big" size="35" name="name" value="$(name)" /></td>
+									<td><input type="text" class="form_big" size="35" name="name" value="$(name)"></input></td>
 								</tr>
 								<tr>
 									<td colspan="3" height="8">
 										<span class="help_text">
-											We accept the name entered in this field.	Please correct the indicated name if necessary.
+											Vi acceptere det intastede navn i dette felt. Vær venlig at ændre navnet om nødvendigt. 
 										</span> 
 									</td>
 								</tr>	
@@ -129,9 +123,7 @@
 								</tr>
 								<tr>
 					                          	<td colspan="3" align="right">
-										<input type="submit" class="form_big" name="Button"
-											onclick="javascript:return confirm('Is the indicated name correct?');"
-											value="save and continue" />
+										<input type="submit" class="form_big" name="Button" onclick="javascript:return confirm('Is the indicated name correct?');" value="save and continue"></input>
 								  	</td>
 								</tr>
 							</table>
@@ -141,28 +133,27 @@
 			</div>
 			<div id="content_right">
 				<div id="helpbox">		
-					<br /><br />
-					[<strong>Payment confirmation</strong>]
-					<br />
-					This payment confirmation by WorldPay is already under way to your e-mail account.
-In the unexpected case that you will not receive a message please contact
+					<br></br><br></br>
+					[<strong>Betalings-bekræftigelse</strong>]
+					<br></br>
+					Denne betalings-bekræftigelse fra WorldPay er allerede undervejs til din indbox. I den uventede situation at du ikke skulle modtage nogen besked, venligst kontakt:
 
-					<br />
-						<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+					<br></br>
+						<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
 						<a href="mailto:service@create-rainforest.org" class="more">
 							service@create-rainforest.org
 						</a>
-					<br /><br /><br />
+					<br></br><br></br><br></br>
 					
-					[<strong>Rainforest certificate</strong>]
-					<br />
-					Starting with 1 square metre only you receive our
-					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+					[<strong>Regnskovs diplom</strong>]
+					<br></br>
+					Med bare 1 sponseret kvardratmeter vil du modtage vores
+					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
 					<a href="javascript:window_extra('certificat')" class="more">
-						Rainforest certificate
+						Regnskovs diplom
 					</a>
-					as a pdf-download from your personal sponsor profile.
-					<br /><br /><br /><br /><br /><br /><br />			
+					som et pdf-download fra din personlige sponsor profil.
+					<br></br><br></br><br></br><br></br><br></br><br></br><br></br>			
 			 	</div>
 			</div>
 		</div>

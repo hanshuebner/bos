@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<bknr:toplevel
-  template="toplevel_main"
-  title="RAINFOREST for SAMBOJA LESTARI"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<bknr:toplevel template="toplevel_main" title="Regnskov i SAMBOJA LESTARI" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
 	<!-- container content_main -->
 	<div id="content_main">
 		<div id="textbox_content_bigger">
@@ -15,43 +8,39 @@
 				<tr>
 					<td colspan="2">
 						<span class="headline">
-							Orangutan, Sunbear and Rhinoceros bird 
+							Orangutanger, Sol-bjørne og Næsehornsfugle 
 						</span>
 					</td>
 					<td align="center" valign="top">
-						<img src="/images/pfeil_back.gif" width="10" height="9" alt="" />
+						<img src="/images/pfeil_back.gif" width="10" height="9" alt=""></img>
 						<a href="javascript:history.back()" class="titlegray">
-							back
+							tilbage
 						</a>
 				  	</td>
 				</tr>
 				<tr>
-					<td><img src="/images/trans.gif" width="120" height="15" alt="" /></td>
-					<td><img src="/images/trans.gif" width="130" height="10" alt="" /></td>
-					<td width="150"><img src="/images/trans.gif" width="140" height="10" alt="" /></td>
+					<td><img src="/images/trans.gif" width="120" height="15" alt=""></img></td>
+					<td><img src="/images/trans.gif" width="130" height="10" alt=""></img></td>
+					<td width="150"><img src="/images/trans.gif" width="140" height="10" alt=""></img></td>
 				</tr>
 				<tr>
 					<td colspan="3">
-						Orangutans, also called man of the forest, are highly endangered great apes.
-						<br /><br />
-						Orangutans are not only our closest relatives in the animal kingdom; they are also indispensable for the biological diversity 
-						of the rainforest due to their role of seed distributors. They are the so called umbrella species. The protection of these fascinating 
-						great apes serves at the same time to preserve the rainforest's eco system.
-						<br /><br />
-						Nowadays, orangutans live only on Sumatra and Borneo. Massive rainforest destruction and unscrupulous pet trade could 
-						mean the end of their species. Malaysian bears are also in danger of losing their natural habitat. The nature reserve Samboja Lestari 
-						represents the last refuge for several animals - a last chance for their survival. Malaysian bears are already living in the reserve, in 
-						a specially set aside area. In a few years time also orangutans will be able to live there in freedom.
-						<br /><br />
-						Rare species such as the Rhinoceros bird, the dwarf deer and the king cobra can already be observed in Samboja Lestari nowadays.
+						Orangutanger, også kaldet Skovmenneske, er stærkt truede menneskeaber.
+						<br></br><br></br>
+						Orangutanger er ikke kun vores nærmeste slægtning i dyreriget; men er samtidig absolut uundværlige for regnskovens biologiske mangfoldighed i kraft af deres rolle som frøspredere. De er en såkaldt "paraplyart." Og beskyttelsen af disse fascinerende menneskeaber gør det samtidig muligt at bevare regnskovens øko system. 
+						<br></br><br></br>
+						I dag lever orangutangerne kun på Sumatra og Borneo. Og massive ødelæggelser af regnskoven og skrupelløs kæledyrshandel kan i sidste instands betyde enden for denne art. Solbjørne er også i fare for at miste deres naturlige levesteder. Her er naturreservatet Samboja Lestari et sidste tilflugtsted for flere forskellige dyr - en sidste chance for deres overlevelse. Solbjørne lever allerede i reservatet i et område, hvor orangutanger om et par år også vil kunne leve i frihed.    
+				
+						<br></br><br></br>
+						Sjældne arter som Næsehornsfuglen, dværdhjorten og konge kobraen kan allerede observeres i Samboja Lestari i dag.
  					</td>
 				</tr>
 				<tr><td height="50"></td></tr>		
 				<tr>
 					<td valign="top" colspan="3">
-						<img src="/images/pic_h3_orangutan.jpg" width="169" height="88" border="0" alt="" />
-						<img src="/images/pic_h3_baer.jpg" width="169" height="88" border="0" alt="" />
-						<img src="/images/pic_h3_vogel.jpg" width="169" height="88" alt="" />
+						<img src="/images/pic_h3_orangutan.jpg" width="169" height="88" border="0" alt=""></img>
+						<img src="/images/pic_h3_baer.jpg" width="169" height="88" border="0" alt=""></img>
+						<img src="/images/pic_h3_vogel.jpg" width="169" height="88" alt=""></img>
 					</td>
 				</tr>			
 				<tr><td height="20"></td></tr>	

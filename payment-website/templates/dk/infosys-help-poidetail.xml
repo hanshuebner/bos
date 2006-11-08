@@ -1,33 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<bknr:toplevel
-  template="toplevel_extra"
-  title="RAINFOREST for SAMBOJA LESTARI - Guide to the Satellite Map"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
-	<h1 class="extra">Guide to the Satellite Map</h1>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<bknr:toplevel template="toplevel_extra" title="Regnskov i SAMBOJA LESTARI - Guide til Satelit Kortet" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
+	<h1 class="extra">Guide til Satelit Kortet</h1>
 	<p class="text_content">
-		<p>You are in the detail display for a point of interest (POI) in the project area Samboja Lestari. 
-		On the top left in the overview map you can see where this POI is located. 
-		</p>
-		<p> By clicking on one of the POI titles in the list you can choose another POI.</p>
-		<p> Above Right  in the picture you find six detail photos of this POI.   
-		 By clicking on the miniature you can increase the chosen photo.
+		<p>Du er nu i et detaljeret display af et "point of interest" (POI) i projekt-området Samboja Lestari. 
+		Øverst til venstre på oversigtskortet kan du se hvor dette POI befinder sig.
+    </p>
+		<p> Ved at klikke på en af POI-titlerne på listen kan du vælge en anden POI.</p>
+		<p> Øverst til højre i billedet finder du seks ditaljerede fotos af denne POI.   
+		 Ved at klikke på miniaturen kan du forstørre det valgte foto. 
  </p>
-		<p> At the lower edge of the photo are up to three buttons with the titles  <strong>Sat map</strong>,
-		<strong>Luftbild</strong> and <strong>Panorama</strong>.  
-		By clickng on one of the buttons you can choose a different view of the POI</p>
+		<p> I bunden af billedet ses op til tre ikoner med titlerne <strong>Sat kort</strong>,
+		<strong>Luftfoto</strong> og <strong>Panorama</strong>.  
+		Ved at klikke på en af ikonerne kan du vælge et andet udsyn til din POI</p>
 		<p style="margin-left: 40px; margin-right: 40px;">
 		  <bl>
-		    <li><strong>Sat-Karte</strong> Cutout from the satellite photo of the project area of 2002.  </li>
-		    <li><strong>Aerial photograph </strong> Aerial photograph of the POI, taken up in the autumn 2004 of a light airplane.  </li>
-		    <li><strong>Panorama</strong> Panorama photo of the POI, taken in the autumn 2004.  
-				By clicking and dragging in the panorama picture you can change the view</li>
+		    <li><strong>Sat-kort</strong> Uddrag fra et satelit foto af projekt området i 2002.  </li>
+		    <li><strong>Luft foto </strong>Luft foto af POI, taget fra oppefra i efteråret 2004 af et lille fly.  </li>
+		    <li><strong>Panorama</strong> Panorama foto af POI, taget i efteråret 2004.  
+				Ved at klikke på og trække i panorama billedet kan du ændre synsvinkel </li>
 		  </bl>
 		</p>
-		<p> Click on the overview map on the top left to return to the POI overview.</p>
+		<p> Klik på oversigtskortet for at vende tilbage til POI oversigten.</p>
 	</p>
 </bknr:toplevel>

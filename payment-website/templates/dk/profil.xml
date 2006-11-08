@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
  <head>
-  <title>Profile creation</title>
-  <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+  <title>Oprettelse af profil</title>
+  <meta http-equiv="Content-Type" content="text/html" charset="utf-8"></meta>
   <script language="JavaScript" type="text/JavaScript" src="/static/profil_en.js"> </script>
-  <link href="/static/profil_style.css" rel="stylesheet" type="text/css" />
+  <link href="/static/profil_style.css" rel="stylesheet" type="text/css"></link>
  </head>
  <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
   <bos:save-profile>
    <form name="form" method="POST">
     <table width="740" border="0" cellpadding="0" cellspacing="0">
      <tr>
-      <td height="50" colspan="3"><img src="../images/header_infosystem.gif" width="740" height="50"/></td>
+      <td height="50" colspan="3"><img src="../images/header_infosystem.gif" width="740" height="50"></img></td>
      </tr>
      <tr> 
       <td height="20" class="BreadCrumbs"> </td>
@@ -31,64 +26,64 @@
      <tr>
       <td class="Label">Sponsor ID</td>
       <td class="Input">$(sponsor-id)</td>
-      <td class="Info">will be created from our system</td>
+      <td class="Info">Vil blive oprettet i vores system</td>
      </tr>
      <tr>
-      <td class="Label">Country</td>
-      <td class="Input">$(country)</td>
-      <td class="Info">can not be changed</td>
+      <td class="Label">Land</td>
+      <td class="Input">$(land)</td>
+      <td class="Info">kan ikke ændres</td>
      </tr>
      <tr>
-      <td class="Label">Name</td>
-      <td class="Input"><input type="text" name="name" size="23" value="$(name)"/></td>
+      <td class="Label">Navn</td>
+      <td class="Input"><input type="text" name="name" size="23" value="$(name)"></input></td>
       <td class="Info"></td>
      </tr>
      <tr>
-      <td class="Label">new password</td>
-      <td class="Input"><input type="password" name="password" size="23"/></td>
-      <td class="Info">enter your personal password</td>
+      <td class="Label">nyt password</td>
+      <td class="Input"><input type="password" name="password" size="23"></input></td>
+      <td class="Info">indtast dit personlige password</td>
      </tr>
      <tr>
-      <td class="Label">enter password again</td>
-      <td class="Input"><input type="password" name="password1" size="23"/></td>
-      <td class="Info">please type in password twice</td>
+      <td class="Label">indtast password igen</td>
+      <td class="Input"><input type="password" name="password1" size="23"></input></td>
+      <td class="Info">tast venligst dit password ind to gange</td>
      </tr>
      <tr>
-      <td class="Label">your comment</td>
-      <td class="Input"><textarea class="Textarea" name="infotext" rows="3" cols="30">$(infotext)</textarea></td>
-      <td class="Info">optional text, not hidden</td>
+      <td class="Label">din kommentar</td>
+      <td class="Input"><textarea class="Textarea" name="infotext" rows="3" cols="30">$(infotekst)</textarea></td>
+      <td class="Info">valgfri tekst vises</td>
      </tr>
      <tr>
-      <td class="Label">square metres</td>
-      <td class="Input">a total of $(numsqm) m² has been bought<br />UTM-coordinate: N$(sqm-x) E$(sqm-y)</td>
+      <td class="Label">kvardratmeter</td>
+      <td class="Input">til værdi af $(numsqm) m² er blevet opkøbt<br></br>UTM-kordinater: N$(sqm-x) E$(sqm-y)</td>
       <td class="Info"></td>
      </tr>
      <tr>
       <td class="Label">action message</td>
       <td class="Input">
-       <button name="action" type="submit" value="save" onclick="javascript:return formcheck();">SAVE</button>
+       <button name="action" type="submit" value="save" onclick="javascript:return formcheck();">GEM</button>
       </td>
-      <td class="Info">Your personal profile data will be updated with the entered data.</td>
+      <td class="Info">Dine personlige data vil blive updateret med den nye indtastede data.</td>
      </tr>
      <tr>
       <td class="Label"></td>
       <td class="Input">
-       <button name="anonymize" type="submit" value="anonymize" onclick="javascript:return anonymizecheck();">make profile anonymous</button>
+       <button name="anonymize" type="submit" value="anonymize" onclick="javascript:return anonymizecheck();">gør profil anonym</button>
       </td>
-      <td class="Info">Your personal data will be hidden.</td>
+      <td class="Info">Dine personlige data vil være skjult.</td>
      </tr>
      <tr>
       <td class="Label"></td>
       <td class="Input">
-       <button name="action" type="reset">discard changes</button>
+       <button name="action" type="reset">slet ændringer</button>
       </td>
-      <td class="Info">All arranged changes have been discarded.</td>
+      <td class="Info">Alle viste ændringer vil blive slettet.</td>
      </tr>
      <bos:when-certificate>
       <tr>
        <td class="Label"></td>
-       <td class="Input"><button name="urkunde" type="button" onclick="javascript:return window_urkunde();">show certificate</button></td>
-       <td class="Info">show certificate/download as pdf</td>
+       <td class="Input"><button name="urkunde" type="button" onclick="javascript:return window_urkunde();">vis diplom</button></td>
+       <td class="Info">vis diplom/download som pdf</td>
       </tr>
      </bos:when-certificate>
 <!-- not yet
@@ -110,8 +105,8 @@
       <td class="Label"></td>
       <td class="Input">
        <a class="Link" href="#" onclick="document.location.href = '/infosystem/en/satellitenkarte.htm'">
-        <img src="/images/pfeil_back.gif" border="0"/>
-	back
+        <img src="/images/pfeil_back.gif" border="0"></img>
+	tilbage
        </a>
       </td>
       <td class="Info"></td>

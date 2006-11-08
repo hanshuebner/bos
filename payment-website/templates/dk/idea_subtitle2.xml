@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<bknr:toplevel
-  template="toplevel_main"
-  title="RAINFOREST for SAMBOJA LESTARI"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<bknr:toplevel template="toplevel_main" title="Regnskov i SAMBOJA LESTARI" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
 	<div id="content_main">
 		<div id="textbox_content_bigger">
 			<table border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td colspan="2"><span class="headline">A square metre with a certain knack <br /></span></td>
+					<td colspan="2"><span class="headline">A square metre with a certain knack <br></br></span></td>
 					<td align="center">
-						<img src="/images/pfeil_back.gif" width="10" height="9" alt="" />
+						<img src="/images/pfeil_back.gif" width="10" height="9" alt=""></img>
 						<a href="javascript:history.back()" class="titlegray">
 							back
 						</a>
@@ -24,35 +17,35 @@
 				</tr>	
 				<tr>			
 					<td colspan="3">
-						To finance the nature reserve, BOS has created a system of symbolical land-purchasing.
-						<br /><br />
+				 Til at finansiere natur reservatet har BOS skabt et system med symbolske opkøb af land.
+						<br></br><br></br>
 						<a href="bestellung" class="titlered">
-							For 3 Euros per m² you can help creating rainforest.
+							For 3 Euros per m² kan du hjælpe med at skabe ny regnskov.
 						</a> 
-						<br /><br />
+						<br></br><br></br>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2">
-						You help financing the purchase of land, ecological reforestation, a nursery, ecological agriculture, sugar palm plantations, wages for Indonesian employees, surveillance and protection of the area, fire fighting, environmental education, infrastructure, research and arboretum, orangutan islands and sunbear areas.
-						<br /><br />
-Contribute to a better future and observe the development of the Samboja Lestari project on the internet.
+						Du hjælper med at financere opkøbet af land, økologisk skovrejsning, en børnehave, økologisk landbrug, sukker-palme plantager, løn til de Indonesiske ansatte, overvågning og beskyttelse af området, bekæmpelse af skovbrænde, miljø-information, infrastruktur, research og arboret, orangutang øer og områder til Sol-bjørne. 
+						<br></br><br></br>
+Bidrag til en bedre fremtid og følg med i udviklingen af projektet i Samboja Lestari på internetet.
 					</td>
 					<td>
-						<img src="/images/projekt_pic_en.jpg" width="240" height="120" />
+						<img src="/images/projekt_pic_en.jpg" width="240" height="120"></img>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="3">
-						<br />
-						Each square metre that you purchase symbolically will be assigned to you by a personal profile. Via a password you will be able to re-find your squaremeters easily at any time. It is also possible to place short informations on 'your' m² and thus communicate with other Samboja Lestari sponsors.
-Visitors of this website will be able to gain insight into all m² and their personal profiles.
-						<br /><br />
-						<b>Observe the development of 'your' area from different perspectives. BOS provides a transparent insight via satellite pictures, and gives regular reports about the progress in situ.</b>
-						<br /><br />
-						Support the project and receive a rainforest document. You can also give squaremeters as a present to friends, relatives and other people you know.
-						<br /><br />
-						Participate and see rainforest grow! - And much more! 
+						<br></br>
+					Hver kvadratmeter som du symbolsk opkøber vil blive overdraget til dig via en personlig profil. Via et password vil du så nemt kunne genfinde dine kvadratmeter til hver en tid. Det er også muligt at placerer korte informationer på 'din' kvadratmeter og derved kommunikerer med andre Samboja Lestari-sponsorer.
+Besøgende på denne website vil altså have mulighed for at få indsigt i samtlige m² and deres personlige profiler.
+						<br></br><br></br>
+						<b>Observer udviklingen i 'dit' område fra forskellige perspektiver. BOS giver en klar indsigt via satelit fotos, og giver regelmæssige reporter om fremgangen i situ.</b>
+						<br></br><br></br>
+						Støt projektet og modtag et regnskovs Diplom. Du kan også give regnskovs-kvadratmeter som en gave til venner, slægtninge og andre mennesker du kender. 
+						<br></br><br></br>
+						Deltag, se regnskov gro - Og meget mere!  
 					</td>
 				</tr>
 				<tr>

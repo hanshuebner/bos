@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<bknr:toplevel
-  template="toplevel_extra"
-  title="RAINFOREST for SAMBOJA LESTARI - printing your profile"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<bknr:toplevel template="toplevel_extra" title="Regnskov i SAMBOJA LESTARI - print din profil" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
 	<div id="noprint"><!-- container wird nicht mitgedruckt -->
 		<table border="0">
 			<tr>
@@ -17,22 +10,22 @@
 				<td width="10"> 
 				</td>
 				<td colspan="2">
-				Please check your printer setup before printing if necessary.
+				Check din printers setup før du printer.
 				</td>
 			</tr>
 			<tr>	
 				<td colspan="2"> </td>										
 				<td align="right" height="30">
-				<input class="form_big" type="button" value="print" onclick="self.print(); return false;" id="drucken" name="drucken" /> 		
+				<input class="form_big" type="button" value="print" onclick="self.print(); return false;" id="drucken" name="drucken"></input> 		
 				</td>
 			</tr>
 		</table>
 	</div>
 	<!-- content_main -->
 	
-	<table id="formTable"  align="center" width="95%" border="0" cellspacing="0" cellpadding="0">
+	<table id="formTable" align="center" width="95%" border="0" cellspacing="0" cellpadding="0">
 		<tr>
-			<td colspan="3" height="10"><h1 class="extra">My m² in Samboja Lestari - my sponsor profile</h1>	
+			<td colspan="3" height="10"><h1 class="extra">Mine m² i Samboja Lestari - min sponsor profil</h1>	
 			</td>
 		</tr>		
 		<tr>
@@ -40,12 +33,12 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3" height="25">Your sponsor profile login data:
+			<td colspan="3" height="25">Din sponsor profil login data:
 			</td>
 		</tr>
 		<tr>
 			<td height="20" width="40%">
-				<strong>Your sponsor ID:</strong>
+				<strong>Dit sponsor ID:</strong>
 			</td>
 			<td width="15">
 			</td>
@@ -55,12 +48,12 @@
 		</tr>						
 		<tr>
 			<td height="30">   
-				<strong>Your password:</strong>
+				<strong>Dit password:</strong>
 			</td>
 			<td>
 			</td>
 			<td>
-				$(sponsor-password_new)
+				$(sponsor-password_ny)
 			</td>
 		</tr>
 		<tr>
@@ -68,7 +61,7 @@
 			</td>
 		</tr>					
 		<tr>
-			<td colspan="3">At this moment we manage your profile under the following name:
+			<td colspan="3">Nu står din profil under følgende navn:
 			</td>
 		</tr>	
 		<tr>
@@ -77,12 +70,12 @@
 		</tr>					
 		<tr>
             <td width="40%" height="20">    
-			 	Name:
+			 	Navn:
 			</td>
             <td> 
 			</td>
             <td>
-				$(name)                       
+				$(navn)                       
              </td>
 		</tr>
 		<tr>
@@ -91,7 +84,7 @@
 		</tr>
 		<tr>
 			<td colspan="3">
-				<br />Your e-mail address will <strong>not</strong> be published and is only used for internal purposes.
+				<br></br>Din e-mail addresse vil <strong>ikke</strong> blive kopieret eller videregivet og bliver kun brugt til internt brug.
 			</td>
 		</tr>
 		<tr>
@@ -100,7 +93,7 @@
 		</tr>
 		<tr>
             <td class="content_text" height="20">    
-				E-mail address:
+				E-mail addresse:
 			</td>
             <td> 
 			</td>

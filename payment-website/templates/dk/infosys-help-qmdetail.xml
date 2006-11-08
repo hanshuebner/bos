@@ -1,35 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<bknr:toplevel
-  template="toplevel_extra"
-  title="RAINFOREST for SAMBOJA LESTARI - Guide to the Satellite Map"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
-	<h1 class="extra">Guide to the Satellite Map</h1>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<bknr:toplevel template="toplevel_extra" title="Regnskov i SAMBOJA LESTARI - Guide til Satelit Kortet" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
+	<h1 class="extra">Guide til Satelit Kortet</h1>
 	<p class="text_content">
-		<p> You are now in the map overview for the square metre sales area. 
-		Here you can get an overview of how many square metres have already been sold. 
-		In addition you can see the sponsors profiles and their posted messages. </p>
-		<p> If you are logged on with your password your "own" square metres will be marked with an icon  (<img src="/images/qm.gif"
-		border="0" />)on the satellite map. The "purchased" square metres will be highlighted in a different colour. 
-		Click on the satellite map in the middle of the screen to move the "Square Metre Magnifier". 
-		The red marked area will appear in an enlarged form in the upper right of the screen. Click on the "sold" 
-		colour marked square metre areas in the enlarged image to find out more about the sponsors in their sponsor profile. 
-		This is displayed under the enlarged area and is shown by moving the mouse over it. </p>
-		<p> On the bottom right of the satellite map you can get the area menu. Click on the individual 
-		areas on the satellite map to 
-		get the names of the individual areas. </p>
-		<p>The following areas can be viewed:</p>
+		<p> Du er nu i oversigtskortet i området med salget af kvardratmeter. 
+		Her kan du få et overblik over hvor mange kvardratmeter der allerede er blevet solgt.
+		Og du kan ligeledes se sponsornes profiler og deres meddelelser.</p>
+		<p> Hvis du er logget på med et password vil din "egen" kvardratmeter være markeret med et ikon på satelit kortet.  (<img src="/images/qm.gif" border="0"></img>)Den "købte" kvardratmeter vil være fremhævet i en anden farve. 
+		Klik på satelit kortet i midten af skærmen for at bevæge "kvardratmeter forstørren." 
+		Området mærket med rødt vil komme til syne i forstørret form øverst til højre på skærmen. Klik på det farve-mærkede "solgt" kvardratmeter område i det forstørrede billede for at finde ud af mere om sponsorne i deres sponsor profil.  
+		Dette findes under det forstørrede område og vises når man fører sin markør hen over det. </p>
+		<p> Nederst til højre i satalit kortet kan man finde område menuen. Klik på de enkelte områder på kortet for at få navnene på hvert område. </p>
+		<p>Følgende områder kan ses:</p>
 		<p style="margin-left: 40px; margin-right: 40px;"> 
 		  <bl>
-		    <li><strong>Sat-Karte</strong> The satellite map is the background of the map  </li>
-		    <li><strong>Areas for Sale</strong>Areas that can be purchased are shown in grey.  </li>
-		    <li><strong>Sold Areas</strong> Areas that have been purchased are displayed in various colours</li>
+		    <li><strong>Sat-Kort</strong> Satelitkortet er baggrunden af kortet  </li>
+		    <li><strong>Områder til salg</strong>Områder der kan købes er vist med gråt  </li>
+		    <li><strong>Solgte områder</strong> Omrøder der allerede er solgt er vist i forkellige farver</li>
 		  </bl>
 		</p>
-		<p>Click on the overview map on the top left to return to the POI overview.</p>
+		<p>Klik på oversigts kortet øverst til venstre for at vende tilbage til POI oversigten.</p>
 	</p>
 </bknr:toplevel>

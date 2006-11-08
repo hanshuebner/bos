@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<bknr:toplevel
-  template="toplevel_main"
-  title="RAINFOREST for SAMBOJA LESTARI - about BOS"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<bknr:toplevel template="toplevel_main" title="Regnskov i SAMBOJA LESTARI - om BOS" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
 	<div id="content_main">
 		<div id="textbox_content">
 			<table border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td colspan="3"><span class="headline">The BOS Foundation</span></td>
+					<td colspan="3"><span class="headline">Organisationen BOS</span></td>
 					<td></td>				
 				</tr>
 				<tr>
@@ -20,47 +13,46 @@
 				</tr>
 				<tr>
 					<td>
-						The <b>Borneo Orangutan Survival Foundation</b> (BOS) is the largest organisation worldwide fighting 
-						against the extinction of orangutans. Their habitat, the rainforest with its biological diversity, 
-						is being protected in collaboration with the local people. 
-						BOS is an Indonesian not-for-profit foundation, founded in 1991.
-						<br /><br />
-						The main aspects of BOS work in Indonesia are the following:
-						<br /><br />
+						Organisation<b> Borneo Orangutan Survival</b> (BOS) er den største, verdensomspændende organisation som kæmper mod udryddelsen af orangutangen. 
+					 Dens levested; regnskoven, med sin biologiske mangfoldighed, beskyttes i samarbejde med den lokale befolkning.   
+						BOS er en Indonesisk non-profit organisation, oprettet i 1991.
+						<br></br><br></br>
+						Hovedaspekterne i BOS arbejde i Indonesien er følgende:
+						<br></br><br></br>
 						<ul>
 							<li>
-                Confiscation of illegally kept orangutans, Malaysian bears and other species
+                Konfiskering af ulovligt tilfangetagende orangutanger, sol-bjørne og andre arter
 							</li>
 							<li>
-								Rehabilitation of orangutans in stations
+								Genudsætning af orangutanger til "stationer"
 							</li>
 							<li>
-								Release of animals into protected rainforest areas
+								Udsætning af dyr til beskyttede regnskovsområder
 							</li>
 							<li>
-								Rescue and relocation of endangered orangutans and other species
+								Flytning og redning af truede orangutanger og andre arter 
 							</li>
 							<li>
-								Forestation and protection of the rainforest 
+								Genplantning og beskyttelse af regnskoven 
 							</li>
 							<li>
-								Creation of alternatives for the local people
+								Skabelsen af alternativer til den lokale befolkning
 							</li>
 							<li>
 								Ecological education of the local people
 							</li>
 							<li>
-								Monitoring of protected areas
+								Overvågning af beskyttede områder
 							</li> 
 							<li>
-								Analysis of satellite photos
+								Analyse af satelit fotos
 							</li>
 							<li>
-								and many more.
+								og mange andre.
 							</li>
 						</ul>
-						<br />
-						The projects run by BOS are mainly sponsored by foreign donors due to the difficult economic situation of Indonesia. 
+						<br></br>
+						BOS projekter er hovedsaglig sponseret af udenlandske donorer pga. den svære økonomiske sitation i Indonesien. 
  					</td>
 				</tr>				
 			</table>		
@@ -72,25 +64,25 @@
 				
 				<tr><td height="30"></td></tr>			
 				<tr>
-					<td colspan="2"><img src="/images/bos-logo.gif" width="116" height="85" alt="" /></td>
+					<td colspan="2"><img src="/images/bos-logo.gif" width="116" height="85" alt=""></img></td>
 				</tr>	
 				<tr>
-					<td colspan="2">Would you like to know more about projects run by BOS?
-					<br /><br />
-					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+					<td colspan="2">Vil du gerne vide mere om BOS projekter?
+					<br></br><br></br>
+					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
 					<a href="http://www.savetheorangutan.info" target="_blank" class="more">
 						savetheorangutan.info
 					</a>
-					<br />
-					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+					<br></br>
+					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
 					<a href="http://www.bos-deutschland.de" target="_blank" class="more">
 						bos-deutschland.de
 					</a>
-					<br /><br />
+					<br></br><br></br>
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2">On these webpages you will also find links to our BOS partner organisations worldwide.</td>
+					<td colspan="2"> På disse websider vil du også finde adresserne på vore søsterorganisationer verden over.</td>
 				</tr>		
 			</table>			
 		</div>

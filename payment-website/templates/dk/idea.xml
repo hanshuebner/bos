@@ -1,49 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<bknr:toplevel
-  template="toplevel_main"
-  title="RAINFOREST for SAMBOJA LESTARI"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<bknr:toplevel template="toplevel_main" title="Regnskov i SAMBOJA LESTARI" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
 	<!-- container content_main -->
 	<div id="content_main">
 		<div id="textbox_content">
-			<table  border="0" cellpadding="0" cellspacing="0">
+			<table border="0" cellpadding="0" cellspacing="0">
 				<tr>
 					<td colspan="2">
 						<span class="headline">
-							Samboja Lestari - Creative reforestation
-							<br />
-							A sanctuary for Borneo
+							Samboja Lestari - Kreativ skovrejsning
+							<br></br>
+							Et reservat på Borneo
 						</span>
 					</td>
-					<td align="center"><img src="/images/pfeil_back.gif" width="10" height="9" alt="" />
+					<td align="center"><img src="/images/pfeil_back.gif" width="10" height="9" alt=""></img>
 						<a href="javascript:history.back()" class="titlegray">
-							back
+							tilbage
 						</a>
 					</td>		
 				</tr>
 				<tr><td height="6"> </td></tr>				
 				<tr>
-					<td colspan="3" align="left"><img src="/images/start_pic_headline1.jpg" width="363" height="120" alt="" border="0" /></td>
+					<td colspan="3" align="left"><img src="/images/start_pic_headline1.jpg" width="363" height="120" alt="" border="0"></img></td>
 					<td></td>			
 				</tr>
 				<tr><td height="6"></td></tr>
 				<tr>
 					<td colspan="3">
-						By means of a unique reforestation concept BOS is creating a sanctuary for orangutans, sunbears and other endangered species on Borneo -maybe the last one.
-Satellite pictures here on the internet make it possible to observe the progress of this concept.
-						<br /><br />
-						During the last decades the once species-rich rainforest of 
+						Ved hjælp af et unikt skovrejsnings koncept har BOS skabt et reservat for orangutanger, solbjørne og andre truede dyrearter på Borneo- måske det sidste af sin art.
+Satelit fotos her på internetet gør det muligt at observere konceptets fremgang.
+						<br></br><br></br>
+						I løbet af de sidste årtier er den engang så artsrige regnskov i  
 						<a href="javascript:window_infosys()" class="titlegreen">
-							Samboja Lestari
-						</a>
-						was cleared and burnt down relentlessly.
-Nutrient-consuming elephant grass took over completely. What remained was an ecological waste land.
-Nowadays it is already visible that this doesn't have to stay - since 2001 BOS is creating new rainforest. An innovative concept of reforestation and protection is changing this area of over 16 mio sqm into a natural habitat again. In tropical Borneo plants grow much faster than in Europe. Already within a few years the first orangutans can be released to share their freedom with other animals A nature reserve is being created for the permanent use of humans, animals and plants in Samboja Lestari ("eternal Samboja").
+							Samboja Lestari blevet nådesløst fældet og nedbrændt.
+				  	</a>
+						Næringsopslugende elefantgræs tog over og hvad blev tilbage var en økologisk ødemark. I dag er det dog allerede tydeligt at dette ikke behøver fortsætte - siden 2001 har BOS skabt ny regnskov.
+Et nyskabende skovrejsnings- og beskyttelses-koncept forandre dette over 16 mio sqm store område til et naturligt levested igen. På tropiske Borneo gror planter meget hurtigere end i Europa, og allerede indenfor få år vil de første orangutanger kunne blive set ud og dele friheden med andre dyr. Et naturreservat er blevet skabt til fremtidig brug for mennesker, dyr og planter i  Samboja Lestari; ("et bærerdygtigt Samboja").
 					</td>
 					<td></td>				
 				</tr>				
@@ -56,16 +48,16 @@ Nowadays it is already visible that this doesn't have to stay - since 2001 BOS i
 				<tr>
 					<td colspan="2">
 						<a href="idea_subtitle1" class="titlegreen">
-							Agriculture, reforestation and protection
+							Landbrug, skovrejsning og beskyttelse
 						</a>
 					</td>
 				</tr>	
 				<tr><td height="6"></td></tr>			
 				<tr>
-					<td> During the early stage of reforestion Indonesian farmers plant profitable agricultural products among the newly planted trees.</td>
+					<td> I de tidlige stadier af skovrejsningen planter Indonesiske landmænd overskudsgivende afgrøder imellem de nyplantede træer.</td>
 					<td valign="top" align="right">
 						<a href="idea_subtitle1" class="titlegreen">
-							<img src="/images/projekt_pic_headline1b.jpg" width="69" height="120" alt="" border="0" />
+							<img src="/images/projekt_pic_headline1b.jpg" width="69" height="120" alt="" border="0"></img>
 						</a>
 					</td>
 				</tr>
@@ -74,7 +66,7 @@ Nowadays it is already visible that this doesn't have to stay - since 2001 BOS i
 					<td colspan="2">
 						...
 						<a href="idea_subtitle1" class="more">
-							more
+							mere
 						</a>
 					</td>
 				</tr>	
@@ -93,7 +85,7 @@ Nowadays it is already visible that this doesn't have to stay - since 2001 BOS i
 				<tr>
 					<td>
 						<a href="idea_subtitle2" class="titlegreen">
-							<img src="/images/projekt_pic_headline1c.gif" width="163" height="80" border="0" alt="" />
+							<img src="/images/projekt_pic_headline1c.gif" width="163" height="80" border="0" alt=""></img>
 						</a>
 					</td>
 				</tr>
@@ -101,11 +93,11 @@ Nowadays it is already visible that this doesn't have to stay - since 2001 BOS i
 				
 				<tr>
 					<td colspan="2">
-						 To finance the nature reserve, BOS has created a system of symbolical land-purchasing.
-						<br />
+						 Til at finansiere natur reservatet har BOS skabt et system med symbolske opkøb af land. 
+						<br></br>
 						...
 						<a href="idea_subtitle2" class="more">
-							more
+							mere
 						</a>
 					</td>
 				</tr>			

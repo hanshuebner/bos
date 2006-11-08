@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<bknr:toplevel
-  template="toplevel_extra"
-  title="RAINFOREST for SAMBOJA LESTARI - Privacy Policy"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
-	<h1 class="extra">Privacy Policy of BOS Deutschland e.V.</h1>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<bknr:toplevel template="toplevel_extra" title="Regnskov i SAMBOJA LESTARI - Privacy Policy" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
+	<h1 class="extra">Privacy Policy for BOS International e.V.</h1>
 	<p class="text_content">
 		<p>
 The protection of your personal data via electronic processing is strictly regulated, 
@@ -18,40 +11,34 @@ is a renowned and not-for-profit foundation complying with the Bundesdatenschutz
 exemption paper of the Finanzamt (tax office) in Kiel-Nord, no. GL5105.
 		</p>
 		<p>
-<b>What happens with your personal data?</b>
+<b>Hvad sker der med dine personlige data?</b>
 		</p>
 		<p>
-Once you have decided to make a donation on-line, you are asked to disclose 
-your bank details. This information will exclusively be processed by WorldPay. 
-WorldPay is a renowned, international provider for on-line payment. 
-Your data will be send by WorldPay through a coded SSL-transaction, 
-and deleted immediately after the successful transaction. 
-BOS Deutschand e.V. has no access to your bank details whatsoever.
+Når du har besluttet dig for at lave en donation online, vil du blive bedt om at give dine bank-oplysninger. Denne information vil blive behandlet egenhændigt af WorldPay. 
+WorldPay er en anerkendt, international udbyder af online betalling. 
+Din data vil blive sendt til WorldPay gennem en kodet SSL-forbindelse, 
+og vil blive slettet straks efter en successfuld transaktion. 
+BOS International har ellers ingen afgang til din bank-information.
 		</p>
 		<p>
-Each square metre of the ecological project you sponsor with your donation 
-is linked to your personal profile. This profile consists of your name, 
-country of origin, number of square metres you sponsor and the date of your donation. 
-A personalised greeting text is possible. All profile information (except your e-mail address and postal address) 
-is available to visitors of our webpage. Through this, transparency and interaction between sponsors is being promoted. Profile information can be altered by logging in with your password at all times. 
-By doing so, it is also possible to stay anonymous.
+Hver kvardratmeter du sponserer med din donation er linket til din personlige profil. Denne profil består af dit navn, hjemland, antal kvardratmeter du sponserer og datoen for din donation.
+Det er desuden muligt at skrive en personlig hilsen. Alt profil-information (undtagen e-mail addresse og post addresse) vil være tilgængelig til besøgende på vores website. På denne måde promoveres kommunikation og menningsudveksling mellem vores sponsore. Profil information kan altid ændres ved at logge ind med dit password. Ved at gøre dette, er det også muligt at forblive anonym.  
+
 		</p>
 		<p>
-In order to send you your personal profile including your sponsor-ID and password, we need your e-mail address. 
-For sending certificates by mail we need your postal address, and the name of the person the certificate is 
-to be issued to. 
-In order to receive our newsletter/news we would need your e-mail address.
+For at kunne sende dig din personlige profil, indeholdende dit sponsor-ID og password, skal vi bruge din e-mail addresse. 
+For at kunne sende dit Regnskovs Diplom med normal post skal vi bruge din post addresse, og navnet på den person diplomet skal udstedes til.  
+For at kunne modtage vores nyhedsbrev/nyhedher, skal vi bruge din e-mail addresse.
 		</p>
 		<p>
-We assure you that this data will only be used for administrative and informative  
-purposes of BOS Deutschland e.V.,as well as for BOS associates international. 
-In case you do not wish to receive any more information from us, you are able to 
+Vi forsikre dig om at din data kun vil blive brugt til administrative og informative formål for BOS international. 
+Hvis du på noget tidspunkt ikke længere ønsker at modtage mere information fra os, kan du til hver en tid slette din data fra vores system. In case you do not wish to receive any more information from us, you are able to 
 delete your data from the system at any time. 
-For this purpose, please always give your sponsor ID!
+Til dette formål, vær venlig altid at oplyse dit sponsor ID!
 		</p>
 		<p>
-In case you have further questions regarding the reglementation of privacy policy of BOS Deutschland e.V., 
-please send an e-mail to: datenschutz@bos-deutschland.de
+Hvis du har flere spørgsmåI vedrørende reglerne om Privacy policy for BOS International
+send venligst en e-mail til: bos@orangutang.dk
 		</p>
 	</p>
 </bknr:toplevel>

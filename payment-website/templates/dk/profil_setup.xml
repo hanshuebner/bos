@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<bknr:toplevel
-  title="RAINFOREST for SAMBOJA LESTARI"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<bknr:toplevel title="Regnskov i SAMBOJA LESTARI" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
 	<div id="content">
 		<!-- content left-->
 		<div id="content_left">
@@ -15,7 +9,7 @@
 					<tr>
 						<td></td>
 						<td colspan="2">
-							<img src="/images/step5.gif" width="120" height="20" border="0" alt="" />
+							<img src="/images/step5.gif" width="120" height="20" border="0" alt=""></img>
 						</td>
 					</tr>
 					<tr><td colspan="4" height="40"></td></tr>
@@ -36,21 +30,21 @@
 		<!-- /content left-->
 		<!-- container content_main -->
 		<div id="content_main">
-			<div id="textbox_content_big" >
+			<div id="textbox_content_big">
 				<form method="post" action="save-initial-profile" name="form" onsubmit="return check_profil_setup();">
-					<input type="hidden" name="sponsor-id" value="$(sponsor-id)" />
+					<input type="hidden" name="sponsor-id" value="$(sponsor-id)"></input>
 					<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
 						<tr>
 							<td colspan="3" height="10">
 							</td>
 						</tr>
 						<tr>
-							<td colspan="3" height="25">Create your sponsor profile now:
+							<td colspan="3" height="25">Opret din sponsor profil nu:
 							</td>
 						</tr>
 						<tr>
 							<td height="20" width="40%">
-								<strong>Your sponsor ID:</strong>
+								<strong>Dit sponsor ID:</strong>
 							</td>
 							<td width="15">
 							</td>
@@ -65,17 +59,17 @@
 							<td>
 							</td>
 							<td>
-								<input type="password" name="password" value="" size="20" class="form_big" />
+								<input type="password" name="password" value="" size="20" class="form_big"></input>
 							</td>
 						</tr>
 						<tr>
 							<td height="30">
-								<strong>Repeat password:</strong>
+								<strong>Gentag password:</strong>
 							</td>
 							<td>
 							</td>
 							<td>
-								<input type="password" name="password1" value="" size="20" class="form_big" />
+								<input type="password" name="password1" value="" size="20" class="form_big"></input>
 							</td>
 						</tr>
 						<tr>
@@ -84,7 +78,7 @@
 						</tr>
 						<tr>
 							<td colspan="3">
-								Currently we process your profile under the name below. You can change this name or stay anonymous.
+								Dit profil står nu under dette navn. Du kan til hver en tid ændre dette navn eller forblive anonym.
 							</td>
 						</tr>
 						<tr>
@@ -93,17 +87,14 @@
 						</tr>
 						<tr>
 				                         <td width="40%" height="20">
-							 	Name:
+							 	Navn:
 							</td>
 				                        <td>
 							</td>
 				                        <td>
-								<input type="text" name="name" value="$(name)" size="20" class="form_big"
-									onclick="javascript:document.form.anonym.checked = false;"
-									onblur="javascript:if (this.value == '') { document.form.anonym.checked = true; }"/>
-								<br />
-								<input type="checkbox" name="anonym" value="1"
-									onclick="javascript:if (this.checked) { document.form.name.value = ''; }"/> anonymous
+								<input type="text" name="name" value="$(name)" size="20" class="form_big" onclick="javascript:document.form.anonym.checked = false;" onblur="javascript:if (this.value == '') { document.form.anonym.checked = true; }"></input>
+								<br></br>
+								<input type="checkbox" name="anonym" value="1" onclick="javascript:if (this.checked) { document.form.name.value = ''; }"></input> anonym
 				                        </td>
 						</tr>
 						<tr>
@@ -112,8 +103,8 @@
 						</tr>
 						<tr>
 							<td colspan="3">
-								<br />
-								Your e-mail address will <strong>not</strong> be published and is only used for internal infomation.
+								<br></br>
+								Din e-mail addresse vil <strong>ikke</strong> være offentlig tilgængelig.
 							</td>
 						</tr>
 						<tr>
@@ -122,12 +113,12 @@
 						</tr>
 						<tr>
 				                      	<td class="content_text" height="20">
-								E-mail address:
+								E-mail addresse:
 							</td>
 				                        <td>
 							</td>
 	                			        <td>
-								<input type="text" name="email" value="$(email)" size="33" class="form_big" />
+								<input type="text" name="email" value="$(email)" size="33" class="form_big"></input>
 							</td>
 						</tr>
 						<tr>
@@ -148,7 +139,7 @@
 						</tr>
 						<tr>
 				                        <td colspan="3" align="right">
-								<input type="submit" class="form_big" name="Button" value="save and continue" />
+								<input type="submit" class="form_big" name="Button" value="save and continue"></input>
 						  	</td>
 						</tr>
 					</table>
@@ -157,11 +148,11 @@
 		</div>
 		<div id="content_right">
 			<div id="helpbox">
-				<br /><br />
-				[<strong>Profile password</strong>]<br />
-				Enter your personal password. In case you forgot it you can find a master password on your payment confirmation, that is sent to you by e-mail.<br /><br /><br /><br /><br />
-				[<strong>Profile creation</strong>]<br />
-				Define under wich name "your" m² will be indicated.<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+				<br></br><br></br>
+				[<strong>Profile password</strong>]<br></br>
+				Indtast dit personlige password. Hvis du har glemt dit password kan det findes på din betalings-bekræftigelse som er sendt til din e-mail.<br></br><br></br><br></br><br></br><br></br>
+				[<strong>Oprettelse af profil</strong>]<br></br>
+				Bestem under hvilket navn "dine" m² skal stå.<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
 		 	</div>
 		</div>
 	</div>

@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
 	<head>
-		<link rel="stylesheet" href="/static/toplevel_style.css" />
-		<link rel="stylesheet" href="/static/content_style.css" />
+		<link rel="stylesheet" href="/static/toplevel_style.css"></link>
+		<link rel="stylesheet" href="/static/content_style.css"></link>
 		<script src="/static/bos.js" type="text/javascript"><!-- x -->	
 		</script> 
              <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8" />-->
@@ -20,55 +15,49 @@
 
 			<div id="menue_banner">
 				<a href="index">
-					<img src="../images/header_ganzneu.gif" border="0" />
+					<img src="../images/header_ganzneu.gif" border="0"></img>
 				</a>
 			</div>
 
 			<div id="menue_header_left">
-			BOS Foundation
+			Foreningen BOS
 			</div>
 			<div id="menue_header_main">
 				<div>l</div>
 				<div>
-					<a href="idea" class="menue"
-							title="What exactly is happening.">
-						project
+					<a href="idea" class="menue" title="What exactly is happening.">
+						projekt
 					</a>
 				</div>
 				<div>l</div>
 				<div>
-					<a href="bestellung" class="menue"
-							title="Join us!">
-						donate
+					<a href="bestellung" class="menue" title="Join us!">
+						donér
 					</a>
 				</div>
 				<div>l</div>	
 				<div>
-					<a href="bos" class="menue"
-							title="BOS Foundation">
+					<a href="bos" class="menue" title="BOS Foundation">
 						BOS
 					</a>
 				</div>
 				<div>l</div>	
 				<div>
-					<a href="javascript:window_infosys()" class="menue"
-							title="Move to satellite map.">
-						satellite map
+					<a href="javascript:window_infosys()" class="menue" title="Move to satellite map.">
+						satelit kort
 					</a>
 				</div>
 				<div>l</div>
 				<div>
-					<a href="contact" class="menue"
-							title="Contact us.">
-						contact     
+					<a href="contact" class="menue" title="Contact us.">
+						kontakt     
 					</a>
 				</div>	
 				<div>l</div>		
 			</div>
 			<div id="menue_header_right" align="right">
-				<select name="language" style="width:125px;"
-						onchange="jumpMenu('parent', this, 0)">
- 					<bos:language-options />
+				<select name="language" style="width:125px;" onchange="jumpMenu('parent', this, 0)">
+ 					<bos:language-options></bos:language-options>
 				</select>
 			</div>
 		</div>
@@ -88,8 +77,8 @@
 							<td width="6"> 
 							</td>
 							<td colspan="2">
-								<strong>Buy Rainforest!</strong>
-								<br /><br /><br />	
+								<strong>Køb Regnskov!</strong>
+								<br></br><br></br><br></br>	
 							</td>
 							<td>
 							</td>				
@@ -97,11 +86,11 @@
 						<tr>
 							<td>
 							</td>
-							<td colspan="2" >
-								<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
+							<td colspan="2">
+								<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt=""></img>
 								<a href="bestellung" class="content_black">
-									Donate!
-								</a><br />			
+									Donér!
+								</a><br></br>			
 							</td>
 							<td> 
 							</td>				
@@ -110,7 +99,7 @@
 						<tr>
 							<td colspan="4" valign="bottom">
 								<a href="bestellung" class="content_black">
-									<img src="/images/spenden.jpg" width="150" height="71" border="0" alt="" />
+									<img src="/images/spenden.jpg" width="150" height="71" border="0" alt=""></img>
 								</a>
 							</td>			
 						</tr>
@@ -123,18 +112,17 @@
 						<tr>
 							<td width="6"> </td>
 							<td colspan="2">
-								<strong>Satellite Map</strong>
-								<br /></td>
+								<strong>Satelit Kort</strong>
+								<br></br></td>
 							<td></td>				
 						</tr>
 						<tr><td colspan="3" height="5"></td></tr>
 						<tr>
 							<td></td>
 							<td colspan="2">
-								<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
-								<a href="javascript:window_infosys()"
-										class="content_black">
-									It's all about m².<br /><br />
+								<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt=""></img>
+								<a href="javascript:window_infosys()" class="content_black">
+									Det handler om m².<br></br><br></br>
 								</a>
 							</td>
 							<td></td>				
@@ -142,7 +130,7 @@
 						<tr>
 							<td colspan="3" height="88">
 							<a href="javascript:window_infosys()">
-								<img src="/images/trans.gif" width="149" height="108" border="0" alt="" />
+								<img src="/images/trans.gif" width="149" height="108" border="0" alt=""></img>
 							</a>
 							</td>
 						</tr>
@@ -161,7 +149,7 @@
 				<!-- /footer -->	
 			</div>
 			<!-- /content left-->
-				<bknr:tag-body />
+				<bknr:tag-body></bknr:tag-body>
 			<!-- /content 3teilig-->
 		</div>
 	</body>

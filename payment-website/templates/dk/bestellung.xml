@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<bknr:toplevel
-  title="RAINFOREST for SAMBOJA LESTARI"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<bknr:toplevel title="Regnskov i SAMBOJA LESTARI" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
 	<!-- content 3teilig-->
 	<div id="content">
 		<!-- content left-->
@@ -16,7 +10,7 @@
 					<tr>
 						<td></td>
 						<td colspan="2">
-							<img src="/images/step1.gif" width="120" height="20" border="0" alt="" />
+							<img src="/images/step1.gif" width="120" height="20" border="0" alt=""></img>
 						</td>
 					</tr>
 					<tr><td colspan="4" height="40"></td></tr>
@@ -24,22 +18,22 @@
 						<td> </td>
 						<td colspan="2">
 							<span class="link_titlered">
-								Create rainforest
-								<br />for only 3,- Euro per m²
+								Plant regnskov
+								<br></br>for kun 3,- Euro per m²
 							</span>
-							<br /><br />
+							<br></br><br></br>
 						</td>
 						<td></td>				
 					</tr>
 					<tr>
 						<td></td>
 						<td colspan="2">
-							We appreciate your decision to get involved in supporting the nature, the wildlife and the people of Indonesia.
-							<br /><br />
-							Your support is an important contribution towards ensuring sustainable project work in Samboja Lestari.<br />
-							<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+							Vi takker for din beslutning om støtte til Indonesiens folk, natur og dyreliv.
+							<br></br><br></br>
+							Din støtte er et vigtig bidrag i kampen hen mod at sikre et holdbart projektarbejde i Samboja Lestari.<br></br>
+							<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
 									<a href="idea_subtitle2" class="more">
-										... more
+										... mere
 									</a>
 						</td>
 						<td></td>
@@ -61,14 +55,14 @@
 		<!-- /content left-->
 		<!-- container content_main -->
 		<div id="content_main">
-			<div id="textbox_content_big" >
+			<div id="textbox_content_big">
 				<form name="bestellformular" method="post" action="buy-sqm">
-                                        <input type="hidden" name="download-only" value="1" />
+                                        <input type="hidden" name="download-only" value="1"></input>
 					<table id="formTable" width="100%" border="0" cellspacing="0" cellpadding="0">
 							<tr>
 								<td colspan="3">
 									<span class="headline">
-										I am getting involved. I want to see how Samboja Lestari becomes green again and hereby create ...
+										Tilmeld mig. Jeg vil se Samboja Lestari blive grøn igen, og derved skabe ...
 									</span>
 								</td>
 							</tr>
@@ -77,28 +71,23 @@
 							</tr>
 							<tr>
 								<td colspan="3">
-									<input type="radio" name="numsqm" value="1"
-											onclick="document.bestellformular.numsqm1.value = '';" />
-									1 m² rainforest [3 Euro],
-									<br />
-									<input type="radio" name="numsqm" value="5"
-											onclick="document.bestellformular.numsqm1.value = '';" />
-									5 m² rainforest [15 Euro],
-									<br />
-									<input type="radio" name="numsqm" value="10" checked="checked"
-											onclick="document.bestellformular.numsqm1.value = '';" />
-									10 m² rainforest [30 Euro],
-									<br />
-									<input type="radio" name="numsqm" value="30"
-											onclick="document.bestellformular.numsqm1.value = '';" />
-									30 m² rainforest [90 Euro],
-									<br />
-									<input type="radio" name="numsqm" value=""/>
+									<input type="radio" name="numsqm" value="1" onclick="document.bestellformular.numsqm1.value = '';"></input>
+									1 m² regnskov [3 Euro],
+									<br></br>
+									<input type="radio" name="numsqm" value="5" onclick="document.bestellformular.numsqm1.value = '';"></input>
+									5 m² regnskov [15 Euro],
+									<br></br>
+									<input type="radio" name="numsqm" value="10" checked="checked" onclick="document.bestellformular.numsqm1.value = '';"></input>
+									10 m² regnskov [30 Euro],
+									<br></br>
+									<input type="radio" name="numsqm" value="30" onclick="document.bestellformular.numsqm1.value = '';"></input>
+									30 m² regnskov [90 Euro],
+									<br></br>
+									<input type="radio" name="numsqm" value=""></input>
 									or
-									<input type="text" name="numsqm1" size="5" value=""
-											onfocus="document.bestellformular.numsqm[4].click()"/>
-									m² [3 Euro each].
-									<br />
+									<input type="text" name="numsqm1" size="5" value="" onfocus="document.bestellformular.numsqm[4].click()"></input>
+									m² [3 Euro stk].
+									<br></br>
 	                        				</td>
 							</tr>
 							<tr>
@@ -122,11 +111,11 @@
 							<tr>
 								<td colspan="4">							
 									<span class="help_text">
-										Your data will be processed electronically by our partner WorldPay.
+										Din data vil blive behandlet elektronisk af vores partner WorldPay.
 										The provisions of the data protection law have been adhered to. Data will not be passed on to third parties.
 									</span>
-									<br />
- 									<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+									<br></br>
+ 									<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
 									<a href="javascript:window_extra('privacy')" class="more">
 										privacy statement
 									</a>
@@ -151,18 +140,17 @@
 							</tr>
 							<tr>
 								<td colspan="3">
-									<input type="checkbox" name="disclaimer_read" value="1" />
-									I have read <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+									<input type="checkbox" name="disclaimer_read" value="1"></input>
+									I have read <img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
 									<a href="javascript:show_disclaimer()" class="more">
 										the waiver clause
-									</a> and I agree.<br />
- 									  <br /> <br />
+									</a> and I agree.<br></br>
+ 									  <br></br> <br></br>
 								</td>
 							</tr>
 							<tr>
 				                <td align="right" colspan="3">
-							  		<input type="submit" class="form_big_bold" name="action" value="Donate online"
-										onclick="return check_online();" />
+							  		<input type="submit" class="form_big_bold" name="action" value="Donate online" onclick="return check_online();"></input>
 									
 								</td>
 							</tr>
@@ -172,26 +160,26 @@
 		</div>
 		<div id="content_right">
 			<div id="helpbox">		
-				<br /><br /><br />
+				<br></br><br></br><br></br>
 				[<strong>Rainforest certificate</strong>]
-				<br />
+				<br></br>
 				Starting with 1 m² only you receive   
-				<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+				<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
 				<a href="javascript:window_extra('certificat')" class="more">our rainforest certificate</a>
 				as a pdf-download  from your personal sponsor profile.
-				<br /><br /><br />
+				<br></br><br></br><br></br>
 				[<strong>Donation receipt</strong>]
-				<br />
+				<br></br>
 				BOS Germany is a tax free registered charity in Germany. Your ability to claim this donation for tax purposes outside of Germany, is dependent upon the laws of your country.
-				<br />
+				<br></br>
 Within your sponsor profile you will find a receipt as a pdf-download.
 
-				<br /> <br />	
-				[<strong>Guarantee of trustworthiness</strong>]<br />
+				<br></br> <br></br>	
+				[<strong>Guarantee of trustworthiness</strong>]<br></br>
 	        		WorldPay is an internationally renowned provider of online payment services.
 Your date will be encoded by WorldPay and deleted immediately after the payment has been carried out succesfully.
 
-				<br /><br />
+				<br></br><br></br>
 	    		</div>			
 		</div>
 	</div>

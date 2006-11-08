@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<bknr:toplevel
-  template="toplevel_extra"
-  title="RAINFOREST for SAMBOJA LESTARI - Guide to the Satellite Map"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
-	<h1 class="extra">Guide to the Satellite Map</h1>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<bknr:toplevel template="toplevel_extra" title="Regnskov i SAMBOJA LESTARI - Guide til Satelit Kortet" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
+	<h1 class="extra">Guide til Satelit Kortet</h1>
 	<p class="text_content">
-		<p> You are in the detail display for a point of interest (POI) in the project area Samboja Lestari. 
-		    On the top left in the overview map you can see where this POI is located.</p>
-		<p> The picture shows an image of the POI. Click on any of the six small images on the 
-		    top right-hand side to get further images of the POI. Click on "Back" to return to the satellite 
-		    map section of the POI.</p>
-		<p> Click on the overview map on the top left to return to the POI overview.</p>
+		<p> Du er nu i et detaljeret display af et "point of interest" (POI) i projekt-området Samboja Lestari. 
+		    Øverst til venstre på oversigtskortet kan du se hvor dette POI befinder sig.</p>
+		<p> Fotoet viser et billede af POI. Klik på en af de seks små billeder i øverste højre side for flere billeder af den pågældende POI. Klik på "tilbage" for at vende tilbage til kort-sektionen af POI.
+		   </p>
+		<p> Klik på overblikskortet i øverste venstre hjørne for at vende tilbage og få et POI overblik.</p>
 	</p>
 </bknr:toplevel>
