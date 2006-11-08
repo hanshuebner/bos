@@ -2,6 +2,13 @@
 
 (enable-interpol-syntax)
 
+(defvar *country->office-email* '(("DK" . "service@bosdanmark.dk")))
+
+(defun contract-office-email (contract)
+  "Return the email address of the MXM office responsible for handling a contract"
+  (or (cdr (assoc (sponsor-country (contract-sponsor contract)) *country->office-email* :test #'string-equal))
+      *office-mail-address*))
+
 (defun send-system-mail (&key (to *office-mail-address*) (subject "(no subject") (text "(no text)") (content-type "text/plain; charset=UTF-8") more-headers)
   (send-smtp "localhost" *mail-sender* to
 	     (format nil "X-Mailer: BKNR-BOS-mailer
@@ -151,7 +158,8 @@ Gift: ~A
 			 :encoding :base64
 			 :content (file-contents (contract-pdf-pathname contract :print t)))
 	  mime-parts))
-  (send-system-mail :subject (format nil "~A-Spenderdaten - Sponsor-ID ~D Contract-ID ~D"
+  (send-system-mail :to (contract-office-email contract)
+		    :subject (format nil "~A-Spenderdaten - Sponsor-ID ~D Contract-ID ~D"
 				     type
 				     (store-object-id (contract-sponsor contract))
 				     (store-object-id contract))
