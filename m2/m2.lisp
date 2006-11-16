@@ -339,6 +339,7 @@ Sponsor-ID: ~A
   *last-contracts-cache*)
 
 (defun add-contract-to-cache (contract)
+  (last-paid-contracts) ; force cache initialization, should really be done by a eval-when
   (push contract *last-contracts-cache*)
   (setf (cdr (nthcdr (1- +last-contracts-cache-size+) *last-contracts-cache*)) nil))
 
