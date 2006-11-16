@@ -331,6 +331,13 @@
 (defclass poi-javascript-handler (page-handler)
   ())
 
+(defun contract-js (contract)
+  (format nil "{ id: ~A, date: ~A, name: ~S, count: ~A }"
+	  (store-object-id contract)
+	  (format-date-time (contract-date contract) :js-style t)
+	  (or (user-full-name (contract-sponsor contract)) "anonymous")
+	  (length (contract-m2s contract))))
+
 (defmethod handle ((handler poi-javascript-handler) req)
   (with-bknr-http-response (req :content-type "text/html; charset=UTF-8")
     (setf (reply-header-slot-value req :cache-control) "no-cache")
@@ -341,6 +348,7 @@
 	  (princ "<script language=\"JavaScript\">") (terpri)
 	  (princ (make-poi-javascript (or (session-variable :language) *default-language*))) (terpri)
 	  (princ "parent.poi_fertig(pois, anzahlSponsoren, anzahlVerkauft);") (terpri)
+	  (format t "parent.last_sponsors([~{~A~^,~%~}]);" (mapcar #'contract-js (last-paid-contracts)))
 	  (princ "</script>") (terpri)))))
 
 (defclass poi-image-handler (object-handler)

@@ -169,6 +169,26 @@ function bestellung () {
     window.opener.focus();
 }
 
+function last_sponsors(sponsors)
+{
+    replaceChildNodes('Info3Text',
+		      TABLE(null,
+			    TBODY(null,
+				  TR(null,
+				     TH({ colspan: 3 },
+					'' + anzahlSponsoren + ' ' +  msg('Anzahl Sponsoren') + ', ' + anzahlVerkauft + " " + msg('Anzahl verkaufte m²'))),
+				  TR(null,
+				     TH(null, msg('Datum')),
+				     TH(null, msg('m²')),
+				     TH(null, msg('Name'))),
+				  map(function(sponsor) { return TR(null,
+								    TD(null, sponsor.date.getDate() + "." + sponsor.date.getMonth() + "."),
+								    TD(null, sponsor.count),
+								    TD(null, sponsor.name)) },
+				      sponsors)
+				  )));
+}
+
 function poi_fertig(_poi, _anzahlSponsoren, _anzahlVerkauft) {
     poi = _poi;
     poi.unshift(0);		// adjust for base 1 arrays
@@ -183,10 +203,6 @@ function poi_warten() {
     if (poicomplete) {
 	// wenn der Datensatz komplett geladen ist wird der timer auf Null gesetzt und je nachdem ob sich eingeloggt wurde oder nicht die loginueberpruefung oder die Punkterzeugung gestartet
 	dbg("<br/> -> <b>POI geladen! login: " + login + "</b>");
-	document.getElementById("Info3Text").innerHTML = '<b>' + msg('Anzahl Sponsoren') + '</b><br />'
-	 + anzahlSponsoren
-	 + '<br /><br /><b>' + msg('Anzahl verkaufte m²') + '</b><br />'
-	 + anzahlVerkauft;
 	if (profil['name']) {
 	    document.getElementById("SponsorInfoText").innerHTML = "<b>" + profil['name'] + "</b>";
 	}

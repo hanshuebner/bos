@@ -225,8 +225,10 @@
        (> (get-universal-time) (contract-expires contract))))
 
 (deftransaction contract-set-paidp (contract newval)
+  (setf (contract-paidp contract) newval)
   (contract-changed contract)
-  (setf (contract-paidp contract) newval))
+  (add-contract-to-cache contract)
+  (bknr.rss::add-item "news" contract))
 
 (defmethod contract-price ((contract contract))
   (* (length (contract-m2s contract)) +price-per-m2+))
@@ -264,9 +266,9 @@
 	(unless (contract-download-only-p contract)
 	  (make-certificate contract name :address address :language language :print t))
 	(loop
-	 do (progn
-	      (format t "~&; waiting for generation of certificate, contract-id ~A" (store-object-id contract))
-	      (sleep 2))
+	   do (progn
+		(format t "~&; waiting for generation of certificate, contract-id ~A" (store-object-id contract))
+		(sleep 2))
 	   until (probe-file (contract-pdf-pathname contract)))
 	(change-slot-values contract 'cert-issued t))))
 
@@ -296,11 +298,11 @@
 	(let ((contract (make-object 'contract
 				     :sponsor sponsor
 				     :date date
-				     :paidp paidp
 				     :m2s m2s
 				     :expires expires
 				     :download-only download-only)))
-	  (bknr.rss::add-item "news" contract)
+	  (when paidp
+	    (contract-set-paidp contract paidp))
 	  contract)
 	(warn "can't create contract, ~A square meters for ~A could not be allocated" m2-count sponsor))))
 
@@ -324,6 +326,21 @@ Sponsor-ID: ~A
 				      m2-count (store-object-id sponsor)))
       (error "could not create contract, allocation areas exhausted?"))
     contract))
+
+(defvar *last-contracts-cache* nil)
+(defconstant +last-contracts-cache-size+ 20)
+
+(defun last-paid-contracts ()
+  (unless *last-contracts-cache*
+    (setf *last-contracts-cache* (subseq (append (sort (remove-if-not #'contract-paidp (class-instances 'contract))
+						       #'> :key #'contract-date)
+						 (make-list +last-contracts-cache-size+))
+					 0 +last-contracts-cache-size+)))
+  *last-contracts-cache*)
+
+(defun add-contract-to-cache (contract)
+  (push contract *last-contracts-cache*)
+  (setf (cdr (nthcdr (1- +last-contracts-cache-size+) *last-contracts-cache*)) nil))
 
 (defun number-of-sold-sqm ()
   (let ((retval 0))
@@ -350,20 +367,20 @@ Sponsor-ID: ~A
       (format t "profil.nachricht = '~A';~%" (string-safe (sponsor-info-text sponsor)))
       (format t "profil.contracts = [ ];~%")
       (loop for contract in paid-contracts
-	    do (destructuring-bind (left top width height) (contract-bounding-box contract)
-		 (format t "profil.contracts.push({ id: ~A, left: ~A, top: ~A, width: ~A, height: ~A, date: ~S });~%"
-			 (store-object-id contract)
-			 left top width height
-			 (format-date-time (contract-date contract) :show-time nil)))))))
+	 do (destructuring-bind (left top width height) (contract-bounding-box contract)
+	      (format t "profil.contracts.push({ id: ~A, left: ~A, top: ~A, width: ~A, height: ~A, date: ~S });~%"
+		      (store-object-id contract)
+		      left top width height
+		      (format-date-time (contract-date contract) :show-time nil)))))))
 
 (defun delete-directory (pathname)
   (when (probe-file pathname)
     ;; XXX Achtung, auf #-cmu folgt das Symlinks.
     (loop for file in (directory pathname #+cmu :truenamep #+cmu nil)
-	  when (pathname-name file)
-	  do (delete-file file)
-	  unless (pathname-name file)
-	  do (delete-directory file))
+       when (pathname-name file)
+       do (delete-file file)
+       unless (pathname-name file)
+       do (delete-directory file))
     #+allegro
     ;; Das loescht doch eh schon die unterverzeichnisse mit?
     (excl:delete-directory-and-files pathname)
@@ -393,11 +410,8 @@ Sponsor-ID: ~A
 
 (defun fill-with-random-contracts (&optional percentage)
   (loop for sponsor = (make-sponsor)
-	while (and (or (null percentage)
-		       (< (allocation-area-percent-used (first (class-instances 'allocation-area))) percentage))
-		   (make-contract sponsor
-				  (random-elt (cons (1+ (random 300)) '(1 1 1 1 1 5 5 10 10 10 10 10 10 10 10 10 10 10 10 10 30 30 30)))
-				  :paidp t))))
-
-
-	       
+     while (and (or (null percentage)
+		    (< (allocation-area-percent-used (first (class-instances 'allocation-area))) percentage))
+		(make-contract sponsor
+			       (random-elt (cons (1+ (random 300)) '(1 1 1 1 1 5 5 10 10 10 10 10 10 10 10 10 10 10 10 10 30 30 30)))
+			       :paidp t))))

@@ -111,6 +111,7 @@
 	   #:contract-pdf-url
 	   #:contract-download-only-p
 	   #:make-m2-javascript
+	   #:last-paid-contracts
 	   #:paidp
 
 	   #:allocation-area
