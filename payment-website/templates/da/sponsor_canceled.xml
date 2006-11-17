@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos" suppress-xml-headers="1">
 	<head>
-		<base href="$(website-url)/en/sponsor_canceled"></base>
+		<base href="$(website-url)/da/sponsor_canceled"></base>
 		<link rel="stylesheet" href="/static/toplevel_style.css"></link>
 		<link rel="stylesheet" href="/static/content_style.css"></link>
 		<script src="/static/bos.js" type="text/javascript"><!-- x -->	

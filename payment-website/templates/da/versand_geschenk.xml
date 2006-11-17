@@ -8,7 +8,7 @@
   suppress-xml-headers="1"
   >
 	<head>
-		<base href="$(website-url)/de/versand_info" />
+		<base href="$(website-url)/da/versand_info" />
 		<link rel="stylesheet" href="/static/toplevel_style.css" />
 		<link rel="stylesheet" href="/static/content_style.css" />
 		<script src="/static/bos.js" type="text/javascript"><!-- x -->	
