@@ -187,6 +187,7 @@
    (expires :read :documentation "universal time which specifies the time the contract expires (is deleted) when it has not been paid for" :initform nil))
   (:default-initargs
       :m2s nil
+    :paidp nil
     :download-only nil
     :color (random-elt *claim-colors*)
     :cert-issued nil
