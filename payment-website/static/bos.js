@@ -106,7 +106,7 @@ function check_online() {
 	return false;
     }
 
-    if (!document.bestellformular.numsqm1.value.match(/^\d+/)) {
+    if (document.bestellformular.numsqm[4].checked && !document.bestellformular.numsqm1.value.match(/^\d+/)) {
 	alert('Bitte geben Sie die Anzahl der Quadratmeter ein, die Sie "kaufen" möchten!');
 	document.bestellformular.numsqm1.focus();
 	return false;

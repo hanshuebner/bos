@@ -51,7 +51,7 @@ function check_online() {
 	return false;
     }
 
-    if (!document.bestellformular.numsqm1.value.match(/^\d+/)) {
+    if (document.bestellformular.numsqm[4].checked && !document.bestellformular.numsqm1.value.match(/^\d+/)) {
 	alert('Please enter the number of square meters that you want to "buy"!');
 	document.bestellformular.numsqm1.focus();
 	return false;
