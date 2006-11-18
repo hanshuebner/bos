@@ -332,10 +332,11 @@
   ())
 
 (defun contract-js (contract)
-  (format nil "{ id: ~A, date: ~A, name: ~S, count: ~A }"
+  (format nil "{ id: ~A, date: ~A, name: ~S, country: ~S, count: ~A }"
 	  (store-object-id contract)
 	  (format-date-time (contract-date contract) :js-style t)
 	  (or (user-full-name (contract-sponsor contract)) "anonymous")
+	  (sponsor-country (contract-sponsor contract))
 	  (length (contract-m2s contract))))
 
 (defmethod handle ((handler poi-javascript-handler) req)

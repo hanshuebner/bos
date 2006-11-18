@@ -1,7 +1,7 @@
 
 document.messages = {
-	'Anzahl Sponsoren': 'Sponsoren',
-	'Anzahl verkaufte m²': 'm²',
+	'Anzahl Sponsoren': 'Anzahl Sponsoren',
+	'Anzahl verkaufte m²': 'Anzahl verkaufte m²',
 	'Das Laden des Panoramas dauert einen Moment und benötigt Java in Ihrem Browser.<br /><br />Klicken und Ziehen Sie mit der Maus, um sich im Panorama umzusehen!': 'Das Laden des Panoramas dauert einen Moment und benötigt Java in Ihrem Browser.<br /><br />Klicken und Ziehen Sie mit der Maus, um sich im Panorama umzusehen!',
 	'Diese Anwendung benötigt Cookies, um zu funktionieren.  Bitte schalten Sie Cookies in Ihrem Browser ein.': 'Diese Anwendung benötigt Cookies, um zu funktionieren.  Bitte schalten Sie Cookies in Ihrem Browser ein.',
 	'Dieser m² wurde bisher noch nicht verkauft': 'Dieser m² wurde bisher noch nicht verkauft',

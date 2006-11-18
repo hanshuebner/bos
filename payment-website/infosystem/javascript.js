@@ -169,24 +169,20 @@ function bestellung () {
     window.opener.focus();
 }
 
+var B = partial(createDOM, 'B');
+
 function last_sponsors(sponsors)
 {
+    var sponsor = sponsors[0];
+
     replaceChildNodes('Info3Text',
-		      TABLE(null,
-			    TBODY(null,
-				  TR(null,
-				     TH({ colspan: 3 },
-					'' + anzahlSponsoren + ' ' +  msg('Anzahl Sponsoren') + ', ' + anzahlVerkauft + " " + msg('Anzahl verkaufte m²'))),
-				  TR(null,
-				     TH(null, msg('Datum')),
-				     TH(null, msg('m²')),
-				     TH(null, msg('Name'))),
-				  map(function(sponsor) { return TR(null,
-								    TD(null, sponsor.date.getDate() + "." + sponsor.date.getMonth() + "."),
-								    TD(null, sponsor.count),
-								    TD(null, sponsor.name)) },
-				      sponsors)
-				  )));
+		      msg('Anzahl Sponsoren'), BR(),
+		      B(anzahlSponsoren), BR(), BR(),
+		      msg('Anzahl verkaufte m²'), BR(),
+		      B(anzahlVerkauft), BR(), BR(),
+		      msg('Letzter Sponsor'), BR(),
+		      B(sponsor.name, BR()),
+		      '(' + sponsor.date.getDate() + "." + sponsor.date.getMonth() + "." + ' - ' + sponsor.country + ' - ' + sponsor.count + ' m²)');
 }
 
 function poi_fertig(_poi, _anzahlSponsoren, _anzahlVerkauft) {

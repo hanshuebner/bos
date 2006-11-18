@@ -262,7 +262,7 @@ div#data {
     z-index: 4;
     top: 16px;
     padding: 0px;
-    padding-left: 2px;
+    padding-left: 10px;
     overflow: hidden;
 }
 
