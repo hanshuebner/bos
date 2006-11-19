@@ -10,12 +10,13 @@ vbellwait 0
 msgminwait 0
 msgwait 0
 
-chdir bknr-svn/projects/bos
+chdir /home/bknr/bknr-svn/projects/bos
 
 screen -t webserver lisp -core bos.core
 #logfile screen.log
 #log on
 screen -t cert-daemon lisp -core bos.core -cert-daemon
+screen -t wp-callback-redir perl tools/wp-callpack-redirect.pl
 
 msgminwait 1
 msgwait 1
