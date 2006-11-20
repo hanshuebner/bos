@@ -14,13 +14,15 @@
 (defvar *vhosts*)
 (defvar *website-directory*)
 (defvar *website-url*)
+(defvar *worldpay-test-mode*)
 
-(defun init (&key (port 8080) (listeners 1) (vhosts '("localhost")) website-directory website-url)
+(defun init (&key (port 8080) (listeners 1) (vhosts '("localhost")) website-directory website-url worldpay-test-mode)
   (setf *port* port)
   (setf *listeners* listeners)
   (setf *vhosts* vhosts)
   (setf *website-url* website-url)
   (setf *website-directory* website-directory)
+  (setf *worldpay-test-mode* worldpay-test-mode)
   (unless *website-directory*
     (error ":website-directory not specified"))
   (reinit))
@@ -30,7 +32,8 @@
   (unpublish :all t)
   (worldpay-test::publish-worldpay-test :website-directory *website-directory*
 					:vhosts *vhosts*
-					:website-url *website-url*)
+					:website-url *website-url*
+                                        :worldpay-test-mode *worldpay-test-mode*)
   (format t "~&; Starting aserve~@[ in debug mode~].~%" debug)
   (force-output)
   (setq *webserver*

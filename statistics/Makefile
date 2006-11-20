@@ -1,5 +1,5 @@
 
-BASE_URL	= http://192.168.254.132:8080/reports-xml
+BASE_URL	= http://217.13.200.204:8080/reports-xml
 YEAR		= 
 LOGIN		=
 OUTPUT_DIR	= ../payment-website/images/statistics

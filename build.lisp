@@ -10,8 +10,8 @@
 
 (defun read-configuration (pathname)
   (with-open-file (s pathname)
-    (loop for form = (read s nil nil)
-          while form
+    (loop for form = (read s nil :end-of-file)
+          while (not (eq form :end-of-file))
           collect form)))
 
 (defmacro define-toggle-switch (switch-name variable default)
