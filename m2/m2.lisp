@@ -337,7 +337,7 @@ Sponsor-ID: ~A
 						       #'> :key #'contract-date)
 						 (make-list +last-contracts-cache-size+))
 					 0 +last-contracts-cache-size+)))
-  *last-contracts-cache*)
+  (remove-if #'object-destroyed-p *last-contracts-cache*))
 
 (defun add-contract-to-cache (contract)
   (last-paid-contracts) ; force cache initialization, should really be done by a eval-when
