@@ -16,8 +16,8 @@ Date: ~A
 From: ~A
 To: ~A
 Subject: ~A
-Content-Type: ~A
-~@[~*~%~]~A"
+~@[Content-Type: ~A
+~]~@[~*~%~]~A"
 		     (format-date-time (get-universal-time) :mail-style t)
 		     *mail-sender*
 		     to
@@ -151,26 +151,27 @@ Gift: ~A
 		  :tel (param 'tel)))))
 
 (defun mail-contract-data (contract type mime-parts)
-  (unless (contract-download-only-p contract)
-    (push (make-instance 'mime
-			 :type "application"
-			 :subtype (format nil "pdf; name=\"contract-~A.pdf\"" (store-object-id contract))
-			 :encoding :base64
-			 :content (file-contents (contract-pdf-pathname contract :print t)))
-	  mime-parts))
-  (send-system-mail :to (contract-office-email contract)
-		    :subject (format nil "~A-Spenderdaten - Sponsor-ID ~D Contract-ID ~D"
-				     type
-				     (store-object-id (contract-sponsor contract))
-				     (store-object-id contract))
-		    :content-type "multipart/mixed"
-		    :more-headers t
-		    :text (with-output-to-string (s)
-			    (print-mime s 
-					(make-instance 'multipart-mime
-						       :subtype "mixed"
-						       :content mime-parts)
-					t t)))
+  (let ((parts mime-parts))
+    (unless (contract-download-only-p contract)
+      (setf parts (append parts
+			  (list (make-instance 'mime
+					       :type "application"
+					       :subtype (format nil "pdf; name=\"contract-~A.pdf\"" (store-object-id contract))
+					       :encoding :base64
+					       :content (file-contents (contract-pdf-pathname contract :print t)))))))
+    (send-system-mail :to (contract-office-email contract)
+		      :subject (format nil "~A-Spenderdaten - Sponsor-ID ~D Contract-ID ~D"
+				       type
+				       (store-object-id (contract-sponsor contract))
+				       (store-object-id contract))
+		      :content-type nil
+		      :more-headers t
+		      :text (with-output-to-string (s)
+			      (print-mime s 
+					  (make-instance 'multipart-mime
+							 :subtype "mixed"
+							 :content parts)
+					  t t))))
   (unless (contract-download-only-p contract)
     (delete-file (contract-pdf-pathname contract :print t))))
 
