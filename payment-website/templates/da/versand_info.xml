@@ -14,7 +14,7 @@
 		<script src="/static/bos.js" type="text/javascript"><!-- x -->	
 		</script> 
              <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8" />-->
-		<title>RAINFOREST for SAMBOJA LESTARI</title>
+		<title>Regnskov i SAMBOJA LESTARI</title>
 	</head>
 	<body>
 	
@@ -26,7 +26,7 @@
 			</div>
 
 			<div id="menue_header_left">
-				BOS Foundation
+				Foreningen BOS
 			</div>
 
 		</div>
@@ -45,12 +45,12 @@
 						<tr><td colspan="4" height="40"></td></tr>
 						<tr>
 							<td> </td>
-							<td colspan="2"><span class="link_titlered">Thank you</span><br /><br /></td>
+							<td colspan="2"><span class="link_titlered">Tak</span><br /><br /></td>
 							<td> </td>				
 						</tr>
 						<tr>
 							<td></td>
-							<td colspan="2"> for your support and for trusting in BOS. <br /><br />The m² you sponsor are in good hands.							</td>
+							<td colspan="2"> for din stÃ¸tte og for din tilld til BOS. <br /><br />The mÂ² du har sponseret er i gode hÃ¦nder.						</td>
 							<td></td>				
 						</tr>
 					</table>			                                             
@@ -80,7 +80,7 @@
 							<input type="hidden" name="next-step-name" value="weiter" />
 							<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
-									<td colspan="3"><span class="headline">Your payment has been successful:</span></td>
+									<td colspan="3"><span class="headline">Din betaling er modtaget:</span></td>
 								</tr>
 								<tr>
 									<td colspan="3" height="140">
@@ -98,12 +98,12 @@
 								</tr>		
 								<tr>
 									<td colspan="3">
-										Under which name would you like to have your rainforest certificate? [We accept the name entered in this field.] 
+										I hvilket navn skal vi udstede dit Regnskovs diplom? [Vi acceptere det intastede navn i dette felt. VÃ¦r venlig at Ã¦ndre navnet om nÃ¸dvendigt. ] 
 									</td>
 								</tr>	
 								<tr>
 									<td height="30">
-										Name on the Rainforest certificate:
+										Navn:
 									</td>
 									<td></td>
 									<td>
@@ -115,7 +115,7 @@
 								</tr>	
 								<tr>
 									<td colspan="3">
-										Please correct the indicated address if necessary for printing into your rainforest certificate:
+										Ret venligst den angivende addresse hvis nødvendigt inden skabelsen af dit regnskovs diplom:
 									</td>
 								</tr>
 								<tr>
@@ -123,7 +123,7 @@
 								</tr>
 								<tr>
 									<td>
-									Address<br />for your Rainforest certificate::<br /><br /><br /></td>
+									Addressen til dit <br />regnskovs diplom:<br /><br /><br /></td>
 									<td></td>
 									<td>
 <!-- left-aligned in order to aid formatting -->
@@ -156,22 +156,21 @@ $(country)</textarea>
 			<div id="content_right">
 				<div id="helpbox">		
 					<br /><br />
-					[<strong>Payment confirmation</strong>]<br />
-					This payment confirmation by WorldPay is already under way to your e-mail account.
-In the unexpected case that you will not receive a message please contact
+					[<strong>Betalings-bekrÃ¦ftigelse</strong>]<br />
+				Denne betalings-bekrÃ¦ftigelse fra WorldPay er allerede undervejs til din indbox. I den uventede situation at du ikke skulle modtage nogen besked, venligst kontakt:
 					<br />
 					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
 					<a href="mailto:service@create-rainforest.org" class="more">
 						service@create-rainforest.org
 					</a>
 					<br /><br /><br /><br /><br /><br /><br /><br /><br />
-					[<strong>Rainforest certificate</strong>]<br />
-					Starting with 1 m² only you receive   
+					[<strong>Regnskovs diplom</strong>]<br />
+					Med bare 1 sponseret kvardratmeter vil du modtage vores  
 					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
 					<a href="javascript:window_extra('certificat')" class="more">
-						a Rainforest certificate
+						Regnskovs diplom
 					</a>
-					from your personal sponsor profile as a pdf-download. If you have any problems or questions please contact
+					som et pdf-download fra din personlige sponsor profil.
 					<br />
 					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
 					<a href="mailto:service@create-rainforest.org" class="more">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
-<bknr:toplevel title="Regnskov i SAMBOJA LESTARI" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
+<bknr:toplevel title="REGNSKOV i SAMBOJA LESTARI" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
 	<!-- content 3teilig-->
 	<div id="content">
 		<!-- content left-->
@@ -19,7 +19,7 @@
 						<td colspan="2">
 							<span class="link_titlered">
 								Plant regnskov
-								<br></br>for kun 3,- Euro per m²
+								<br></br>for kun 3,- Euro/24,- Kroner per m²
 							</span>
 							<br></br><br></br>
 						</td>
@@ -28,9 +28,9 @@
 					<tr>
 						<td></td>
 						<td colspan="2">
-							Vi takker for din beslutning om støtte til Indonesiens folk, natur og dyreliv.
+							Vi takker for din beslutning om stætte til Indonesiens folk, natur og dyreliv.
 							<br></br><br></br>
-							Din støtte er et vigtig bidrag i kampen hen mod at sikre et holdbart projektarbejde i Samboja Lestari.<br></br>
+							Din stætte er et vigtig bidrag i kampen hen mod at sikre et holdbart projektarbejde i Samboja Lestari.<br></br>
 							<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
 									<a href="idea_subtitle2" class="more">
 										... mere
@@ -57,6 +57,7 @@
 		<div id="content_main">
 			<div id="textbox_content_big">
 				<form name="bestellformular" method="post" action="buy-sqm">
+                                        <input type="hidden" name="download-only" value="1"></input>
 					<table id="formTable" width="100%" border="0" cellspacing="0" cellpadding="0">
 							<tr>
 								<td colspan="3">
@@ -71,21 +72,21 @@
 							<tr>
 								<td colspan="3">
 									<input type="radio" name="numsqm" value="1" onclick="document.bestellformular.numsqm1.value = '';"></input>
-									1 m² regnskov [3 Euro],
+									1 m² regnskov [3 Euro/24 Kroner],
 									<br></br>
 									<input type="radio" name="numsqm" value="5" onclick="document.bestellformular.numsqm1.value = '';"></input>
-									5 m² regnskov [15 Euro],
+									5 m² regnskov [15 Euro/120 Kroner],
 									<br></br>
 									<input type="radio" name="numsqm" value="10" checked="checked" onclick="document.bestellformular.numsqm1.value = '';"></input>
-									10 m² regnskov [30 Euro],
+									10 m² regnskov [30 Euro/240 Kroner],
 									<br></br>
 									<input type="radio" name="numsqm" value="30" onclick="document.bestellformular.numsqm1.value = '';"></input>
-									30 m² regnskov [90 Euro],
+									30 m² regnskov [90 Euro/720 Kroner],
 									<br></br>
 									<input type="radio" name="numsqm" value=""></input>
 									or
 									<input type="text" name="numsqm1" size="5" value="" onfocus="document.bestellformular.numsqm[4].click()"></input>
-									m² [3 Euro stk].
+									m² [3 Euro/24 Kroner stk].
 									<br></br>
 	                        				</td>
 							</tr>
@@ -110,8 +111,7 @@
 							<tr>
 								<td colspan="4">							
 									<span class="help_text">
-										Din data vil blive behandlet elektronisk af vores partner WorldPay.
-										The provisions of the data protection law have been adhered to. Data will not be passed on to third parties.
+										Din data vil blive behandlet elektronisk af vores partner WorldPay. Reglerne for dataloven er blevet overholdt, og ingen data vil blive videregivet til andre.
 									</span>
 									<br></br>
  									<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
@@ -126,7 +126,7 @@
 							<tr>
 								<td colspan="3">
 									<span class="help_text">
-										Donations can be effected comfortably online via credit card payment. 
+										Donationer kan gives nemt og hurtigt online via betaling med kredit kort.
 									</span>
 									<!--
 										Ich möchte den administrativen Aufwand und Kosten für BOS verringern und
@@ -137,19 +137,30 @@
 							<tr>
 								<td colspan="3" height="15"> </td>
 							</tr>
+								<tr>
+								<td colspan="3">
+									<span class="help_text">
+										[Information DanKort]<br></br>Vi kan tilbyde betaling med internationale kreditkort men desværre endnu ikke betaling med DanKort. Hvis du ikke er i besiddelse af et internationalt kreditkort (MasterCard, Visa o.l.), kan du overføre via din bank.
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" height="15"> </td>
+							</tr>
 							<tr>
 								<td colspan="3">
 									<input type="checkbox" name="disclaimer_read" value="1"></input>
-									I have read <img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
+									Jeg har læst  <img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
 									<a href="javascript:show_disclaimer()" class="more">
-										the waiver clause
-									</a> and I agree.<br></br>
+										betingelserne 
+									</a> og er enig.<br></br>
  									  <br></br> <br></br>
 								</td>
 							</tr>
 							<tr>
 				                <td align="right" colspan="3">
-							  		<input type="submit" class="form_big_bold" name="action" value="Donate online" onclick="return check_online();"></input>
+							  		<input type="submit" class="form_big_bold" name="action" value="Doner online" onclick="return check_online();"></input>
+										<input type="submit" class="form_big" name="action" value="Überweisen" onclick="return check_ueberweisung();"></input>
 									
 								</td>
 							</tr>
@@ -160,23 +171,22 @@
 		<div id="content_right">
 			<div id="helpbox">		
 				<br></br><br></br><br></br>
-				[<strong>Rainforest certificate</strong>]
+				[<strong>Regnskovs diplom</strong>]
 				<br></br>
-				Starting with 1 m² only you receive   
+				Startende med bare 1 m², modtager du     
 				<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
-				<a href="javascript:window_extra('certificat')" class="more">our rainforest certificate</a>
-				as a pdf-download  from your personal sponsor profile.
+				<a href="javascript:window_extra('certificat')" class="more">vores regnskovs diplom</a>
+				som en pdf-fil fra din personlige sponsor-profil.
 				<br></br><br></br><br></br>
-				[<strong>Donation receipt</strong>]
+				[<strong>Donations kvittering</strong>]
 				<br></br>
-				BOS Germany is a tax free registered charity in Germany. Your ability to claim this donation for tax purposes outside of Germany, is dependent upon the laws of your country.
+				BOS Danmark BOS er en godkendt, non-profit organisation. BOS Danmark er ligeledes godkendt efter ligningsloven §8A, §12, stk 3.
 				<br></br>
-Within your sponsor profile you will find a receipt as a pdf-download.
+På din sponsor-profil vil du finde din kvittering som en pdf-fil.
 
 				<br></br> <br></br>	
-				[<strong>Guarantee of trustworthiness</strong>]<br></br>
-	        		WorldPay is an internationally renowned provider of online payment services.
-Your date will be encoded by WorldPay and deleted immediately after the payment has been carried out succesfully.
+				[<strong>Garanti for troværdighed</strong>]<br></br>
+	        		WorldPay er en internationalt godkendt udbyder af online betaling. Din information vil blive registreret af WorldPay og derefter slettet straks efter at din betaling er blevet gennemført.
 
 				<br></br><br></br>
 	    		</div>			

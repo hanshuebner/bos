@@ -123,7 +123,7 @@
 								</tr>
 								<tr>
 					                          	<td colspan="3" align="right">
-										<input type="submit" class="form_big" name="Button" onclick="javascript:return confirm('Is the indicated name correct?');" value="save and continue"></input>
+										<input type="submit" class="form_big" name="Button" onclick="javascript:return confirm('Is the indicated name correct?');" value="save and fortsæt"></input>
 								  	</td>
 								</tr>
 							</table>
@@ -153,7 +153,7 @@
 						Regnskovs diplom
 					</a>
 					som et pdf-download fra din personlige sponsor profil.
-					<br></br><br></br><br></br><br></br><br></br><br></br><br></br>			
+					<br /><br /><br /><br /><br /><br />		
 			 	</div>
 			</div>
 		</div>

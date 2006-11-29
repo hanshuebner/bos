@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-  title="RAINFOREST for SAMBOJA LESTARI"
+  title="REGNSKOV i SAMBOJA LESTARI"
   xmlns="http://www.w3.org/1999/xhtml"
   xmlns:bknr="http://bknr.net"
   xmlns:bos="http://headcraft.de/bos"
@@ -50,11 +50,11 @@
 					<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
 						<tr>
 							<td colspan="3">
-								We will issue the Rainforest Certificate in the following name at the following address:
+								Regnskovs diplomet vil blive udstedt i følgende navn og adresse:
 								<br /><br /><br />
-								Name on the Rainforest Certificate: $(name)
+								Navn på regnskovs diplomet: $(name)
 								<br /><br />
-							Address for the certificate: <br />
+							Adresse på diplomet: <br />
 <pre>
 $(address)
 $(postcode)
@@ -69,7 +69,7 @@ $(country)
 						<tr>
 							<td colspan="3">
 								<span class="help_text">
-									Please check that the details given are accurate. 
+									Check venligst at den angivne information er korrekt.
 								</span>
 							</td>
 						</tr>
@@ -87,12 +87,12 @@ $(country)
 						</tr>
 						<tr>
 							<td colspan="3" height="40">
-								This payment has created a new sponsor profile with the following sponsor ID:
+								Denne indbetalling har oprettet en ny sponsor profil med følgende sponsor ID:
 							</td>
 						</tr>
 						<tr>
 							<td height="20" width="40%">
-								<strong>Your sponsor ID:</strong>
+								<strong>Din sponsor ID:</strong>
 							</td>
 							<td width="15">
 							</td>
@@ -123,7 +123,7 @@ $(country)
 						<tr>
 							<td colspan="3" align="right">
 								<input class="form_big" type="button"
-										value="back"
+										value="tilbage"
 										onclick="javascript:history.back()"
 										id="back" name="back" />
 								<input type="submit" class="form_big" name="Button" value="$(next-step-name)" />
@@ -137,11 +137,7 @@ $(country)
 			<div id="helpbox">
 				<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 				[<strong>Sponsor ID</strong>]<br />
-				You can check your sponsored m²  
-				at any time using your sponsor ID. The ID enables you to easily locate your m².
-				Visitors of this website can look at all m² and their personal profiles.
-				If you wish to remain anonymous you can restrict access by the use of a password.
-				<br /><br /><br /><br /><br /><br />
+				Du kan til en hver tid cheke dine sponsorerede m² ved hjælp af dit sponsor ID. ID'et gør det muligt for dig nemt at lokaliserer dine m². Ligeledes kan besøgende på hjemmesiden se alle m² og de personlige profiler. Hvis du ønsker at forblive anonym kan du begrænse adgangen ved hjælp af et kodeord.		<br /><br /><br /><br /><br /><br />
 		 	</div>
 		</div>
 	</div>
