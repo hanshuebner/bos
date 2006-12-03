@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-  title="REGENWALD für SAMBOJA LESTARI"
+  title="REGENSKOV i SAMBOJA LESTARI"
   xmlns="http://www.w3.org/1999/xhtml"
   xmlns:bknr="http://bknr.net"
   xmlns:bos="http://headcraft.de/bos"
@@ -45,22 +45,22 @@
 					<input type="hidden" name="donationcert-yearly" value="$(donationcert-yearly)" />
 					<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
 						<tr>
-							<td colspan="3"><span class="headline">Ich möchte meine Spende überweisen.</span></td>
+							<td colspan="3"><span class="headline">Jeg vil overføre mit bidrag til BOS Danmark via min bank!</span></td>
 						</tr>
 						<tr>
 							<td colspan="3" height="7"> </td>
 						</tr>
 						<tr>
 							<td colspan="3">
-Ich habe mich dazu entschieden einen Betrag von $(amount) Euro auf das Spendenkonto "Samboja Lestari" von BOS Deutschland e.V. zu überweisen.
+Jeg har besluttet mig for at overføre et bidrag på  $(amount) kroner til Samboja Lestari via BOS Danmark.
 								<table border="0">
-									<tr><td>Kontonummer:</td><td>32 10 100</td></tr>
-									<tr><td>Bank:</td><td>Bank für Sozialwirtschaft</td></tr>
-									<tr><td>BLZ:</td><td>100 205 00</td></tr>
+									<tr><td>Kontonummer:</td><td>0001718891</td></tr>
+									<tr><td>Bank:</td><td>Merkur Bank</td></tr>
+									<tr><td>Reg.Nr.:</td><td> 8401</td></tr>
 								</table>
-								<strong>Bitte unbedingt den Verwendungszweck "SL ID $(contract-id)" auf dem Überweisungsformular angeben!</strong>
+								<strong>Vigtigt! Du skal anføre "SL ID $(contract-id)" på  bankoverførslen, så vi kan genkende din betaling. </strong>
 								<br /> <br />
-								Meine Überweisung muss ich bei meiner Bank eigenständig veranlassen!
+								Meine Husk, at du selv står for overførslen via din bank til BOS Danmarks konto.
 							</td>
 						</tr>						
 						<tr>
@@ -70,22 +70,22 @@ Ich habe mich dazu entschieden einen Betrag von $(amount) Euro auf das Spendenko
 							<td colspan="3" height="7"> </td>
 						</tr>
 						<tr>
-							<td height="10">Vorname:</td>
+							<td height="10">Fornavn:</td>
 							<td width="10"></td>
 							<td><input name="vorname" type="text" size="25" maxlength="30" /></td>
 						</tr>
 						<tr>
-							<td height="10">Name:</td>
+							<td height="10">Efternavn:</td>
 							<td width="10"></td>
 							<td><input name="name" type="text" size="25" maxlength="30" /></td>
 						</tr>
 						<tr>
-							<td height="10">Straße/Nr.:</td>
+							<td height="10">Gade/Nr.:</td>
 							<td width="10"></td>
 							<td><input name="strasse" type="text" size="25" maxlength="30" /></td>
 						</tr>
 						<tr>
-							<td height="10">PLZ/Ort</td>
+							<td height="10">Kommune:</td>
 							<td width="10"></td>
 							<td>
 								<input name="plz" type="text" size="5" maxlength="5" />
@@ -107,7 +107,7 @@ Ich habe mich dazu entschieden einen Betrag von $(amount) Euro auf das Spendenko
 						</tr>
 						<tr>
 			                          	<td align="right" colspan="3">
-								<input type="submit" class="form_big" name="action" value="Angaben an BOS mailen" />
+								<input type="submit" class="form_big" name="action" value="Oplysninger til BOS" />
 							</td>
 						</tr>
 					</table>
@@ -116,31 +116,28 @@ Ich habe mich dazu entschieden einen Betrag von $(amount) Euro auf das Spendenko
 		</div>
 		<div id="content_right">
 			<div id="helpbox">		
-				<strong>[Persönliche Daten]</strong>
+				<strong>[Personlige oplysninger]</strong>
 				<br />
-Wir reservieren gerne die von Ihnen gewünschten m². Für die Zusendung
-der entsprechenden Informationen (Regenwaldurkunde, Sponsorenprofil,
-Geokoordinaten, Spendenbescheinigung) benötigen wir unbedingt die
-Angabe Ihrer Daten. Nach erfolgter Überweisung erhalten Sie diese
-Informationen schriftlich oder per E-Mail von uns.
+Vi reserverer gerne det ønskede antal mÂ².
+Vi har brug for nogle personlige oplysninger for at kunne sende dig informationer om (regnskovsbevis, sponsorprofil, geografisk koordinater, bidragskvittering).
+Når vi har modtaget bidraget, sender vi dig alle ovenfor nævnte informationer per brev eller e-mail. 
 				<br /><br /><br />
-				<strong>[Dieses Formular]</strong>
+				<strong>[Denne formular]</strong>
 				<br />
-				Bitte senden Sie dieses Formular per E-Mail direkt an uns. Sie können es auch
+				Send os venligst denne formular direkte per e-mail, eller  
 				<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
 				<a href="javascript:window.print();" class="more">
-					ausdrucken
+					udskriv
 				</a>
-				und per Fax oder Post an unsere
-				Kontaktadresse schicken:
+				den og send den til os per fax eller post:
 				<br /><br />
-				BOS Deutschland e.V.
+				BOS Danmark
 				<br />
-				Schöneberger Ufer 69
+				Økologihuset, Blegdamsvej 4b
 				<br />
-				10785 Berlin
+				2200 København N 
 				<br /><br />
-				Fax: (030) 2636 7815
+				Fax: +45 3537 3636
 		    	</div>		
 		</div>
 	</div>
