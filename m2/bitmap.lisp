@@ -150,7 +150,7 @@
                                :first-name "Otto"
                                :last-name "Mustermann"
                                :email-address "otto.mustermann@t-online.de"))))
-      (flet ((step ()
+      (flet ((make-one-contract ()
                (let* ((limit 0.0001)
                       (n (max 1 (round (/ 0.5 (+ (random (- 1.0 limit)) limit))))))
         
@@ -159,9 +159,9 @@
                  (make-contract u n))))
         (if limit
             (dotimes (x limit)
-              (step))
+              (make-one-contract))
             (loop
-              (step)))))))
+              (make-one-contract)))))))
 
 #+(or)
 (progn

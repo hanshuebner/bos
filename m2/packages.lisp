@@ -189,6 +189,13 @@
 	   #:*cert-download-directory*))
 
 (defpackage :bos.m2.cert-generator
-  (:use :cl :extensions :bos.m2.config :bknr.utils :cl-ppcre :cl-interpol :cl-gd)
+  (:use :cl
+	#+cmu :extensions
+	#+sbcl :sb-ext
+	:bos.m2.config
+	:bknr.utils
+	:cl-ppcre
+	:cl-interpol
+	:cl-gd)
   (:shadowing-import-from :cl-interpol #:quote-meta-chars)
   (:export #:cert-daemon))

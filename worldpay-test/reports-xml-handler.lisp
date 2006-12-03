@@ -16,6 +16,7 @@
 
 (defun contract-year (contract)
   (multiple-value-bind (second minute hour date month year day-of-week is-dst tz) (decode-universal-time (contract-date contract))
+    (declare (ignore second minute hour date month day-of-week is-dst tz))
     year))
 
 (defmethod handle ((handler reports-xml-handler) req)
@@ -48,6 +49,7 @@
 (defun week-of-contract (contract)
   "Return Week key (YYYY-WW) for given contract."
   (multiple-value-bind (second minute hour date month year day-of-week is-dst tz) (decode-universal-time (contract-date contract))
+    (declare (ignore second minute hour day-of-week is-dst tz))
     (multiple-value-bind (week-no week-year)
 	(week-of-year year month date)
       (when (and (> week-no 50)
@@ -61,6 +63,7 @@
 (defun week-first-yday (contract)
   "Return the day-of year of the first day of the contract's date"
   (multiple-value-bind (second minute hour date month year day-of-week is-dst tz) (decode-universal-time (contract-date contract))
+    (declare (ignore second minute hour day-of-week is-dst tz))
     (max 0 (- (day-of-year year month date) (day-of-week year month date)))))
 
 (defreport contracts-by-week ()

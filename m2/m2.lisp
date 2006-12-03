@@ -388,7 +388,9 @@ Sponsor-ID: ~A
     (excl:delete-directory-and-files pathname)
     #+cmu
     (unix:unix-rmdir (ext:unix-namestring pathname))
-    #-(or allegro cmu)
+    #+sbcl
+    (sb-posix:rmdir (namestring pathname))
+    #-(or allegro cmu sbcl)
     ...))
 
 (defun reinit (&key delete directory website-url)

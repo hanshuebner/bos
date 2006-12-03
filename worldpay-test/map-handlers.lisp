@@ -54,6 +54,7 @@
 
 (defmethod object-handler-get-object ((handler image-tile-handler) req)
   (destructuring-bind (x y &rest operations) (decoded-handler-path handler req)
+    (declare (ignore operations))
     (setf x (parse-integer x))
     (setf y (parse-integer y))
     (ensure-map-tile x y)))

@@ -3,6 +3,8 @@
 
 (enable-interpol-syntax)
 
+(defvar *xml-sink*)
+
 (defmacro with-xml-response (req &body body)
   `(with-http-response (,req *ent* :content-type "text/xml")
      (with-query-params (,req download)
@@ -16,6 +18,7 @@
 	     ,@body))))))
 
 (defmacro with-xml-error-handler (req &body body)
+  (declare (ignore req))
   `(handler-case
     (progn ,@body)
     (error (e)

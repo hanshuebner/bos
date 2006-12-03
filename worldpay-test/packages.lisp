@@ -3,7 +3,8 @@
 (defpackage :worldpay-test
   (:use :cl
 	:date-calc
-	:extensions
+	#+cmu :extensions
+	#+sbcl :sb-ext
 	:cl-user
 	:cl-interpol
 	:cl-ppcre
@@ -14,7 +15,6 @@
 	:puri
 	#+(or) :mime
 	:acl-compat.socket
-	:acl-compat.mp
         :bknr.web
 	:bknr.datastore
 	:bknr.indices

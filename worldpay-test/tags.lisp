@@ -6,7 +6,7 @@
   ;; das ist fuer WPDISPLAY
   (let ((s (cxml::chained-handler *html-sink*)))
     (cxml::maybe-close-tag s)
-    (map nil (lambda (c) (cxml::write-rune (char-code c) s)) str)))
+    (map nil (lambda (c) (cxml::write-rune #+sbcl c #+cmu (char-code c) s)) str)))
 
 (defun language-options-1 (current-language)
   (loop for (language-symbol language-name) in (website-languages)
