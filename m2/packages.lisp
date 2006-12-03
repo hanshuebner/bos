@@ -184,6 +184,7 @@
 	   #:mail-instructions-to-sponsor
 	   #:mail-info-request
 	   #:mail-manual-sponsor-data
+	   #:mail-backoffice-sponsor-data
 	   #:mail-worldpay-sponsor-data
 
 	   #:*cert-download-directory*))

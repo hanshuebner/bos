@@ -84,17 +84,18 @@
        (:tr (:td "Name for certificate")
 	    (:td (text-field "name" :size 20)))
        (:tr (:td "Postal address for certificate"
-		 (:td (textarea-field "postaladdress" :rows 5 :cols 40))))
+		 (:td (textarea-field "address" :rows 5 :cols 40))))
        (:tr (:td (submit-button "create" "create" :formcheck "javascript:return check_complete_sale()"))))))))
 
 (defun date-to-universal (date-string)
   (apply #'encode-universal-time 0 0 0 (mapcar #'parse-integer (split #?r"\." date-string))))
 
 (defmethod handle-object-form ((handler edit-sponsor-handler) (action (eql :create)) (sponsor (eql nil)) req)
-  (with-query-params (req numsqm country email name postaladdress date language)
+  (with-query-params (req numsqm country email name address date language)
     (let* ((sponsor (make-sponsor :email email :country country))
 	   (contract (make-contract sponsor (parse-integer numsqm) :paidp t :date (date-to-universal date))))
-      (contract-issue-cert contract name :address postaladdress :language language)
+      (contract-issue-cert contract name :address address :language language)
+      (mail-backoffice-sponsor-data contract req)
       (redirect (format nil "/edit-sponsor/~D" (store-object-id sponsor)) req))))
 
 (defun contract-checkbox-name (contract)
