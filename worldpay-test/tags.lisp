@@ -59,16 +59,17 @@
 (define-bknr-tag buy-sqm (&key children)
   (with-template-vars (numsqm numsqm1 action gift donationcert-yearly download-only)
     (let* ((numsqm (parse-integer (or numsqm numsqm1)))
-	   ;; Wer ueber dieses Formular bestellt, ist ein neuer Sponsor,
-	   ;; also ein neues Sponsorenobjekt anlegen.  Eine Profil-ID
-	   ;; wird automatisch zugewiesen, sonstige Daten haben wir zu
-	   ;; diesem Zeitpunkt noch nicht.
-	   ;; XXX Überweisung wird nur für die deutsche Website
-	   ;; angeboten, was passenderweise durch die folgende
+	   ;; Wer ueber dieses Formular bestellt, ist ein neuer
+	   ;; Sponsor, also ein neues Sponsorenobjekt anlegen.  Eine
+	   ;; Profil-ID wird automatisch zugewiesen, sonstige Daten
+	   ;; haben wir zu diesem Zeitpunkt noch nicht.  XXX
+	   ;; Überweisung wird nur für die deutsche und dänische
+	   ;; Website angeboten, was passenderweise durch die folgende
 	   ;; Überprüfung auch sicher gestellt wurde.  Sollte man aber
 	   ;; eventuell noch mal prüfen und sicher stellen.
 	   (manual-transfer (or (scan #?r"rweisen" action)
-				(scan #?r"rweisung" action)))
+				(scan #?r"rweisung" action)
+				(scan #?r"overf" action)))
            (sponsor (make-sponsor))
            (price (* numsqm 3))
            (contract (make-contract sponsor numsqm
