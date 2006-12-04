@@ -50,7 +50,7 @@
 						</tr>
 						<tr>
 							<td></td>
-							<td colspan="2"> for din stÃ¸tte og for din tilld til BOS. <br /><br />The mÂ² du har sponseret er i gode hÃ¦nder.						</td>
+							<td colspan="2"> for din støtte og for din tilld til BOS. <br /><br />The m² du har sponseret er i gode hænder.						</td>
 							<td></td>				
 						</tr>
 					</table>			                                             
@@ -98,7 +98,7 @@
 								</tr>		
 								<tr>
 									<td colspan="3">
-										I hvilket navn skal vi udstede dit Regnskovs diplom? [Vi acceptere det intastede navn i dette felt. VÃ¦r venlig at Ã¦ndre navnet om nÃ¸dvendigt. ] 
+										I hvilket navn skal vi udstede dit Regnskovs diplom? [Vi acceptere det intastede navn i dette felt. Vær venlig at ændre navnet om nødvendigt. ] 
 									</td>
 								</tr>	
 								<tr>
@@ -156,8 +156,8 @@ $(country)</textarea>
 			<div id="content_right">
 				<div id="helpbox">		
 					<br /><br />
-					[<strong>Betalings-bekrÃ¦ftigelse</strong>]<br />
-				Denne betalings-bekrÃ¦ftigelse fra WorldPay er allerede undervejs til din indbox. I den uventede situation at du ikke skulle modtage nogen besked, venligst kontakt:
+					[<strong>Betalings-bekræftigelse</strong>]<br />
+				Denne betalings-bekræftigelse fra WorldPay er allerede undervejs til din indbox. I den uventede situation at du ikke skulle modtage nogen besked, venligst kontakt:
 					<br />
 					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
 					<a href="mailto:service@create-rainforest.org" class="more">
