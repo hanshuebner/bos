@@ -40,7 +40,7 @@
 						enctype="application/x-www-form-urlencoded"
 						name="mailtransfer"
 						id="mailtransfer"
-						onsubmit="YY_checkform('mailtransfer','vorname','#q','0','Bitte das Feld \'Vorname\' ausfuellen.','name','#q','0','Bitte das Feld \'Name\' ausfuellen.','strasse','#q','0','Bitte das Feld \'Strasse\' ausfuellen.','plz','#q','0','Bitte das Feld \'PLZ\' ausfuellen.','ort','#q','0','Bitte das Feld \'Ort\' ausfuellen.');return document.MM_returnValue">
+						onsubmit="YY_checkform('mailtransfer','vorname','#q','0','Anuller venligst dette felt \'Fornavn\'.','name','#q','0','Anuller venligst dette felt \'Efternavn\'.','strasse','#q','0','Anuller venligst dette felt \'Gade/Nr.\'.','plz','#q','0','Anuller venligst dette felt \'Postnummer\'.','ort','#q','0','Anuller venligst dette felt \'Kommune\'.');return document.MM_returnValue">
 					<input type="hidden" name="contract-id" value="$(contract-id)" />
 					<input type="hidden" name="donationcert-yearly" value="$(donationcert-yearly)" />
 					<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
@@ -133,7 +133,8 @@ Når vi har modtaget bidraget, sender vi dig alle ovenfor nævnte informationer 
 				<br /><br />
 				BOS Danmark
 				<br />
-				Økologihuset, Blegdamsvej 4b
+				Økologihuset, <br />
+				Blegdamsvej 4b
 				<br />
 				2200 København N 
 				<br /><br />

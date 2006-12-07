@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
-<bknr:toplevel title="REGNSKOV i SAMBOJA LESTARI" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
+<bknr:toplevel
+  title="Regnskov i SAMBOJA LESTARI"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
 	<!-- content 3teilig-->
 	<div id="content">
 		<!-- content left-->
@@ -159,7 +164,7 @@
 							<tr>
 				                <td align="right" colspan="3">
 							  		<input type="submit" class="form_big_bold" name="action" value="Doner online" onclick="return check_online();" />
-									<!-- <input type="submit" class="form_big" name="action" value="ueberweisen" onclick="return check_ueberweisung();" />-->
+								<!--	 <input type="submit" class="form_big" name="action" value="ueberweisen" onclick="return check_ueberweisung();" />-->
 
 <input type="submit" class="form_big" name="action" value="overføre" onclick="return check_ueberweisung();" />
 									
