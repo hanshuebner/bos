@@ -2,7 +2,7 @@
 
 function anonymizecheck ()
 {
-	if (confirm('Delete your personal data?')) {
+	if (confirm('Skal dine personlige data slettes?')) {
 		document.form.name.value = '';
 		document.form.infotext.value = '';
 		return true;
@@ -14,7 +14,7 @@ function buycheck ()
 {
 	if (!document.form.numsqm.value.match(/^\d+$/)
 		|| (document.form.numsqm.value.match(/^0+/))) {
-		alert("Invalid number of square metres.");
+		alert("Ugyldigt antal kvadratmeter.");
 		document.form.numsqm.select();
 		document.form.numsqm.focus();
 		return false;
@@ -25,13 +25,13 @@ function buycheck ()
 function formcheck ()
 {
 	if (document.form.password.value != document.form.password1.value) {
-		alert('The passwords you have entered do not correspond');
+		alert('De to indtastede kodeord stemmer ikke overens.');
 		document.form.password.select();
 		document.form.password.focus();
 		return false;
 	}
 
-	alert('Your changes will be saved.');
+	alert('Dine ændringer vil blive gemt.');
 
 	return true;
 }
