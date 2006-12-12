@@ -76,7 +76,7 @@
 							<input type="hidden" name="contract-id" value="$(cartId)" />
 							<input type="hidden" name="email" value="$(email)" />
 							<input type="hidden" name="gift" value="$(MC_gift)" />
-							<input type="hidden" name="next-step-name" value="fertig" />
+							<input type="hidden" name="next-step-name" value="done" />
 							<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
 								<tr>
 									<td colspan="3"><span class="headline">Ihre Zahlung war erfolgreich:</span></td>
