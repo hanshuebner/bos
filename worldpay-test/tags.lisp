@@ -91,9 +91,12 @@
                         (store-object-id contract)
                         price
 			language
-                        (encode-urlencoded (format nil "~A ~A in Samboja Lestari"
+                        (encode-urlencoded (format nil "~A ~A Samboja Lestari"
                                                    numsqm
-                                                   (if (string-equal language "de") "qm Regenwald" "sqm rain forest")))
+                                                   (case (make-keyword-from-string language)
+						     (:de "qm Regenwald in")
+						     (:da "sqm Regnskov i")
+						     (t "sqm rain forest in"))))
 			(store-object-id sponsor)
 			(sponsor-master-code sponsor)
 			(if donationcert-yearly "1" "0")
