@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
-<bknr:toplevel
-  title="Regnskov i SAMBOJA LESTARI"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+<bknr:toplevel title="REGNSKOV i SAMBOJA LESTARI" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
 	<!-- content 3teilig-->
 	<div id="content">
 		<!-- content left-->
@@ -33,9 +28,9 @@
 					<tr>
 						<td></td>
 						<td colspan="2">
-							Vi takker for din beslutning om stætte til Indonesiens folk, natur og dyreliv.
+							Vi takker for din beslutning om støtte til Indonesiens folk, natur og dyreliv.
 							<br></br><br></br>
-							Din stætte er et vigtig bidrag i kampen hen mod at sikre et holdbart projektarbejde i Samboja Lestari.<br></br>
+							Din støtte er et vigtig bidrag i kampen hen mod at sikre et holdbart projektarbejde i Samboja Lestari.<br></br>
 							<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
 									<a href="idea_subtitle2" class="more">
 										... mere
@@ -62,6 +57,7 @@
 		<div id="content_main">
 			<div id="textbox_content_big">
 				<form name="bestellformular" method="post" action="buy-sqm">
+                                        <input type="hidden" name="download-only" value="1"></input>
 					<table id="formTable" width="100%" border="0" cellspacing="0" cellpadding="0">
 							<tr>
 								<td colspan="3">
@@ -163,10 +159,8 @@
 							</tr>
 							<tr>
 				                <td align="right" colspan="3">
-							  		<input type="submit" class="form_big_bold" name="action" value="Doner online" onclick="return check_online();" />
-								<!--	 <input type="submit" class="form_big" name="action" value="ueberweisen" onclick="return check_ueberweisung();" />-->
-
-<input type="submit" class="form_big" name="action" value="overføre" onclick="return check_ueberweisung();" />
+							  		<input type="submit" class="form_big_bold" name="action" value="Doner online" onclick="return check_online();"></input>
+										<input type="submit" class="form_big" name="action" value="Überweisen" onclick="return check_ueberweisung();"></input>
 									
 								</td>
 							</tr>

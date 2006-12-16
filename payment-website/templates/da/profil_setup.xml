@@ -139,7 +139,7 @@
 						</tr>
 						<tr>
 				                        <td colspan="3" align="right">
-								<input type="submit" class="form_big" name="Button" value="gem og fortsæt"></input>
+								<input type="submit" class="form_big" name="Button" value="save and continue"></input>
 						  	</td>
 						</tr>
 					</table>
