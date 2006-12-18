@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<bknr:toplevel
-  title="REGNSKOV i SAMBOJA LESTARI"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<bknr:toplevel title="REGNSKOV i SAMBOJA LESTARI" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
 	<!-- content 3teilig-->
 	<div id="content">
 		<!-- content left-->
@@ -16,7 +10,7 @@
 					<tr>
 						<td></td>
 						<td colspan="2">
-							<img src="/images/step4.gif" width="120" height="20" border="0" alt="" />
+							<img src="/images/step4.gif" width="120" height="20" border="0" alt=""></img>
 						</td>
 					</tr>
 					<tr><td colspan="4" height="40"></td></tr>
@@ -37,24 +31,24 @@
 		</div>
 		<!-- container content_main -->
 		<div id="content_main">
-			<div id="textbox_content_big" >
+			<div id="textbox_content_big">
 				<form method="post" action="generate-cert">
-					<input type="hidden" name="sponsor-id" value="$(sponsor-id)" />
-					<input type="hidden" name="__sponsorid" value="$(sponsor-id)" />
-					<input type="hidden" name="__password" value="$(master-code)" />
-					<input type="hidden" name="contract-id" value="$(contract-id)" />
-					<input type="hidden" name="name" value="$(name)" />
-					<input type="hidden" name="address" value="$(address)" />
-					<input type="hidden" name="email" value="$(email)" />
-					<input type="hidden" name="gift" value="$(gift)" />
+					<input type="hidden" name="sponsor-id" value="$(sponsor-id)"></input>
+					<input type="hidden" name="__sponsorid" value="$(sponsor-id)"></input>
+					<input type="hidden" name="__password" value="$(master-code)"></input>
+					<input type="hidden" name="contract-id" value="$(contract-id)"></input>
+					<input type="hidden" name="name" value="$(name)"></input>
+					<input type="hidden" name="address" value="$(address)"></input>
+					<input type="hidden" name="email" value="$(email)"></input>
+					<input type="hidden" name="gift" value="$(gift)"></input>
 					<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
 						<tr>
 							<td colspan="3">
 								Regnskovs diplomet vil blive udstedt i følgende navn og adresse:
-								<br /><br /><br />
+								<br></br><br></br><br></br>
 								Navn på regnskovs diplomet: $(name)
-								<br /><br />
-							Adresse på diplomet: <br />
+								<br></br><br></br>
+							Adresse på diplomet: <br></br>
 <pre>
 $(address)
 $(postcode)
@@ -122,11 +116,8 @@ $(country)
 						</tr>
 						<tr>
 							<td colspan="3" align="right">
-								<input class="form_big" type="button"
-										value="tilbage"
-										onclick="javascript:history.back()"
-										id="back" name="back" />
-								<input type="submit" class="form_big" name="Button" value="$(next-step-name)" />
+								<input class="form_big" type="button" value="tilbage" onclick="javascript:history.back()" id="back" name="back"></input>
+								<input type="submit" class="form_big" name="Button" value="$(next-step-name)"></input>
 						  	</td>
 						</tr>
 					</table>
@@ -135,9 +126,9 @@ $(country)
 		</div>
 		<div id="content_right">
 			<div id="helpbox">
-				<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-				[<strong>Sponsor ID</strong>]<br />
-				Du kan til en hver tid cheke dine sponsorerede m² ved hjælp af dit sponsor ID. ID'et gør det muligt for dig nemt at lokaliserer dine m². Ligeledes kan besøgende på hjemmesiden se alle m² og de personlige profiler. Hvis du ønsker at forblive anonym kan du begrænse adgangen ved hjælp af et kodeord.		<br /><br /><br /><br /><br /><br />
+				<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+				[<strong>Sponsor ID</strong>]<br></br>
+				Du kan til en hver tid cheke dine sponsorerede m² ved hjælp af dit sponsor ID. ID'et gør det muligt for dig nemt at lokalisere dine m². Ligeledes kan besøgende på hjemmesiden se alle m² og de personlige profiler. Hvis du ønsker at forblive anonym kan du begrænse adgangen ved hjælp af et kodeord.		<br></br><br></br><br></br><br></br><br></br><br></br>
 		 	</div>
 		</div>
 	</div>

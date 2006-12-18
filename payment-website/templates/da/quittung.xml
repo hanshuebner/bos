@@ -123,7 +123,7 @@
 								</tr>
 								<tr>
 					                          	<td colspan="3" align="right">
-										<input type="submit" class="form_big" name="Button" onclick="javascript:return confirm('Is the indicated name correct?');" value="save and fortsæt"></input>
+										<input type="submit" class="form_big" name="Button" onclick="javascript:return confirm('Er det nævnte navn korrekt?');" value="gem og fortsæt" />
 								  	</td>
 								</tr>
 							</table>

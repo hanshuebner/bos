@@ -69,9 +69,8 @@
 	   ;; eventuell noch mal prüfen und sicher stellen.
 	   (manual-transfer (or (scan #?r"rweisen" action)
 				(scan #?r"rweisung" action)
-				(scan #?r"overf" action)))
+				(scan #?r"verf" action)))
            (sponsor (make-sponsor))
-           (price (* numsqm 3))
            (contract (make-contract sponsor numsqm
                                     :download-only download-only
                                     :expires (+ (if manual-transfer
@@ -79,30 +78,35 @@
                                                     bos.m2::*online-contract-expiry-time*)
                                                 (get-universal-time))))
 	   (language (session-variable :language)))
-      (setf (get-template-var :worldpay-url)
-            (if manual-transfer
-                (format nil "ueberweisung?contract-id=~A&amount=~A&numsqm=~A~@[&donationcert-yearly=1~]"
-                        (store-object-id contract)
-                        price
-                        numsqm
-			donationcert-yearly)
-                (format nil "https://select.worldpay.com/wcc/purchase?instId=~A&cartId=~A&amount=~A&currency=EUR&lang=~A&desc=~A&MC_sponsorid=~A&MC_password=~A&MC_donationcert-yearly=~A&MC_gift=~A~@[~A~]"
-			*worldpay-installation-id*
-                        (store-object-id contract)
-                        price
-			language
-                        (encode-urlencoded (format nil "~A ~A Samboja Lestari"
-                                                   numsqm
-                                                   (case (make-keyword-from-string language)
-						     (:de "qm Regenwald in")
-						     (:da "sqm Regnskov i")
-						     (t "sqm rain forest in"))))
-			(store-object-id sponsor)
-			(sponsor-master-code sponsor)
-			(if donationcert-yearly "1" "0")
-			(if gift "1" "0")
-			(when *worldpay-test-mode* "&testMode=100"))))))
-  (mapc #'emit-template-node children))
+      (destructuring-bind (price currency)
+	  (case (make-keyword-from-string language)
+	    (:da (list (* numsqm 24) "DKK"))
+	    (t   (list (* numsqm 3)  "EUR")))
+	(setf (get-template-var :worldpay-url)
+	      (if manual-transfer
+		  (format nil "ueberweisung?contract-id=~A&amount=~A&numsqm=~A~@[&donationcert-yearly=1~]"
+			  (store-object-id contract)
+			  price
+			  numsqm
+			  donationcert-yearly)
+		  (format nil "https://select.worldpay.com/wcc/purchase?instId=~A&cartId=~A&amount=~A&currency=~A&lang=~A&desc=~A&MC_sponsorid=~A&MC_password=~A&MC_donationcert-yearly=~A&MC_gift=~A~@[~A~]"
+			  *worldpay-installation-id*
+			  (store-object-id contract)
+			  price
+			  currency
+			  language
+			  (encode-urlencoded (format nil "~A ~A Samboja Lestari"
+						     numsqm
+						     (case (make-keyword-from-string language)
+						       (:de "qm Regenwald in")
+						       (:da "sqm Regnskov i")
+						       (t "sqm rain forest in"))))
+			  (store-object-id sponsor)
+			  (sponsor-master-code sponsor)
+			  (if donationcert-yearly "1" "0")
+			  (if gift "1" "0")
+			  (when *worldpay-test-mode* "&testMode=100"))))))
+    (mapc #'emit-template-node children)))
 
 (define-bknr-tag mail-transfer ()
   (with-query-params ((get-template-var :request)
