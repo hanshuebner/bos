@@ -214,7 +214,7 @@ Gift: ~A
     (let ((parts (list (make-html-part (format nil "
 <html>
  <body>
-  <h1>Manuell erfasste Sponsordate:</h1>
+  <h1>Manuell erfasste Sponsordaten:</h1>
   <table border=\"1\">
    <tr><td>Contract-ID</td><td>~@[~A~]</td></tr>
    <tr><td>Anzahl sqm</td><td>~A</td></tr>
