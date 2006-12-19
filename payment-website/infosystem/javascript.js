@@ -182,7 +182,7 @@ function last_sponsors(sponsors)
 		      B(anzahlVerkauft), BR(), BR(),
 		      msg('Letzter Sponsor'), BR(),
 		      B(sponsor.name, BR()),
-		      '(' + sponsor.date.getDate() + "." + sponsor.date.getMonth() + "." + ' - ' + sponsor.country + ' - ' + sponsor.count + ' m²)');
+		      '(' + sponsor.date.getDate() + "." + (sponsor.date.getMonth() + 1) + "." + ' - ' + sponsor.country + ' - ' + sponsor.count + ' m²)');
 }
 
 function poi_fertig(_poi, _anzahlSponsoren, _anzahlVerkauft) {
