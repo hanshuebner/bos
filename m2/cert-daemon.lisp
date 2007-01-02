@@ -31,14 +31,17 @@
   (dolist (fdf-pathname (remove "fdf" (directory directory)
 				:test (complement #'string-equal)
 				:key #'pathname-type))
-    (destructuring-bind (id &optional (country "en")) (split "-" (pathname-name fdf-pathname))
-      (let ((language-specific-template-pathname (merge-pathnames (make-pathname :name (format nil "~A-~A" (pathname-name template-pathname) country))
-                                                                  template-pathname))
-            (output-pathname (merge-pathnames (make-pathname :name id :type "pdf") fdf-pathname)))
-        (fill-form fdf-pathname (if (probe-file language-specific-template-pathname)
-                                    language-specific-template-pathname
-                                    template-pathname)
-                   output-pathname)))))
+    (handler-case
+	(destructuring-bind (id &optional (country "en")) (split "-" (pathname-name fdf-pathname))
+	  (let ((language-specific-template-pathname (merge-pathnames (make-pathname :name (format nil "~A-~A" (pathname-name template-pathname) country))
+								      template-pathname))
+		(output-pathname (merge-pathnames (make-pathname :name id :type "pdf") fdf-pathname)))
+	    (fill-form fdf-pathname (if (probe-file language-specific-template-pathname)
+					language-specific-template-pathname
+					template-pathname)
+		       output-pathname)))
+      (error (e)
+	(format "Error generating certificate from file ~A: ~A~%" fdf-pathname e)))))
 
 (defun generate-certs ()
   (fill-forms *cert-mail-directory* *cert-mail-template*)
