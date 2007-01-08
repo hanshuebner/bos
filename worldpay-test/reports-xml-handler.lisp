@@ -34,8 +34,7 @@
 		   (error "invalid report name ~A" name))
 	       arguments)))))
 
-
-(defreport all-contracts ()
+(defun all-contracts/internal (&key include-coords)
   (dolist (contract *contracts-to-process*)
     (with-element "contract"
       (attribute "id" (store-object-id contract))
@@ -44,7 +43,18 @@
       (attribute "paid" (contract-paidp contract))
       (attribute "date-time" (format-date-time (contract-date contract) :xml-style t))
       (attribute "country" (sponsor-country (contract-sponsor contract)))
-      (attribute "sqm-count" (length (contract-m2s contract))))))
+      (attribute "sqm-count" (length (contract-m2s contract)))
+      (when include-coords
+	(dolist (m2 (contract-m2s contract))
+	  (with-element "m2"
+	    (attribute "utm-x" (m2-x m2))
+	    (attribute "utm-y" (m2-y m2))))))))
+
+(defreport all-contracts ()
+  (all-contracts/internal))
+
+(defreport all-contracts-m2s ()
+  (all-contracts/internal :include-coords t))
 
 (defun week-of-contract (contract)
   "Return Week key (YYYY-WW) for given contract."
