@@ -99,7 +99,7 @@
 						     numsqm
 						     (case (make-keyword-from-string language)
 						       (:de "qm Regenwald in")
-						       (:da "sqm Regnskov i")
+						       (:da "m2 Regnskov i")
 						       (t "sqm rain forest in"))))
 			  (store-object-id sponsor)
 			  (sponsor-master-code sponsor)
