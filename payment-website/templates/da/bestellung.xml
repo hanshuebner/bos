@@ -19,7 +19,7 @@
 						<td colspan="2">
 							<span class="link_titlered">
 								Plant regnskov
-								<br></br>for kun 3,- Euro/24,- Kroner per m²
+								<br></br>for kun 3,- Euro/24,- kroner per m²
 							</span>
 							<br></br><br></br>
 						</td>
@@ -30,7 +30,7 @@
 						<td colspan="2">
 							Vi takker for din beslutning om støtte til Indonesiens folk, natur og dyreliv.
 							<br></br><br></br>
-							Din støtte er et vigtig bidrag i kampen hen mod at sikre et holdbart projektarbejde i Samboja Lestari.<br></br>
+							Din støtte er et vigtigt bidrag i kampen hen mod at sikre et holdbart projektarbejde i Samboja Lestari.<br></br>
 							<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
 									<a href="idea_subtitle2" class="more">
 										... mere
@@ -71,21 +71,21 @@
 							<tr>
 								<td colspan="3">
 									<input type="radio" name="numsqm" value="1" onclick="document.bestellformular.numsqm1.value = '';"></input>
-									1 m² regnskov [3 Euro/24 Kroner],
+									1 m² regnskov [3 Euro/24 kroner],
 									<br></br>
 									<input type="radio" name="numsqm" value="5" onclick="document.bestellformular.numsqm1.value = '';"></input>
-									5 m² regnskov [15 Euro/120 Kroner],
+									5 m² regnskov [15 Euro/120 kroner],
 									<br></br>
 									<input type="radio" name="numsqm" value="10" checked="checked" onclick="document.bestellformular.numsqm1.value = '';"></input>
-									10 m² regnskov [30 Euro/240 Kroner],
+									10 m² regnskov [30 Euro/240 kroner],
 									<br></br>
 									<input type="radio" name="numsqm" value="30" onclick="document.bestellformular.numsqm1.value = '';"></input>
-									30 m² regnskov [90 Euro/720 Kroner],
+									30 m² regnskov [90 Euro/720 kroner],
 									<br></br>
 									<input type="radio" name="numsqm" value=""></input>
 									or
 									<input type="text" name="numsqm1" size="5" value="" onfocus="document.bestellformular.numsqm[4].click()"></input>
-									m² [3 Euro/24 Kroner stk].
+									m² [3 Euro/24 kroner stk].
 									<br></br>
 	                        				</td>
 							</tr>
@@ -159,7 +159,7 @@
 							<tr>
 				                <td align="right" colspan="3">
 							  		<input type="submit" class="form_big_bold" name="action" value="Doner online" onclick="return check_online();" />
-										<input type="submit" class="form_big" name="action" value="overføre" onclick="return check_ueberweisung();" />
+										<input type="submit" class="form_big" name="action" value="overfør" onclick="return check_ueberweisung();" />
 									
 								</td>
 							</tr>
@@ -175,7 +175,7 @@
 				Startende med bare 1 m², modtager du     
 				<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
 				<a href="javascript:window_extra('certificat')" class="more">vores regnskovs diplom</a>
-				som en pdf-fil fra din personlige sponsor-profil.
+				som en pdf-fil på din personlige sponsor-profil.
 				<br></br><br></br><br></br>
 				[<strong>Donations kvittering</strong>]
 				<br></br>

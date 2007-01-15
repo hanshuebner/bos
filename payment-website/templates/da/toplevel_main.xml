@@ -44,7 +44,7 @@
 				<div>l</div>	
 				<div>
 					<a href="javascript:window_infosys()" class="menue" title="Move to satellite map.">
-						satellit kort
+						satellitkort
 					</a>
 				</div>
 				<div>l</div>
@@ -112,7 +112,7 @@
 						<tr>
 							<td width="6"> </td>
 							<td colspan="2">
-								<strong>Satelit Kort</strong>
+								<strong>Satellitkort</strong>
 								<br></br></td>
 							<td></td>				
 						</tr>

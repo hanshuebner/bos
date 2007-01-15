@@ -47,7 +47,7 @@
 						<tr>
 							<td></td>
 							<td colspan="2">
-								for din støtte og for din tilld til BOS.
+								for din støtte og for din tillid til BOS.
 								<br></br><br></br>
 								Kvardratmeterne du har sponseret er i gode hænder.
 							</td>
@@ -107,7 +107,7 @@
 								<tr>
 									<td colspan="3" height="8">
 										<span class="help_text">
-											Vi acceptere det intastede navn i dette felt. Vær venlig at ændre navnet om nødvendigt. 
+											Vi accepterer det indtastede navn i dette felt. Vær venlig at ændre navnet om nødvendigt. 
 										</span> 
 									</td>
 								</tr>	
@@ -134,9 +134,9 @@
 			<div id="content_right">
 				<div id="helpbox">		
 					<br></br><br></br>
-					[<strong>Betalings-bekræftigelse</strong>]
+					[<strong>Betalingsbekræftigelse</strong>]
 					<br></br>
-					Denne betalings-bekræftigelse fra WorldPay er allerede undervejs til din indbox. I den uventede situation at du ikke skulle modtage nogen besked, venligst kontakt:
+					Denne betalingsbekræftigelse fra WorldPay er allerede undervejs til din indboks. I den uventede situation at du ikke skulle modtage nogen besked, venligst kontakt:
 
 					<br></br>
 						<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
@@ -152,7 +152,7 @@
 					<a href="javascript:window_extra('certificat')" class="more">
 						Regnskovs diplom
 					</a>
-					som et pdf-download fra din personlige sponsor profil.
+					som et pdf-download på din personlige sponsor profil.
 					<br /><br /><br /><br /><br /><br />		
 			 	</div>
 			</div>
