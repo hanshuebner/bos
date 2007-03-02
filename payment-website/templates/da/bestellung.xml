@@ -159,7 +159,7 @@
 							<tr>
 				                <td align="right" colspan="3">
 							  		<input type="submit" class="form_big_bold" name="action" value="Doner online" onclick="return check_online();" />
-										<input type="submit" class="form_big" name="action" value="overfør" onclick="return check_ueberweisung();" />
+										<input type="submit" class="form_big" name="action" value="bankoverførsel" onclick="return check_ueberweisung();" />
 									
 								</td>
 							</tr>
