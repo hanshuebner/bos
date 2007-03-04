@@ -110,11 +110,14 @@
 
 (define-bknr-tag mail-transfer ()
   (with-query-params ((get-template-var :request)
+		      country
 		      contract-id 
 		      name vorname strasse plz ort)
     (let* ((contract (store-object-with-id (parse-integer contract-id)))
 	   (download-only (< (contract-price contract) *mail-certificate-threshold*)))
-      (contract-set-download-only-p contract download-only)
+      (with-transaction (:prepare-before-mail)
+	(setf (contract-download-only contract) download-only)
+	(setf (sponsor-country (contract-sponsor contract)) country))
       (contract-issue-cert contract (format nil "~A ~A" vorname name)
 			   :address (format nil "~A ~A~%~A~%~A ~A"
 					    vorname name

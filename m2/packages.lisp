@@ -97,6 +97,7 @@
            #:get-contract
            #:contract-sponsor
            #:contract-paidp
+	   #:contract-download-only
            #:contract-date
            #:contract-m2s
 	   #:contract-bounding-box
