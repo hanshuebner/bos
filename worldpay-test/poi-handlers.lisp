@@ -287,6 +287,7 @@
     (with-bos-cms-page (req :title "Edit POI Image")
       (html
        (cmslink (edit-object-url (poi-image-poi poi-image)) "Back to POI")
+       (content-language-chooser req)
        ((:form :method "post" :enctype "multipart/form-data")
 	((:input :type "hidden" :name "poi" :value poi))
 	(:table (:tr (:td "thumbnail")
