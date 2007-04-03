@@ -19,17 +19,11 @@
 			      :key #'news-item-time)
 			0 (unless archive 3))))
       (labels ((show-news-entry (news-item)
-		 (html (:strong (:princ-safe (format-date-time (news-item-time news-item) :show-time nil))
-				" - "
-				(:princ-safe (news-item-title news-item language)))
-		       :br
-		       (:princ-safe (subseq (news-item-text news-item language) 0
-					    (min *news-item-snippet-length*
-						 (length (news-item-text news-item language)))))
-		       " "
-		       ((:a :href (format nil "javascript:window_news('news/~a')" (store-object-id news-item))
+		 (html ((:a :href (format nil "javascript:window_news('news/~a')" (store-object-id news-item))
 			    :class "more")
-			"... mehr"))))
+			(:strong (:princ-safe (format-date-time (news-item-time news-item) :show-time nil))
+				 " - "
+				 (:princ-safe (news-item-title news-item language)))))))
 	(loop for news-item in news-items
 	      for index from 1
 	      do (if archive
@@ -46,4 +40,4 @@
 	   ", "
 	   (:princ-safe (news-item-title news-item language)))
 	  ((:p :class "text_content")
-	   (text-with-linebreaks (news-item-text news-item language))))))
+	   (:princ (news-item-text news-item language))))))

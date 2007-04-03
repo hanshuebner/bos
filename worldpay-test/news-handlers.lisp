@@ -35,6 +35,8 @@
   (let ((language (session-variable :language)))
     (with-bos-cms-page (req :title "Edit news item")
       (content-language-chooser req)
+      ((:script :type "text/javascript")
+       "tinyMCE.init({ mode : 'textareas', theme : 'advanced' });")
       ((:form :method "post")
        (:table
 	   (:tr (:td "title")
