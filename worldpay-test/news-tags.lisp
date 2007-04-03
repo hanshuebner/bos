@@ -22,7 +22,7 @@
 		 (html ((:a :href (format nil "javascript:window_news('news/~a')" (store-object-id news-item))
 			    :class "more")
 			(:strong (:princ-safe (format-date-time (news-item-time news-item) :show-time nil))
-				 " - "
+				 :br
 				 (:princ-safe (news-item-title news-item language)))))))
 	(loop for news-item in news-items
 	      for index from 1
