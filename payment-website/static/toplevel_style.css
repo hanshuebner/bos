@@ -261,12 +261,11 @@ font-size: 100.1%;
 	width: 160px;
 	visibility: visible;
 	display: block;
-	min-height: 80px;
 	max-width: 160px;
 }
 
 #newsbox1 {
-	margin-top: 58px;
+	margin-top: 30px;
 	margin-left: 10px;
 	}
 	
