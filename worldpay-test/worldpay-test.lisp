@@ -180,6 +180,7 @@ language preference weights."
     (setf *website-url* website-url))
 
   (setf *worldpay-test-mode* worldpay-test-mode)
+  (setf bknr.web:*upload-file-size-limit* 20000000)
 
   (make-instance 'bos-website
 		 :name "BOS Website"
@@ -231,7 +232,7 @@ language preference weights."
 		 :authorizer (make-instance 'bos-authorizer)
 		 :site-logo-url "/images/bos-logo.gif"
 		 :style-sheet-urls '("/static/cms.css")
-		 :javascript-urls '("/static/cms.js")
+		 :javascript-urls '("/static/cms.js" "/static/tiny_mce/tiny_mce.js")
 		 :vhosts vhosts)
 
   (publish-directory :prefix "/static/"
