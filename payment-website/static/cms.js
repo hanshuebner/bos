@@ -1,5 +1,11 @@
 // This may look like -*- Java -*-, but it really is ECMAScript
 
+// Allgemeine Initialisierungsfunktion fuer alle CMS-Seiten
+
+function init() {
+    update_movie_preview();
+}
+
 // Formularcheck für Sponsoren-Erzeugung
 
 function check_complete_sale() {
@@ -55,4 +61,34 @@ function statistic_selected ()
  	= '<embed src="/images/statistics/' + stats_name + '.svg" width="800" height="600" type="image/svg+xml"></embed>';
 
     return true;
+}
+
+function $(id) { return document.getElementById(id); }
+
+function update_movie_preview()
+{
+    if ($('movie') && $('movie_preview')) {
+	var url = $('movie').value;
+	if (url == "") {
+	    $('movie_preview').innerHTML = '';
+	} else {
+	    $('movie_preview').innerHTML = '<object width="360" height="340"> <param name="movie" value=" ' + url + '"> </param> <embed src=" ' + url + '" type="application/x-shockwave-flash" width="360" height="340"> </embed> </object>';
+	}
+    }
+}
+
+function parse_youtube_link (input)
+{
+    var text = input.value;
+
+    text = text.replace(/.*src=" (http:\/\/www.youtube.com[^"]+).*/, "$1")
+    input.value = text;
+    if ((input.value != "") && !input.value.match(/^http:\/\/www.youtube.com\/v\/\S+/)) {
+        alert("Invalid YouTube URL: " + input.value);
+        input.value = "";
+        return false;
+    } else {
+        update_movie_preview();
+        return true;
+    }
 }

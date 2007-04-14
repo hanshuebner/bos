@@ -6,6 +6,22 @@
 (defclass bos-website (website)
   ())
 
+(defmethod website-show-page ((website bos-website) fn title)
+  (html
+   (princ "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" *html-stream*)
+   (princ #\Newline *html-stream*)
+   (:html
+    (:head
+     (bknr.web::header :title title))
+    ((:body :class "cms" :onload "init();")
+     ((:div :class "navigation")
+      (bknr.web::logo)
+      (:h1 (:princ-safe (website-name website)))
+      (bknr.web::navigation))
+     (:h1 (:princ-safe title))
+     (funcall fn)
+     (website-session-info website)))))
+
 (defmethod website-session-info ((website bos-website))
   (html :br :hr
 	((:p :class "footer")

@@ -79,6 +79,7 @@
    (images :update :initform nil)
    (airals :update :initform nil)
    (panoramas :update :initform nil)
+   (movies :update :initform nil)
    (published :update :initform nil)))
 
 (deftransaction make-poi (language name &key title description area)
@@ -96,7 +97,7 @@
        (poi-images poi)
        t))
 
-(defun update-poi (poi language &key title subtitle description area icon published (images :not-set))
+(defun update-poi (poi language &key title subtitle description area icon published (images :not-set) (movies :not-set))
   (with-transaction ()
     (setf (slot-value poi 'published) published)
     (when title
@@ -110,7 +111,9 @@
     (when icon
       (setf (poi-icon poi) icon))
     (when (listp images)
-      (setf (poi-images poi) images))))
+      (setf (poi-images poi) images))
+    (when (listp movies)
+      (setf (poi-movies poi) movies))))
 
 (defmethod poi-center-x ((poi poi))
   (first (poi-area poi)))
@@ -150,17 +153,19 @@ var poi = { symbol: ~S,
 	      (length (poi-images poi)))
       (format t "poi.thumbnail = ~D;~%" (length (poi-images poi)))
       (when (poi-airals poi)
+	
 	(format t "poi.luftbild = ~D;~%" (store-object-id (first (poi-airals poi)))))
       (when (poi-panoramas poi)
-	(let ((panorama-ids (mapcar #'store-object-id (poi-panoramas poi))))
-	  (format t "poi.panoramas = [ ~D~{, ~D~} ];~%" (first panorama-ids) (rest panorama-ids))))
+	(format t "poi.panoramas = [ ~{~D~^, ~} ];~%" (mapcar #'store-object-id (poi-panoramas poi))))
+      (when (poi-movies poi)
+	(format t "poi.movies = [ ~{~S~^, ~} ];~%" (poi-movies poi)))
       (loop for slot-name in '(title subtitle description)
-	    for javascript-name in '("imageueberschrift" "imageuntertitel" "imagetext")
-	    for slot-values = (mapcar #'(lambda (image)
-					  (escape-nl (slot-string image slot-name language)))
-				      (poi-images poi))
-	    when slot-values
-	    do (format t "poi.~A = [ ~S~{, ~S~} ];~%" javascript-name (car slot-values) (cdr slot-values)))
+	 for javascript-name in '("imageueberschrift" "imageuntertitel" "imagetext")
+	 for slot-values = (mapcar (lambda (image)
+				     (escape-nl (slot-string image slot-name language)))
+				   (poi-images poi))
+	 when slot-values
+	 do (format t "poi.~A = [ ~{~S~^, ~} ];~%" javascript-name slot-values))
       (format t "pois.push(poi);~%"))
     (dolist (allocation-area (remove-if (complement #'allocation-area-active-p) (class-instances 'allocation-area)))
       (destructuring-bind (x y) (allocation-area-center allocation-area)

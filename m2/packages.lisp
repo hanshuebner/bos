@@ -151,6 +151,8 @@
 	   #:airals
 	   #:poi-panoramas
 	   #:panoramas
+	   #:poi-movies
+	   #:movies
 	   #:make-poi-image
 	   #:update-poi-image
 	   #:poi

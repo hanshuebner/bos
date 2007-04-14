@@ -825,6 +825,7 @@ function Uebersicht_anzeigen() {
     // Ebenen entsprechen ein- oder ausblenden
     hide_poi_panorama();
     hide_poi_luftbild();
+    hide_poi_movie();
 
     n_profil = {};
     display_selected_contract();
@@ -843,6 +844,7 @@ function Uebersicht_anzeigen() {
 function show_poi_luftbild() {
     help_page = 'luftbild';
     hide_poi_panorama();
+    hide_poi_movie();
     if (poi[aktuelles_objekt]['luftbild']) {
 	document.getElementById("Luftbild").style.visibility = "visible";
     }
@@ -856,6 +858,7 @@ function show_poi_panorama() {
     var the_poi = poi[aktuelles_objekt];
     help_page = 'panorama';
     hide_poi_luftbild();
+    hide_poi_movie();
     if (the_poi.panoramas) {
 	var panorama_id = the_poi.panoramas[0];
 	document.getElementById("Panorama").style.visibility = "visible";
@@ -871,11 +874,35 @@ function show_poi_panorama() {
 
 function hide_poi_panorama() {
     document.getElementById("Panorama").style.visibility = "hidden";
+    document.getElementById("PanoramaApplet").innerHTML = '';
 }
 
 function show_poi_satbild() {
     hide_poi_luftbild(); // for now
     hide_poi_panorama();
+    hide_poi_movie();
+}
+
+function show_poi_movie() {
+    var the_poi = poi[aktuelles_objekt];
+    help_page = 'movie';
+    hide_poi_luftbild();
+    hide_poi_panorama();
+    if (the_poi.movies) {
+	var movie_url = the_poi.movies[0];
+	document.getElementById("Movie").style.visibility = "visible";
+	document.getElementById("PoiInfoText").innerHTML
+	    = msg('Das Laden des Videos dauert einen Moment und benötigt Flash in Ihrem Browser.');
+	document.getElementById("MovieApplet").innerHTML
+	    = '<object width="360" height="340"> <param name="movie" value=" '
+	    + movie_url + '"> </param> <embed src=" '
+	    + movie_url + '" type="application/x-shockwave-flash" width="360" height="340"> </embed> </object>';
+    }
+}
+
+function hide_poi_movie() {
+    document.getElementById("Movie").style.visibility = "hidden";
+    document.getElementById("MovieApplet").innerHTML = '';
 }
 
 var poi_menu_items;
@@ -913,6 +940,9 @@ function PoiDetail_anzeigen(index) {
     if (the_poi.panoramas) {
 	poi_menu_items.push([ msg('Panorama'), show_poi_panorama ]);
     }
+    if (the_poi.movies) {
+	poi_menu_items.push([ msg('Film'), show_poi_movie ]);
+    }
 
     poi_active_menu_item = msg('Sat-Karte');
 
@@ -924,6 +954,7 @@ function PoiDetail_anzeigen(index) {
 
     hide_poi_luftbild();
     hide_poi_panorama();
+    hide_poi_movie();
 
     if (the_poi['luftbild']) {
 	document.poiluftbild.src = "/image/" + the_poi['luftbild'];

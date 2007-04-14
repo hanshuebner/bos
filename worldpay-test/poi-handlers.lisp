@@ -150,11 +150,25 @@
 			((:input :type "file" :name "image-file"))
 			:br
 			(submit-button "upload-panorama" "upload-panorama"))))
-	(:tr (:td (submit-button "save" "save") (submit-button "delete" "delete" :confirm "Really delete the POI?"))))))))
+	(:tr (:td "movie")
+	     (:td (html "URL or 'embed' string: "
+			((:input :type "text"
+				 :size "50"
+				 :name "movie"
+				 :id "movie"
+				 :value (or (first (poi-movies poi)) "")
+				 :onchange "parse_youtube_link(this)"))
+			" "
+			(when (poi-movies poi)
+			  (html :br (submit-button "delete-movie" "delete-movie" :confirm "Really delete the movie?")))
+			:br
+			((:div :id "movie_preview" :style "height: 340px; width: 360px;") ""))))
+	(:tr (:td (submit-button "save" "save")
+		  (submit-button "delete" "delete" :confirm "Really delete the POI?"))))))))
 
 (defmethod handle-object-form ((handler edit-poi-handler)
 			       (action (eql :save)) (poi poi) req)
-  (with-query-params (req published title subtitle description language x y icon)
+  (with-query-params (req published title subtitle description language x y icon movie)
     (unless language (setq language (session-variable :language)))
     (let ((args (list :title title
 		      :published published
@@ -163,6 +177,8 @@
 		      :icon icon)))
       (when (and x y)
 	(setq args (append args (list :area (list (parse-integer x) (parse-integer y))))))
+      (when movie
+	(setq args (append args (list :movies (list movie)))))
       (apply #'update-poi poi language args))
     (with-bos-cms-page (req :title "POI has been updated")
       (html (:h2 "Your changes have been saved")
@@ -202,6 +218,13 @@
     (mapc #'delete-object airals))
   (redirect (format nil "/edit-poi/~D"
 		    (store-object-id poi)) req))
+
+(defmethod handle-object-form ((handler edit-poi-handler)
+			       (action (eql :delete-movie))
+			       (poi poi)
+			       req)
+  (change-slot-values poi 'movies nil)
+  (redirect (format nil "/edit-poi/~D" (store-object-id poi)) req))
 
 (defmethod handle-object-form ((handler edit-poi-handler)
 			       (action (eql :upload-panorama))
