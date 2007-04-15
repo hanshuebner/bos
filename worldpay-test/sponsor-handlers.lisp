@@ -93,7 +93,11 @@
 (defmethod handle-object-form ((handler edit-sponsor-handler) (action (eql :create)) (sponsor (eql nil)) req)
   (with-query-params (req numsqm country email name address date language)
     (let* ((sponsor (make-sponsor :email email :country country))
-	   (contract (make-contract sponsor (parse-integer numsqm) :paidp t :date (date-to-universal date))))
+	   (contract (make-contract sponsor (parse-integer numsqm)
+				    :paidp (format nil "~A: manually created by ~A"
+						   (format-date-time (get-universal-time))
+						   (user-login (bknr-request-user req)))
+				    :date (date-to-universal date))))
       (contract-issue-cert contract name :address address :language language)
       (mail-backoffice-sponsor-data contract req)
       (redirect (format nil "/edit-sponsor/~D" (store-object-id sponsor)) req))))
