@@ -51,3 +51,8 @@ a.cmslink:active {
 .footer {
 	font-size: 70%;
 }
+
+.error {
+	color:#f00;
+	font-size: 110%;
+}
