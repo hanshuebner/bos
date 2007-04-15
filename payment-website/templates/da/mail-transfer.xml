@@ -40,7 +40,7 @@
 					<tr>
 						<td colspan="3">
 							<span class="headline">
-								Vielen Dank für Ihre Unterstützung
+								Vi takker mange gange for din støtte
 							</span>
 						</td>
 						<td></td>
@@ -48,30 +48,29 @@
 					<tr><td height="6"></td></tr>
 					<tr>
 						<td colspan="3">
-							<strong>Bitte geben Sie unbedingt die ID $(contract-id) als Verwendungszweck
-							Ihrer Überweisung an, damit wir Sie nach der Bearbeitung erreichen können!</strong>
+							<strong>Husk endelig at notere dit udstedte ID $(contract-id) på bankoverførslen; dette er den eneste måde, hvorpå vi kan identificere dine m2.</strong>
 						</td>
 					</tr>
 					<tr><td height="6"></td></tr>
 					<tr>
 						<td colspan="3">
 								<table border="0">
-									<tr><td colspan="2">BOS Deutschland e.V.</td></tr>
-									<tr><td>Kontonummer:</td><td>32 10 100</td></tr>
-									<tr><td>Bank:</td><td>Bank für Sozialwirtschaft</td></tr>
-									<tr><td>BLZ:</td><td>100 205 00</td></tr>
+									<tr><td colspan="2">BOS Danmark</td></tr>
+									<tr><td>Kontonummer:</td><td>0001718891</td></tr>
+									<tr><td>Bank:</td><td>Merkur Bank</td></tr>
+									<tr><td>Reg.Nr.:</td><td>8401</td></tr>
 								</table>
 						</td>
 					</tr>
+					<tr><td>Tilbage til hjemmesiden</td></tr>
 					<tr><td height="6"></td></tr>
 					<tr>
 						<td colspan="3">
-							Wir melden uns direkt nach Eingang Ihrer Überweisung und
-							geben Ihnen die Informationen, die Sie benötigen, um Ihre Quadratmeter im Internet zu beobachten.
+Lige så snart vi registrerer din overførsel, vil du modtage en mail eller et brev med de informationer, der er nødvendige for at du kan logge ind og se dine m2.
 							<br /><br />
 							<a href="index" class="more">
 								<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
-								Zurück zur Home Page
+								Home
 							</a>
 						</td>
 						<td></td>
