@@ -81,7 +81,7 @@ function parse_youtube_link (input)
 {
     var text = input.value;
 
-    text = text.replace(/.*src=" (http:\/\/www.youtube.com[^"]+).*/, "$1")
+    text = text.replace(/.*src=" *(http:\/\/www.youtube.com[^"]+).*/, "$1")
     input.value = text;
     if ((input.value != "") && !input.value.match(/^http:\/\/www.youtube.com\/v\/\S+/)) {
         alert("Invalid YouTube URL: " + input.value);
