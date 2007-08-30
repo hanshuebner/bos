@@ -27,8 +27,8 @@ Subject: ~A
 		     text)))
   
 (defun mail-info-request (email)
-  (send-system-mail :subject "Mailinglisten-Eintrag"
-		    :text #?"Bitte in die Info-Mailingliste aufnehmen:
+  (send-system-mail :subject "Mailing list request"
+		    :text #?"Please enter into the mailing list:
 
 
 $(email)
@@ -158,6 +158,20 @@ Gift: ~A
 		 :encoding :quoted-printable
 		 :content string))
 
+(defparameter *common-element-names*
+  '(("MC_donationcert-yearly" "donationcert-yearly")
+    ("MC_sponsorid" "sponsor-id")
+    ("countryString" "country")
+    ("postcode" "plz")
+    ("MC_gift" "gift")
+    ("cartId" "contract-id")))
+
+(defun lookup-element-name (element-name)
+  "Given an ELEMENT-NAME (which may be either a form field name or a name of a post parameter from
+worldpay), return the common XML element name"
+  (or (cdr (find element-name *common-element-names* :key #'car :test #'equal))
+      element-name))
+
 (defun make-contract-xml-part (id params)
   (make-instance 'text-mime
 		 :type "text"
@@ -169,13 +183,16 @@ Gift: ~A
  ~{<~A>~A</~A>~}
 </sponsor>
 "
-				  (apply #'append (mapcar #'(lambda (cons)
-							      (list (car cons)
-								    (if (find #\Newline (cdr cons))
-									(format nil "<![CDATA[~A]]>" (cdr cons))
-									(cdr cons))
-								    (car cons)))
-							  params)))))
+				  (apply #'append
+					 (mapcar #'(lambda (cons)
+						     (destructuring-bind (element-name content) cons
+						       (setf element-name (lookup-element-name element-name))
+						       (list element-name
+							     (if (find #\Newline content)
+								 (format nil "<![CDATA[~A]]>" content)
+								 content)
+							     element-name)))
+						 params)))))
 
 (defun make-vcard-part (id vcard)
   (make-instance 'text-mime
@@ -194,7 +211,7 @@ Gift: ~A
 					       :encoding :base64
 					       :content (file-contents (contract-pdf-pathname contract :print t)))))))
     (send-system-mail :to (contract-office-email contract)
-		      :subject (format nil "~A-Spenderdaten - Sponsor-ID ~D Contract-ID ~D"
+		      :subject (format nil "~A-Sponsor data - Sponsor-ID ~D Contract-ID ~D"
 				       type
 				       (store-object-id (contract-sponsor contract))
 				       (store-object-id contract))
@@ -214,12 +231,12 @@ Gift: ~A
     (let ((parts (list (make-html-part (format nil "
 <html>
  <body>
-  <h1>Manuell erfasste Sponsordaten:</h1>
+  <h1>Manually entered sponsor data:</h1>
   <table border=\"1\">
    <tr><td>Contract-ID</td><td>~@[~A~]</td></tr>
-   <tr><td>Anzahl sqm</td><td>~A</td></tr>
+   <tr><td>Number of sqm</td><td>~A</td></tr>
    <tr><td>Name</td><td>~@[~A~]</td></tr>
-   <tr><td>Adresse</td><td>~@[~A~]</td></tr>
+   <tr><td>Adress</td><td>~@[~A~]</td></tr>
    <tr><td>Email</td><td>~@[~A~]</td></tr>
   </table>
  </body>
@@ -245,7 +262,7 @@ Amount: EUR~A.00
 						    :name name
 						    :address address
 						    :email email)))))
-      (mail-contract-data contract "Manuell erfasster Sponsor" parts))))
+      (mail-contract-data contract "Manually entered sponsor" parts))))
 
 (defun mail-manual-sponsor-data (req)
   (with-query-params (req contract-id vorname name strasse plz ort email telefon donationcert-yearly)
@@ -254,26 +271,28 @@ Amount: EUR~A.00
 	   (parts (list (make-html-part (format nil "
 <html>
  <body>
-   <h1>Ueberweisungsformulardaten:</h1>
+   <h1>Sponsor data as entered by the sponsor:</h1>
    <table border=\"1\">
     <tr><td>Contract-ID</td><td>~@[~A~]</td></tr>
-    <tr><td>Anzahl sqm</td><td>~A</td></tr>
-    <tr><td>Vorname</td><td>~@[~A~]</td></tr>
-    <tr><td>Name</td><td>~@[~A~]</td></tr>
-    <tr><td>Strasse</td><td>~@[~A~]</td></tr>
-    <tr><td>PLZ</td><td>~@[~A~]</td></tr>
-    <tr><td>Ort</td><td>~@[~A~]</td></tr>
+    <tr><td>Number of sqm</td><td>~A</td></tr>
+    <tr><td>Amount</td><td>EUR~A</td></tr>
+    <tr><td>First name</td><td>~@[~A~]</td></tr>
+    <tr><td>Last name</td><td>~@[~A~]</td></tr>
+    <tr><td>Street</td><td>~@[~A~]</td></tr>
+    <tr><td>Postcode</td><td>~@[~A~]</td></tr>
+    <tr><td>City</td><td>~@[~A~]</td></tr>
     <tr><td>Email</td><td>~@[~A~]</td></tr>
-    <tr><td>Telefon</td><td>~@[~A~]</td></tr>~@[
+    <tr><td>Phone</td><td>~@[~A~]</td></tr>~@[
     <tr><td></td></tr>
-    <tr><td>Spendenbescheinigung am Jahresende</td><td>~A</td></tr>~]
+    <tr><td>Donation receipt at year's end</td><td>~A</td></tr>~]
    </table>
-   <p><a href=\"~A/complete-transfer/~A?email=~A\">Zahlungseingang bestätigen</a></p>
+   <p><a href=\"~A/complete-transfer/~A?email=~A\">Acknowledge receipt of payment</a></p>
  </body>
 </html>
 "
 						contract-id
 						(length (contract-m2s contract))
+						(* 3.0 (length (contract-m2s contract)))
 						vorname name strasse plz ort email telefon
 						(if donationcert-yearly "ja" "nein")
 						*website-url* contract-id email))

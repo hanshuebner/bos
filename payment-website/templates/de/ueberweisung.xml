@@ -42,6 +42,9 @@
 						id="mailtransfer"
 						onsubmit="YY_checkform('mailtransfer','vorname','#q','0','Bitte das Feld \'Vorname\' ausfuellen.','name','#q','0','Bitte das Feld \'Name\' ausfuellen.','strasse','#q','0','Bitte das Feld \'Strasse\' ausfuellen.','plz','#q','0','Bitte das Feld \'PLZ\' ausfuellen.','ort','#q','0','Bitte das Feld \'Ort\' ausfuellen.');return document.MM_returnValue">
 					<input type="hidden" name="contract-id" value="$(contract-id)" />
+					<input type="hidden" name="amount" value="$(amount)" />
+					<input type="hidden" name="numsqm" value="$(numsqm)" />
+					<input type="hidden" name="gift" value="$(gift)" />
 					<input type="hidden" name="donationcert-yearly" value="$(donationcert-yearly)" />
 					<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
 						<tr>
