@@ -27,5 +27,6 @@
 				close window
 			</a>
 		</div>
+		<bos:google-analytics-track />
 	</body>
 </html>

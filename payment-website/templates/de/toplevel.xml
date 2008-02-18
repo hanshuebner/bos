@@ -74,5 +74,6 @@
 		<bknr:tag-body />
 	<!-- /content 3teilig-->
 
+		<bos:google-analytics-track />
 	</body>
 </html>

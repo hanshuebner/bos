@@ -2,7 +2,11 @@
 
 (handler-bind ((style-warning #'muffle-warning))
   (asdf:operate 'asdf:load-op :aserve)
-  (asdf:operate 'asdf:load-op :bos.web))
+  (asdf:operate 'asdf:load-op :bos.web)
+  ;; FIXME: fuer das Deployment ?
+  ;; BOS tests
+  (asdf:operate 'asdf:load-op :fiveam)
+  (asdf:oos 'asdf:load-op :bos.test))
 
 ;;;
 ;;; Lisp-Image fuer das Deployment dumpen
@@ -25,6 +29,7 @@
 (define-toggle-switch "nostart" *webserver* t)
 (define-toggle-switch "slime" *slime* nil)
 (define-toggle-switch "cert-daemon" *cert-daemon* nil)
+(define-toggle-switch "run-tests" *run-tests* nil)
 
 (defun start-webserver ()
   (apply #'bos.m2::reinit (read-configuration "m2.rc"))
@@ -32,7 +37,8 @@
   (bknr.cron::start-cron))
 
 (defun start-slime ()
-  (swank::create-swank-server 4005 :spawn #'swank::simple-announce-function t))
+  ;; (swank::create-swank-server 4005 :spawn #'swank::simple-announce-function t)
+  (swank:create-server :port 4005 :dont-close t))
 
 (defun reload-global-table ()
   (loop for lib-entry in (reverse sys::*global-table*)
@@ -53,6 +59,13 @@
   (fix-dpd)
   (asdf:oos 'asdf:load-op :bos.web)
   (format t "BOS Online-System~%")
+  (when *run-tests*
+    (asdf:oos 'asdf:load-op :bos.test)
+    (format t "Starting BOS tests...~%")
+    (eval (read-from-string "(5am:run! :bos.test)"))
+    (terpri)
+    (finish-output)
+    (cl-user::quit))
   (when *cert-daemon*
     (format t "; starting certificate generation daemon, slime and webserver not started~%")
     (bos.m2.cert-generator:cert-daemon))
@@ -60,8 +73,8 @@
     (start-slime))
   (when *webserver*
     (start-webserver))
-  (if (or *slime* *webserver*)
-      (mp::startup-idle-and-top-level-loops))
+  (when (or *slime* *webserver*)
+    (mp::startup-idle-and-top-level-loops))
   (lisp::%top-level))
 
 (setf *default-pathname-defaults* #p"")

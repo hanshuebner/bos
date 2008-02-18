@@ -42,6 +42,7 @@
 						id="mailtransfer"
 						onsubmit="YY_checkform('mailtransfer','vorname','#q','0','Bitte das Feld \'Vorname\' ausfuellen.','name','#q','0','Bitte das Feld \'Name\' ausfuellen.','strasse','#q','0','Bitte das Feld \'Strasse\' ausfuellen.','plz','#q','0','Bitte das Feld \'PLZ\' ausfuellen.','ort','#q','0','Bitte das Feld \'Ort\' ausfuellen.');return document.MM_returnValue">
 					<input type="hidden" name="contract-id" value="$(contract-id)" />
+					<input type="hidden" name="sponsor-id" value="$(sponsor-id)" />
 					<input type="hidden" name="amount" value="$(amount)" />
 					<input type="hidden" name="numsqm" value="$(numsqm)" />
 					<input type="hidden" name="gift" value="$(gift)" />
@@ -66,9 +67,6 @@ Ich habe mich dazu entschieden einen Betrag von $(amount) Euro auf das Spendenko
 								Meine Überweisung muss ich bei meiner Bank eigenständig veranlassen!
 							</td>
 						</tr>						
-						<tr>
-							<td colspan="3" height="7"> </td>
-						</tr>
 						<tr>
 							<td colspan="3" height="7"> </td>
 						</tr>
@@ -109,7 +107,16 @@ Ich habe mich dazu entschieden einen Betrag von $(amount) Euro auf das Spendenko
 							<td colspan="3" height="20"> </td>
 						</tr>
 						<tr>
-			                          	<td align="right" colspan="3">
+								<td colspan="3">
+										<input type="checkbox" name="want-print"/>
+ 									Ich möchte meine Regenwaldurkunde per Post zugeschickt bekommen.
+								</td>
+						</tr>
+						<tr>
+							<td colspan="3" height="20"> </td>
+						</tr>
+						<tr>
+       <td align="right" colspan="3">
 								<input type="submit" class="form_big" name="action" value="Angaben an BOS mailen" />
 							</td>
 						</tr>
@@ -122,11 +129,16 @@ Ich habe mich dazu entschieden einen Betrag von $(amount) Euro auf das Spendenko
 				<strong>[Persönliche Daten]</strong>
 				<br />
 Wir reservieren gerne die von Ihnen gewünschten m². Für die Zusendung
-der entsprechenden Informationen (Regenwaldurkunde, Sponsorenprofil,
-Geokoordinaten, Spendenbescheinigung) benötigen wir unbedingt die
-Angabe Ihrer Daten. Nach erfolgter Überweisung erhalten Sie diese
-Informationen schriftlich oder per E-Mail von uns.
-				<br /><br /><br />
+der entsprechenden Informationen (Regenwaldurkunde, Geokoordinaten,
+Spendenbescheinigung) benötigen wir Ihre Daten. Nach
+erfolgter Überweisung melden wir uns schriftlich und
+per E-Mail.
+				<br /><br />
+				<strong>[Urkunde]</strong>
+				<br />
+				Sie können Ihre Regenwaldurkunde in jedem Fall als PDF von unserem System herunterladen, auch
+				wenn Sie es nicht per Post zugeschickt bekommen möchten.
+				<br /><br />
 				<strong>[Dieses Formular]</strong>
 				<br />
 				Bitte senden Sie dieses Formular per E-Mail direkt an uns. Sie können es auch

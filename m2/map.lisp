@@ -60,22 +60,6 @@
 ;;;; kann, sie ist jedoch makrobasiert und nicht flexibel - Sie
 ;;;; erlaubt ausschließlich das Iterieren über ein Image.
 
-(defun point-in-polygon-p (x y polygon)
-  (let (result
-	(py y))
-    (loop with (pjx . pjy) = (aref polygon (1- (length polygon)))
-	  for (pix . piy) across polygon
-	  when (and (or (and (<= piy py) (< py pjy))
-			(and (<= pjy py) (< py piy)))
-		    (< x
-		       (+ (/ (* (- pjx pix) (- py piy))
-			     (- pjy piy))
-			  pix)))
-	  do (setf result (not result))
-	  do (setf pjx pix
-		   pjy piy))
-    result))
-
 (defun colorize-pixel (pixel-rgb-value color-red color-green color-blue)
   "Colorize the given PIXEL-RGB-VALUE in the COLOR given.
 PIXEL-RGB-VALUE is a raw truecolor pixel with RGB components.  COLOR
@@ -118,8 +102,9 @@ to determine the intensity of the returned RGB value."
     original-image))
 
 (defmethod image-tile-process ((tile image-tile) (operation (eql :background)))
-  (with-store-image (original-image (image-tile-original-image tile))
-    (copy-image original-image *default-image* 0 0 0 0 (image-width) (image-height))))
+  (when (image-tile-original-image tile)
+    (with-store-image (original-image (image-tile-original-image tile))
+      (copy-image original-image *default-image* 0 0 0 0 (image-width) (image-height)))))
 
 (defmethod image-tile-process ((tile image-tile) (operation (eql :areas)))
   (do-rows (y)

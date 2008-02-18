@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+  template="toplevel_main"
+  title="REGENWALD für SAMBOJA LESTARI - Large donation"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:bknr="http://bknr.net"
+  xmlns:bos="http://headcraft.de/bos"
+  >
+	<div id="content_main">
+		<div id="textbox_content">
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td colspan="3"><span class="headline">Your donation is too large to be processed online at this time!</span>
+					</td>
+					<td>
+					</td>				
+				</tr>
+				<tr>
+					<td height="15">
+					</td>
+				</tr>
+				<tr>
+					<td>We're sorry, but your donorship request is too large to be processed online at
+						this time.  Please get in touch with us directly!  Thank you!
+						<br />
+						<br /><br />
+						BOS Deutschland e.V.<br />
+						Böckhstr. 39<br />
+						D - 10967 Berlin 
+						<br /><br />	
+						Telefon:   +49.30.26 36 78 33<br />
+						Fax:       +49.30.26 36 78 15<br /><br />
+						E-Mail:
+						<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+						<a href="mailto:info@bos-deutschland.de" class="more">
+							info@bos-deutschland.de
+						</a>
+						<br /><br /><br /><br /><br /><br />
+						Wir werden Ihre Anfrage baldmöglichst beantworten.  Bitte haben Sie etwas Geduld.
+						<br />
+					</td>					
+				</tr>				
+			</table>		
+		</div>	
+	</div>
+	<div id="content_right">
+		<div id="textbox_right_top">
+			<table id="rightTable" border="0" cellpadding="0" cellspacing="0">				
+				<tr>
+					<td height="30">
+					</td>
+				</tr>			
+				<tr>
+					<td colspan="2"><img src="/images/bos-logo.gif" width="116" height="85" alt="" />
+					</td>
+				</tr>	
+				<tr>
+					<td height="10">
+					</td>
+				</tr>		
+				<tr>
+					<td colspan="2">Möchten Sie gern mehr über die Projekte von BOS erfahren?
+					<br /><br />
+					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+					<a href="http://www.bos-deutschland.de" target="_blank" class="more">
+						bos-deutschland.de
+					</a>
+					<br />
+					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+					<a href="http://www.savetheorangutan.info" target="_blank" class="more">
+						savetheorangutan.info
+					</a>
+					<br /><br />
+					</td>
+				</tr>
+				<tr>
+					<td>Dort finden Sie auch Links zu unseren BOS- Schwesterorganisationen weltweit.
+					</td>
+				</tr>	
+			</table>
+		</div>		
+	</div>
+</bknr:toplevel>

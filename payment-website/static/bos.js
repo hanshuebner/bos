@@ -22,8 +22,7 @@ function window_news(target) {
 
 // ***  extrafenster fuer satellitenkarte *** //
 function window_infosys() {
-    var language = document.location.pathname.substr(1, 2); // XXX funktioniert nur mit 2-buchstaben-abkuerzungen von sprachen
-    var url = "/infosystem/" + language + "/satellitenkarte.htm";
+    var url = "/infosystem";
 
     var sponsorid_input = document.getElementById('sponsorid-input');
     var password_input = document.getElementById('password-input');

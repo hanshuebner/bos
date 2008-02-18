@@ -60,29 +60,17 @@
      </tr>
      <tr>
       <td class="Label">square metres</td>
-      <td class="Input">a total of $(numsqm) m² has been bought<br />UTM-coordinate: N$(sqm-x) E$(sqm-y)</td>
+      <td class="Input">a total of $(numsqm) m² has been bought<br />UTM-coordinate: N$(sqm-x) E$(sqm-y)
+      <br /><a href="/contract-kml/$(contract-id)">Your square metres in Google Earth</a></td>
       <td class="Info"></td>
      </tr>
      <tr>
       <td class="Label">action message</td>
       <td class="Input">
-       <button name="action" type="submit" value="save" onclick="javascript:return formcheck();">SAVE</button>
-      </td>
-      <td class="Info">Your personal profile data will be updated with the entered data.</td>
-     </tr>
-     <tr>
-      <td class="Label"></td>
-      <td class="Input">
-       <button name="anonymize" type="submit" value="anonymize" onclick="javascript:return anonymizecheck();">make profile anonymous</button>
-      </td>
-      <td class="Info">Your personal data will be hidden.</td>
-     </tr>
-     <tr>
-      <td class="Label"></td>
-      <td class="Input">
+       <button name="action" type="submit" value="save" onclick="javascript:return formcheck();">Save</button>
        <button name="action" type="reset">discard changes</button>
       </td>
-      <td class="Info">All arranged changes have been discarded.</td>
+      <td class="Info">Update profile or discard changes.</td>
      </tr>
      <bos:when-certificate>
       <tr>
@@ -124,5 +112,6 @@
     </table>
    </form>
   </bos:save-profile>
+  <bos:google-analytics-track />
  </body>
 </html>

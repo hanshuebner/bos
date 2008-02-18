@@ -1,3 +1,5 @@
+;; 2008-01-15: currently not used in the production core
+
 ;;;; Quadratmeterbelegungsroutine:
 ;;;;
 ;;;; Oeffentliche API:

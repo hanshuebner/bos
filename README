@@ -4,16 +4,16 @@ Deployment des BOS-Servers
 Vorbereitung
 ------------
 
-  - CMUCL 19a installieren, so dass "lisp" im Pfad ist
+  - CMUCL 19c installieren, so dass "lisp" im Pfad ist
 
-  - Komplettes cvs auschecken:
-      $ cvs -d :ext:bknr.net:/home/bknr/cvs co -d bknr.net .
+  - Komplettes svn auschecken:
+      $ svn co svn+ssh://common-lisp.net/project/bknr/svn/branches/bos/projects/bos bknr-svn
 
 Image bauen
 -----------
 
   - Im BOS-Verzeichnis eingeben
-      bknr.net/bos$ ./build.sh --clean
+      bknr.net/bos$ ./build.sh
     (--clean loescht fasls vor dem Kompilieren.)
 
   - Heraus kommt das Imagefile "bos.core", das auf den Kundenserver
@@ -51,3 +51,6 @@ Startup
    - Zum Debuggen kann man auch eingeben:
        $ lisp -core bos.core -nostart
      Dann kann man das Image begutachten, bevor der Server gestartet ist.
+
+   - Fuer weitere Optionen siehe define-toggle-switch in build.lisp.
+

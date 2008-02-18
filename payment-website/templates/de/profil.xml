@@ -60,7 +60,8 @@
      </tr>
      <tr>
       <td class="Label">Quadratmeter</td>
-      <td class="Input">Insgesamt $(numsqm) Quadratmeter gekauft<br />UTM-Koordinate: N$(sqm-x) E$(sqm-y)</td>
+      <td class="Input">Insgesamt $(numsqm) Quadratmeter gekauft<br />UTM-Koordinate: N$(sqm-x) E$(sqm-y)
+      <br /><a href="/contract-kml/$(contract-id)">Ihre Quadratmeter in Google Earth</a></td>
       <td class="Info"></td>
      </tr>
      <tr>
@@ -124,5 +125,6 @@
     </table>
    </form>
   </bos:save-profile>
+  <bos:google-analytics-track />
  </body>
 </html>

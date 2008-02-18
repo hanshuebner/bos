@@ -2,32 +2,39 @@
 
 (enable-interpol-syntax)
 
-(defvar *country->office-email* '(("DK" . "service@bosdanmark.dk")))
+(defvar *country->office-email* '(("DK" . "bosdanmark.regnskov@gmail.com")
+				  ("SE" . "bosdanmark.regnskov@gmail.com")))
+
+(defun country->office-email (country)
+  (or (cdr (assoc country *country->office-email* :test #'string-equal))
+      *office-mail-address*))
 
 (defun contract-office-email (contract)
   "Return the email address of the MXM office responsible for handling a contract"
-  (or (cdr (assoc (sponsor-country (contract-sponsor contract)) *country->office-email* :test #'string-equal))
-      *office-mail-address*))
+  (country->office-email (sponsor-country (contract-sponsor contract))))
 
 (defun send-system-mail (&key (to *office-mail-address*) (subject "(no subject") (text "(no text)") (content-type "text/plain; charset=UTF-8") more-headers)
-  (send-smtp "localhost" *mail-sender* to
-	     (format nil "X-Mailer: BKNR-BOS-mailer
+  (if *enable-mails*
+      (send-smtp "localhost" *mail-sender* to
+		 (format nil "X-Mailer: BKNR-BOS-mailer
 Date: ~A
 From: ~A
 To: ~A
 Subject: ~A
 ~@[Content-Type: ~A
 ~]~@[~*~%~]~A"
-		     (format-date-time (get-universal-time) :mail-style t)
-		     *mail-sender*
-		     to
-		     subject
-		     content-type
-		     (not more-headers)
-		     text)))
+			 (format-date-time (get-universal-time) :mail-style t)
+			 *mail-sender*
+			 to
+			 subject
+			 content-type
+			 (not more-headers)
+			 text))
+      (format t "Mail with subject ~S to ~A not sent~%" subject to)))
   
-(defun mail-info-request (email)
+(defun mail-info-request (email country)
   (send-system-mail :subject "Mailing list request"
+		    :to (country->office-email country)
 		    :text #?"Please enter into the mailing list:
 
 
@@ -37,45 +44,34 @@ $(email)
 (defun mail-fiscal-certificate-to-office (contract name address country)
   (format t "mail-fiscal-certificate-to-office: ~a name: ~a address: ~a country: ~a~%" contract name address country))
 
+(defun mail-template-directory (language)
+  "Return the directory where the mail templates are stored"
+  (merge-pathnames (make-pathname :directory `(:relative "templates" ,(string-downcase language)))
+		   (symbol-value (find-symbol "*WEBSITE-DIRECTORY*" "BOS.WEB"))))
+
+(defun rest-of-file (file)
+  (let ((result (make-array (- (file-length file)
+			       (file-position file))
+			    :element-type 'character)))
+    (read-sequence result file)
+    result))
+
+(defun make-welcome-mail (sponsor)
+  "Return a plist containing the :subject and :text options to generate an email with send-system-mail"
+  (let ((vars (list :sponsor-id (sponsor-id sponsor)
+		    :master-code (sponsor-master-code sponsor))))
+    (labels
+	((get-var (var-name) (getf vars var-name)))
+      (with-open-file (template (merge-pathnames #p"welcome-email.template"
+						 (mail-template-directory (sponsor-language sponsor))))
+	(let ((subject (bknr.web:expand-variables (read-line template) #'get-var))
+	      (text (bknr.web:expand-variables (rest-of-file template) #'get-var)))
+	  (list :subject subject :text text))))))
+
 (defun mail-instructions-to-sponsor (contract email)
-  (let* ((sponsor (contract-sponsor contract))
-	 (sponsor-id (sponsor-id sponsor))
-	 (master-code (sponsor-master-code sponsor)))
-    (send-system-mail :to email
-		      :subject "Willkommen zur Samboja Lestari Informations-Website"
-		      :text #?"Sehr geehrte(r) Sponsor(in),
-
-wir haben Ihr Sponsoren-Profil fuer Sie eingerichtet.
-
-Ihre Sponsoren-ID lautet: $(sponsor-id)
-Ihr Master-Code lautet: $(master-code)
-
-Besuchen Sie unsere Website http://create-rainforest.org/ regelmaessig,
-um sich ein Bild darueber zu verschaffen, was auf \"Ihren\" Quadratmetern
-passiert.
-
-Bedienungsanleitung:
-
-Mit Hilfe Ihrer Sponsoren-ID und Ihrem Kennwort oder auch Mastercode
-koennen Sie sich auf der Webseite in Ihr persoenliches Profil einloggen
-und \"Ihre\" Quadratmeter lokalisieren.
-Die Zugangsdaten können in der linken unteren Ecke der Satellitenkarte unter
-Sponsoren ID und Kennwort (oder Mastercode) eingegeben werden.
-Sie gelangen in ihr Profil indem sie nach dem Eingeben der Daten  das an
-gleicher Stelle erscheinende \"Profil-Feld\" anklicken.
-Es besteht zusaetzlich die Moeglichkeit für Sie, einen Grusstext zu
-hinterlegen,
-welcher fuer jeden Besucher dieser Webseite sichtbar wird, sofern dieser
-Besucher auf Ihre Quadratmeter in dem Vergroesserungsfenster klickt.
-Waehlen Sie in Ihrem Profil, ob Sie anonym bleiben wollen oder nicht.
-
-Wir wuenschen Ihnen viel Spass beim Lesen der Texte und betrachten der
-Bilder vom immer groesser werdenden Regenwald in Samboja Lestari - Borneo!
-
-Nochmals danken wir Ihnen im Namen der Orang-Utans und Malaienbaeren, sowie
-aller Waldbewohner und natuerlich der lokalen Bevoelkerung Indonesiens.
-
-Das Team von BOS Deutschland e.V.")))
+  (apply #'send-system-mail
+	 :to email
+	 (make-welcome-mail (contract-sponsor contract))))
 
 (defun format-vcard (field-list)
   (with-output-to-string (s)
@@ -159,12 +155,12 @@ Gift: ~A
 		 :content string))
 
 (defparameter *common-element-names*
-  '(("MC_donationcert-yearly" "donationcert-yearly")
-    ("MC_sponsorid" "sponsor-id")
-    ("countryString" "country")
-    ("postcode" "plz")
-    ("MC_gift" "gift")
-    ("cartId" "contract-id")))
+  '(("MC_donationcert-yearly" . "donationcert-yearly")
+    ("MC_sponsorid" . "sponsor-id")
+    ("countryString" . "country")
+    ("postcode" . "plz")
+    ("MC_gift" . "gift")
+    ("cartId" . "contract-id")))
 
 (defun lookup-element-name (element-name)
   "Given an ELEMENT-NAME (which may be either a form field name or a name of a post parameter from
@@ -180,12 +176,14 @@ worldpay), return the common XML element name"
 		 :encoding :quoted-printable
 		 :content (format nil "
 <sponsor>
+ <date>~A</date>
  ~{<~A>~A</~A>~}
 </sponsor>
 "
+				  (format-date-time (get-universal-time) :xml-style t)
 				  (apply #'append
 					 (mapcar #'(lambda (cons)
-						     (destructuring-bind (element-name content) cons
+						     (destructuring-bind (element-name . content) cons
 						       (setf element-name (lookup-element-name element-name))
 						       (list element-name
 							     (if (find #\Newline content)
@@ -218,16 +216,43 @@ worldpay), return the common XML element name"
 		      :content-type nil
 		      :more-headers t
 		      :text (with-output-to-string (s)
+			      (format s "X-BOS-Sponsor-Country: ~A~%" (sponsor-country (contract-sponsor contract)))
 			      (print-mime s 
 					  (make-instance 'multipart-mime
 							 :subtype "mixed"
 							 :content parts)
 					  t t))))
-  (unless (contract-download-only-p contract)
+  (ignore-errors
     (delete-file (contract-pdf-pathname contract :print t))))
 
-(defun mail-backoffice-sponsor-data (contract req)
-  (with-query-params (req numsqm country email name address date language)
+(defun mail-print-pdf (contract)
+  (send-system-mail
+   :to (contract-office-email contract)
+   :subject (format nil "PDF certificate (regenerated) - Sponsor-ID ~D Contract-ID ~D"
+		    (store-object-id (contract-sponsor contract))
+		    (store-object-id contract))
+   :content-type nil
+   :more-headers t
+   :text (with-output-to-string (s)
+	   (format s "X-BOS-Sponsor-Country: ~A~%" (sponsor-country (contract-sponsor contract)))
+	   (print-mime s 
+		       (make-instance
+			'multipart-mime
+			:subtype "mixed"
+			:content (list
+				  (make-instance
+				   'mime
+				   :type "application"
+				   :subtype (format nil "pdf; name=\"contract-~A.pdf\""
+						    (store-object-id contract))
+				   :encoding :base64
+				   :content (file-contents (contract-pdf-pathname contract :print t)))))
+		       t t)))
+  (ignore-errors
+    (delete-file (contract-pdf-pathname contract :print t))))
+
+(defun mail-backoffice-sponsor-data (contract)
+  (with-query-params (numsqm country email name address date language)
     (let ((parts (list (make-html-part (format nil "
 <html>
  <body>
@@ -238,6 +263,8 @@ worldpay), return the common XML element name"
    <tr><td>Name</td><td>~@[~A~]</td></tr>
    <tr><td>Adress</td><td>~@[~A~]</td></tr>
    <tr><td>Email</td><td>~@[~A~]</td></tr>
+   <tr><td>Country</td><td>~@[~A~]</td></tr>
+   <tr><td>Language</td><td>~@[~A~]</td></tr>
   </table>
  </body>
 </html>"
@@ -245,8 +272,10 @@ worldpay), return the common XML element name"
 					       numsqm
 					       name
 					       address
-					       email))
-		       (make-contract-xml-part (store-object-id contract) (all-request-params req))
+					       email
+					       country
+					       language))
+		       (make-contract-xml-part (store-object-id contract) (all-request-params))
 		       (make-vcard-part (store-object-id contract)
 					(make-vcard :sponsor-id (store-object-id (contract-sponsor contract))
 						    :note (format nil "Paid-by: Back office
@@ -264,8 +293,8 @@ Amount: EUR~A.00
 						    :email email)))))
       (mail-contract-data contract "Manually entered sponsor" parts))))
 
-(defun mail-manual-sponsor-data (req)
-  (with-query-params (req contract-id vorname name strasse plz ort email telefon donationcert-yearly)
+(defun mail-manual-sponsor-data ()
+  (with-query-params (contract-id vorname name strasse plz ort email telefon want-print donationcert-yearly)
     (let* ((contract (store-object-with-id (parse-integer contract-id)))
 	   (sponsor-id (store-object-id (contract-sponsor contract)))
 	   (parts (list (make-html-part (format nil "
@@ -282,9 +311,10 @@ Amount: EUR~A.00
     <tr><td>Postcode</td><td>~@[~A~]</td></tr>
     <tr><td>City</td><td>~@[~A~]</td></tr>
     <tr><td>Email</td><td>~@[~A~]</td></tr>
-    <tr><td>Phone</td><td>~@[~A~]</td></tr>~@[
+    <tr><td>Phone</td><td>~@[~A~]</td></tr>
     <tr><td></td></tr>
-    <tr><td>Donation receipt at year's end</td><td>~A</td></tr>~]
+    <tr><td>Printed certificate</td><td>~A</td></tr>
+    <tr><td>Donation receipt at year's end</td><td>~A</td></tr>
    </table>
    <p><a href=\"~A/complete-transfer/~A?email=~A\">Acknowledge receipt of payment</a></p>
  </body>
@@ -294,9 +324,10 @@ Amount: EUR~A.00
 						(length (contract-m2s contract))
 						(* 3.0 (length (contract-m2s contract)))
 						vorname name strasse plz ort email telefon
-						(if donationcert-yearly "ja" "nein")
+						(if want-print "yes" "no")
+						(if donationcert-yearly "yes" "no")
 						*website-url* contract-id email))
-			(make-contract-xml-part contract-id (all-request-params req))
+			(make-contract-xml-part contract-id (all-request-params))
 			(make-vcard-part contract-id (make-vcard :sponsor-id sponsor-id
 								 :note (format nil "Paid-by: Manual money transfer
 Contract ID: ~A
@@ -331,8 +362,8 @@ Donationcert yearly: ~A
 	(remhash contract-id *worldpay-params-hash*))
       (error "cannot find WorldPay callback params for contract ~A~%" contract-id)))
 
-(defun mail-worldpay-sponsor-data (req)
-  (with-query-params (req contract-id)
+(defun mail-worldpay-sponsor-data ()
+  (with-query-params (contract-id)
     (let* ((contract (store-object-with-id (parse-integer contract-id)))
 	   (params (get-worldpay-params contract-id))
 	   (parts (list (make-html-part (format nil "

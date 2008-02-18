@@ -5,7 +5,8 @@
 ;; Die Gesamtbreite des Gebiets in Quadratmetern.
 (defconstant +width+ 10800)
 
-;; Die UTM-Koordinaten der Nord-West-Ecke des Gebiets.
+;; Die UTM-Koordinaten der Nord-West-Ecke des Gebiets (Zone 50)
+(defconstant +utm-zone+ 50)
 (defconstant +nw-utm-x+ 491698.366d0)
 (defconstant +nw-utm-y+ 9890100.289d0)
 
@@ -69,3 +70,6 @@ Download-Urkunden erzeugt werden sollen")
 (defparameter *online-contract-expiry-time* (* 3600))
 
 (defvar *website-url* "http://change-me")
+
+;; Einschalten des Mail-Versands (normalerweise aus)
+(defvar *enable-mails* nil)

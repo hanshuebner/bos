@@ -166,5 +166,6 @@ In the unexpected case that you will not receive a message please contact
 			 	</div>
 			</div>
 		</div>
+		<bos:google-analytics-track />
 	</body>
 </html>

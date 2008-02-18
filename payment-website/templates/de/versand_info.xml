@@ -16,7 +16,7 @@
              <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8" />-->
 		<title>REGENWALD für SAMBOJA LESTARI</title>
 	</head>
-	<body>
+	<body onload="if (document.formular['want-print'][1].checked) document.getElementById('postal_info').style.visibility = 'inherit'">
 	
 		<!-- header and menu_top -->
 		<div id="header">
@@ -89,13 +89,13 @@
 									</td>							
 								</tr>
 								<tr>
-									<td colspan="3" height="8"> </td>
+									<td colspan="3" height="3"> </td>
 								</tr>
 								<tr>
 									<td colspan="3" height="1" bgcolor="#c0c0c0"> </td>
 								</tr>
 								<tr>
-									<td colspan="3" height="8"> </td>
+									<td colspan="3" height="3"> </td>
 								</tr>		
 								<tr>
 									<td colspan="3">
@@ -113,18 +113,42 @@
 									</td>
 								</tr>
 								<tr>
-									<td colspan="3" height="6"> </td>
-								</tr>	
+									<td colspan="3" height="3"> </td>
+								</tr>
+								<tr>
+									<td colspan="3" height="1" bgcolor="#c0c0c0"> </td>
+								</tr>
+								<tr>
+									<td colspan="3" height="5"> </td>
+								</tr>		
 								<tr>
 									<td colspan="3">
-										Bitte überprüfen bzw. korrigieren Sie die angegebene Adresse für den Versand
-										Ihrer Regenwald-Urkunde:
+										Wir senden Ihnen gerne eine attraktive Urkunde per Post zu.  In jedem Fall ist
+										Ihre Urkunde für Sie als PDF abrufbar.
+									</td>
+								</tr>	
+								<tr>
+									<td colspan="3" height="3"> </td>
+								</tr>		
+								<tr>
+									<td colspan="3">
+										<input type="radio"
+																	name="want-print"
+																	value="no"
+																	onclick="document.getElementById('postal_info').style.visibility = 'hidden'"
+																	checked="checked"/>
+										Nur Download-Urkunde<br/>
+										<input type="radio"
+																	name="want-print"
+																	value="yes"
+																	onclick="document.getElementById('postal_info').style.visibility = 'inherit'"/>
+										Urkunde per Post
 									</td>
 								</tr>
 								<tr>
 									<td colspan="3" height="10"> </td>
 								</tr>
-								<tr>
+								<tr id="postal_info" style="visibility: hidden">
 									<td>Versandadresse<br />für die Urkunde:<br /><br /><br /></td>
 									<td></td>
 									<td>
@@ -168,7 +192,7 @@ $(country)</textarea>
 					</a>
 					<br /><br /><br /><br /><br /><br /><br /><br /><br />
 					[<strong>Regenwald-Urkunde</strong>]<br />
-					Sie oder der Beschenkte erhalten auf dem Postweg eine attraktive
+					Wenn Sie es wünschen, erhalten Sie auf dem Postweg eine attraktive
 					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
 					<a href="javascript:window_extra('certificat')" class="more">
 						Urkunde
@@ -183,5 +207,6 @@ $(country)</textarea>
 			 	</div>			
 			</div>
 		</div>
+		<bos:google-analytics-track />
 	</body>
 </html>

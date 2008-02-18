@@ -31,7 +31,7 @@
    (free-m2s :update)
    (bounding-box :update :transient t))
   (:documentation
-    "A polygon in which to allocate meters.  LEFT, TOP, WIDTH, and HEIGHT
+   "A polygon in which to allocate meters.  LEFT, TOP, WIDTH, and HEIGHT
      designate the bounding rectangle of the polygon.  VERTICES is the
      list of coordinates (x . y) of the polygon vertices.  Initially the area
      is unallocated.  Is is then partitioned into stripes by the allocation
@@ -43,6 +43,17 @@
      provide enough space to meet allocation guarantees.  When such activation
      is done, a warning message is sent, to avoid running out of allocation
      areas."))
+
+(defmethod print-object ((allocation-area allocation-area) stream)
+  (print-unreadable-object (allocation-area stream :type t)
+    (format stream "~a x ~a ~:[inactive~;active~] free: ~s ID: ~a"
+	    (allocation-area-width allocation-area)
+	    (allocation-area-height allocation-area)
+	    (allocation-area-active-p allocation-area)
+	    (if (slot-boundp allocation-area 'free-m2s)
+		(allocation-area-free-m2s allocation-area)
+		:unbound)
+	    (store-object-id allocation-area))))
 
 (defmethod initialize-persistent-instance :after ((allocation-area allocation-area))
   (with-slots (total-m2s free-m2s) allocation-area
@@ -72,13 +83,13 @@
          (right left)
          (bottom top))
     (loop for i from 1 below (length vertices) do
-          (let* ((v (elt vertices i))
-                 (x (car v))
-                 (y (cdr v)))
-            (setf left (min left x)
-                  right (max right x)
-                  top (min top y)
-                  bottom (max bottom y))))
+	 (let* ((v (elt vertices i))
+		(x (car v))
+		(y (cdr v)))
+	   (setf left (min left x)
+		 right (max right x)
+		 top (min top y)
+		 bottom (max bottom y))))
     (values left top (- right left) (- bottom top))))
 
 (defmethod allocation-area-center ((allocation-area allocation-area))
@@ -116,12 +127,14 @@
   ;; Punkt der neuen allocation area.
   (multiple-value-bind (left top width height)
       (compute-bounding-box vertices)
+    ;; FIXME: sollte das nicht sein:
+    ;; for y from top upto (1- (+ top height)) ?
     (loop for y from top upto (+ top height)
-	  do (loop for x from left upto (+ left width)
-		   when (point-in-polygon-p x y vertices)
-		   do (dolist (allocation-area (class-instances 'allocation-area))
-			(when (point-in-polygon-p x y (allocation-area-vertices allocation-area))
-			  (error "new allocation area must not intersect with existing allocation area ~A" allocation-area))))))
+       do (loop for x from left upto (+ left width)
+	     when (point-in-polygon-p x y vertices)
+	     do (dolist (allocation-area (class-instances 'allocation-area))
+		  (when (point-in-polygon-p x y (allocation-area-vertices allocation-area))
+		    (error "new allocation area must not intersect with existing allocation area ~A" allocation-area))))))
   
   (make-allocation-area/unchecked vertices))
 
@@ -171,16 +184,19 @@
 						(null (allocation-area-free-m2s allocation-area)))))
 	   (all-allocation-areas)))
 
-(defun activate-allocation-area (area)
+(deftransaction activate-allocation-area (area)
   (warn "activating ~S" area)
   (setf (slot-value area 'active-p) t)
+  (bos.m2.allocation-cache:rebuild-cache)
   area)
 
-(defun deactivate-allocation-area (area)
+(deftransaction deactivate-allocation-area (area)
   (warn "deactivating ~S" area)
   (setf (slot-value area 'active-p) nil)
+  (bos.m2.allocation-cache:rebuild-cache)
   area)
 
+;;; FIXME can be optimized
 (defun map-edges (fn vertices)
   (loop
      for i from 0 below (length vertices)
@@ -188,6 +204,7 @@
      for b = (elt vertices i)
      do (funcall fn a b)))
 
+;; http://www.ics.uci.edu/~eppstein/161/960307.html
 (defun in-polygon-p (x y vertices)
   (let ((c 0))
     (map-edges (lambda (a b)
@@ -217,11 +234,11 @@ not be returned by this function"
   "Returns the total number of sqms in the allocation area (note: brute force)"
   (with-slots (left top width height vertices) allocation-area
     (loop for x from left upto (+ left width)
-	  with retval = 0
-	  do (loop for y from top upto (+ top height)
-		       when (in-polygon-p x y vertices)
-		       do (incf retval))
-	  finally (return retval))))
+       with retval = 0
+       do (loop for y from top upto (+ top height)
+	     when (in-polygon-p x y vertices)
+	     do (incf retval))
+       finally (return retval))))
 
 (defmethod calculate-allocated-m2-count ((allocation-area allocation-area))
   "Returns the number of sqms allocated within an allocation area"
@@ -243,8 +260,8 @@ not be returned by this function"
 	(right (* 90 (ceiling (+ left width) 90)))
 	(bottom (* 90 (ceiling (+ top height) 90))))
     (loop for x from left upto right by 90
-	  do (loop for y from top upto bottom by 90
-		   do (pushnew (ensure-map-tile x y) tiles)))
+       do (loop for y from top upto bottom by 90
+	     do (pushnew (ensure-map-tile x y) tiles)))
     tiles))
 
 (defmethod allocation-area-tiles ((allocation-area allocation-area))
@@ -261,7 +278,7 @@ not be returned by this function"
    (area :update)
    (seen :update))
   (:documentation
-    "A rectangle in which to allocate meters.  LEFT, TOP, WIDTH, and HEIGHT
+   "A rectangle in which to allocate meters.  LEFT, TOP, WIDTH, and HEIGHT
      designate the dimensions of the stripe.  X and Y point to the next free
      square meter.  If X or Y point to a square meter outside of the stripe,
      and no square meters have already been SEEN, there are not free square
@@ -334,7 +351,7 @@ not be returned by this function"
   "Liefere alle STRIPES, sortiert erstens nach ihrer Area, zweitens nach
    aufsteigender Hoehe, drittens von oben nach unten."
   (loop for area in (active-allocation-areas)
-        append (allocation-area-stripes area)))
+     append (allocation-area-stripes area)))
 
 (defun add-new-stripe/area (n area)
   "Return a newly allocated stripe contained in AREA suitable for allocation
@@ -451,8 +468,8 @@ not be returned by this function"
   ;; optisch sichtbare Trennung in einem Contract zu verhindern.
   (with-slots (top height area) stripe
     (loop with vertices = (allocation-area-vertices area)
-          for y from top below (+ top height)
-          never (in-polygon-p x y vertices))))
+       for y from top below (+ top height)
+       never (in-polygon-p x y vertices))))
 
 (defun stripe-full-p (stripe)
   (with-slots (left top width height x y seen) stripe
@@ -501,34 +518,34 @@ not be returned by this function"
                  "Return the next *free* square meter in stripe, using the
                   temporary counters, or NIL if stripe is fully allocated."
                  (or (loop
-                      (let ((m2 (pop new-seen)))
-                        (cond
-                          ((null m2)
-                           (return nil))
-                          ((null (m2-contract m2))
-                           (return m2)))))
+			(let ((m2 (pop new-seen)))
+			  (cond
+			    ((null m2)
+			     (return nil))
+			    ((null (m2-contract m2))
+			     (return m2)))))
                      (loop
-                      (let ((m2 (find-next-m2)))
-                        (cond
-                          ((null m2)
-                           (return nil))
-                          ((not (in-polygon-p (m2-x m2) (m2-y m2) vertices))
-                           (when (and (stripe-dissection-p (m2-x m2) stripe)
-                                      (or result new-seen))
-                             ;; Wenn wir hier weitermachen und das Polygon
-                             ;; nicht konvex ist, ist das Ergebnis nicht
-                             ;; zusammenhaengend.  Also aufgeben und in der
-                             ;; rechten Haelfe des Stripes weitermachen.
-                             (setf x new-x
-                                   y new-y
-                                   seen (append new-seen (reverse result)))
-                             (let ((right (split-stripe-vertically stripe)))
-                               (return-from find-free-m2s/stripe
-                                 (if right
-                                     (find-free-m2s/stripe n right)
-                                     nil)))))
-                          ((null (m2-contract m2))
-                           (return m2))))))))
+			(let ((m2 (find-next-m2)))
+			  (cond
+			    ((null m2)
+			     (return nil))
+			    ((not (in-polygon-p (m2-x m2) (m2-y m2) vertices))
+			     (when (and (stripe-dissection-p (m2-x m2) stripe)
+					(or result new-seen))
+			       ;; Wenn wir hier weitermachen und das Polygon
+			       ;; nicht konvex ist, ist das Ergebnis nicht
+			       ;; zusammenhaengend.  Also aufgeben und in der
+			       ;; rechten Haelfe des Stripes weitermachen.
+			       (setf x new-x
+				     y new-y
+				     seen (append new-seen (reverse result)))
+			       (let ((right (split-stripe-vertically stripe)))
+				 (return-from find-free-m2s/stripe
+				   (if right
+				       (find-free-m2s/stripe n right)
+				       nil)))))
+			    ((null (m2-contract m2))
+			     (return m2))))))))
         (dotimes (dummy n
                   (progn                ;success
                     (setf x new-x
@@ -537,8 +554,8 @@ not be returned by this function"
                     (when result
 		      (with-slots (area) stripe
 			(decf (allocation-area-free-m2s area) n)
-		      (when (null (allocation-area-free-m2s area))
-			(deactivate-allocation-area area))))
+			(when (null (allocation-area-free-m2s area))
+			  (deactivate-allocation-area area))))
 		    result))
           (let ((m2 (find-free-m2)))
             (unless m2                  ;failure
@@ -563,11 +580,11 @@ not be returned by this function"
    such stripe can be created, return NIL.  If a stripe could be created but
    N square meters could not actually be allocated in the stripe, repeat."
   (loop for stripe = (add-new-stripe/area n area)
-        while stripe
-        do
-          (let ((result (find-free-m2s/stripe n stripe)))
-            (when result
-              (return result)))))
+     while stripe
+     do
+     (let ((result (find-free-m2s/stripe n stripe)))
+       (when result
+	 (return result)))))
 
 (defun find-free-m2s/overflow (n area)
   "Find an allocation stripe in store of size HEIGHT with N free square
@@ -580,16 +597,16 @@ not be returned by this function"
        while stripe
        until result
        do
-         (ecase (classify-stripe n stripe)
-           (:stripe-too-small)
-           (:stripe-matches
-            (setf result (find-free-m2s/stripe n stripe)))
-           (:stripe-too-large
-            (split-stripe-horizontally stripe)
-            (setf stripes (allocation-area-stripes area)))
-           (:stripe-nearly-full
-            (when (<= n 2)
-              (setf result (find-free-m2s/stripe n stripe))))))
+       (ecase (classify-stripe n stripe)
+	 (:stripe-too-small)
+	 (:stripe-matches
+	  (setf result (find-free-m2s/stripe n stripe)))
+	 (:stripe-too-large
+	  (split-stripe-horizontally stripe)
+	  (setf stripes (allocation-area-stripes area)))
+	 (:stripe-nearly-full
+	  (when (<= n 2)
+	    (setf result (find-free-m2s/stripe n stripe))))))
     result))
 
 (defmethod allocation-area-find-free-m2s ((area allocation-area) n)
@@ -609,29 +626,30 @@ not be returned by this function"
   (some (lambda (stripe)
           (find-free-m2s/stripe n stripe))
         (loop for area in (reverse (active-allocation-areas))
-              append (allocation-area-stripes area))))
+	   append (allocation-area-stripes area))))
 
 (defun find-free-m2s (n)
   (assert (plusp n))
   (unless (in-transaction-p)
     (error "find-free-m2s called outside of the allocation transaction"))
-  (or (some (lambda (area) (allocation-area-find-free-m2s area n))
-            (active-allocation-areas))
+  (or (bos.m2.allocation-cache:find-exact-match n :remove t) 
+      (some (lambda (area) (allocation-area-find-free-m2s area n))
+	    (active-allocation-areas))
       (let ((area (find-inactive-allocation-area)))
-        (when area
-          (activate-allocation-area area)
-          (find-free-m2s n)))
+	(when area
+	  (activate-allocation-area area)
+	  (find-free-m2s n)))
       (find-free-m2s/underflow n)
       (warn "all allocation areas exhausted")
       nil))
 
-(defun return-m2s (m2s)
+(defmethod return-m2s (m2s)
   "Mark the given square meters as free, so that they can be re-allocated."
   (when m2s
     (loop for m2 in m2s
-	  for allocation-area = (m2-allocation-area m2)
-	  when allocation-area
-	  do (return-m2 allocation-area))
+       for allocation-area = (m2-allocation-area m2)
+       when allocation-area
+       do (return-m2 allocation-area))
     (multiple-value-bind (left top width height)
         (compute-bounding-box
          (mapcar (lambda (m2) (cons (m2-x m2) (m2-y m2))) m2s))

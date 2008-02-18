@@ -42,8 +42,19 @@ Download der Urkunde"
 		   :sponsor-id (sponsor-id sponsor)
 		   :master-code (sponsor-master-code sponsor)
 		   :sqm-count (length (contract-m2s contract))
-		   :sqm-ids (with-output-to-string (s)
-			      (loop for group in (group-by (mapcar #'m2-num-string (contract-m2s contract)) *num-coords-per-line*)
-				    do (loop for nums on group
-					     do (princ (car nums) s)
-					     do (princ (if (cdr nums) #\Tab #\Newline) s)))))))
+		   ;; :sqm-ids (with-output-to-string (s)
+		   ;; 			      (loop for group in (group-by (mapcar #'m2-num-string (contract-m2s contract)) *num-coords-per-line*)
+		   ;; 				 do (loop for nums on group
+		   ;; 				       do (princ (car nums) s)
+		   ;; 				       do (princ (if (cdr nums) #\Tab #\Newline) s))))
+		   ;; should later be called :sqm-coordinates
+		   :sqm-ids
+		   (flet ((format-point (stream x y)
+			    (apply #'geometry:format-lon-lat stream
+				   (geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ x)
+							       (- +nw-utm-y+ y) +utm-zone+ t))))
+		     (destructuring-bind (left top width height)
+			 (contract-bounding-box contract)
+		       (with-output-to-string (out)
+			 (format-point out left top) (terpri out)			 
+			 (format-point out (+ left width) (+ top height)) (terpri out)))))))

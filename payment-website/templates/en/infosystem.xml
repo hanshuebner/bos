@@ -18,6 +18,7 @@
 <div id="content_infosystem">
 	<h1 class="extra">Infosystem "satellite map"</h1>
 </div>
+<bos:google-analytics-track />
 </body>
 </html>
 

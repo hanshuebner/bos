@@ -1,3 +1,5 @@
+;; 2008-01-15: currently not used in the production core
+
 (in-package :cl-user)
 
 (defconstant +max-node-objects+ 10)

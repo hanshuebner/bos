@@ -1,9 +1,27 @@
 (in-package :cl-user)
 
+(defpackage :geometry
+  (:use :cl :iterate :arnesi)
+  (:export #:with-points
+	   #:distance
+	   #:dorect
+	   #:rect-center
+	   #:point-in-polygon-p
+	   #:point-in-circle-p
+	   #:find-boundary-point
+	   #:region-to-polygon
+	   #:format-lon-lat))
+
+(defpackage :geo-utm
+  (:use :cl)
+  (:export #:lon-lat-to-utm-x-y
+	   #:utm-x-y-to-lon-lat))
+
 (defpackage :bos.m2.config
   (:export #:+width+
 	   #:+nw-utm-x+
 	   #:+nw-utm-y+
+	   #:+utm-zone+
 	   #:+m2tile-width+
 	   #:+price-per-m2+
 
@@ -27,6 +45,7 @@
   (:use :cl
 	:cl-ppcre
 	:cl-interpol
+	:geometry
 	:bknr.utils
 	:bknr.indices
 	:bknr.datastore
@@ -36,7 +55,7 @@
 	:bknr.statistics
 	:bknr.rss
 	:bos.m2.config
-	:net.post-office
+	:cl-smtp
 	:kmrcl
 	:cxml
 	:cl-mime
@@ -76,7 +95,12 @@
            #:m2-y
 	   #:m2-utm-x
 	   #:m2-utm-y
+	   #:m2-utm
+	   #:m2-lon-lat
+	   #:m2s-polygon
+	   #:m2s-polygon-lon-lat
 	   #:escape-nl
+	   #:return-m2s
 
            #:sponsor
            #:make-sponsor
@@ -85,11 +109,17 @@
            #:sponsor-info-text
            #:sponsor-country
            #:sponsor-contracts
+	   #:sponsor-id
+	   #:sponsor-language
            #:sponsor-set-info-text
            #:sponsor-set-country
-	   #:sponsor-id
+	   #:sponsor-set-language
 	   #:country
 	   #:info-text
+	   #:language
+
+	   #:editor-only-handler
+	   #:editor-p
 
            #:contract
            #:make-contract
@@ -101,6 +131,9 @@
            #:contract-date
            #:contract-m2s
 	   #:contract-bounding-box
+	   #:contract-neighbours
+	   #:contract-center
+	   #:contract-center-lon-lat
 	   #:contract-color
 	   #:contract-cert-issued
            #:contract-set-paidp
@@ -189,6 +222,7 @@
 	   #:mail-manual-sponsor-data
 	   #:mail-backoffice-sponsor-data
 	   #:mail-worldpay-sponsor-data
+	   #:mail-print-pdf
 
 	   #:*cert-download-directory*))
 
@@ -203,3 +237,24 @@
 	:cl-gd)
   (:shadowing-import-from :cl-interpol #:quote-meta-chars)
   (:export #:cert-daemon))
+
+(defpackage :bos.m2.allocation-cache
+  (:use :cl
+	:geometry
+	:bknr.indices
+	:bknr.datastore
+	:bknr.user       
+	:bknr.images
+	:bknr.statistics
+	:bknr.rss
+	:bos.m2	
+	:bos.m2.config	
+	:iterate
+	:arnesi)
+  (:export #:find-exact-match
+	   #:add-area
+	   #:count-cache-entries
+	   #:pprint-cache
+	   #:rebuild-cache
+	   #:allocation-cache-subsystem))
+

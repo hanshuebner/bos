@@ -88,6 +88,10 @@
 ;; UTM laeuft von links nach rechts und von UNTEN NACH OBEN.
 (defun m2-utm-x (m2) (+ +nw-utm-x+ (m2-x m2)))
 (defun m2-utm-y (m2) (- +nw-utm-y+ (m2-y m2)))
+(defun m2-utm (m2) (list (m2-utm-x m2) (m2-utm-y m2)))
+
+(defun m2-lon-lat (m2)
+  (geo-utm:utm-x-y-to-lon-lat (m2-utm-x m2) (m2-utm-y m2) +utm-zone+ t))
 
 (defmethod m2-num-to-utm ((num integer))
   (multiple-value-bind (y x) (truncate num +width+)
@@ -101,6 +105,21 @@
   (find-if #'(lambda (allocation-area) (point-in-polygon-p (m2-x m2) (m2-y m2) (allocation-area-vertices allocation-area)))
 	   (class-instances 'allocation-area)))
 
+(defun m2s-polygon (m2s)
+  (let* ((m2 (first m2s))
+	 (contract (m2-contract m2)))
+    (region-to-polygon (list (m2-x m2) (m2-y m2))
+		       (lambda (p)
+			 (let ((m2 (apply #'get-m2 p)))
+			   (and m2 (eql contract (m2-contract m2))))))))
+
+(defun m2s-polygon-lon-lat (m2s)
+  (let ((polygon (m2s-polygon m2s)))
+    (mapcar (lambda (point)
+	      (destructuring-bind (x y) point
+		(geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ x) (- +nw-utm-y+ y) +utm-zone+ t)))
+	    polygon)))
+
 ;;;; SPONSOR
 
 ;;; Exportierte Funktionen:
@@ -112,16 +131,21 @@
 ;;; SPONSOR-PASSWORD-ANSWER (sponsor) => string
 ;;; SPONSOR-INFO-TEXT (sponsor) => string
 ;;; SPONSOR-COUNTRY (sponsor) => string
+;;; SPONSOR-LANGUAGE (sponsor) => string (preferred language)
 ;;; SPONSOR-CONTRACTS (sponsor) => list of contract
 ;;;
 ;;; Sowie Funktionen von USER.
 
 (define-persistent-class sponsor (user)
-  ((master-code :read          :initform nil)
-   (info-text :update	       :initform nil)
-   (country :update	       :initform nil)
-   (contracts :update          :initform nil))
+  ((master-code :read :initform nil)
+   (info-text :update :initform nil)
+   (country :update :initform nil)
+   (contracts :update :initform nil)
+   (language :update :initform nil))
   (:default-initargs :full-name nil :email nil))
+
+(defmethod user-editable-p ((sponsor sponsor))
+  nil)
 
 (defun sponsor-p (object)
   (equal (class-of object) (find-class 'sponsor)))
@@ -131,6 +155,13 @@
 
 (deftransaction sponsor-set-country (sponsor newval)
   (setf (sponsor-country sponsor) newval))
+
+(deftransaction sponsor-set-language (sponsor newval)
+  (setf (sponsor-language sponsor) newval))
+
+(defmethod sponsor-language :around ((sponsor sponsor))
+  (or (call-next-method)
+      "en"))
 
 (defvar *sponsor-counter* 0)
 
@@ -145,6 +176,21 @@
 
 (defmethod sponsor-id ((sponsor sponsor))
   (store-object-id sponsor))
+
+(define-user-flag :editor)
+
+(defmethod editor-p ((user user))
+  (or (admin-p user)
+      (user-has-flag user :editor)))
+
+(defmethod editor-p ((user null))
+  nil)
+
+(defclass editor-only-handler ()
+  ())
+
+(defmethod bknr.web:authorized-p ((handler editor-only-handler))
+  (editor-p bknr.web:*user*))
 
 ;;;; CONTRACT
 
@@ -259,20 +305,34 @@
 (defmethod contract-pdf-url ((contract contract))
   (format nil "/certificate/~A" (store-object-id contract)))
 
+(defmethod contract-certificates-generated-p (contract)
+  (and (probe-file (contract-pdf-pathname contract))
+       (or (contract-download-only-p contract)
+	   (probe-file (contract-pdf-pathname contract :print t)))))
+
+(defmethod contract-delete-certificate-files (contract)
+  (ignore-errors
+    (delete-file (contract-pdf-pathname contract))
+    (delete-file (contract-pdf-pathname contract :print t))))
+
+(defun wait-for-certificates (contract)
+  "Wait until the PDF generating process has generated the certificates"
+  (dotimes (i 10)
+    (when (contract-certificates-generated-p contract)
+      (return))
+    (sleep 1))
+  (unless (contract-certificates-generated-p contract)
+    (error "Cannot generate certificate")))
+
 (defmethod contract-issue-cert ((contract contract) name &key address language)
-  (if (contract-cert-issued contract)
-      (warn "can't re-issue cert for ~A" contract)
-      (progn
-	(make-certificate contract name :address address :language language)
-	(unless (contract-download-only-p contract)
-	  (make-certificate contract name :address address :language language :print t))
-	(dotimes (i 10)
-	  (when (probe-file (contract-pdf-pathname contract))
-	    (return))
-	  (sleep 1))
-	(if (probe-file (contract-pdf-pathname contract))
-	    (change-slot-values contract 'cert-issued t)
-	    (error "Cannot generate certificate")))))
+  (when (contract-cert-issued contract)
+    (warn "re-issuing cert for ~A" contract))
+  (contract-delete-certificate-files contract)
+  (make-certificate contract name :address address :language language)
+  (unless (contract-download-only-p contract)
+    (make-certificate contract name :address address :language language :print t))
+  (wait-for-certificates contract)
+  (change-slot-values contract 'cert-issued t))
 
 (defmethod contract-image-tiles ((contract contract))
   (let (image-tiles)
@@ -289,6 +349,31 @@
       (setf max-x (max (m2-x m2) (or max-x (m2-x m2))))
       (setf max-y (max (m2-y m2) (or max-y (m2-y m2)))))
     (list min-x min-y (1+ (- max-x min-x)) (1+ (- max-y min-y)))))
+
+(defun contract-neighbours (contract &optional (radius 100))
+  (destructuring-bind (left top width height)
+      (contract-bounding-box contract)
+    (let ((center (rect-center left top width height :roundp t))
+	  (diameter (* 2 radius))
+	  (contracts (make-hash-table :test #'eq)))
+      (with-points (center)
+	(dorect (point ((- center-x radius) (- center-y radius) diameter diameter)
+		       :test (lambda (point) (point-in-circle-p point center radius)))
+	  (with-points (point)
+	    (awhen (get-m2 point-x point-y)
+	      (when (m2-contract it)
+		(setf (gethash (m2-contract it) contracts) t))))))
+      (hash-keys contracts))))
+
+(defun contract-center (contract)
+  (destructuring-bind (left top width height)
+      (contract-bounding-box contract)
+    (rect-center left top width height :roundp t)))
+
+(defun contract-center-lon-lat (contract)
+  (let ((center (contract-center contract)))
+    (with-points (center)
+      (geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ center-x) (- +nw-utm-y+ center-y) +utm-zone+ t))))
 
 (defun tx-make-contract (sponsor m2-count &key date paidp expires)
   (warn "Old tx-make-contract transaction used, contract dates may be wrong")
@@ -308,6 +393,12 @@
 	  contract)
 	(warn "can't create contract, ~A square meters for ~A could not be allocated" m2-count sponsor))))
 
+(define-condition allocation-areas-exhausted (simple-error)
+  ((numsqm :initarg :numsqm :reader numsqm))
+  (:report (lambda (condition stream)
+	     (format stream "Could not satisfy your request for ~A sqms, please contact the BOS office"
+		     (numsqm condition)))))
+
 (defun make-contract (sponsor m2-count
                       &key (date (get-universal-time))
                       paidp
@@ -316,7 +407,11 @@
   (unless (and (integerp m2-count)
 	       (plusp m2-count))
     (error "number of square meters must be a positive integer"))
-  (let ((contract (do-make-contract sponsor m2-count :date date :paidp paidp :expires expires :download-only download-only)))
+  (let ((contract (do-make-contract sponsor m2-count
+				    :date date
+				    :paidp paidp
+				    :expires expires
+				    :download-only download-only)))
     (unless contract
       (send-system-mail :subject "Contact creation failed - Allocation areas exhaused"
 			:text (format nil "A contract for ~A square meters could not be created, presumably because no
@@ -326,7 +421,7 @@ areas and add more space.
 Sponsor-ID: ~A
 "
 				      m2-count (store-object-id sponsor)))
-      (error "could not create contract, allocation areas exhausted?"))
+      (error 'allocation-areas-exhausted :numsqm m2-count))
     contract))
 
 (defvar *last-contracts-cache* nil)
@@ -353,8 +448,7 @@ Sponsor-ID: ~A
 
 (defun string-safe (string)
   (if string
-      (escape-nl (with-output-to-string (s)
-		   (net.html.generator::emit-safe s string)))
+      (escape-nl (arnesi:escape-as-html string))
       ""))
 
 (defun make-m2-javascript (sponsor)
@@ -394,20 +488,27 @@ Sponsor-ID: ~A
     #-(or allegro cmu sbcl)
     ...))
 
-(defun reinit (&key delete directory website-url)
+(defun reinit (&key delete directory website-url enable-mails)
   (format t "~&; Startup Quadratmeterdatenbank...~%")
   (force-output)
+  (setf *enable-mails* enable-mails)
   (setf *website-url* website-url)
   (unless directory
     (error ":DIRECTORY parameter not set in m2.rc"))
+  (assert (and (null (pathname-name directory))
+	       (null (pathname-type directory)))
+	  (directory)
+	  ":DIRECTORY parameter is ~s (not a directory pathname)" directory)
   (when delete
     (delete-directory directory)
     (assert (not (probe-file directory))))
+  (close-store)
   (make-instance 'm2-store
 		 :directory directory
 		 :subsystems (list (make-instance 'store-object-subsystem)
 				   (make-instance 'blob-subsystem
-						  :n-blobs-per-directory 1000)))
+						  :n-blobs-per-directory 1000)
+				   (make-instance 'bos.m2.allocation-cache:allocation-cache-subsystem)))
   (format t "~&; Startup der Quadratmeterdatenbank done.~%")
   (force-output))
 
@@ -418,5 +519,52 @@ Sponsor-ID: ~A
      while (and (or (null percentage)
 		    (< (allocation-area-percent-used (first (class-instances 'allocation-area))) percentage))
 		(make-contract sponsor
-			       (random-elt (cons (1+ (random 300)) '(1 1 1 1 1 5 5 10 10 10 10 10 10 10 10 10 10 10 10 10 30 30 30)))
+			       (random-elt (cons (1+ (random 300))
+						 '(1 1 1 1 1 5 5 10 10 10 10 10 10 10 10
+						   10 10 10 10 10 30 30 30)))
 			       :paidp t))))
+
+
+;;; for quick visualization
+#+ltk
+(defun show-m2s-polygon (m2s &aux (points (m2s-polygon m2s)))
+  (labels ((compute-bounding-box (m2s)
+	     (let* ((left (m2-x (elt m2s 0)))
+		    (top (m2-y (elt m2s 0)))
+		    (right left)
+		    (bottom top))
+	       (loop for i from 1 below (length m2s) do
+		    (let* ((v (elt m2s i))
+			   (x (m2-x v))
+			   (y (m2-y v)))
+		      (setf left (min left x)
+			    right (max right x)
+			    top (min top y)
+			    bottom (max bottom y))))
+	       (values left top (- right left) (- bottom top)))))	      
+    (multiple-value-bind (left top width height)
+	(compute-bounding-box m2s)
+      (declare (ignore width height))
+      (finish-output)
+      (flet ((transform-x (x)
+	       (+ 30 (* 30 (- x left))))
+	     (transform-y (y)
+	       (+ 30 (* 30 (- y top)))))	
+	(ltk:with-ltk ()
+	  (let ((canvas (make-instance 'ltk:canvas :width 700 :height 700)))	  
+	    ;; draw m2s
+	    (loop for m2 in m2s
+	       for x = (transform-x (m2-x m2))
+	       for y = (transform-y (m2-y m2))
+	       do (ltk:create-text canvas (+ 10 x) (+ 10 y) "x"))
+	    ;; draw polygon
+	    (loop for a in points
+	       for b in (cdr points)
+	       while (and a b)
+	       do (ltk:create-line* canvas
+				    (transform-x (first a)) (transform-y (second a))
+				    (transform-x (first b)) (transform-y (second b))))
+	    (let ((a (first points)))
+	      (ltk:create-text canvas (transform-x (first a)) (transform-y (second a)) "o"))
+	    (ltk:pack canvas)))))))
+

@@ -6,3 +6,7 @@
   (if string
       (regex-replace-all #?r"[\n\r]+" string #?"<br />")
       ""))
+
+(defun random-elt (choices)
+  (when choices
+    (elt choices (random (length choices)))))

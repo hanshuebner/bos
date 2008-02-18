@@ -105,5 +105,6 @@
 			 	</div>
 			</div>
 		</div>
+		<bos:google-analytics-track />
 	</body>
 </html>

@@ -21,8 +21,9 @@
 		<div style="padding:10px">
 			<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
 			<a href="javascript:window.close()" class="more">
-				Fenster schließen
+				Fenster schlieÃen
 			</a>
 		</div>
+		<bos:google-analytics-track />
 	</body>
 </html>

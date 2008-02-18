@@ -43,6 +43,7 @@
 					<input type="hidden" name="__sponsorid" value="$(sponsor-id)" />
 					<input type="hidden" name="__password" value="$(master-code)" />
 					<input type="hidden" name="contract-id" value="$(contract-id)" />
+					<input type="hidden" name="want-print" value="$(want-print)" />
 					<input type="hidden" name="name" value="$(name)" />
 					<input type="hidden" name="address" value="$(address)" />
 					<input type="hidden" name="email" value="$(email)" />
@@ -50,17 +51,17 @@
 					<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
 						<tr>
 							<td colspan="3">
-								Wir werden Ihre Regenwald-Urkunde auf den folgenden Namen ausstellen und diese an
-								die unten angegebene Adresse versenden:
-								<br /><br /><br />
-								Name für Regenwald-Urkunde: $(name)
-								<br /><br />
-								Versandadresse für Urkunde: <br />
+								Wir werden Ihre Regenwald-Urkunde auf den folgenden Namen ausstellen:<br /><br />
+								$(name)
+        <bos:only-if-print>
+								 <br /><br />
+ 								Versandadresse für die Urkunde: <br />
 <pre>
 $(address)
 $(postcode)
 $(country)
 </pre>
+        </bos:only-if-print>
 							</td>
 						</tr>
 						<tr>

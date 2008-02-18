@@ -192,5 +192,6 @@
 				<bknr:tag-body />
 			<!-- /content 3teilig-->
 		</div>
+		<bos:google-analytics-track />
 	</body>
 </html>
