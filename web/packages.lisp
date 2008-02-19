@@ -12,7 +12,6 @@
 	:cxml
 	:puri
 	#+(or) :mime
-	:acl-compat.socket
         :bknr.web
 	:bknr.datastore
 	:bknr.indices
@@ -24,6 +23,5 @@
         :bos.m2
 	:bos.m2.config)
   (:nicknames :web :worldpay-test)
-  (:shadowing-import-from :cl-interpol #:quote-meta-chars)
-  (:shadowing-import-from :acl-compat.mp #:process-kill #:process-wait)  
+  (:shadowing-import-from :cl-interpol #:quote-meta-chars)    
   (:export))
