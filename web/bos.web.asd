@@ -16,7 +16,7 @@
   :description "worldpay test web server"
   :long-description ""
 
-  :depends-on (:bknr.web :bknr.modules :bos.m2 :cxml :acl-compat)
+  :depends-on (:bknr.web :bknr.modules :bos.m2 :cxml)
 
   :components ((:file "packages")
 	       (:file "utf-8" :depends-on ("packages"))
