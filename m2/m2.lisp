@@ -485,7 +485,9 @@ Sponsor-ID: ~A
     (unix:unix-rmdir (ext:unix-namestring pathname))
     #+sbcl
     (sb-posix:rmdir (namestring pathname))
-    #-(or allegro cmu sbcl)
+    #+openmcl
+    (ccl::%rmdir (namestring pathname))
+    #-(or allegro cmu sbcl openmcl)
     ...))
 
 (defun reinit (&key delete directory website-url enable-mails)
