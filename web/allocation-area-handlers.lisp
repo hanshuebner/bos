@@ -227,7 +227,7 @@
 (defun parse-point (line)
   (destructuring-bind (x y) (read-from-string (format nil "(~A)" line))
     (cons (scale-coordinate 'x +nw-utm-x+ x)
-	  (scale-coordinate 'y (- +nw-utm-y+ +width+) y))))
+          (- +width+ (scale-coordinate 'y (- +nw-utm-y+ +width+) y)))))
 
 (defun polygon-from-text-file (filename)
   (coerce (with-open-file (input-file filename)
