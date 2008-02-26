@@ -76,6 +76,11 @@ that will be called between the rows."
 (defun point-in-circle-p (point center radius)
   (<= (distance point center) radius))
 
+(defun point-in-rect-p (point left top width height)
+  (with-point point
+    (and (<= left point-x (1- (+ left width)))
+         (<= top point-y (1- (+ top height))))))
+
 ;;; for fun...
 (defun point-in-circle-p-test ()
   (let ((center (list 4 4)))
@@ -83,6 +88,28 @@ that will be called between the rows."
       (if (point-in-circle-p p center 3)
 	  (princ "x")
 	  (princ ".")))))
+
+(defun bounding-box (objects &key (key #'identity))
+  (let (min-x min-y max-x max-y)
+    (dolist (obj objects)
+      (let ((point (funcall key obj)))
+        (with-point point
+          (setf min-x (min point-x (or min-x point-x)))
+          (setf min-y (min point-y (or min-y point-y)))
+          (setf max-x (max point-x (or max-x point-x)))
+          (setf max-y (max point-y (or max-y point-y))))))
+    (list min-x min-y (1+ (- max-x min-x)) (1+ (- max-y min-y)))))
+
+(defmacro with-bounding-box-collect ((collect) &body body)
+  `(let (min-x min-y max-x max-y)     
+     (flet ((,collect (point)
+              (with-point point
+                (setf min-x (min point-x (or min-x point-x)))
+                (setf min-y (min point-y (or min-y point-y)))
+                (setf max-x (max point-x (or max-x point-x)))
+                (setf max-y (max point-y (or max-y point-y))))))
+       ,@body)
+     (list min-x min-y (1+ (- max-x min-x)) (1+ (- max-y min-y)))))
 
 ;;; directions
 

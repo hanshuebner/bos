@@ -8,6 +8,9 @@
 	   #:rect-center
 	   #:point-in-polygon-p
 	   #:point-in-circle-p
+           #:point-in-rect-p
+           #:bounding-box
+           #:with-bounding-box-collect
 	   #:find-boundary-point
 	   #:region-to-polygon
 	   #:format-lon-lat))
