@@ -6,11 +6,6 @@
 (defun kml-format-color (color &optional (opacity 255))
   (format nil "~2,'0X~{~2,'0X~}" opacity (reverse color)))
 
-(defun utf-8-text (string)
-  ;; cxml::utf8-string-to-rod did not what we want, so we use
-  ;; utf-8-string-to-bytes instead
-  (cxml:text (utf-8-string-to-bytes string)))
-
 (defun contract-description (contract language)
   (declare (ignore language))
   (let* ((sponsor (contract-sponsor contract))
@@ -24,18 +19,18 @@
 		 (with-element "td" (text (princ-to-string (store-object-id sponsor)))))
 	       (with-element "tr"
 		 (with-element "td" (text "Name:"))
-		 (with-element "td" (utf-8-text (if name name "[anonymous]"))))
+		 (with-element "td" (if name name "[anonymous]")))
 	       (with-element "tr"
 		 (with-element "td" (text "Land:"))
 		 (with-element "td" (text (sponsor-country sponsor))))
 	       (with-element "tr"
 		 (with-element "td" (text "gesponsort:"))
-		 (with-element "td" (utf-8-text (format nil "~D m²" (length (contract-m2s contract))))))
+		 (with-element "td" (format nil "~D m²" (length (contract-m2s contract)))))
 	       (with-element "tr"
 		 (with-element "td" (text "seit:"))
 		 (with-element "td" (text (format-date-time (contract-date contract) :show-time nil)))))
 	     (when (sponsor-info-text sponsor)
-	       (utf-8-text (sponsor-info-text sponsor))))))))
+	       (sponsor-info-text sponsor)))))))
 
 (defclass contract-kml-handler (object-handler)
   ())
@@ -49,10 +44,10 @@
 	(let ((polygon (m2s-polygon-lon-lat (contract-m2s c)))
 	      (name (user-full-name (contract-sponsor c))))
 	  (with-element "Placemark"
-	    (with-element "name" (utf-8-text (format nil "~A ~Dm²"
-						     (if name name "anonymous")
-						     (length (contract-m2s c)))))
-	    (with-element "description" (utf-8-text (contract-description c :de)))
+	    (with-element "name" (format nil "~A ~Dm²"
+                                         (if name name "anonymous")
+                                         (length (contract-m2s c))))
+	    (with-element "description" (contract-description c :de))
 	    (with-element "Style"
 	      (attribute "id" "#region")
 	      (with-element "LineStyle"
@@ -69,10 +64,10 @@
 	  ;; the center contract
 	  (when (eq c contract)
 	    (with-element "Placemark"
-	      (with-element "name" (utf-8-text (format nil "~A ~Dm²"
-						       (if name name "anonymous")
-						       (length (contract-m2s c)))))
-	      (with-element "description" (utf-8-text (contract-description c :de)))
+	      (with-element "name" (format nil "~A ~Dm²"
+                                           (if name name "anonymous")
+                                           (length (contract-m2s c))))
+	      (with-element "description" (contract-description c :de))
 	      (with-element "Point"
 		(with-element "coordinates"
 		  (text (kml-format-points (list (contract-center-lon-lat c)))))))))))))

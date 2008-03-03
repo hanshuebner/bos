@@ -11,6 +11,12 @@
 (defvar *year*)
 (defvar *month-names* '("Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"))
 
+(defmethod cxml:unparse-attribute ((value (eql nil)))
+  "false")
+
+(defmethod cxml:unparse-attribute ((value (eql t)))
+  "true")
+
 (defmacro defreport (name arguments &body body)
   `(setf (gethash ',name *report-generators*) (lambda (,@arguments) ,@body)))
 

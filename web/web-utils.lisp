@@ -8,8 +8,6 @@
 
 (defmethod website-show-page ((website bos-website) fn title)
   (html
-   (princ "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" *html-stream*)
-   (princ #\Newline *html-stream*)
    (:html
     (:head
      (bknr.web::header :title title))
@@ -27,9 +25,8 @@
 	((:p :class "footer")
 	 "local time is " (:princ-safe (format-date-time))
 	 " - "
-	 (if (and (equal 'bknr-request (type-of *req*))
-		  (bknr-request-user *req*))
-	     (html "logged in as " (html-link (bknr-request-user *req*)))
+	 (if (bknr-session-user)
+	     (html "logged in as " (html-link (bknr-session-user)))
 	     (html "not logged in"))
 	 " - current content language is "
 	(cmslink "change-language"
@@ -60,7 +57,7 @@
 	       (html " "))))))
 
 (defun decode-ismap-query-string ()
-  (let ((coord-string (caar (request-query req))))
+  (let ((coord-string (caar (query-params))))
     (when (and coord-string (scan #?r"^\d*,\d*$" coord-string))
       (mapcar #'parse-integer (split "," coord-string)))))
 

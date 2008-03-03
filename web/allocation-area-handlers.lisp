@@ -143,8 +143,8 @@
       ((and x y)
        (redirect (format nil "/map-browser/~A/~A?heading=~A&chosen-url=~A&"
 			 x y
-			 (uriencode-string "Choose lower right point of allocation area")
-			 (uriencode-string (format nil "~A?left=~A&top=~A&"
+			 (encode-urlencoded "Choose lower right point of allocation area")
+			 (encode-urlencoded (format nil "~A?left=~A&top=~A&"
 						   (hunchentoot:request-uri)
 						   x y)))))
       (t
@@ -165,8 +165,8 @@
   (with-query-params (start-x start-y)
     (redirect (format nil "/map-browser/~A/~A?heading=~A&chosen-url=~A&"
 		      start-x start-y
-		      (uriencode-string "Choose upper left point of allocation area")
-		      (uriencode-string (format nil "~A?" (hunchentoot:request-uri)))))))
+		      (encode-urlencoded "Choose upper left point of allocation area")
+		      (encode-urlencoded (format nil "~A?" (hunchentoot:request-uri)))))))
 
 (defmethod handle-form ((handler create-allocation-area-handler) (action (eql :upload)))
   (let ((uploaded-text-file (cdr (find "text-file" (request-uploaded-files) :test #'equal :key #'car))))

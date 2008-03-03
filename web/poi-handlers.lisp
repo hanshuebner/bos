@@ -95,11 +95,11 @@
 		     (html (:princ-safe (format nil "~D/~D " (first (poi-area poi)) (second (poi-area poi)))))
 		     (cmslink (format nil "map-browser/~A/~A?chosen-url=~A"
 				      (first (poi-area poi)) (second (poi-area poi))
-				      (uriencode-string (format nil "~A?action=save&" (hunchentoot:request-uri))))
+				      (encode-urlencoded (format nil "~A?action=save&" (hunchentoot:request-uri))))
 		       "[relocate]"))
 		    (t
 		     (cmslink (format nil "map-browser/?chosen-url=~A"
-				      (uriencode-string (format nil "~A?action=save&" (hunchentoot:request-uri))))
+				      (encode-urlencoded (format nil "~A?action=save&" (hunchentoot:request-uri))))
 		       "[choose]")))))
 	(:tr (:td "icon")
 	     (:td (icon-chooser "icon" (poi-icon poi))))
@@ -364,12 +364,11 @@
       (setf (hunchentoot:header-out :pragma) "no-cache")
       (setf (hunchentoot:header-out :expires) "-1")
       (with-http-body ()
-	(let ((*standard-output* *html-stream*))
-	  (princ "<script language=\"JavaScript\">") (terpri)
-	  (princ (make-poi-javascript (or (hunchentoot:session-value :language) *default-language*))) (terpri)
-	  (princ "parent.poi_fertig(pois, anzahlSponsoren, anzahlVerkauft);") (terpri)
-	  (format t "parent.last_sponsors([~{~A~^,~%~}]);" (mapcar #'contract-js (last-paid-contracts)))
-	  (princ "</script>") (terpri)))))
+        (html
+         ((:script :language "JavaScript")
+	  (:princ (make-poi-javascript (or (hunchentoot:session-value :language) *default-language*)))
+	  (:princ "parent.poi_fertig(pois, anzahlSponsoren, anzahlVerkauft);")
+	  (:princ (format nil "parent.last_sponsors([~{~A~^,~%~}]);" (mapcar #'contract-js (last-paid-contracts)))))))))
 
 (defclass poi-image-handler (object-handler)
   ()

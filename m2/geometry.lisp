@@ -285,10 +285,10 @@ leading zeros, keep trailing zeros)"
 
 
 (defun format-decimal-degree (degree)
-  (format-mixed-radix-number nil (* 60 60 degree) '(60 60 360) '(" ~,2F´´" " ~D´" "~D°")))
+  (format-mixed-radix-number nil (* 60 60 degree) '(60 60 360) '("~,2F´´" "~D´" "~D°")))
 
 (defun format-lon-lat (stream lon lat)
-  (format stream "~A ~:[S~;N~], ~A ~:[W~;E~]"
+  (format stream "~A~:[S~;N~], ~A~:[W~;E~]"
 	  (format-decimal-degree (abs lat))
 	  (plusp lat)
 	  (format-decimal-degree (abs lon))

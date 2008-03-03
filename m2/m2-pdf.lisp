@@ -26,9 +26,9 @@
 
             (draw-coordinate 180 40 (m2-lon-lat last-m2))
 
-            (pdf:translate (+ 65.0 (if (> bb-width bb-height) 0
+            (pdf:translate (+ 65.0 (if (>= bb-width bb-height) 0
                                        (* 0.5 (abs (- bb-width bb-height)) scale)))
-                           (+ 65.0 (if (> bb-height bb-width) 0
+                           (+ 65.0 (if (>= bb-height bb-width) 0
                                        (* 0.5 (abs (- bb-width bb-height)) scale))))
 
             (pdf:scale scale scale)

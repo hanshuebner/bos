@@ -2,7 +2,7 @@
 
 (enable-interpol-syntax)
 
-(defmacro with-bos-cms-page ((&key title response) &rest body)
+(defmacro with-bos-cms-page ((&key title (response hunchentoot:+http-ok+)) &rest body)
   `(with-bknr-page (:title ,title :response ,response)
     ,@body))
 
@@ -14,11 +14,11 @@
        (when download
 	 (setf (hunchentoot:header-out :content-disposition)
                (format nil "attachment; filename=~A" download))))
-     (with-http-body ()
-       (let ((*xml-sink* (make-character-stream-sink xhtml-generator:*html-sink* :canonical nil)))
-	 (with-xml-output *xml-sink*
-	   (with-element ,root-element
-	     ,@body))))))
+    (with-output-to-string (s)
+      (let ((*xml-sink* (make-character-stream-sink s :canonical nil)))
+        (with-xml-output *xml-sink*
+          (with-element ,root-element
+            ,@body))))))
 
 (defmacro with-xml-error-handler (() &body body)
   `(handler-case

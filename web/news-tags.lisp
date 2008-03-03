@@ -33,7 +33,7 @@
                          (show-news-entry news-item)))))))))
 
 (define-bknr-tag news-item ()
-  (let ((news-item (find-store-object (parse-integer (nth-value 1 (parse-url (get-template-var :request))))))
+  (let ((news-item (find-store-object (parse-integer (nth-value 1 (parse-url)))))
 	(language (hunchentoot:session-value :language)))
     (html ((:h1 :class "extra")
 	   (:princ-safe (format-date-time (news-item-time news-item) :show-time nil))

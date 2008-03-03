@@ -68,28 +68,18 @@
 		(apply #'list (make-keyword-from-string operation) arguments)))
 	  operation-strings))
 
-;; trunk-reorg adaption
 (defmethod handle-object ((handler image-tile-handler) tile)
   ;; xxx parse url another time - the parse result of
   ;; object-handler-get-object should really be kept in the request
   (destructuring-bind (x y &rest operation-strings) (decoded-handler-path handler)
     (declare (ignore x y))
-    (let ((changed-time (image-tile-changed-time tile))
-	  (ims (hunchentoot:header-in :if-modified-since)))
-      (format t "Warning: not setting last-modified of *ent* to changed-time")
-      #+(or)
-      (format t "; image-tile-handler handle-object: changed-time: ~A if-modified-since: ~A~%" (format-date-time changed-time) ims)
-      (if (or (not ims)
-	      (> changed-time (date-to-universal-time ims)))
-	  (let ((image (image-tile-image tile (apply #'parse-operations operation-strings))))
-	    (emit-image-to-browser image :png
-				   :date changed-time
-				   :max-age 60)
-	    (cl-gd:destroy-image image))
-	  (with-http-response ()
-	    (with-http-body ()
-              ;; do nothing
-	      ))))))
+    (let ((changed-time (image-tile-changed-time tile)))
+      (hunchentoot:handle-if-modified-since changed-time)
+      (let ((image (image-tile-image tile (apply #'parse-operations operation-strings))))
+        (emit-image-to-browser image :png
+                               :date changed-time
+                               :max-age 60)
+        (cl-gd:destroy-image image)))))
 
 (defclass enlarge-tile-handler (image-tile-handler)
   ())

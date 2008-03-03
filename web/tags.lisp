@@ -42,10 +42,10 @@
       (when (equal want-print "no")
 	(contract-set-download-only-p contract t))
       (contract-issue-cert contract name :address address :language (hunchentoot:session-value :language))
-      (mail-worldpay-sponsor-data (get-template-var :request))
+      (mail-worldpay-sponsor-data)
       (bknr.web::redirect-request :target (if gift "index"
 					      (format nil "profil_setup?name=~A&email=~A&sponsor-id=~A"
-						      (uriencode-string name) (uriencode-string email)
+						      (encode-urlencoded name) (encode-urlencoded email)
 						      (store-object-id (contract-sponsor contract))))))))
 
 (define-bknr-tag urkunde-per-post (&key contract-id min-amount message)
@@ -134,10 +134,10 @@
 					    strasse
 					    plz ort)
 			   :language (hunchentoot:session-value :language))
-      (mail-manual-sponsor-data (get-template-var :request)))))
+      (mail-manual-sponsor-data))))
 
 (define-bknr-tag when-certificate (&key children)
-  (let ((sponsor (bknr-request-user (get-template-var :request))))
+  (let ((sponsor (bknr-session-user)))
     (when (some #'contract-pdf-pathname (sponsor-contracts sponsor))
       (mapc #'emit-template-node children))))
 
@@ -146,7 +146,7 @@
   (mapc #'emit-template-node children))
 
 (define-bknr-tag save-profile (&key children)
-  (let* ((sponsor (bknr-request-user (get-template-var :request)))
+  (let* ((sponsor (bknr-session-user))
 	 (contract (first (sponsor-contracts sponsor))))
     (with-template-vars (email name password infotext anonymize)
       (when anonymize
@@ -181,7 +181,7 @@
   (mapc #'emit-template-node children))
 
 (define-bknr-tag admin-login-page (&key children)
-  (if (editor-p (bknr-request-user (get-template-var :request)))
+  (if (editor-p (bknr-session-user))
       (html (:head ((:meta :http-equiv "refresh" :content "0; url=/admin"))))
       (mapc #'emit-template-node children)))
 

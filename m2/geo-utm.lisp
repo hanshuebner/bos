@@ -36,19 +36,19 @@
       (setq n (/ (- sm-a sm-b) (+ sm-a sm-b)))
       (setq alpha
 	    (* (/ (+ sm-a sm-b) 2.0)
-	       (+ (+ 1.0 (/ (expt n 2.0) 4.0))
-		  (/ (expt n 4.0) 64.0))))
+	       (+ (+ 1.0 (/ (expt n 2) 4.0))
+		  (/ (expt n 4) 64.0))))
       (setq beta
 	    (+
-	     (+ (/ (* (- 3.0) n) 2.0) (/ (* 9.0 (expt n 3.0)) 16.0))
-	     (/ (* (- 3.0) (expt n 5.0)) 32.0)))
+	     (+ (/ (* (- 3.0) n) 2.0) (/ (* 9.0 (expt n 3)) 16.0))
+	     (/ (* (- 3.0) (expt n 5)) 32.0)))
       (setq gamma
-	    (+ (/ (* 15.0 (expt n 2.0)) 16.0)
-	       (/ (* (- 15.0) (expt n 4.0)) 32.0)))
+	    (+ (/ (* 15.0 (expt n 2)) 16.0)
+	       (/ (* (- 15.0) (expt n 4)) 32.0)))
       (setq delta
-	    (+ (/ (* (- 35.0) (expt n 3.0)) 48.0)
-	       (/ (* 105.0 (expt n 5.0)) 256.0)))
-      (setq epsilon (/ (* 315.0 (expt n 4.0)) 512.0))
+	    (+ (/ (* (- 35.0) (expt n 3)) 48.0)
+	       (/ (* 105.0 (expt n 5)) 256.0)))
+      (setq epsilon (/ (* 315.0 (expt n 4)) 512.0))
       (setq result
 	    (* alpha
 	       (+
@@ -70,19 +70,19 @@
       (setq n (/ (- sm-a sm-b) (+ sm-a sm-b)))
       (setq alpha_
 	    (* (/ (+ sm-a sm-b) 2.0)
-	       (+ (+ 1 (/ (expt n 2.0) 4)) (/ (expt n 4.0) 64))))
+	       (+ (+ 1 (/ (expt n 2) 4)) (/ (expt n 4) 64))))
       (setq y_ (/ y alpha_))
       (setq beta_
 	    (+
-	     (+ (/ (* 3.0 n) 2.0) (/ (* (- 27.0) (expt n 3.0)) 32.0))
-	     (/ (* 269.0 (expt n 5.0)) 512.0)))
+	     (+ (/ (* 3.0 n) 2.0) (/ (* (- 27.0) (expt n 3)) 32.0))
+	     (/ (* 269.0 (expt n 5)) 512.0)))
       (setq gamma_
-	    (+ (/ (* 21.0 (expt n 2.0)) 16.0)
-	       (/ (* (- 55.0) (expt n 4.0)) 32.0)))
+	    (+ (/ (* 21.0 (expt n 2)) 16.0)
+	       (/ (* (- 55.0) (expt n 4)) 32.0)))
       (setq delta_
-	    (+ (/ (* 151.0 (expt n 3.0)) 96.0)
-	       (/ (* (- 417.0) (expt n 5.0)) 128.0)))
-      (setq epsilon_ (/ (* 1097.0 (expt n 4.0)) 512.0))
+	    (+ (/ (* 151.0 (expt n 3)) 96.0)
+	       (/ (* (- 417.0) (expt n 5)) 128.0)))
+      (setq epsilon_ (/ (* 1097.0 (expt n 4)) 512.0))
       (setq result
 	    (+
 	     (+
@@ -98,12 +98,12 @@
       (let (tmp)
 	(setq ep2
 	      (/ (- (expt sm-a 2.0) (expt sm-b 2.0))
-		 (expt sm-b 2.0)))
-	(setq nu2 (* ep2 (expt (cos phi) 2.0)))
-	(setq n (/ (expt sm-a 2.0) (* sm-b (sqrt (+ 1 nu2)))))
+		 (expt sm-b 2)))
+	(setq nu2 (* ep2 (expt (cos phi) 2)))
+	(setq n (/ (expt sm-a 2) (* sm-b (sqrt (+ 1 nu2)))))
 	(setq %t (tan phi))
 	(setq t2 (* %t %t))
-	(setq tmp (- (* (* t2 t2) t2) (expt %t 6.0)))
+	(setq tmp (- (* (* t2 t2) t2) (expt %t 6)))
 	(setq l (- lambda lambda0))
 	(setq l3coef (+ (- 1.0 t2) nu2))
 	(setq l4coef (+ (+ (- 5.0 t2) (* 9 nu2)) (* 4.0 (* nu2 nu2))))
@@ -123,24 +123,24 @@
 	 (+
 	  (+
 	   (+ (* (* n (cos phi)) l)
-	      (* (* (* (/ n 6.0) (expt (cos phi) 3.0)) l3coef)
-		 (expt l 3.0)))
-	   (* (* (* (/ n 120.0) (expt (cos phi) 5.0)) l5coef)
-	      (expt l 5.0)))
-	  (* (* (* (/ n 5040.0) (expt (cos phi) 7.0)) l7coef)
-	     (expt l 7.0)))
+	      (* (* (* (/ n 6.0) (expt (cos phi) 3)) l3coef)
+		 (expt l 3)))
+	   (* (* (* (/ n 120.0) (expt (cos phi) 5)) l5coef)
+	      (expt l 5)))
+	  (* (* (* (/ n 5040.0) (expt (cos phi) 7)) l7coef)
+	     (expt l 7)))
 	 (+
 	  (+
 	   (+
 	    (+ (arc-length-of-meridian phi)
-	       (* (* (* (/ %t 2.0) n) (expt (cos phi) 2.0))
-		  (expt l 2.0)))
-	    (* (* (* (* (/ %t 24.0) n) (expt (cos phi) 4.0)) l4coef)
-	       (expt l 4.0)))
-	   (* (* (* (* (/ %t 720.0) n) (expt (cos phi) 6.0)) l6coef)
-	      (expt l 6.0)))
-	  (* (* (* (* (/ %t 40320.0) n) (expt (cos phi) 8.0)) l8coef)
-	     (expt l 8.0))))))))
+	       (* (* (* (/ %t 2.0) n) (expt (cos phi) 2))
+		  (expt l 2)))
+	    (* (* (* (* (/ %t 24.0) n) (expt (cos phi) 4)) l4coef)
+	       (expt l 4)))
+	   (* (* (* (* (/ %t 720.0) n) (expt (cos phi) 6)) l6coef)
+	      (expt l 6)))
+	  (* (* (* (* (/ %t 40320.0) n) (expt (cos phi) 8)) l8coef)
+	     (expt l 8))))))))
 
 (defun map-xyto-lat-lon (x y lambda0)
   (let (phif nf nfpow nuf2 ep2 tf tf2 tf4 cf)
@@ -148,11 +148,11 @@
       (let (x2poly x3poly x4poly x5poly x6poly x7poly x8poly)
 	(setq phif (footpoint-latitude y))
 	(setq ep2
-	      (/ (- (expt sm-a 2.0) (expt sm-b 2.0))
-		 (expt sm-b 2.0)))
+	      (/ (- (expt sm-a 2) (expt sm-b 2))
+		 (expt sm-b 2)))
 	(setq cf (cos phif))
-	(setq nuf2 (* ep2 (expt cf 2.0)))
-	(setq nf (/ (expt sm-a 2.0) (* sm-b (sqrt (+ 1 nuf2)))))
+	(setq nuf2 (* ep2 (expt cf 2)))
+	(setq nf (/ (expt sm-a 2) (* sm-b (sqrt (+ 1 nuf2)))))
 	(setq nfpow nf)
 	(setq tf (tan phif))
 	(setq tf2 (* tf tf))
@@ -200,15 +200,15 @@
 	 (+
 	  (+
 	   (+ (+ phif (* (* x2frac x2poly) (* x x)))
-	      (* (* x4frac x4poly) (expt x 4.0)))
-	   (* (* x6frac x6poly) (expt x 6.0)))
-	  (* (* x8frac x8poly) (expt x 8.0)))
+	      (* (* x4frac x4poly) (expt x 4)))
+	   (* (* x6frac x6poly) (expt x 6)))
+	  (* (* x8frac x8poly) (expt x 8)))
 	 (+
 	  (+
 	   (+ (+ lambda0 (* x1frac x))
-	      (* (* x3frac x3poly) (expt x 3.0)))
-	   (* (* x5frac x5poly) (expt x 5.0)))
-	  (* (* x7frac x7poly) (expt x 7.0))))))))
+	      (* (* x3frac x3poly) (expt x 3)))
+	   (* (* x5frac x5poly) (expt x 5)))
+	  (* (* x7frac x7poly) (expt x 7))))))))
 
 (defun lon-lat-to-utm-x-y (lon lat)
   "Returns four values X, Y, ZONE and SOUTHHEMI-P."
@@ -223,7 +223,7 @@
       (list x y zone (minusp lat)))))
 
 (defun utm-x-y-to-lon-lat (x y zone southhemi-p)
-  "Returns two values LON and LAT."
+  "Returns list (LON LAT)."
   (let ((x (float x 0d0))
 	(y (float y 0d0))
 	cmeridian)

@@ -111,7 +111,7 @@ language preference weights."
   ;; XXX hier logout-parameter implementieren
   (with-query-params (logout)
     (when logout
-      (bknr.web::drop-session *session*)))
+      (hunchentoot:remove-session hunchentoot:*session*)))
   (let ((language (hunchentoot:session-value :language)))
     (redirect #?"/infosystem/$(language)/satellitenkarte.htm")))
 
@@ -168,20 +168,17 @@ language preference weights."
 	    (call-next-method)))
 	(call-next-method))))
 
-;; trunk-reorg adaption
-;; (defmethod authorize :after ((authorizer bos-authorizer)
-;; 			     (req http-request)
-;; 			     (ent net.aserve::entity))
-;;   (let ((new-language (or (language-from-url (hunchentoot:request-uri))
-;; 			  (query-param "language")))
-;; 	(current-language (gethash :language (bknr-session-variables *session*))))
-;;     (when (or (not current-language)
-;; 	      (and new-language
-;; 		   (not (equal new-language current-language))))
-;;       (setf (gethash :language (bknr-session-variables *session*))
-;; 	    (or new-language
-;; 		(find-browser-prefered-language)
-;; 		*default-language*)))))
+(defmethod authorize :after ((authorizer bos-authorizer))
+  (let ((new-language (or (languagen-from-url (hunchentoot:request-uri))
+			  (query-param "language")))
+	(current-language (hunchentoot:session-value :language)))
+    (when (or (not current-language)
+	      (and new-language
+		   (not (equal new-language current-language))))
+      (setf (hunchentoot:session-value :language)
+	    (or new-language
+		(find-browser-prefered-language)
+		*default-language*)))))
 
 ;;; TODOreorg
 (defun publish-directory (&key prefix destination)
@@ -202,6 +199,8 @@ language preference weights."
 		 :handler-definitions `(("/edit-poi" edit-poi-handler)
 					("/edit-poi-image" edit-poi-image-handler)
 					("/edit-sponsor" edit-sponsor-handler)
+					("/contract-kml" contract-kml-handler)
+					("/contract-image" contract-image-handler)
 					("/contract" contract-handler)
 					("/reports-xml" reports-xml-handler)					
 					("/complete-transfer" complete-transfer-handler)
@@ -216,7 +215,6 @@ language preference weights."
 					("/allocation-area" allocation-area-handler)
 					("/allocation-area-gfx" allocation-area-gfx-handler)
 					("/allocation-cache" allocation-cache-handler)
-					("/contract-image" contract-image-handler)
 					("/certificate" certificate-handler)
 					("/cert-regen" cert-regen-handler)
 					("/admin" admin-handler)
@@ -229,7 +227,6 @@ language preference weights."
 					("/cancel-contract" cancel-contract-handler)
 					("/statistics" statistics-handler)
 					("/rss" rss-handler)
-					("/contract-kml" contract-kml-handler)
 					#+(or)
 					("/" redirect-handler
 					 :to "/index")

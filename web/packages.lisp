@@ -1,6 +1,7 @@
 (in-package :cl-user)
 
 (defpackage :bos.web
+  (:nicknames :web :worldpay-test)
   (:use :cl
 	:date-calc
 	#+cmu :extensions
@@ -22,6 +23,5 @@
 	:bknr.rss
         :bos.m2
 	:bos.m2.config)
-  (:nicknames :web :worldpay-test)
   (:shadowing-import-from :cl-interpol #:quote-meta-chars)    
   (:export))

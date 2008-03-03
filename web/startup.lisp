@@ -46,5 +46,5 @@
   (setq hunchentoot:*catch-errors-p* (not debug))
   (when *webserver*
     (hunchentoot:stop-server *webserver*))
-  (setf *hunchentoot-default-external-format* (flex:make-external-format :utf-8 :eol-style :lf))
+  (setf hunchentoot:*hunchentoot-default-external-format* (flex:make-external-format :utf-8 :eol-style :lf))
   (setq *webserver* (hunchentoot:start-server :port *port*)))
