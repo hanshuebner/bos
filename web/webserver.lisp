@@ -152,7 +152,7 @@ language preference weights."
 (defclass bos-authorizer (bknr-authorizer)
   ())
 
-(defmethod find-user-from-request-parameters ((authorizer bos-authorizer))
+(defmethod authorize ((authorizer bos-authorizer))
   (with-query-params (__sponsorid __password)
     (if (and __sponsorid __password)
 	(handler-case

@@ -26,7 +26,7 @@
     year))
 
 (defmethod handle ((handler reports-xml-handler))
-  (with-xml-response ()
+  (with-xml-response (:root-element "response")
     (destructuring-bind (name &optional *year* &rest arguments) (decoded-handler-path handler)
       (setf *year* (and *year* (parse-integer *year*)))
       (let ((*contracts-to-process* (sort (remove-if (lambda (contract)

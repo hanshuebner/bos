@@ -7,7 +7,7 @@
   ())
 
 (defmethod authorized-p ((handler boi-handler))
-  (bos.m2:editor-p bknr.web:*user*))
+  (bos.m2:editor-p (bknr-session-user)))
 
 (defclass create-contract-handler (boi-handler)
   ())
@@ -37,7 +37,7 @@
 			  (find-sponsor sponsor-id)
 			  (make-sponsor :full-name name)))
 	     (contract (make-contract sponsor num-sqm :expires expires :paidp paid)))
-	(with-xml-response ()
+	(with-xml-response (:root-element "response")
 	  (with-element "status"
 	    (attribute "success" 1)
 	    (if sponsor-id
@@ -68,7 +68,7 @@
 					       (user-login bknr.web:*user*)))
 	  (when name
 	    (setf (user-full-name (contract-sponsor contract)) name))))
-      (with-xml-response ()
+      (with-xml-response (:root-element "response")
 	(with-element "status"
 	  (attribute "success" 1)
 	  (text "Contract has been marked as paid for"))))))
@@ -87,7 +87,7 @@
 	(when (contract-paidp contract)
 	  (error "contract has already been paid for"))
 	(delete-object contract)
-	(with-xml-response ()
+	(with-xml-response (:root-element "response")
 	  (with-element "status"
 	    (attribute "success" 1)
 	    (text "Contract has been deleted")))))))
