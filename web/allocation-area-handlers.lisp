@@ -169,16 +169,16 @@
 		      (encode-urlencoded (format nil "~A?" (hunchentoot:request-uri)))))))
 
 (defmethod handle-form ((handler create-allocation-area-handler) (action (eql :upload)))
-  (let ((uploaded-text-file (cdr (find "text-file" (request-uploaded-files) :test #'equal :key #'car))))
+  (let ((uploaded-text-file (request-uploaded-file "text-file")))
     (cond
       ((not uploaded-text-file)
        (with-bos-cms-page (:title "No Text file uploaded")
 	 (:h2 "File not uploaded")
 	 (:p "Please upload your text file containing the allocation polygon UTM coordinates")))
       (t
-       (with-bos-cms-page (:title #?"Importing allocation polygons from text file $(uploaded-text-file)")
+       (with-bos-cms-page (:title #?"Importing allocation polygons from uploaded text file")
 	 (handler-case
-	     (let* ((vertices (polygon-from-text-file uploaded-text-file))
+	     (let* ((vertices (polygon-from-text-file (upload-pathname uploaded-text-file)))
 		    (existing-area (find (coerce vertices 'list)
 						     (class-instances 'allocation-area)
 						     :key #'(lambda (area) (coerce (allocation-area-vertices area) 'list))

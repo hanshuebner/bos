@@ -187,10 +187,10 @@
 (defmethod handle-object-form ((handler edit-poi-handler)
 			       (action (eql :upload-airal))
 			       (poi poi))
-  (let ((uploaded-file (cdr (find "image-file" (request-uploaded-files) :test #'equal :key #'car))))
+  (let ((uploaded-file (request-uploaded-file "image-file")))
     (unless uploaded-file
       (error "no file uploaded in upload handler"))
-    (cl-gd:with-image-from-file* (uploaded-file)
+    (with-image-from-upload* (uploaded-file)
       (unless (and (eql (cl-gd:image-width) *poi-image-width*)
 		   (eql (cl-gd:image-height) *poi-image-height*))
 	(with-bos-cms-page (:title "Invalid image size")
@@ -226,10 +226,10 @@
 (defmethod handle-object-form ((handler edit-poi-handler)
 			       (action (eql :upload-panorama))
 			       (poi poi))
-  (let ((uploaded-file (cdr (find "image-file" (request-uploaded-files) :test #'equal :key #'car))))
+  (let ((uploaded-file (request-uploaded-file "image-file")))
     (unless uploaded-file
       (error "no file uploaded in upload handler"))
-    (cl-gd:with-image-from-file* (uploaded-file)
+    (with-image-from-upload* (uploaded-file)
       ; just open the image to make sure that gd can process it
       )
     (change-slot-values poi 'panoramas (cons (import-image uploaded-file
@@ -274,10 +274,10 @@
 (defmethod handle-object-form ((handler edit-poi-image-handler) (action (eql :upload)) poi-image)
   (with-query-params (poi)
     (setq poi (find-store-object (parse-integer poi) :class 'poi))
-    (let ((uploaded-file (cdr (find "image-file" (request-uploaded-files) :test #'equal :key #'car))))
+    (let ((uploaded-file (request-uploaded-file "image-file")))
       (unless uploaded-file
 	(error "no file uploaded in upload handler"))
-      (cl-gd:with-image-from-file* (uploaded-file)
+      (bknr.web:with-image-from-upload* (uploaded-file)
 	(unless (and (eql (cl-gd:image-width) *poi-image-width*)
 		     (eql (cl-gd:image-height) *poi-image-height*))
 	  (with-bos-cms-page (:title "Invalid image size")
