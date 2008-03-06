@@ -113,7 +113,10 @@
                (check-type (cdr b) integer)
                ;; Kanten duerfen nicht auf einen Punkt zusammenfallen.
                (assert (not (and (zerop (- (car a) (car b)))
-                                 (zerop (- (cdr a) (cdr b)))))))
+                                 (zerop (- (cdr a) (cdr b)))))
+                       nil
+                       "~a and ~a (mxm coordinates) are too close to each other ~
+                       to be considered independent polygon vertices." a b))
              (coerce vertices 'vector))
   ;; Punkte muessen im Vergabegebiet liegen
   (map nil

@@ -64,7 +64,10 @@
 	 (:td (:princ-safe (length (allocation-area-contracts allocation-area))))))
        (:p
 	((:form :method "post")
-	 (submit-button "delete" "delete" :confirm "Really delete the allocation area?")))
+	 (submit-button "delete" "delete" :confirm "Really delete the allocation area?")
+         (if active-p
+             (submit-button "deactivate" "deactivate" :confirm "Really deactivate the allocation area?")
+             (submit-button "activate" "activate" :confirm "Really activate the allocation area?"))))
        (:h2 "Allocation Graphics")
        ((:table :cellspacing "0" :cellpadding "0" :border "0")
 	(loop for y from (floor top 90) below (ceiling (+ top height) 90)
@@ -79,6 +82,16 @@
   (delete-object allocation-area)
   (with-bos-cms-page (:title "Allocation area has been deleted")
     (:h2 "The allocation area has been deleted")))
+
+(defmethod handle-object-form ((handler allocation-area-handler) (action (eql :activate)) allocation-area req)
+  (bos.m2::activate-allocation-area allocation-area)
+  (with-bos-cms-page (req :title "Allocation area has been activated")
+    (:h2 "The allocation area has been activated")))
+
+(defmethod handle-object-form ((handler allocation-area-handler) (action (eql :deactivate)) allocation-area req)
+  (bos.m2::deactivate-allocation-area allocation-area)
+  (with-bos-cms-page (req :title "Allocation area has been deactivated")
+    (:h2 "The allocation area has been deactivated")))
 
 (defclass allocation-area-gfx-handler (editor-only-handler object-handler)
   ())
@@ -225,20 +238,25 @@
   (round (- x min)))
 
 (defun parse-point (line)
-  (destructuring-bind (x y) (read-from-string (format nil "(~A)" line))
-    (cons (scale-coordinate 'x +nw-utm-x+ x)
-          (- +width+ (scale-coordinate 'y (- +nw-utm-y+ +width+) y)))))
+  (let ((line (string-right-trim '(#\Return) line)))
+    (unless (ppcre:scan line "^\\s*$")
+      (destructuring-bind (x y) (read-from-string (format nil "(~A)" line))
+        (cons (scale-coordinate 'x +nw-utm-x+ x)
+              (- +width+ (scale-coordinate 'y (- +nw-utm-y+ +width+) y)))))))
 
 (defun polygon-from-text-file (filename)
   (coerce (with-open-file (input-file filename)
 	    (loop
+               with last-point
 	       for line-number from 1
 	       for line = (read-line input-file nil)
 	       while line
-	       collect (handler-case
-			   (parse-point line)
-			 (error (e)
-			   (error "~A in line ~A" e line-number)))))
+	       for point = (handler-case
+                               (parse-point line)
+                             (error (e)
+                               (error "Problem with text file in line ~A '~A': ~A in " line-number line e)))
+               when (and point (not (equal point last-point)))
+               collect (setq last-point point)))
 	  'vector))
 
 (defun parse-illustrator-point (line)
