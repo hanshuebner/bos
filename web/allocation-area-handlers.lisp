@@ -83,14 +83,14 @@
   (with-bos-cms-page (:title "Allocation area has been deleted")
     (:h2 "The allocation area has been deleted")))
 
-(defmethod handle-object-form ((handler allocation-area-handler) (action (eql :activate)) allocation-area req)
+(defmethod handle-object-form ((handler allocation-area-handler) (action (eql :activate)) allocation-area)
   (bos.m2::activate-allocation-area allocation-area)
-  (with-bos-cms-page (req :title "Allocation area has been activated")
+  (with-bos-cms-page (:title "Allocation area has been activated")
     (:h2 "The allocation area has been activated")))
 
-(defmethod handle-object-form ((handler allocation-area-handler) (action (eql :deactivate)) allocation-area req)
+(defmethod handle-object-form ((handler allocation-area-handler) (action (eql :deactivate)) allocation-area)
   (bos.m2::deactivate-allocation-area allocation-area)
-  (with-bos-cms-page (req :title "Allocation area has been deactivated")
+  (with-bos-cms-page (:title "Allocation area has been deactivated")
     (:h2 "The allocation area has been deactivated")))
 
 (defclass allocation-area-gfx-handler (editor-only-handler object-handler)
