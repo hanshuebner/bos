@@ -169,7 +169,7 @@ language preference weights."
 	(call-next-method))))
 
 (defmethod authorize :after ((authorizer bos-authorizer))
-  (let ((new-language (or (languagen-from-url (hunchentoot:request-uri))
+  (let ((new-language (or (language-from-url (hunchentoot:request-uri))
 			  (query-param "language")))
 	(current-language (hunchentoot:session-value :language)))
     (when (or (not current-language)
