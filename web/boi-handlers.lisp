@@ -65,7 +65,7 @@
 	(with-transaction (:contract-paid)
 	  (contract-set-paidp contract (format nil "~A: manually set paid by ~A"
 					       (format-date-time)
-					       (user-login bknr.web:*user*)))
+					       (user-login (bknr.web:bknr-session-user))))
 	  (when name
 	    (setf (user-full-name (contract-sponsor contract)) name))))
       (with-xml-response (:root-element "response")

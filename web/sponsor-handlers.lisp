@@ -111,7 +111,7 @@
 	   (contract (make-contract sponsor (parse-integer numsqm)
 				    :paidp (format nil "~A: manually created by ~A"
 						   (format-date-time (get-universal-time))
-						   (user-login bknr.web:*user*))
+						   (user-login (bknr.web:bknr-session-user)))
 				    :date (date-to-universal date))))
       (contract-issue-cert contract name :address address :language language)
       (mail-backoffice-sponsor-data contract)
@@ -240,7 +240,7 @@
 	    (html (:h2 "Completing square meter sale"))
 	    (sponsor-set-country (contract-sponsor contract) country)
 	    (contract-set-paidp contract (format nil "~A: wire transfer processed by ~A"
-						 (format-date-time) (user-login bknr.web:*user*)))
+						 (format-date-time) (user-login (bknr.web:bknr-session-user))))
 	    (when email
 	      (html (:p "Sending instruction email to " (:princ-safe email)))
 	      (mail-instructions-to-sponsor contract email))))

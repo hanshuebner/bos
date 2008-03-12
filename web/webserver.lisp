@@ -121,7 +121,7 @@ language preference weights."
 
 (defmethod handle-object ((handler certificate-handler) contract)
   (unless contract
-    (setf contract (find-if #'contract-pdf-pathname (sponsor-contracts bknr.web:*user*))))
+    (setf contract (find-if #'contract-pdf-pathname (sponsor-contracts (bknr.web:bknr-session-user)))))
   (redirect (format nil "/certificates/~D.pdf" (store-object-id contract))))
 
 (defclass statistics-handler (editor-only-handler prefix-handler)
@@ -226,16 +226,17 @@ language preference weights."
 					("/pay-contract" pay-contract-handler)
 					("/cancel-contract" cancel-contract-handler)
 					("/statistics" statistics-handler)
-					("/rss" rss-handler)
-					#+(or)
+					("/rss" rss-handler)                
 					("/" redirect-handler
 					 :to "/index")
 					("/index" index-handler)
+                                        user
+                                        images
+                                        stats
 					("/" worldpay-template-handler
 					 :destination ,(namestring (merge-pathnames #p"templates/" website-directory))
 					 :command-packages (("http://headcraft.de/bos" . :bos.web)
-							    ("http://bknr.net" . :bknr.web))))
-		 :modules '(user images stats)
+							    ("http://bknr.net" . :bknr.web))))	       
 		 :navigation '(("sponsor" . "edit-sponsor/")
 			       ("statistics" . "statistics/")
 			       ("news" . "edit-news/")

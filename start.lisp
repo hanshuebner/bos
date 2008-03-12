@@ -29,6 +29,11 @@
 
 ;;; load bos project
 (asdf:oos 'asdf:load-op :bos.web)
+(mapcar #'cl-gd::load-foreign-library   ; for now...
+        '("/usr/lib/libcrypto.so"
+          "/usr/lib/libssl.so"
+          "/usr/local/lib/libgd.so"
+          ))
 (format t "BOS Online-System~%")
 ;;; slime
 (asdf:oos 'asdf:load-op :swank)

@@ -190,7 +190,7 @@
   ())
 
 (defmethod bknr.web:authorized-p ((handler editor-only-handler))
-  (editor-p bknr.web:*user*))
+  (editor-p (bknr.web:bknr-session-user)))
 
 ;;;; CONTRACT
 
