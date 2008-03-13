@@ -16,6 +16,9 @@
    (geo-height :initarg :geo-height :reader geo-height)
    (children :initarg :children :reader children)))
 
+(defpersistent-class image-tree (image-tree-node)
+  ())
+
 (defmethod print-object ((object image-tree-node) stream)
   (print-unreadable-object (object stream :type t)
     (format stream "ID: ~A (~A x ~A)"	    
@@ -23,19 +26,26 @@
 	    (store-image-width object)
 	    (store-image-height object))))
 
-(defun make-image-tree-node (image &key geo-rect children)
+(defun make-image-tree-node (image &key geo-rect children (class-name 'image-tree-node))
   (destructuring-bind (geo-x geo-y geo-width geo-height)
       geo-rect
     (make-store-image :image image
                       :name (image-tree-node-unique-name)
-                      :class-name 'image-tree-node
+                      :class-name class-name
                       :initargs `(:geo-x ,geo-x
                                          :geo-y ,geo-y
                                          :geo-width ,geo-width
                                          :geo-height ,geo-height
                                          :children ,children))))
 
-(defun children-sizes (width height &key (divisor 2))
+(defun image-tree-node-less (a b)
+  (cond
+    ((< (geo-x a) (geo-x b)) t)
+    ((= (geo-x a) (geo-x b))
+     (< (geo-y a) (geo-y b)))
+    (t nil)))
+
+(defun children-sizes (width height &key (divisor 3))
   (flet ((divide-almost-equally (x)
            (multiple-value-bind (quotient remainder)
                (floor x divisor)
@@ -47,11 +57,10 @@
     (list (divide-almost-equally width)
           (divide-almost-equally height))))
 
-
 (defun map-children-rects (function left top width-heights)
   "Calls FUNCTION with (x y width height) for each of the sub-rectangles
 specified by the start point LEFT, TOP and WIDTH-HEIGHTS of the sub-rectangles.
-Collects the results into a list."
+Collects the results into an array of dimensions corresponding to WIDTH-HEIGHTS."
   (let (results)
     (destructuring-bind (widths heights)
         width-heights
@@ -59,16 +68,16 @@ Collects the results into a list."
         (let ((safe-top top))           ; pretty ugly, sorry
           (dolist (h heights)
             (push (funcall function left safe-top w h) results)
-            (incf safe-top h)))
+            (incf safe-top h)))        
         (incf left w)))))
-
 
 (defun make-image-tree (source-image geo-location &key (output-images-size 256))
   (destructuring-bind (geo-x geo-y geo-width geo-height) geo-location
     (let* ((source-image-width (cl-gd:image-width source-image))
            (source-image-height (cl-gd:image-height source-image))
            (scaler-x (/ source-image-width geo-width))
-           (scaler-y (/ source-image-height geo-height)))
+           (scaler-y (/ source-image-height geo-height))
+           (classes '(image-tree . #1=(image-tree-node . #1#))))
       (labels ((image-point2geo-point (x y)
                  (list (+ (/ x scaler-x) geo-x)
                        (+ (/ y scaler-y) geo-y)))
@@ -86,10 +95,13 @@ Collects the results into a list."
                  (and (<= image-width output-images-size)
                       (<= image-height output-images-size)))
                (%make-image-tree (image-x image-y image-width image-height)
-                 (let ((children (unless (image-small-enough image-width image-height)
-                                   (map-children-rects #'%make-image-tree
-                                                       image-x image-y
-                                                       (children-sizes image-width image-height)))))
+                 (let ((class (pop classes))
+                       (children (unless (image-small-enough image-width image-height)
+                                   (sort
+                                    (map-children-rects #'%make-image-tree
+                                                        image-x image-y
+                                                        (children-sizes image-width image-height))
+                                    #'image-tree-node-less))))
                    (cl-gd:with-image (image output-images-size output-images-size t)
                      (cl-gd:copy-image source-image image
                                        image-x image-y 0 0
@@ -101,7 +113,8 @@ Collects the results into a list."
                      (make-image-tree-node image
                                            :geo-rect (image-rect2geo-rect
                                                       (list image-x image-y image-width image-height))
-                                           :children children)))))
+                                           :children children
+                                           :class-name class)))))
         (with-image-tree-node-counter
           (%make-image-tree 0 0 source-image-width source-image-height))))))
 
@@ -114,4 +127,25 @@ Collects the results into a list."
   (make-image-tree image '(0 0 10 10)))
 
 |#
+
+(defclass image-tree-handler (object-handler)
+  ()
+  (:default-initargs :object-class 'image-tree-node))
+
+
+(defun img-image-tree (object)
+  (html
+   ((:a :href (website-make-path *website*
+                                 (format nil "image-tree/~d" (store-object-id object))))
+    ((:img :src (website-make-path *website*
+                                   (format nil "image/~d" (store-object-id object))))))))
+
+(defmethod handle-object ((image-tree-handler image-tree-handler) (object image-tree-node))
+  (with-bknr-page (:title (prin1-to-string object))
+    (img-image-tree object)
+    (:table
+     (dolist (row (group-on (children object) :key #'geo-y :include-key nil))
+       (html (:tr
+              (dolist (child row)
+                (html (:td (img-image-tree child))))))))))
 
