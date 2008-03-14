@@ -257,9 +257,9 @@
 (defun kml-format-color (color &optional (opacity 255))
   (format nil "~2,'0X~{~2,'0X~}" opacity (reverse color)))
 
-(defmethod kml-link ((href pathname))
+(defmethod kml-link ((href string))
   (with-element "Link"
-    (with-element "href" (text (enough-namestring href)))
+    (with-element "href" (text href))
     (with-element "viewRefreshMode" (text "onRegion"))))
 
 ;; (defmethod kml-link ((href puri:uri))
@@ -288,7 +288,7 @@
     (with-element "name" (text (file-namestring img-path)))
     (with-element "drawOrder" (integer-text drawOrder))
     (with-element "Icon"
-      (with-element "href" (text (enough-namestring img-path)))
+      (with-element "href" (text img-path))
       ;; (with-element "refreshMode" (text "..."))
       )
     (kml-lat-lon-box rect)))
@@ -490,9 +490,17 @@ Collects the results into an array of dimensions corresponding to WIDTH-HEIGHTS.
   ()
   (:default-initargs :object-class 'image-tree-node))
 
-(defmethod handle-object ((handler image-tree-kml-handler) (image-tree-node image-tree-node))
-  (with-xml-response (:content-type "text/plain" #+nil"application/vnd.google-earth.kml+xml"
-                                    :root-element "kml")
-    (with-element "Document"
-      )))
-
+(defmethod handle-object ((handler image-tree-kml-handler) (obj image-tree-node))
+  (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
+                                    :root-element "kml")    
+    (let ((lod `(:min ,(lod-min obj) :max ,(lod-max obj)))
+          (rect (make-rectangle2 (list (geo-x obj) (geo-y obj) (geo-width obj) (geo-height obj)))))
+      (with-element "Document"
+        (kml-region rect lod)
+        (kml-overlay (format nil "~a:~a/image/~d" *website-url* *port* (store-object-id obj))
+                     rect 0)
+        (dolist (child (children obj))
+          (kml-network-link (format nil "~a:~a/image-tree-kml/~d" *website-url* *port* (store-object-id child))
+                            (make-rectangle2 (list (geo-x child) (geo-y child)
+                                                   (geo-width child) (geo-height child)))
+                            `(:min ,(lod-min child) :max ,(lod-max child))))))))
