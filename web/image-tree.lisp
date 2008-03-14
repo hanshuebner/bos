@@ -367,7 +367,7 @@
       (* (store-image-width obj) (store-image-height obj))
       -1))
 
-(defun children-sizes (width height &key (divisor 3))
+(defun children-sizes (width height &key (divisor 2))
   (flet ((divide-almost-equally (x)
            (multiple-value-bind (quotient remainder)
                (floor x divisor)

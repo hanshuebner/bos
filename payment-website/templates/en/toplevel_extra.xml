@@ -13,7 +13,8 @@
 		<script src="/static/bos.js" type="text/javascript"><!-- x -->	
 		</script> 
              <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8" />-->
-		<title>$(title)</title>
+		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+                <title>$(title)</title>
 	</head>
 	<body>
 		<div id="header_extra">

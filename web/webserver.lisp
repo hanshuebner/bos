@@ -228,17 +228,21 @@ language preference weights."
 					("/pay-contract" pay-contract-handler)
 					("/cancel-contract" cancel-contract-handler)
 					("/statistics" statistics-handler)
-					("/rss" rss-handler)                
+					("/rss" rss-handler)
+                                        ("/favicon.ico"
+                                         file-handler
+                                         :destination ,(merge-pathnames #p"static/favicon.ico" website-directory)
+                                         :content-type "image/x-icon")
 					("/" redirect-handler
-					 :to "/index")
+                                             :to "/index")
 					("/index" index-handler)
                                         user
                                         images
                                         stats
 					("/" worldpay-template-handler
-					 :destination ,(namestring (merge-pathnames #p"templates/" website-directory))
-					 :command-packages (("http://headcraft.de/bos" . :bos.web)
-							    ("http://bknr.net" . :bknr.web))))	       
+                                             :destination ,(namestring (merge-pathnames #p"templates/" website-directory))
+                                             :command-packages (("http://headcraft.de/bos" . :bos.web)
+                                                                ("http://bknr.net" . :bknr.web))))	       
 		 :navigation '(("sponsor" . "edit-sponsor/")
 			       ("statistics" . "statistics/")
 			       ("news" . "edit-news/")
