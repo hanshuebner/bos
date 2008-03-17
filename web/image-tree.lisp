@@ -320,7 +320,8 @@
    (geo-width :initarg :geo-width :reader geo-width)
    (geo-height :initarg :geo-height :reader geo-height)   
    (children :initarg :children :reader children)
-   (parent :reader parent)))
+   (parent :reader parent)
+   (depth :reader depth :initarg :depth)))
 
 (defpersistent-class image-tree (image-tree-node)
   ((parent :initform nil)))
@@ -337,7 +338,8 @@
     (setf (slot-value child 'parent) obj)))
 
 (defun make-image-tree-node (image &key geo-rect children
-                             (class-name 'image-tree-node))
+                             (class-name 'image-tree-node)
+                             depth)
   (destructuring-bind (geo-x geo-y geo-width geo-height)
       geo-rect
     (make-store-image :image image
@@ -347,7 +349,8 @@
                                          :geo-y ,geo-y
                                          :geo-width ,geo-width
                                          :geo-height ,geo-height             
-                                         :children ,children))))
+                                         :children ,children
+                                         :depth ,depth))))
 
 (defun image-tree-node-less (a b)
   (cond
@@ -356,16 +359,22 @@
      (< (geo-y a) (geo-y b)))
     (t nil)))
 
-(defmethod lod-min ((obj image-tree-node))
-  (/ (min (store-image-width obj) (store-image-height obj)) 2.0))
+;; (defmethod lod-min ((obj image-tree-node))
+;;   (/ (min (store-image-width obj) (store-image-height obj)) 2.0))
 
-(defmethod lod-min ((obj image-tree))
-  900)
+;; (defmethod lod-min ((obj image-tree))
+;;   900)
+
+;; (defmethod lod-max ((obj image-tree-node))
+;;   (if (children obj)
+;;       (* (store-image-width obj) (store-image-height obj))
+;;       -1))
+
+(defmethod lod-min ((obj image-tree-node))
+  256)
 
 (defmethod lod-max ((obj image-tree-node))
-  (if (children obj)
-      (* (store-image-width obj) (store-image-height obj))
-      -1))
+  -1)
 
 (defun children-sizes (width height &key (divisor 2))
   (flet ((divide-almost-equally (x)
@@ -379,8 +388,8 @@
     (list (divide-almost-equally width)
           (divide-almost-equally height))))
 
-(defun map-children-rects (function left top width-heights)
-  "Calls FUNCTION with (x y width height) for each of the sub-rectangles
+(defun map-children-rects (function left top width-heights depth)
+  "Calls FUNCTION with (x y width height depth) for each of the sub-rectangles
 specified by the start point LEFT, TOP and WIDTH-HEIGHTS of the sub-rectangles.
 Collects the results into an array of dimensions corresponding to WIDTH-HEIGHTS."
   (let (results)
@@ -389,7 +398,7 @@ Collects the results into an array of dimensions corresponding to WIDTH-HEIGHTS.
       (dolist (w widths (nreverse results))       
         (let ((safe-top top))           ; pretty ugly, sorry
           (dolist (h heights)
-            (push (funcall function left safe-top w h) results)
+            (push (funcall function left safe-top w h depth) results)
             (incf safe-top h)))        
         (incf left w)))))
 
@@ -417,13 +426,14 @@ Collects the results into an array of dimensions corresponding to WIDTH-HEIGHTS.
                (image-small-enough (image-width image-height)
                  (and (<= image-width output-images-size)
                       (<= image-height output-images-size)))
-               (%make-image-tree (image-x image-y image-width image-height)
+               (%make-image-tree (image-x image-y image-width image-height depth)
                  (let ((class (pop classes))
                        (children (unless (image-small-enough image-width image-height)
                                    (sort
                                     (map-children-rects #'%make-image-tree
                                                         image-x image-y
-                                                        (children-sizes image-width image-height))
+                                                        (children-sizes image-width image-height)
+                                                        (1+ depth))
                                     #'image-tree-node-less))))
                    (cl-gd:with-image (image output-images-size output-images-size t)
                      (cl-gd:copy-image source-image image
@@ -440,9 +450,10 @@ Collects the results into an array of dimensions corresponding to WIDTH-HEIGHTS.
                                            :geo-rect (image-rect2geo-rect
                                                       (list image-x image-y image-width image-height))
                                            :children children
-                                           :class-name class)))))
+                                           :class-name class
+                                           :depth depth)))))
         (with-image-tree-node-counter
-          (%make-image-tree 0 0 source-image-width source-image-height))))))
+          (%make-image-tree 0 0 source-image-width source-image-height 0))))))
 
 
 #|
@@ -480,7 +491,7 @@ Collects the results into an array of dimensions corresponding to WIDTH-HEIGHTS.
         ((:a :href (website-make-path *website*
                                       (format nil "image-tree/~d" (store-object-id (parent object)))))
          "go to parent"))))
-    (:p "lod-min:" (:princ (lod-min object)) "lod-max:" (:princ (lod-max object)))
+    (:p "depth: " (:princ (depth object)) "lod-min:" (:princ (lod-min object)) "lod-max:" (:princ (lod-max object)))
     (:table
      (dolist (row (group-on (children object) :key #'geo-y :include-key nil))
        (html (:tr
@@ -501,9 +512,17 @@ Collects the results into an array of dimensions corresponding to WIDTH-HEIGHTS.
       (with-element "Document"
         (kml-region rect lod)
         (kml-overlay (format nil "~a:~a/image/~d" *website-url* *port* (store-object-id obj))
-                     rect 0)
+                     rect (depth obj))
         (dolist (child (children obj))
           (kml-network-link (format nil "~a:~a/image-tree-kml/~d" *website-url* *port* (store-object-id child))
                             (make-rectangle2 (list (geo-x child) (geo-y child)
                                                    (geo-width child) (geo-height child)))
                             `(:min ,(lod-min child) :max ,(lod-max child))))))))
+
+(defclass image-tree-kml-latest-handler (redirect-handler)
+  ())
+
+(defmethod handle ((page-handler image-tree-kml-latest-handler))
+  (redirect (format nil "~a:~a/image-tree-kml/~d" *website-url* *port* (store-object-id (car (last (class-instances 'image-tree)))))))
+
+
