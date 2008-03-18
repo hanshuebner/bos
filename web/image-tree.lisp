@@ -321,7 +321,7 @@
    (geo-height :initarg :geo-height :reader geo-height)   
    (children :initarg :children :reader children)
    (parent :reader parent)
-   (depth :reader depth :initarg :depth)))
+   (depth :accessor depth :initarg :depth)))
 
 (defpersistent-class image-tree (image-tree-node)
   ((parent :initform nil)))
@@ -454,6 +454,30 @@ Collects the results into an array of dimensions corresponding to WIDTH-HEIGHTS.
                                            :depth depth)))))
         (with-image-tree-node-counter
           (%make-image-tree 0 0 source-image-width source-image-height 0))))))
+
+(deftransaction combine-image-trees (image-trees)
+  (macrolet ((reduce-min (&rest args)
+               `(reduce #'min ,@args))
+             (reduce-max (&rest args)
+               `(reduce #'max ,@args)))
+    (labels ((normalize-depths (node &optional (depth 0))
+               (setf (depth node) depth)
+               (mapc #'(lambda (child) (normalize-depths child (1+ depth))) (children node))
+               node))
+      (let ((geo-x (reduce-min image-trees :key #'geo-x))
+            (geo-y (reduce-min image-trees :key #'geo-y))
+            (geo-x-max (reduce-max image-trees :key #'(lambda (tree) (+ (geo-x tree) (geo-width tree)))))
+            (geo-y-max (reduce-max image-trees :key #'(lambda (tree) (+ (geo-y tree) (geo-height tree)))))
+            (first-image-tree (first image-trees)))       
+        (cl-gd:with-image (image (store-image-width first-image-tree)
+                                 (store-image-height first-image-tree)
+                                 t)
+          (normalize-depths
+           (with-image-tree-node-counter
+             (make-image-tree-node image :geo-rect (list geo-x geo-y (- geo-x-max geo-x) (- geo-y-max geo-y))
+                                   :children (mapcar (alexandria:rcurry #'persistent-change-class 'image-tree-node)
+                                                     image-trees)                         
+                                   :class-name 'image-tree))))))))
 
 
 #|
