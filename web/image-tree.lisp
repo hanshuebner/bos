@@ -595,4 +595,31 @@ element using TEST and KEY)."
 (defmethod handle ((page-handler image-tree-kml-latest-handler))
   (redirect (format nil "~a:~a/image-tree-kml/~d" *website-url* *port* (store-object-id (car (last (class-instances 'image-tree)))))))
 
+;;;;
+(defun image-tree-import-all ()
+  (let ((array (make-array (list 4 4))))
+    (loop with *default-pathname-defaults* = #p"/home/paul/bos-satellitenbild/"
+       for name in '("sl_utm50s_01.png"
+                     "sl_utm50s_02.png"
+                     "sl_utm50s_03.png"
+                     "sl_utm50s_04.png"
+                     "sl_utm50s_05.png"
+                     "sl_utm50s_06.png"
+                     "sl_utm50s_07.png"
+                     "sl_utm50s_08.png"
+                     "sl_utm50s_09.png"
+                     "sl_utm50s_10.png"
+                     "sl_utm50s_11.png"
+                     "sl_utm50s_12.png"
+                     "sl_utm50s_13.png"
+                     "sl_utm50s_14.png"
+                     "sl_utm50s_15.png"
+                     "sl_utm50s_16.png")
+       for i upfrom 0
+       for x = (mod i 4)
+       for y = (floor i 4)
+       do (setf (aref array x y)
+                (cl-gd:with-image-from-file (image (merge-pathnames name))
+                  (make-image-tree image (list (* (mod i 4) 2700) (* (floor i 4) 2700)
+                                               2700 2700)))))))
 
