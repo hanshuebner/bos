@@ -444,8 +444,10 @@ Collects the results into an array of dimensions corresponding to WIDTH-HEIGHTS.
                                        :dest-width output-images-size
                                        :dest-height output-images-size)
                      (cl-gd:with-default-color ((cl-gd:allocate-color 255 0 0 :image image))
-                       (cl-gd:draw-string 10 10 (format nil "~D,~D (~D x ~D)" image-x image-y image-width image-height)
-                                          :font :medium :image image))
+                       ;; (cl-gd:draw-string 10 10 (format nil "~D,~D (~D x ~D)" image-x image-y image-width image-height)
+                       ;;                                           :font :medium :image image)
+                       (cl-gd:draw-rectangle (list 10 10 (- output-images-size 10) (- output-images-size 10))
+                                             :image image))
                      (make-image-tree-node image
                                            :geo-rect (image-rect2geo-rect
                                                       (list image-x image-y image-width image-height))
@@ -454,6 +456,22 @@ Collects the results into an array of dimensions corresponding to WIDTH-HEIGHTS.
                                            :depth depth)))))
         (with-image-tree-node-counter
           (%make-image-tree 0 0 source-image-width source-image-height 0))))))
+
+(defun matrix-from-list (list &key (x-key #'first) (y-key #'second))
+  (let* ((matrix (mapcar #'cdr (sort (group-on (sort (copy-list list) #'< :key x-key) :key y-key) #'< :key #'first)))
+         (width (length (first matrix))))
+    (assert (every #'(lambda (row) (= width (length row))) matrix)
+            nil "Cant make a proper matrix from list, cause its rows wont have the same length.")
+    matrix))
+
+(defun setp (list &key (test #'eql) (key #'identity))
+  ;; quick hack...
+  (= (length list)
+     (length (remove-duplicates list :test test :key key))))
+
+(defun every-eql-first-p (list &key (test #'eql) (key #'identity))
+  (let ((first-key (funcall key (first list))))
+    (every #'(lambda (elt) (funcall test first-key (funcall key elt))) (cdr list))))
 
 (deftransaction combine-image-trees (image-trees)
   (macrolet ((reduce-min (&rest args)
@@ -464,14 +482,40 @@ Collects the results into an array of dimensions corresponding to WIDTH-HEIGHTS.
                (setf (depth node) depth)
                (mapc #'(lambda (child) (normalize-depths child (1+ depth))) (children node))
                node))
-      (let ((geo-x (reduce-min image-trees :key #'geo-x))
-            (geo-y (reduce-min image-trees :key #'geo-y))
-            (geo-x-max (reduce-max image-trees :key #'(lambda (tree) (+ (geo-x tree) (geo-width tree)))))
-            (geo-y-max (reduce-max image-trees :key #'(lambda (tree) (+ (geo-y tree) (geo-height tree)))))
-            (first-image-tree (first image-trees)))       
+      (assert (setp image-trees :key #'(lambda (tree) (list (geo-x tree) (geo-y tree))) :test #'equal)
+              nil "The given image-trees have at least one duplicate with respect to their left-top position.")
+      (assert (every-eql-first-p image-trees :key #'(lambda (tree) (list (store-image-width tree)
+                                                                         (store-image-height tree)))
+                                 :test #'equal)
+              nil "The given image-trees must have the same width and height.")
+      (let* ((geo-x (reduce-min image-trees :key #'geo-x))
+             (geo-y (reduce-min image-trees :key #'geo-y))
+             (geo-x-max (reduce-max image-trees :key #'(lambda (tree) (+ (geo-x tree) (geo-width tree)))))
+             (geo-y-max (reduce-max image-trees :key #'(lambda (tree) (+ (geo-y tree) (geo-height tree)))))
+             (first-image-tree (first image-trees))
+             (children-matrix (matrix-from-list image-trees :x-key #'geo-x :y-key #'geo-y))
+             (children-matrix-width (length (first children-matrix)))
+             (children-matrix-height (length children-matrix)))       
         (cl-gd:with-image (image (store-image-width first-image-tree)
                                  (store-image-height first-image-tree)
                                  t)
+          ;; copy images
+          (flet ((scaler-x (x) (round (/ x children-matrix-width)))
+                 (scaler-y (y) (round (/ y children-matrix-height))))
+            (loop with dest-y = 0
+               for row in children-matrix
+               do (loop with dest-x = 0
+                     for tree in row                    
+                     do (with-store-image (source-image tree)
+                          (cl-gd:copy-image source-image image
+                                            0 0 (scaler-x dest-x) (scaler-y dest-y)
+                                            (store-image-width tree) (store-image-height tree)
+                                            :resample t
+                                            :resize t
+                                            :dest-width (scaler-x (store-image-width first-image-tree))
+                                            :dest-height (scaler-y (store-image-height first-image-tree))))
+                     do (incf dest-x (store-image-width tree)))
+               do (incf dest-y (store-image-height (first row)))))
           (normalize-depths
            (with-image-tree-node-counter
              (make-image-tree-node image :geo-rect (list geo-x geo-y (- geo-x-max geo-x) (- geo-y-max geo-y))
