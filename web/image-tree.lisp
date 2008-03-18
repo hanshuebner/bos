@@ -312,7 +312,7 @@
      ,@body))
 
 (defun image-tree-node-unique-name ()
-  (format nil "image-tree-~a-~a" (get-universal-time) (incf *image-tree-node-counter*)))
+  (format nil "image-tree-~a-~a-~a" (get-universal-time) (random 10000) (incf *image-tree-node-counter*)))
 
 (defpersistent-class image-tree-node (store-image)
   ((geo-x :initarg :geo-x :reader geo-x) 
@@ -465,11 +465,13 @@ Collects the results into an array of dimensions corresponding to WIDTH-HEIGHTS.
     matrix))
 
 (defun setp (list &key (test #'eql) (key #'identity))
-  ;; quick hack...
+  "Checks if LIST is a set (using TEST and KEY)."
   (= (length list)
      (length (remove-duplicates list :test test :key key))))
 
 (defun every-eql-first-p (list &key (test #'eql) (key #'identity))
+  "Checks if LIST only contains elements that are eql to its first
+element using TEST and KEY)."
   (let ((first-key (funcall key (first list))))
     (every #'(lambda (elt) (funcall test first-key (funcall key elt))) (cdr list))))
 
