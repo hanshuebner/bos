@@ -388,3 +388,48 @@
 			    imageproc-arguments))
 	  (error "image index ~a out of bounds for poi ~a" image-index poi)))))
 
+(defclass poi-xml-handler (object-handler)
+  ()
+  (:default-initargs :object-class 'poi :query-function #'find-poi))
+
+
+(defmethod handle-object ((handler poi-xml-handler) poi)
+  (labels ((format-hash-table (element-name hash-table)
+             (with-element element-name
+               (maphash (lambda (k v)                        
+                          (with-element "content"
+                            (attribute "lang" k)
+                            (text v)))
+                        hash-table)))
+           (format-store-image (element-name store-image)
+             (with-element element-name
+               (with-element "id" (text (princ-to-string (store-object-id store-image))))
+               (with-element "name" (text (store-image-name store-image)))
+               (with-element "width" (text (princ-to-string (store-image-width store-image))))
+               (with-element "height" (text (princ-to-string (store-image-height store-image)))))))
+    (with-accessors ((id store-object-id)
+                     (name poi-name)
+                     (title poi-title)
+                     (subtitle poi-subtitle)
+                     (description poi-description)
+                     (airals poi-airals)
+                     (images poi-images)
+                     (panoramas poi-panoramas)
+                     (movies poi-movies)) poi
+      (with-xml-response (:root-element "poi")
+        (with-element "id" (text (princ-to-string id)))
+        (with-element "name" (text name))
+        (format-hash-table "title" title)
+        (format-hash-table "subtitle" subtitle)
+        (format-hash-table "description" description)        
+        (with-element "airals"
+          (mapc (alexandria:curry #'format-store-image "airal") airals))
+        (with-element "images"
+          (mapc (alexandria:curry #'format-store-image "image") images))
+        (with-element "panoramas"
+          (mapc (alexandria:curry #'format-store-image "panorama") panoramas))
+        (with-element "movies"
+          (dolist (url movies)
+            (with-element "movie"
+              (with-element "url" (text url)))))))))
+
