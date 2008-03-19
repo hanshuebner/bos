@@ -1,6 +1,6 @@
 (in-package :bos.web)
 
-;;; kml utils (including point / rect stuff) - for now 
+;;; kml utils (including point / rect stuff) - for now
 
 (defmacro values-nsew ()
   '(values north south east west))
@@ -82,15 +82,15 @@
   ((top-left :accessor top-left :initarg :top-left)
    (bottom-right :accessor bottom-right :initarg :bottom-right)))
 
-(defmethod width-height ((rect rectangle))  
+(defmethod width-height ((rect rectangle))
   (multiple-value-bind
         (x y)
-      (point-x-y (top-left rect))   
+      (point-x-y (top-left rect))
     (multiple-value-bind
           (x2 y2)
-        (point-x-y (bottom-right rect))     
+        (point-x-y (bottom-right rect))
       (let ((width (- x2 x))
-            (height (- y2 y)))        
+            (height (- y2 y)))
         (values width height)))))
 
 (defmethod size ((rect rectangle))
@@ -99,15 +99,15 @@
     (max width height)))
 
 (defmethod print-object ((rect rectangle) stream)
-  (print-unreadable-object (rect stream :type t :identity t)    
+  (print-unreadable-object (rect stream :type t :identity t)
     (multiple-value-bind
           (x y)
-        (point-x-y (top-left rect))    
+        (point-x-y (top-left rect))
       (multiple-value-bind
             (x2 y2)
-          (point-x-y (bottom-right rect))        
-        (let ((width (- x2 x)))         
-          (let ((height (- y2 y)))            
+          (point-x-y (bottom-right rect))
+        (let ((width (- x2 x)))
+          (let ((height (- y2 y)))
             (format stream "~a,~a ~a x ~a" x y width height)))))))
 
 (defun make-rectangle (&key x y width height (type 'rectangle))
@@ -125,13 +125,13 @@
        (point-equal (bottom-right a) (bottom-right b))))
 
 (defmethod bounding-box-lon-lat ((rect rectangle))
-  (MULTIPLE-VALUE-BIND
-        (WEST NORTH)
-      (POINT-LON-LAT (TOP-LEFT RECT))
-    (MULTIPLE-VALUE-BIND
-          (EAST SOUTH)
-        (POINT-LON-LAT (BOTTOM-RIGHT RECT))
-      (VALUES-NSEW))))
+  (multiple-value-bind
+        (west north)
+      (point-lon-lat (top-left rect))
+    (multiple-value-bind
+          (east south)
+        (point-lon-lat (bottom-right rect))
+      (values-nsew))))
 
 (defmethod bounding-box-x-y ((rect rectangle))
   (multiple-value-bind
@@ -197,11 +197,11 @@
           (point-x-y (bottom-right rect))
         (and (<= r-x x (1- r-x2)) (<= r-y y (1- r-y2)))))))
 
-(defun contains-p (parent-rect rect)  
+(defun contains-p (parent-rect rect)
   (and (point-in-rect-p (top-left rect) parent-rect)
        (point-in-rect-p (point1- (bottom-right rect)) parent-rect)))
 
-(defun intersects-p (parent-rect rect)  
+(defun intersects-p (parent-rect rect)
   (or (point-in-rect-p (top-left rect) parent-rect)
       (point-in-rect-p (point1- (bottom-right rect)) parent-rect)))
 
@@ -284,7 +284,7 @@
   (kml-lat-lon-box rect "LatLonAltBox"))
 
 (defun kml-overlay (img-path rect &optional (drawOrder 0))
-  (with-element "GroundOverlay"                                          
+  (with-element "GroundOverlay"
     (with-element "name" (text (file-namestring img-path)))
     (with-element "drawOrder" (integer-text drawOrder))
     (with-element "Icon"
@@ -308,32 +308,40 @@
 (defvar *image-tree-node-counter*)
 
 (defmacro with-image-tree-node-counter (&body body)
+  "Allows to call IMAGE-TREE-NODE-UNIQUE-NAME in BODY."
   `(let ((*image-tree-node-counter* -1))
      ,@body))
 
 (defun image-tree-node-unique-name ()
+  "Generates a unique name for an image-tree-node."
   (format nil "image-tree-~a-~a-~a" (get-universal-time) (random 10000) (incf *image-tree-node-counter*)))
 
 (defpersistent-class image-tree-node (store-image)
-  ((geo-x :initarg :geo-x :reader geo-x) 
+  ((geo-x :initarg :geo-x :reader geo-x)
    (geo-y :initarg :geo-y :reader geo-y)
    (geo-width :initarg :geo-width :reader geo-width)
-   (geo-height :initarg :geo-height :reader geo-height)   
+   (geo-height :initarg :geo-height :reader geo-height)
    (children :initarg :children :reader children)
    (parent :reader parent)
-   (depth :accessor depth :initarg :depth)))
+   (depth :accessor depth :initarg :depth))
+  (:documentation "Derived from STORE-IMAGE, IMAGE-TREE-NODE is an
+image itself, which has additional information, like its
+geo-location. It also knows about its position in the tree; being at a
+certain DEPTH and pointing to its PARENT and its CHILDREN."))
 
 (defpersistent-class image-tree (image-tree-node)
-  ((parent :initform nil)))
+  ((parent :initform nil))
+  (:documentation "IMAGE-TREE is the root node of IMAGE-TREE-NODEs."))
 
 (defmethod print-object ((object image-tree-node) stream)
   (print-unreadable-object (object stream :type t)
-    (format stream "ID: ~A (~A x ~A)"	    
-	    (store-object-id object)
-	    (store-image-width object)
-	    (store-image-height object))))
+    (format stream "ID: ~A (~A x ~A)"
+            (store-object-id object)
+            (store-image-width object)
+            (store-image-height object))))
 
 (defmethod initialize-persistent-instance :after ((obj image-tree-node))
+  ;; initialize the parent slot
   (dolist (child (children obj))
     (setf (slot-value child 'parent) obj)))
 
@@ -348,11 +356,13 @@
                       :initargs `(:geo-x ,geo-x
                                          :geo-y ,geo-y
                                          :geo-width ,geo-width
-                                         :geo-height ,geo-height             
+                                         :geo-height ,geo-height
                                          :children ,children
                                          :depth ,depth))))
 
 (defun image-tree-node-less (a b)
+  "Allows to give IMAGE-TREE-NODEs a canonical order according to
+their geo-locations."
   (cond
     ((< (geo-x a) (geo-x b)) t)
     ((= (geo-x a) (geo-x b))
@@ -371,12 +381,20 @@
 ;;       -1))
 
 (defmethod lod-min ((obj image-tree-node))
+  "Initially intended to customize LOD-MIN according to the node's
+context.  It seems that a constant default value is sufficient here."
   256)
 
 (defmethod lod-max ((obj image-tree-node))
+  "See LOD-MIN."
   -1)
 
 (defun children-sizes (width height &key (divisor 2))
+  "Splits a rectangle of integer size WIDTH x HEIGHT into almost equal
+parts that have again integer size. If the initial rectangle does not
+have an extreme aspect ratio, the number of the resulting rectangles
+will be (sqr divisor)."
+  ;; extreme aspect ratios are not implemented yet
   (flet ((divide-almost-equally (x)
            (multiple-value-bind (quotient remainder)
                (floor x divisor)
@@ -389,21 +407,25 @@
           (divide-almost-equally height))))
 
 (defun map-children-rects (function left top width-heights depth)
-  "Calls FUNCTION with (x y width height depth) for each of the sub-rectangles
-specified by the start point LEFT, TOP and WIDTH-HEIGHTS of the sub-rectangles.
-Collects the results into an array of dimensions corresponding to WIDTH-HEIGHTS."
+  "Calls FUNCTION with (x y width height depth) for each of the
+sub-rectangles specified by the start point LEFT, TOP and
+WIDTH-HEIGHTS of the sub-rectangles.  Collects the results into an
+array of dimensions corresponding to WIDTH-HEIGHTS."
   (let (results)
     (destructuring-bind (widths heights)
         width-heights
-      (dolist (w widths (nreverse results))       
+      (dolist (w widths (nreverse results))
         (let ((safe-top top))           ; pretty ugly, sorry
           (dolist (h heights)
             (push (funcall function left safe-top w h depth) results)
-            (incf safe-top h)))        
+            (incf safe-top h)))
         (incf left w)))))
 
 (defun make-image-tree (source-image geo-location &key
                         (output-images-size 256))
+  "Constructs an image-tree with the given SOURCE-IMAGE. The root
+IMAGE-TREE-NODE will be at GEO-LOCATION. All images will be scaled to
+OUTPUT-IMAGES-SIZE."
   (destructuring-bind (geo-x geo-y geo-width geo-height) geo-location
     (let* ((source-image-width (cl-gd:image-width source-image))
            (source-image-height (cl-gd:image-height source-image))
@@ -458,6 +480,8 @@ Collects the results into an array of dimensions corresponding to WIDTH-HEIGHTS.
           (%make-image-tree 0 0 source-image-width source-image-height 0))))))
 
 (defun matrix-from-list (list &key (x-key #'first) (y-key #'second))
+  "Converts a flat LIST to a matrix, by using X-KEY and Y-KEY to
+associate a position to each element of LIST. "
   (let* ((matrix (mapcar #'cdr (sort (group-on (sort (copy-list list) #'< :key x-key) :key y-key) #'< :key #'first)))
          (width (length (first matrix))))
     (assert (every #'(lambda (row) (= width (length row))) matrix)
@@ -476,68 +500,70 @@ element using TEST and KEY)."
     (every #'(lambda (elt) (funcall test first-key (funcall key elt))) (cdr list))))
 
 (deftransaction combine-image-trees (image-trees)
-  (macrolet ((reduce-min (&rest args)
-               `(reduce #'min ,@args))
-             (reduce-max (&rest args)
-               `(reduce #'max ,@args)))
-    (labels ((normalize-depths (node &optional (depth 0))
-               (setf (depth node) depth)
-               (mapc #'(lambda (child) (normalize-depths child (1+ depth))) (children node))
-               node))
-      (assert (setp image-trees :key #'(lambda (tree) (list (geo-x tree) (geo-y tree))) :test #'equal)
-              nil "The given image-trees have at least one duplicate with respect to their left-top position.")
-      (assert (every-eql-first-p image-trees :key #'(lambda (tree) (list (store-image-width tree)
-                                                                         (store-image-height tree)))
-                                 :test #'equal)
-              nil "The given image-trees must have the same width and height.")
-      (let* ((geo-x (reduce-min image-trees :key #'geo-x))
-             (geo-y (reduce-min image-trees :key #'geo-y))
-             (geo-x-max (reduce-max image-trees :key #'(lambda (tree) (+ (geo-x tree) (geo-width tree)))))
-             (geo-y-max (reduce-max image-trees :key #'(lambda (tree) (+ (geo-y tree) (geo-height tree)))))
-             (first-image-tree (first image-trees))
-             (children-matrix (matrix-from-list image-trees :x-key #'geo-x :y-key #'geo-y))
-             (children-matrix-width (length (first children-matrix)))
-             (children-matrix-height (length children-matrix)))       
-        (cl-gd:with-image (image (store-image-width first-image-tree)
-                                 (store-image-height first-image-tree)
-                                 t)
-          ;; copy images
-          (flet ((scaler-x (x) (round (/ x children-matrix-width)))
-                 (scaler-y (y) (round (/ y children-matrix-height))))
-            (loop with dest-y = 0
-               for row in children-matrix
-               do (loop with dest-x = 0
-                     for tree in row                    
-                     do (with-store-image (source-image tree)
-                          (cl-gd:copy-image source-image image
-                                            0 0 (scaler-x dest-x) (scaler-y dest-y)
-                                            (store-image-width tree) (store-image-height tree)
-                                            :resample t
-                                            :resize t
-                                            :dest-width (scaler-x (store-image-width first-image-tree))
-                                            :dest-height (scaler-y (store-image-height first-image-tree))))
-                     do (incf dest-x (store-image-width tree)))
-               do (incf dest-y (store-image-height (first row)))))
-          (normalize-depths
-           (with-image-tree-node-counter
-             (make-image-tree-node image :geo-rect (list geo-x geo-y (- geo-x-max geo-x) (- geo-y-max geo-y))
-                                   :children (mapcar (alexandria:rcurry #'persistent-change-class 'image-tree-node)
-                                                     image-trees)                         
-                                   :class-name 'image-tree))))))))
+  "Creates a new image-tree object that contains IMAGE-TREES as
+children. All necessary adoptions for the new structure are
+performed."
+  (labels ((reduce-min (&rest args)
+             (apply #'reduce #'min args))
+           (reduce-max (&rest args)
+             (apply #'reduce #'max args))
+           (normalize-depths (node &optional (depth 0))
+             (setf (depth node) depth)
+             (mapc #'(lambda (child) (normalize-depths child (1+ depth))) (children node))
+             node))
+    (assert (setp image-trees :key #'(lambda (tree) (list (geo-x tree) (geo-y tree))) :test #'equal)
+            nil "The given image-trees have at least one duplicate with respect to their left-top position.")
+    (assert (every-eql-first-p image-trees :key #'(lambda (tree) (list (store-image-width tree)
+                                                                       (store-image-height tree)))
+                               :test #'equal)
+            nil "The given image-trees must have the same width and height.")
+    (let* ((geo-x (reduce-min image-trees :key #'geo-x))
+           (geo-y (reduce-min image-trees :key #'geo-y))
+           (geo-x-max (reduce-max image-trees :key #'(lambda (tree) (+ (geo-x tree) (geo-width tree)))))
+           (geo-y-max (reduce-max image-trees :key #'(lambda (tree) (+ (geo-y tree) (geo-height tree)))))
+           (first-image-tree (first image-trees))
+           (children-matrix (matrix-from-list image-trees :x-key #'geo-x :y-key #'geo-y))
+           (children-matrix-width (length (first children-matrix)))
+           (children-matrix-height (length children-matrix)))
+      (cl-gd:with-image (image (store-image-width first-image-tree)
+                               (store-image-height first-image-tree)
+                               t)
+        ;; copy images
+        (flet ((scaler-x (x) (round (/ x children-matrix-width)))
+               (scaler-y (y) (round (/ y children-matrix-height))))
+          (loop with dest-y = 0
+             for row in children-matrix
+             do (loop with dest-x = 0
+                   for tree in row
+                   do (with-store-image (source-image tree)
+                        (cl-gd:copy-image source-image image
+                                          0 0 (scaler-x dest-x) (scaler-y dest-y)
+                                          (store-image-width tree) (store-image-height tree)
+                                          :resample t
+                                          :resize t
+                                          :dest-width (scaler-x (store-image-width first-image-tree))
+                                          :dest-height (scaler-y (store-image-height first-image-tree))))
+                   do (incf dest-x (store-image-width tree)))
+             do (incf dest-y (store-image-height (first row)))))
+        (normalize-depths
+         (with-image-tree-node-counter
+           (make-image-tree-node image :geo-rect (list geo-x geo-y (- geo-x-max geo-x) (- geo-y-max geo-y))
+                                 :children (mapcar (alexandria:rcurry #'persistent-change-class 'image-tree-node)
+                                                   image-trees)
+                                 :class-name 'image-tree)))))))
 
 
-#|
-(cl-gd:with-image-from-file (image "/tmp/115606" :jpeg)
-  (make-image-tree image nil))
+;; (cl-gd:with-image-from-file (image "/tmp/115606" :jpeg)
+;;   (make-image-tree image nil))
 
-(cl-gd:with-image-from-file (image "/tmp/115606" :jpeg)
-  (make-image-tree image '(0 0 10 10)))
-
-|#
+;; (cl-gd:with-image-from-file (image "/tmp/115606" :jpeg)
+;;   (make-image-tree image '(0 0 10 10)))
 
 (defclass image-tree-handler (object-handler)
   ()
-  (:default-initargs :object-class 'image-tree-node))
+  (:default-initargs :object-class 'image-tree-node)
+  (:documentation "A simple html inspector for image-trees. Mainly
+  used for debugging."))
 
 
 (defun img-image-tree (object)
@@ -549,11 +575,11 @@ element using TEST and KEY)."
 
 (defmethod handle-object ((image-tree-handler image-tree-handler) (object image-tree-node))
   (with-bknr-page (:title (prin1-to-string object))
-    #+nil(:pre                            
-          (:princ                      
-           (arnesi:escape-as-html      
-            (with-output-to-string (*standard-output*)  
-              (describe object)))))    
+    #+nil(:pre
+          (:princ
+           (arnesi:escape-as-html
+            (with-output-to-string (*standard-output*)
+              (describe object)))))
     (img-image-tree object)
     (when (parent object)
       (html
@@ -572,11 +598,14 @@ element using TEST and KEY)."
 
 (defclass image-tree-kml-handler (object-handler)
   ()
-  (:default-initargs :object-class 'image-tree-node))
+  (:default-initargs :object-class 'image-tree-node)
+  (:documentation "Generates a kml representation of the queried
+image-tree-node.  If the node has children, corresponding network
+links are created."))
 
 (defmethod handle-object ((handler image-tree-kml-handler) (obj image-tree-node))
   (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
-                                    :root-element "kml")    
+                                    :root-element "kml")
     (let ((lod `(:min ,(lod-min obj) :max ,(lod-max obj)))
           (rect (make-rectangle2 (list (geo-x obj) (geo-y obj) (geo-width obj) (geo-height obj)))))
       (with-element "Document"
@@ -590,36 +619,48 @@ element using TEST and KEY)."
                             `(:min ,(lod-min child) :max ,(lod-max child))))))))
 
 (defclass image-tree-kml-latest-handler (redirect-handler)
-  ())
+  ()
+  (:documentation "A convenience handler that redirects to the
+  IMAGE-TREE-KML-HANDLER of the latest created image-tree."))
 
 (defmethod handle ((page-handler image-tree-kml-latest-handler))
   (redirect (format nil "~a:~a/image-tree-kml/~d" *website-url* *port* (store-object-id (car (last (class-instances 'image-tree)))))))
 
 ;;;;
-(defun image-tree-import-all ()
-  (let ((array (make-array (list 4 4))))
-    (loop with *default-pathname-defaults* = #p"/home/paul/bos-satellitenbild/"
-       for name in '("sl_utm50s_01.png"
-                     "sl_utm50s_02.png"
-                     "sl_utm50s_03.png"
-                     "sl_utm50s_04.png"
-                     "sl_utm50s_05.png"
-                     "sl_utm50s_06.png"
-                     "sl_utm50s_07.png"
-                     "sl_utm50s_08.png"
-                     "sl_utm50s_09.png"
-                     "sl_utm50s_10.png"
-                     "sl_utm50s_11.png"
-                     "sl_utm50s_12.png"
-                     "sl_utm50s_13.png"
-                     "sl_utm50s_14.png"
-                     "sl_utm50s_15.png"
-                     "sl_utm50s_16.png")
-       for i upfrom 0
-       for x = (mod i 4)
-       for y = (floor i 4)
-       do (setf (aref array x y)
-                (cl-gd:with-image-from-file (image (merge-pathnames name))
-                  (make-image-tree image (list (* (mod i 4) 2700) (* (floor i 4) 2700)
-                                               2700 2700)))))))
-
+(defun image-tree-import-satellitenbild ()
+  "A simple importer for our standard image."
+  (labels ((2x2-indices (left top)
+             `((,left ,top)(,(1+ left) ,top)(,left ,(1+ top))(,(1+ left) ,(1+ top))))
+           (aref-indices (array indices)
+             (mapcar #'(lambda (index-pair) (destructuring-bind (x y) index-pair (aref array x y))) indices)))
+    (let ((array (make-array (list 4 4))))
+      (loop with *default-pathname-defaults* = #p"/home/paul/bos-satellitenbild/"
+         for name in '("sl_utm50s_01.png"
+                       "sl_utm50s_02.png"
+                       "sl_utm50s_03.png"
+                       "sl_utm50s_04.png"
+                       "sl_utm50s_05.png"
+                       "sl_utm50s_06.png"
+                       "sl_utm50s_07.png"
+                       "sl_utm50s_08.png"
+                       "sl_utm50s_09.png"
+                       "sl_utm50s_10.png"
+                       "sl_utm50s_11.png"
+                       "sl_utm50s_12.png"
+                       "sl_utm50s_13.png"
+                       "sl_utm50s_14.png"
+                       "sl_utm50s_15.png"
+                       "sl_utm50s_16.png")
+         for i upfrom 0
+         for x = (mod i 4)
+         for y = (floor i 4)
+         do (print (list 'importing x y))
+         do (setf (aref array x y)
+                  (cl-gd:with-image-from-file (image (merge-pathnames name))
+                    (make-image-tree image (list (* (mod i 4) 2700) (* (floor i 4) 2700)
+                                                 2700 2700)))))
+      (combine-image-trees
+       (list (combine-image-trees (aref-indices array (2x2-indices 0 0)))
+             (combine-image-trees (aref-indices array (2x2-indices 0 2)))
+             (combine-image-trees (aref-indices array (2x2-indices 2 0)))
+             (combine-image-trees (aref-indices array (2x2-indices 2 2))))))))
