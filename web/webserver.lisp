@@ -211,6 +211,8 @@ language preference weights."
 					("/make-poi" make-poi-handler)
 					("/poi-image" poi-image-handler)
                                         ("/poi-xml" poi-xml-handler)
+                                        ("/poi-kml-all" poi-kml-all-handler)
+                                        ("/poi-kml" poi-kml-handler)
 					("/map-browser" map-browser-handler)
 					("/poi-javascript" poi-javascript-handler)
 					("/m2-javascript" m2-javascript-handler)
