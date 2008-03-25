@@ -22,7 +22,7 @@
   <!-- server -->
   <xsl:param name="server" select="'http://test.createrainforest.org'"/>
   <!-- image_width -->
-  <xsl:param name="image_width" select="60"/>
+  <xsl:param name="image_width" select="120"/>
   
   <xsl:template match="kml:Placemark">  
     <table style="background-color: rgb(186, 186, 186); width: 319px; height: 350px;" border="0" cellpadding="5" cellspacing="0">
@@ -34,24 +34,26 @@
         </tr>        
         <tr>
           <td style="width: 100px;">
-            <a href="{$server}/infosystem/en/satellitenkarte.htm#">
-              <img style="border: 0px solid ;" alt="Galerie" src="{$server}/infosystem/en/satellitenkarte.htm#"/>
-              <br/> Galerie Slidwshow</a></td><td style="width: 33%;">
-            <a href="{$server}/infosystem/en/satellitenkarte.htm#">
-              <img style="border: 0px solid ;" alt="Panorama-klein" src="{$server}/infosystem/en/satellitenkarte.htm#"/>
-              <br/>Panorama-Mini</a></td><td style="width: 33%;"> <a href="{$server}/infosystem/en/satellitenkarte.htm#">
-              <img style="border: 0px solid ;" alt="Video" src="{$server}/infosystem/en/satellitenkarte.htm#"/>
-              <br/>Video</a></td></tr><tr><td style="width: 33%;" colspan="3">
             <h1><xsl:value-of select="descendant::bos:title/bos:content[@lang=$lang]"/></h1>
             <h2><xsl:value-of select="descendant::bos:subtitle/bos:content[@lang=$lang]"/></h2>
             <div style="text-align: left;">
               <xsl:value-of select="descendant::bos:description/bos:content[@lang=$lang]"/>
-              <a href="{$server}/en/index">learn more</a></div>
+            </div>
+            <br/>
             <xsl:apply-templates select="descendant::bos:image"/>
-        </td></tr><tr><td style="width: 99px;" colspan="3" align="center" valign="middle">
-            <font color="#999999"><a href="{$server}/en/index">create rainforest</a>
-              | copyright</font>
-    </td></tr></tbody></table>
+          </td>
+        </tr>
+        <!-- this will later become a link that goes directly to poi info -->
+        <tr><td align="center" colspan="3"><a href="{$server}/infosystem/en/satellitenkarte.htm">learn more</a></td></tr>
+        <tr>
+          <td style="width: 99px;" colspan="3" align="center" valign="middle">
+            <font color="#999999">
+              <a href="{$server}/en/index">create rainforest</a> | copyright
+            </font>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <p/>    
   </xsl:template>
   
