@@ -618,7 +618,7 @@ links are created."))
                                                    (geo-width child) (geo-height child)))
                             `(:min ,(lod-min child) :max ,(lod-max child))))))))
 
-(defclass image-tree-kml-latest-handler (redirect-handler)
+(defclass image-tree-kml-latest-handler (page-handler)
   ()
   (:documentation "A convenience handler that redirects to the
   IMAGE-TREE-KML-HANDLER of the latest created image-tree."))
