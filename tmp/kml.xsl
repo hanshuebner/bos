@@ -39,8 +39,31 @@
             <div style="text-align: left;">
               <xsl:value-of select="descendant::bos:description/bos:content[@lang=$lang]"/>
             </div>
-            <br/>
-            <xsl:apply-templates select="descendant::bos:image"/>
+            <br/>            
+            <table>
+              <tbody>
+                <tr>
+                  <td><xsl:apply-templates select="descendant::bos:image[1]"/></td>
+                  <td><xsl:apply-templates select="descendant::bos:image[2]"/></td>
+                  <td><xsl:apply-templates select="descendant::bos:image[3]"/></td>
+                </tr>
+                <tr>
+                  <td valign="top"><xsl:apply-templates select="descendant::bos:image[1]" mode="title"/></td>
+                  <td valign="top"><xsl:apply-templates select="descendant::bos:image[2]" mode="title"/></td>
+                  <td valign="top"><xsl:apply-templates select="descendant::bos:image[3]" mode="title"/></td>
+                </tr>
+                <tr>
+                  <td><xsl:apply-templates select="descendant::bos:image[4]"/></td>
+                  <td><xsl:apply-templates select="descendant::bos:image[5]"/></td>
+                  <td><xsl:apply-templates select="descendant::bos:image[6]"/></td>
+                </tr>
+                <tr>
+                  <td valign="top"><xsl:apply-templates select="descendant::bos:image[4]" mode="title"/></td>
+                  <td valign="top"><xsl:apply-templates select="descendant::bos:image[5]" mode="title"/></td>
+                  <td valign="top"><xsl:apply-templates select="descendant::bos:image[6]" mode="title"/></td>
+                </tr>
+              </tbody>
+            </table>
           </td>
         </tr>
         <!-- this will later become a link that goes directly to poi info -->
@@ -64,7 +87,11 @@
     <xsl:param name="w" select="$image_width"/>
     <xsl:param name="h" select="$aspect_ratio * $w"/>
     <img src="{$server}/image/{$id}" width="{$w}" height="{$h}"/>
-    &#160;
   </xsl:template>
+
+  <xsl:template match="bos:image" mode="title">
+    <span style="font-size: small;"><xsl:value-of select="bos:title/bos:content[@lang=$lang]"/></span>
+  </xsl:template>
+
 </xsl:stylesheet>
 
