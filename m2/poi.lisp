@@ -190,12 +190,16 @@ var poi = { symbol: ~S,
                               (attribute "lang" k)
                               (text v)))
                           hash-table)))
-             (format-store-image (element-name store-image)
+             (format-image (element-name image)
                (with-element element-name
-                 (with-element "id" (text (princ-to-string (store-object-id store-image))))
-                 (with-element "name" (text (store-image-name store-image)))
-                 (with-element "width" (text (princ-to-string (store-image-width store-image))))
-                 (with-element "height" (text (princ-to-string (store-image-height store-image)))))))
+                 (with-element "id" (text (princ-to-string (store-object-id image))))
+                 (with-element "name" (text (store-image-name image)))
+                 (with-element "width" (text (princ-to-string (store-image-width image))))
+                 (with-element "height" (text (princ-to-string (store-image-height image))))
+                 (when (typep image 'poi-image)
+                   (format-hash-table "title" (poi-image-title image))
+                   (format-hash-table "subtitle" (poi-image-subtitle image))
+                   (format-hash-table "description" (poi-image-description image))))))
       (with-accessors ((id store-object-id)
                        (name poi-name)
                        (title poi-title)
@@ -212,11 +216,11 @@ var poi = { symbol: ~S,
           (format-hash-table "subtitle" subtitle)
           (format-hash-table "description" description)        
           (with-element "airals"
-            (mapc (alexandria:curry #'format-store-image "airal") airals))
+            (mapc (alexandria:curry #'format-image "airal") airals))
           (with-element "images"
-            (mapc (alexandria:curry #'format-store-image "image") images))
+            (mapc (alexandria:curry #'format-image "image") images))
           (with-element "panoramas"
-            (mapc (alexandria:curry #'format-store-image "panorama") panoramas))
+            (mapc (alexandria:curry #'format-image "panorama") panoramas))
           (with-element "movies"
             (dolist (url movies)
               (with-element "movie"
