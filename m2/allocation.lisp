@@ -716,3 +716,19 @@ not be returned by this function"
 		(stripe-height stripe))
 	     (- (stripe-y stripe) (stripe-top stripe)))
 	  (* (stripe-width stripe) (stripe-height stripe))))
+
+
+(defun allocation-area-consistent-p (allocation-area)
+  (let ((total (calculate-total-m2-count allocation-area))
+        (allocated (calculate-allocated-m2-count allocation-area))
+        (consistent-p t))
+    (unless (= total (allocation-area-total-m2s allocation-area))
+      (warn "~s's total count is ~d but should be ~d"
+            allocation-area (allocation-area-total-m2s allocation-area) total)
+      (setf consistent-p nil))
+    (unless (= (- total allocated) (allocation-area-free-m2s allocation-area))
+      (warn "~s's free count is ~d but should be ~d"
+            allocation-area (allocation-area-free-m2s allocation-area) (- total allocated))
+      (setf consistent-p nil))
+    consistent-p))
+
