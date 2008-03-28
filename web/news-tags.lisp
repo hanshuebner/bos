@@ -19,7 +19,7 @@
                                               :key #'news-item-time)))
                              (subseq items 0 (min (length items) 3))))))
       (labels ((show-news-entry (news-item)
-		 (html ((:a :href (format nil "javascript:window_news('news/~a')" (store-object-id news-item))
+		 (html ((:a :href (format nil "javascript:window_news('/~a/news/~a')" language (store-object-id news-item))
 			    :class "more")
 			(:strong (:princ-safe (format-date-time (news-item-time news-item) :show-time nil))
 				 :br
