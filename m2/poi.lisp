@@ -1,17 +1,17 @@
 ;; poi.lisp
 
-;; Klassen und Funktione für die "Points of Information", die für die
+;; Klassen und Funktione fÃ¼r die "Points of Information", die fÃ¼r die
 ;; Quadratmeter-Datenbank gespeichert werden.
 
 ;; Die Implementation kurvt ein bisschen um den aktuellen Datastore
-;; herum, da eine ästhetische Implementation der mehrsprachigen
-;; Strings MOP erforderlich machen würde, die Umstellung des Datastore
+;; herum, da eine Ã¤sthetische Implementation der mehrsprachigen
+;; Strings MOP erforderlich machen wÃ¼rde, die Umstellung des Datastore
 ;; auf MOP jedoch noch nicht fertig ist.
 
 (in-package :bos.m2)
 
 ;; Multilinguale Strings als Slots, werden als Hashes im Objekt
-;; gespeichert und über slot-string bzw. (setf slot-string)
+;; gespeichert und Ã¼ber slot-string bzw. (setf slot-string)
 ;; angesprochen.
 
 (defun make-string-hash-table ()
@@ -125,7 +125,7 @@
   (geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ (poi-center-x poi)) (- +nw-utm-y+ (poi-center-y poi)) +utm-zone+ t))
 
 (defun make-poi-javascript (language)
-  "Erzeugt das POI-Javascript für das Infosystem"
+  "Erzeugt das POI-Javascript fÃ¼r das Infosystem"
   (with-output-to-string (*standard-output*)
     (format t "var anzahlSponsoren = ~D;~%" (length (remove-if-not #'(lambda (sponsor) (some #'contract-paidp (sponsor-contracts sponsor)))
 							       (class-instances 'sponsor))))
