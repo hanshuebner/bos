@@ -5,7 +5,8 @@
   (:export #:with-points
 	   #:distance
 	   #:dorect
-	   #:rect-center
+	   #:rectangle-center
+           #:rectangle-intersects-p
 	   #:point-in-polygon-p
 	   #:point-in-circle-p
            #:point-in-rect-p

@@ -353,7 +353,7 @@
 (defun contract-neighbours (contract &optional (radius 100))
   (destructuring-bind (left top width height)
       (contract-bounding-box contract)
-    (let ((center (rect-center left top width height :roundp t))
+    (let ((center (rectangle-center (list left top width height) :roundp t))
 	  (diameter (* 2 radius))
 	  (contracts (make-hash-table :test #'eq)))
       (with-points (center)
@@ -368,7 +368,7 @@
 (defun contract-center (contract)
   (destructuring-bind (left top width height)
       (contract-bounding-box contract)
-    (rect-center left top width height :roundp t)))
+    (rectangle-center (list left top width height) :roundp t)))
 
 (defun contract-center-lon-lat (contract)
   (let ((center (contract-center contract)))

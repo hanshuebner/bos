@@ -3,6 +3,9 @@
 ;; a point in this package is represented
 ;; as a list (x y)
 
+;; a rectangle is represented
+;; as a list (left top width height)
+
 (defmacro with-point (point &body body)
   (let* ((*package* (symbol-package point))
 	 (x (intern (format nil "~A-X" (symbol-name point))))
@@ -17,43 +20,72 @@
 	 (with-points (,@(cdr points))
 	   ,@body))))
 
+(defmacro with-rectangle (rectangle &body body)
+  (destructuring-bind (rectangle &key suffix) (ensure-list rectangle)
+    (flet ((add-suffix (symbol)
+             (if suffix
+                 (intern (format nil "~a-~a" (symbol-name symbol) (string-upcase suffix))
+                         (symbol-package symbol))
+                 symbol)))
+      `(destructuring-bind (,(add-suffix 'left)
+                            ,(add-suffix 'top)
+                             ,(add-suffix 'width)
+                             ,(add-suffix 'height))
+           ,rectangle
+         ,@body))))
+
 (defun distance (point-a point-b)
   (with-points (point-a point-b)
     (sqrt (+ (expt (- point-a-x point-b-x) 2)
 	     (expt (- point-a-y point-b-y) 2)))))
 
-(defmacro dorect ((point (left top width height) &key test row-change) &body body)
-  "Iterate with POINT over all points in rect row per row. The list
-containing x and y is intended for only extracting those
-and not to be stored away (it will be modified).
+;; (defmacro dorect ((point rectangle &key test row-change) &body body)
+;;   "Iterate with POINT over all points in rect row per row. The list
+;; containing x and y is intended for only extracting those
+;; and not to be stored away (it will be modified).
 
-BODY is only executed, if TEST of the current point is true.
+;; BODY is only executed, if TEST of the current point is true.
 
-For convenience, a null arg function ROW-CHANGE can be given
-that will be called between the rows."
-  (check-type point symbol)
-  (rebinding (left top)
-    `(iter
-       (with ,point = (list nil nil))
-       (for y from ,top to (1- (+ ,top ,height)))
-       ,(when row-change
-	      `(unless (first-time-p)
-		 (funcall ,row-change)))
-       (iter
-	 (for x from ,left to (1- (+ ,left ,width)))
-	 (setf (first ,point) x
-	       (second ,point) y)
-	 (when ,(if test
-		    `(funcall ,test ,point)
-		    t)
-	   ,@body)))))
+;; For convenience, a null arg function ROW-CHANGE can be given
+;; that will be called between the rows."
+;;   (check-type point symbol)
+;;   (with-rectangle rectangle
+;;     (rebinding (left top)
+;;       `(iter
+;;          (with ,point = (list nil nil))
+;;          (for y from ,top to (1- (+ ,top ,height)))
+;;          ,(when row-change
+;;                 `(unless (first-time-p)
+;;                    (funcall ,row-change)))
+;;          (iter
+;;            (for x from ,left to (1- (+ ,left ,width)))
+;;            (setf (first ,point) x
+;;                  (second ,point) y)
+;;            (when ,(if test
+;;                       `(funcall ,test ,point)
+;;                       t)
+;;              ,@body))))))
 
-(defun rect-center (left top width height &key roundp)
-  (let ((x (+ left (/ width 2)))
-	(y (+ top (/ height 2))))
-    (if roundp
-	(list (round x) (round y))
-	(list x y))))
+(defun rectangle-center (rectangle &key roundp)
+  (with-rectangle rectangle
+    (let ((x (+ left (/ width 2)))
+          (y (+ top (/ height 2))))
+      (if roundp
+          (list (round x) (round y))
+          (list x y)))))
+
+(defun rectangle-intersects-p (a b)
+  (with-rectangle (a :suffix a)
+    (with-rectangle (b :suffix b)
+      (let* ((right-a (+ left-a width-a))
+             (bottom-a (+ top-a height-a))
+             (right-b (+ left-b width-b))
+             (bottom-b (+ top-b height-b))
+             (left (max left-a left-b))
+             (top (max top-a top-b))
+             (right (min right-a right-b))
+             (bottom (min bottom-a bottom-b)))
+        (and (> right left) (> bottom top))))))
 
 ;; maybe change this function to take a
 ;; point as an argument?
@@ -76,18 +108,19 @@ that will be called between the rows."
 (defun point-in-circle-p (point center radius)
   (<= (distance point center) radius))
 
-(defun point-in-rect-p (point left top width height)
+(defun point-in-rect-p (point rectangle)
   (with-point point
-    (and (<= left point-x (1- (+ left width)))
-         (<= top point-y (1- (+ top height))))))
+    (with-rectangle rectangle
+      (and (<= left point-x (1- (+ left width)))
+           (<= top point-y (1- (+ top height)))))))
 
 ;;; for fun...
-(defun point-in-circle-p-test ()
-  (let ((center (list 4 4)))
-    (dorect (p (0 0 10 10) :row-change #'terpri)
-      (if (point-in-circle-p p center 3)
-	  (princ "x")
-	  (princ ".")))))
+;; (defun point-in-circle-p-test ()
+;;   (let ((center (list 4 4)))
+;;     (dorect (p (0 0 10 10) :row-change #'terpri)
+;;       (if (point-in-circle-p p center 3)
+;; 	  (princ "x")
+;; 	  (princ ".")))))
 
 (defun bounding-box (objects &key (key #'identity))
   (let (min-x min-y max-x max-y)
