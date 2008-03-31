@@ -14,7 +14,11 @@
            #:with-bounding-box-collect
 	   #:find-boundary-point
 	   #:region-to-polygon
-	   #:format-lon-lat))
+	   #:format-lon-lat
+           ;;
+           #:make-rect-publisher
+           #:register-rect-subscriber
+           #:publish-rect-change))
 
 (defpackage :geo-utm
   (:use :cl)

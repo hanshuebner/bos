@@ -326,3 +326,27 @@ leading zeros, keep trailing zeros)"
 	  (format-decimal-degree (abs lon))
 	  (plusp lon)))
 
+;;; publish - subscribe on rectangles
+(defstruct rect-publisher
+  subscribers)
+
+(setf (documentation 'make-rect-publisher 'function)
+      "MAKE-RECT-PUBLISHER creates a new publisher object.")
+
+(defstruct rect-subscriber
+  object rectangle callback-fn)
+
+(defun register-rect-subscriber (publisher subscriber rectangle callback-fn)
+  "Register SUBSCRIBER with associated RECTANGLE and CALLBACK-FN with
+PUBLISHER, so that on changes in RECTANGLE, CALLBACK-FN will be called
+with SUBSCRIBER as the only arg."
+  (push (make-rect-subscriber :object subscriber :rectangle (copy-list rectangle) :callback-fn callback-fn)
+        (rect-publisher-subscribers publisher)))
+
+(defun publish-rect-change (publisher rectangle)
+  "Tells PUBLISHER about changes in RECTANGLE. All subscribers whose
+own rectangle intersects with RECTANGLE will be notified."
+  (dolist (subscriber (rect-publisher-subscribers publisher))
+    (when (rectangle-intersects-p rectangle (rect-subscriber-rectangle subscriber))
+      (funcall (rect-subscriber-callback-fn subscriber) (rect-subscriber-object subscriber)))))
+
