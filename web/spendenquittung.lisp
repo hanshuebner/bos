@@ -127,10 +127,10 @@ BOS Deutchland e.V.
 												:signature-field mail-to-office)))))))
 
     (handler-case
-	(send-smtp "localhost" *mail-sender-address* email
-		   (format nil "From: ~a <~a>~%To: ~a <~a>~%Subject: Ihre Spendenbescheinigung für den Quadratmeterkauf~%"
-			   *mail-sender-name* *mail-sender-address*
-			   name email)
+	(cl-smtp:with-smtp-mail (smtp "localhost" *mail-sender-address* email)
+          (format smtp "From: ~a <~a>~%To: ~a <~a>~%Subject: Ihre Spendenbescheinigung für den Quadratmeterkauf~%"
+                  *mail-sender-name* *mail-sender-address*
+                  name email)
 		   (with-output-to-string (s)
 		     (print-mime s mime t nil)))
       (error (e)

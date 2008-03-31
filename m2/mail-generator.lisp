@@ -14,22 +14,23 @@
   (country->office-email (sponsor-country (contract-sponsor contract))))
 
 (defun send-system-mail (&key (to *office-mail-address*) (subject "(no subject") (text "(no text)") (content-type "text/plain; charset=UTF-8") more-headers)
+  (setf to (alexandria:ensure-list to))
   (if *enable-mails*
-      (send-smtp "localhost" *mail-sender* to
-		 (format nil "X-Mailer: BKNR-BOS-mailer
+      (cl-smtp:with-smtp-mail (smtp "localhost" *mail-sender* to)
+        (format smtp "X-Mailer: BKNR-BOS-mailer
 Date: ~A
 From: ~A
-To: ~A
+To: ~{~A~^, ~}
 Subject: ~A
 ~@[Content-Type: ~A
 ~]~@[~*~%~]~A"
-			 (format-date-time (get-universal-time) :mail-style t)
-			 *mail-sender*
-			 to
-			 subject
-			 content-type
-			 (not more-headers)
-			 text))
+                (format-date-time (get-universal-time) :mail-style t)
+                *mail-sender*
+                to
+                subject
+                content-type
+                (not more-headers)
+                text))
       (format t "Mail with subject ~S to ~A not sent~%" subject to)))
   
 (defun mail-info-request (email country)
