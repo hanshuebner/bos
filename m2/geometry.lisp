@@ -39,32 +39,31 @@
     (sqrt (+ (expt (- point-a-x point-b-x) 2)
 	     (expt (- point-a-y point-b-y) 2)))))
 
-;; (defmacro dorect ((point rectangle &key test row-change) &body body)
-;;   "Iterate with POINT over all points in rect row per row. The list
-;; containing x and y is intended for only extracting those
-;; and not to be stored away (it will be modified).
+(defmacro dorect ((point (left top width height) &key test row-change) &body body)
+  "Iterate with POINT over all points in rect row per row. The list
+containing x and y is intended for only extracting those
+and not to be stored away (it will be modified).
 
-;; BODY is only executed, if TEST of the current point is true.
+BODY is only executed, if TEST of the current point is true.
 
-;; For convenience, a null arg function ROW-CHANGE can be given
-;; that will be called between the rows."
-;;   (check-type point symbol)
-;;   (with-rectangle rectangle
-;;     (rebinding (left top)
-;;       `(iter
-;;          (with ,point = (list nil nil))
-;;          (for y from ,top to (1- (+ ,top ,height)))
-;;          ,(when row-change
-;;                 `(unless (first-time-p)
-;;                    (funcall ,row-change)))
-;;          (iter
-;;            (for x from ,left to (1- (+ ,left ,width)))
-;;            (setf (first ,point) x
-;;                  (second ,point) y)
-;;            (when ,(if test
-;;                       `(funcall ,test ,point)
-;;                       t)
-;;              ,@body))))))
+For convenience, a null arg function ROW-CHANGE can be given
+that will be called between the rows."
+  (check-type point symbol)
+  (rebinding (left top)
+    `(iter
+       (with ,point = (list nil nil))
+       (for y from ,top to (1- (+ ,top ,height)))
+       ,(when row-change
+	      `(unless (first-time-p)
+		 (funcall ,row-change)))
+       (iter
+	 (for x from ,left to (1- (+ ,left ,width)))
+	 (setf (first ,point) x
+	       (second ,point) y)
+	 (when ,(if test
+		    `(funcall ,test ,point)
+		    t)
+	   ,@body)))))
 
 (defun rectangle-center (rectangle &key roundp)
   (with-rectangle rectangle
