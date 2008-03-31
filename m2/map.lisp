@@ -95,6 +95,10 @@ to determine the intensity of the returned RGB value."
    (layers :initarg :layers :reader image-tile-layers))
   (:default-initargs :type :png :changed-time (get-universal-time) :layers '(background areas contracts palette)))
 
+(defmethod initialize-instance :after ((tile image-tile) &key nw-x nw-y width &allow-other-keys)
+  (register-rect-subscriber *rect-publisher* tile
+                            (list nw-x nw-y width width) #'image-tile-changed))
+
 (defmethod image-tile-original-image ((tile image-tile))
   (with-slots (original-image nw-x nw-y) tile
     (unless original-image

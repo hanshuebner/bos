@@ -264,8 +264,8 @@
       (unless (subtypep (type-of contract) 'contract)
 	(error "invalid contract id (wrong type) ~A" id)))))
 
-(defmethod contract-changed ((contract contract))
-  (mapc #'(lambda (tile) (image-tile-changed tile)) (contract-image-tiles contract)))
+(defmethod contract-changed ((contract contract))  
+  (publish-rect-change *rect-publisher* (contract-bounding-box contract)))
 
 (defmethod contract-is-expired ((contract contract))
   (and (contract-expires contract)
@@ -495,6 +495,7 @@ Sponsor-ID: ~A
   (force-output)
   (setf *enable-mails* enable-mails)
   (setf *website-url* website-url)
+  (setf *rect-publisher* (make-rect-publisher))
   (unless directory
     (error ":DIRECTORY parameter not set in m2.rc"))
   (assert (and (null (pathname-name directory))

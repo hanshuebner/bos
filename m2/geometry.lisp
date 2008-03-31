@@ -347,6 +347,7 @@ with SUBSCRIBER as the only arg."
   "Tells PUBLISHER about changes in RECTANGLE. All subscribers whose
 own rectangle intersects with RECTANGLE will be notified."
   (dolist (subscriber (rect-publisher-subscribers publisher))
-    (when (rectangle-intersects-p rectangle (rect-subscriber-rectangle subscriber))
+    (when (rectangle-intersects-p rectangle (rect-subscriber-rectangle subscriber))      
       (funcall (rect-subscriber-callback-fn subscriber) (rect-subscriber-object subscriber)))))
+
 
