@@ -3,6 +3,7 @@
 (defpackage :geometry
   (:use :cl :iterate :arnesi)
   (:export #:with-points
+           #:with-rectangle
 	   #:distance
 	   #:dorect
 	   #:rectangle-center

@@ -25,8 +25,8 @@
     (flet ((add-suffix (symbol)
              (if suffix
                  (intern (format nil "~a-~a" (symbol-name symbol) (string-upcase suffix))
-                         (symbol-package symbol))
-                 symbol)))
+                         (symbol-package rectangle))
+                 (intern (symbol-name symbol) (symbol-package rectangle)))))
       `(destructuring-bind (,(add-suffix 'left)
                             ,(add-suffix 'top)
                              ,(add-suffix 'width)
