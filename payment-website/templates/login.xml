@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:bos="http://createrainforest.org">
+      xmlns:bos="http://headcraft.de/bos">
  <bos:admin-login-page>
   <head>
-   <title>Please login in to the BOS CMS</title>
+   <title>Please log in to the BOS CMS</title>
    <link rel="stylesheet" href="/static/cms.css" />
   </head>
   <body>
