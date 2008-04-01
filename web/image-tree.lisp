@@ -595,7 +595,6 @@ performed."
                 (html (:td (img-image-tree child))))))))))
 
 
-
 (defclass image-tree-kml-handler (object-handler)
   ()
   (:default-initargs :object-class 'image-tree-node)
