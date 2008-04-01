@@ -24,7 +24,7 @@
 (define-bknr-tag worldpay-receipt ()
   (emit-without-quoting "<WPDISPLAY ITEM=banner>"))
 
-(define-bknr-tag process-payment (&key children)
+(define-bknr-tag process-payment ()
   (with-template-vars (cartId transId email country)
     (let* ((contract (get-contract (parse-integer cartId)))
 	   (sponsor (contract-sponsor contract)))
@@ -34,7 +34,7 @@
       (contract-set-paidp contract (format nil "~A: paid via worldpay" (format-date-time)))
       (setf (get-template-var :master-code) (sponsor-master-code sponsor))
       (setf (get-template-var :sponsor-id) (sponsor-id sponsor))))
-  (mapc #'emit-template-node children))
+  (emit-tag-children))
 
 (define-bknr-tag generate-cert ()
   (with-template-vars (gift email name address want-print)
@@ -53,17 +53,17 @@
     (when (>= (contract-price contract) (parse-integer min-amount))
       (html (checkbox-field "mail-certificate" message :checked nil)))))
 
-(define-bknr-tag only-if-print (&key children)
+(define-bknr-tag only-if-print ()
   (with-template-vars (want-print)
     (when (equal want-print "yes")
-      (mapc #'emit-template-node children))))
+      (emit-tag-children))))
 
 (define-bknr-tag maybe-base (&key href)
   (when (and href
 	     (not (equal "" href)))
     (html ((:base "href" href)))))
 
-(define-bknr-tag buy-sqm (&key children)
+(define-bknr-tag buy-sqm ()
   (handler-case
       (with-template-vars (numsqm numsqm1 action gift donationcert-yearly download-only)
 	(let* ((numsqm (parse-integer (or numsqm numsqm1)))
@@ -114,7 +114,7 @@
 			      (if donationcert-yearly "1" "0")
 			      (if gift "1" "0")
 			      (when *worldpay-test-mode* "&testMode=100"))))))
-	(mapc #'emit-template-node children))
+	(emit-tag-children))
     (bos.m2::allocation-areas-exhausted (e)
       (declare (ignore e))
       (bknr.web::redirect-request :target "allocation-areas-exhausted"))))
@@ -136,16 +136,16 @@
 			   :language (hunchentoot:session-value :language))
       (mail-manual-sponsor-data))))
 
-(define-bknr-tag when-certificate (&key children)
+(define-bknr-tag when-certificate ()
   (let ((sponsor (bknr-session-user)))
     (when (some #'contract-pdf-pathname (sponsor-contracts sponsor))
-      (mapc #'emit-template-node children))))
+      (emit-tag-children))))
 
-(define-bknr-tag send-info-request (&key children email country)
+(define-bknr-tag send-info-request (&key email country)
   (mail-info-request email (or country "DE"))
-  (mapc #'emit-template-node children))
+  (emit-tag-children))
 
-(define-bknr-tag save-profile (&key children)
+(define-bknr-tag save-profile ()
   (let* ((sponsor (bknr-session-user))
 	 (contract (first (sponsor-contracts sponsor))))
     (with-template-vars (email name password infotext anonymize)
@@ -178,12 +178,12 @@
     (setf (get-template-var :numsqm)
 	  (format nil "~D"
 		  (apply #'+ (mapcar #'(lambda (contract) (length (contract-m2s contract))) (sponsor-contracts sponsor))))))
-  (mapc #'emit-template-node children))
+  (emit-tag-children))
 
-(define-bknr-tag admin-login-page (&key children)
+(define-bknr-tag admin-login-page ()  
   (if (editor-p (bknr-session-user))
       (html (:head ((:meta :http-equiv "refresh" :content "0; url=/admin"))))
-      (mapc #'emit-template-node children)))
+      (emit-tag-children)))
 
 (define-bknr-tag google-analytics-track ()
   (html ((:script :type "text/javascript")
@@ -191,3 +191,4 @@
 document.write(unescape('%3Cscript src=%22' + gaJsHost + 'google-analytics.com/ga.js%22 type=%22text/javascript%22%3E%3C/script%3E'));")
 	((:script :type "text/javascript")
 	 (:princ #?"if (_gat) { var pageTracker = _gat._getTracker('$(*google-analytics-account*)'); pageTracker._initData(); pageTracker._trackPageview(); }"))))
+
