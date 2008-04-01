@@ -168,6 +168,18 @@
 				 'vector)))
     bounding-box))
 
+(defmethod allocation-area-bounding-box2 ((allocation-area allocation-area))
+  "Returns the bounding-box in a standard rectangle representation."
+  (with-slots (left top width height) allocation-area
+    (list left top width height)))
+
+(defun allocation-areas-bounding-box (&optional (allocation-areas (class-instances 'allocation-area)))
+  (geometry:with-bounding-box-collect (collect)
+    (dolist (area allocation-areas)
+      (geometry:with-rectangle ((allocation-area-bounding-box2 area))
+        (collect (list left top))
+        (collect (list (1- (+ left width)) (1- (+ top height))))))))
+
 (defun gauge (area)
   "Liefere den Fuellpegel des Vergabegebiets (0 <= gauge <= 1)"
   (with-slots (y top height) area

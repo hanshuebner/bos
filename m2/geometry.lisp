@@ -20,13 +20,12 @@
 	 (with-points (,@(cdr points))
 	   ,@body))))
 
-(defmacro with-rectangle (rectangle &body body)
-  (destructuring-bind (rectangle &key suffix) (ensure-list rectangle)
+(defmacro with-rectangle (rectangle-or-options &body body)
+  (destructuring-bind (rectangle &key suffix) (ensure-list rectangle-or-options)
     (flet ((add-suffix (symbol)
              (if suffix
-                 (intern (format nil "~a-~a" (symbol-name symbol) (string-upcase suffix))
-                         (symbol-package rectangle))
-                 (intern (symbol-name symbol) (symbol-package rectangle)))))
+                 (intern (format nil "~a-~a" (symbol-name symbol) (string-upcase suffix)))
+                 (intern (symbol-name symbol)))))
       `(destructuring-bind (,(add-suffix 'left)
                             ,(add-suffix 'top)
                              ,(add-suffix 'width)
