@@ -186,6 +186,12 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
       (draw-contract-image image image-size (geo-location object) (pixelize object))
       (emit-image-to-browser image :png :date (timestamp object)))))
 
+(defmethod lod-min ((obj contract-tree-node))
+  256)
+
+(defmethod lod-max ((obj contract-tree-node))
+  (if (children obj) 1024 -1))
+
 (defclass contract-tree-kml-handler (contract-tree-handler)
   ()
   (:documentation "Generates a kml representation of the queried
@@ -195,7 +201,7 @@ links are created."))
 (defmethod handle-object ((handler contract-tree-kml-handler) (obj contract-tree-node))
   (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
                                     :root-element "kml")
-    (let ((lod '(:min 256 :max 1024))
+    (let ((lod `(:min ,(lod-min obj) :max ,(lod-max obj)))
           (rect (make-rectangle2 (geo-location obj))))
       (with-element "Document"
         (kml-region rect lod)
@@ -204,5 +210,5 @@ links are created."))
         (dolist (child (children obj))
           (kml-network-link (format nil "~a:~a/contract-tree-kml/~d" *website-url* *port* (id child))
                             (make-rectangle2 (geo-location child))
-                            '(:min 256 :max 1024)))))))
+                            `(:min ,(lod-min child) :max ,(lod-max child))))))))
 
