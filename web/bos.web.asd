@@ -32,6 +32,7 @@
 	       (:file "contract-image-handler" :depends-on ("web-utils"))
 	       (:file "reports-xml-handler" :depends-on ("boi-handlers"))
 	       (:file "image-tree" :depends-on ("packages"))
+               (:file "contract-tree" :depends-on ("packages"))
                (:file "kml-handlers" :depends-on ("packages" "web-macros"))
 	       (:file "sponsor-handlers" :depends-on ("web-utils"))
 	       (:file "news-handlers" :depends-on ("web-utils"))

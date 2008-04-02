@@ -14,14 +14,37 @@
                 ;; FIXME bos.m2::colorize-pixel not needed here
                 (setf (cl-gd:raw-pixel) (apply #'bos.m2::colorize-pixel (cl-gd:raw-pixel) (contract-color contract)))))))))))
 
+
+(defclass contract-tree-node-index (unique-index)
+  ((last-id :initform -1 :accessor last-id)))
+
+(defmethod index-reinitialize :after ((new-index contract-tree-node-index) old-index)
+  "Updates last-id"
+  (declare (ignore old-index))
+  (setf (last-id new-index) (reduce #'max (index-keys new-index) :initial-value -1)))
+
 (defclass contract-tree-node ()
-  ((geo-location :initarg :geo-location :reader geo-location)
+  ((id :accessor id)
+   (geo-location :initarg :geo-location :reader geo-location)
    (children :initarg :children :reader children)
    (pixelize :initarg :pixelize :reader pixelize)
-   (root :initarg :root :accessor root)))
+   (root :initarg :root :accessor root))
+  (:metaclass indexed-class)
+  (:class-indices (ids :index-type contract-tree-node-index
+                       :slots (id)
+                       :index-reader find-contract-tree-node)))
 
 (defclass contract-tree (contract-tree-node)
-  ((output-images-size :initarg :output-images-size :accessor output-images-size)))
+  ((output-images-size :initarg :output-images-size :accessor output-images-size))
+  (:metaclass indexed-class))
+
+(defmethod initialize-instance :after ((contract-tree-node contract-tree-node) &key)
+  (setf (id contract-tree-node)
+        (incf (last-id (indexed-class-index-named (find-class 'contract-tree-node) 'ids)))))
+
+(defmethod print-object ((contract-tree-node contract-tree-node) stream)
+  (print-unreadable-object (contract-tree-node stream :type t :identity t)
+    (format stream "ID: ~d" (id contract-tree-node))))
 
 (defun map-children-rects (function left top width-heights depth)
   "Calls FUNCTION with (x y width height depth) for each of the
