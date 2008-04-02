@@ -41,11 +41,17 @@
 
 (defmethod initialize-instance :after ((contract-tree-node contract-tree-node) &key)
   (setf (id contract-tree-node)
-        (incf (last-id (indexed-class-index-named (find-class 'contract-tree-node) 'ids)))))
+        (incf (last-id (indexed-class-index-named (find-class 'contract-tree-node) 'ids))))
+  (geometry:register-rect-subscriber *rect-publisher* contract-tree-node
+                                     (geo-location contract-tree-node)
+                                     #'contract-tree-node-changed))
 
 (defmethod print-object ((contract-tree-node contract-tree-node) stream)
   (print-unreadable-object (contract-tree-node stream :type t :identity t)
     (format stream "ID: ~d" (id contract-tree-node))))
+
+(defmethod contract-tree-node-changed ((contract-tree-node contract-tree-node))
+  (setf (timestamp contract-tree-node) (get-universal-time)))
 
 (defun map-children-rects (function left top width-heights depth)
   "Calls FUNCTION with (x y width height depth) for each of the
@@ -173,6 +179,7 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
   (hunchentoot:handle-if-modified-since (timestamp object))
   (let ((image-size (output-images-size (root object))))
     (cl-gd:with-image (image image-size image-size t)      
+      (print 'rendering-contract-tree-image)
       (draw-contract-image image image-size (geo-location object) (pixelize object))
       (emit-image-to-browser image :png :date (timestamp object)))))
 

@@ -238,7 +238,9 @@
 	   #:mail-worldpay-sponsor-data
 	   #:mail-print-pdf
 
-	   #:*cert-download-directory*))
+	   #:*cert-download-directory*
+
+           #:*rect-publisher*))
 
 (defpackage :bos.m2.cert-generator
   (:use :cl
