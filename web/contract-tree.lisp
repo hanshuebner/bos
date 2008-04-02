@@ -23,7 +23,6 @@
 (defclass contract-tree (contract-tree-node)
   ((output-images-size :initarg :output-images-size :accessor output-images-size)))
 
-
 (defun map-children-rects (function left top width-heights depth)
   "Calls FUNCTION with (x y width height depth) for each of the
 sub-rectangles specified by the start point LEFT, TOP and
@@ -45,7 +44,7 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
                            (max-pixel-per-meter 5))
   (labels ((stick-on-last (list)
              (let* ((list (copy-list list))
-                    (last list))
+                    (last (last list)))
                (setf (cdr last) last)
                list))
            (divide-almost-equally (x divisor)
@@ -71,8 +70,9 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
                          (incf safe-top h)))
                      (incf left w))))))
            (children-setf-root (node &optional root)
-             (when root (setf (root node) root))
-             (mapc #'(lambda (node) (children-setf-root node (if root root node))) (children node)))
+             (setf (root node) root)
+             (mapc #'(lambda (child) (children-setf-root child (if root root node))) (children node))
+             node)
            (setf-root-slots (root)
              (setf (output-images-size root) output-images-size)
              root)
