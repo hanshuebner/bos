@@ -203,6 +203,7 @@ language preference weights."
                                         ("/image-tree-kml-latest" image-tree-kml-latest-handler)
                                         ("/image-tree-kml" image-tree-kml-handler)                                        
                                         ("/image-tree" image-tree-handler)
+                                        ("/contract-tree-kml" contract-tree-kml-handler)
                                         ("/contract-tree-image" contract-tree-image-handler)
                                         ("/contract-tree" contract-tree-handler)                                        
 					("/contract-image" contract-image-handler)

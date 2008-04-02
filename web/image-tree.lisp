@@ -465,6 +465,7 @@ OUTPUT-IMAGES-SIZE."
                                        :resize t
                                        :dest-width output-images-size
                                        :dest-height output-images-size)
+                     #+nil
                      (cl-gd:with-default-color ((cl-gd:allocate-color 255 0 0 :image image))
                        ;; (cl-gd:draw-string 10 10 (format nil "~D,~D (~D x ~D)" image-x image-y image-width image-height)
                        ;;                                           :font :medium :image image)

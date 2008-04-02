@@ -4,15 +4,16 @@
   (geometry:with-rectangle geo-location
     (let ((step (float (/ (max height width) image-size))))
       (cl-gd:with-default-image (image)        
-        (cl-gd:fill-image 0 0 :color (cl-gd:find-color 255 255 255))
+        (setf (cl-gd:save-alpha-p) t)
+        (setf (cl-gd:alpha-blending-p) nil)
+        (cl-gd:fill-image 0 0 :color (cl-gd:find-color 255 255 255 :alpha 127))        
         (cl-gd:do-rows (y)
           (cl-gd:do-pixels-in-row (x)
             (let* ((m2 (get-m2 (+ left (round (* step (* pixelize (floor x pixelize)))))
                                (+ top (round (* step (* pixelize (floor y pixelize)))))))
                    (contract (and m2 (m2-contract m2))))          
               (when (and contract (contract-paidp contract))                
-                ;; FIXME bos.m2::colorize-pixel not needed here
-                (setf (cl-gd:raw-pixel) (apply #'bos.m2::colorize-pixel (cl-gd:raw-pixel) (contract-color contract)))))))))))
+                (setf (cl-gd:raw-pixel) (apply #'cl-gd:find-color (contract-color contract)))))))))))
 
 
 (defclass contract-tree-node-index (unique-index)
@@ -29,7 +30,8 @@
    (geo-location :initarg :geo-location :reader geo-location)
    (children :initarg :children :reader children)
    (pixelize :initarg :pixelize :reader pixelize)
-   (root :initarg :root :accessor root))
+   (root :initarg :root :accessor root)
+   (depth :initarg :depth :accessor depth))
   (:metaclass indexed-class)
   (:class-indices (ids :index-type contract-tree-node-index
                        :slots (id)
@@ -117,14 +119,15 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
                (declare (ignore left top))
                (>= (/ output-images-size (max width height))
                    max-pixel-per-meter)))
-           (rec (class geo-location pixelize)
+           (rec (class geo-location pixelize &optional (depth 0))
              (let ((children (unless (leaf-node-p geo-location)
-                               (mapcar #'(lambda (gl) (rec (cdr class) gl (cdr pixelize)))
+                               (mapcar #'(lambda (gl) (rec (cdr class) gl (cdr pixelize) (1+ depth)))
                                        (children-geo-locations geo-location)))))
                (make-instance (car class)
                               :geo-location geo-location
                               :children children
-                              :pixelize (car pixelize)))))
+                              :pixelize (car pixelize)
+                              :depth depth))))
     (let ((tree (rec (stick-on-last '(contract-tree contract-tree-node))
                      (ensure-square geo-location)
                      (stick-on-last (alexandria:ensure-list pixelize)))))
@@ -182,4 +185,24 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
       (print 'rendering-contract-tree-image)
       (draw-contract-image image image-size (geo-location object) (pixelize object))
       (emit-image-to-browser image :png :date (timestamp object)))))
+
+(defclass contract-tree-kml-handler (contract-tree-handler)
+  ()
+  (:documentation "Generates a kml representation of the queried
+contract-tree-node.  If the node has children, corresponding network
+links are created."))
+
+(defmethod handle-object ((handler contract-tree-kml-handler) (obj contract-tree-node))
+  (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
+                                    :root-element "kml")
+    (let ((lod '(:min 256 :max 1024))
+          (rect (make-rectangle2 (geo-location obj))))
+      (with-element "Document"
+        (kml-region rect lod)
+        (kml-overlay (format nil "~a:~a/contract-tree-image/~d" *website-url* *port* (id obj))
+                     rect (+ 100 (depth obj)))
+        (dolist (child (children obj))
+          (kml-network-link (format nil "~a:~a/contract-tree-kml/~d" *website-url* *port* (id child))
+                            (make-rectangle2 (geo-location child))
+                            '(:min 256 :max 1024)))))))
 
