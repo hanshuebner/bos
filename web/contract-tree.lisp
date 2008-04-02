@@ -25,6 +25,7 @@
 
 (defclass contract-tree-node ()
   ((id :accessor id)
+   (timestamp :accessor timestamp :initform (get-universal-time))
    (geo-location :initarg :geo-location :reader geo-location)
    (children :initarg :children :reader children)
    (pixelize :initarg :pixelize :reader pixelize)
@@ -65,7 +66,13 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
                            (output-images-size 256)
                            (pixelize 1)
                            (max-pixel-per-meter 5))
-  (labels ((stick-on-last (list)
+  (labels ((ensure-square (rectangle)
+             (geometry:with-rectangle rectangle
+               (if (= width height)
+                   rectangle
+                   (let ((size (max width height)))
+                     (list left top size size)))))
+           (stick-on-last (list)
              (let* ((list (copy-list list))
                     (last (last list)))
                (setf (cdr last) last)
@@ -92,9 +99,9 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
                          (push (list left safe-top w h) results)
                          (incf safe-top h)))
                      (incf left w))))))
-           (children-setf-root (node &optional root)
+           (children-setf-root (node root)
              (setf (root node) root)
-             (mapc #'(lambda (child) (children-setf-root child (if root root node))) (children node))
+             (mapc #'(lambda (child) (children-setf-root child root)) (children node))
              node)
            (setf-root-slots (root)
              (setf (output-images-size root) output-images-size)
@@ -113,7 +120,59 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
                               :children children
                               :pixelize (car pixelize)))))
     (let ((tree (rec (stick-on-last '(contract-tree contract-tree-node))
-                     geo-location
+                     (ensure-square geo-location)
                      (stick-on-last (alexandria:ensure-list pixelize)))))
-      (setf-root-slots (children-setf-root tree)))))
+      (setf-root-slots (children-setf-root tree tree)))))
+
+;;; handlers
+(defclass contract-tree-handler (object-handler)
+  ()
+  (:documentation "A simple html inspector for contract-trees. Mainly
+  used for debugging."))
+
+(defun img-contract-tree (object)
+  (html
+   ((:a :href (website-make-path *website*
+                                 (format nil "contract-tree/~d" (id object))))
+    ((:img :src (website-make-path *website*
+                                   (format nil "contract-tree-image/~d" (id object))))))))
+
+(defmethod object-handler-get-object ((handler contract-tree-handler))
+  (let ((id (parse-url)))
+    (when id
+      (let ((object (find-contract-tree-node (parse-integer id))))
+        (when (typep object 'contract-tree-node)
+          object)))))
+
+(defmethod handle-object ((contract-tree-handler contract-tree-handler) (object contract-tree-node))
+  (with-bknr-page (:title (prin1-to-string object))
+    (:pre
+     (:princ
+      (arnesi:escape-as-html
+       (with-output-to-string (*standard-output*)
+         (describe object)))))
+    (img-contract-tree object)
+    (when (root object)
+      (html
+       (:p
+        ((:a :href (website-make-path *website*
+                                      (format nil "contract-tree/~d" (id (root object)))))
+         "go to root"))))
+    ;; (:p "depth: " (:princ (depth object)) "lod-min:" (:princ (lod-min object)) "lod-max:" (:princ (lod-max object)))
+    (:table
+     (dolist (row (group-on (children object) :key #'(lambda (obj) (second (geo-location obj))) :include-key nil))
+       (html (:tr
+              (dolist (child row)
+                (html (:td (img-contract-tree child))))))))
+    ))
+
+(defclass contract-tree-image-handler (contract-tree-handler)
+  ())
+
+(defmethod handle-object ((handler contract-tree-image-handler) (object contract-tree-node))
+  (hunchentoot:handle-if-modified-since (timestamp object))
+  (let ((image-size (output-images-size (root object))))
+    (cl-gd:with-image (image image-size image-size t)      
+      (draw-contract-image image image-size (geo-location object) (pixelize object))
+      (emit-image-to-browser image :png :date (timestamp object)))))
 
