@@ -198,8 +198,7 @@ language preference weights."
 		 :name "create-rainforest.org CMS"
 		 :handler-definitions `(("/edit-poi" edit-poi-handler)
 					("/edit-poi-image" edit-poi-image-handler)
-					("/edit-sponsor" edit-sponsor-handler)
-					("/contract-kml" contract-kml-handler)
+					("/edit-sponsor" edit-sponsor-handler)					
                                         ("/image-tree-kml-latest" image-tree-kml-latest-handler)
                                         ("/image-tree-kml" image-tree-kml-handler)                                        
                                         ("/image-tree" image-tree-handler)

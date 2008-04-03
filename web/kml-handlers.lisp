@@ -39,7 +39,7 @@
     ;; when name is xmlns, the attribute does not show up - why (?)
     ;; (attribute "xmlns" "http://earth.google.com/kml/2.2")
     (with-element "Document"
-      (dolist (c (contract-neighbours contract 50))
+      (dolist (c (error "changed definition of contract-neighbours. (contract-neighbours contract 50)"))
 	(let ((polygon (m2s-polygon-lon-lat (contract-m2s c)))
 	      (name (user-full-name (contract-sponsor c))))
 	  (with-element "Placemark"
