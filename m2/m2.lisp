@@ -230,7 +230,8 @@
    (download-only :update)
    (cert-issued :read)
    (worldpay-trans-id :update :initform nil)
-   (expires :read :documentation "universal time which specifies the time the contract expires (is deleted) when it has not been paid for" :initform nil))
+   (expires :read :documentation "universal time which specifies the time the contract expires (is deleted) when it has not been paid for" :initform nil)
+   (largest-rectangle :update))
   (:default-initargs
       :m2s nil
     :paidp nil
@@ -246,7 +247,9 @@
   (pushnew contract (sponsor-contracts (contract-sponsor contract)))
   (contract-changed contract)
   (dolist (m2 (contract-m2s contract))
-    (setf (m2-contract m2) contract)))
+    (setf (m2-contract m2) contract))
+  (setf (contract-largest-rectangle contract)
+        (contract-compute-largest-rectangle contract)))
 
 (defmethod destroy-object :before ((contract contract))
   (let ((sponsor (contract-sponsor contract)))
@@ -356,7 +359,7 @@
 (defun contract-polygon (contract)
   (m2s-polygon (contract-m2s contract)))
 
-(defun contract-largest-rectangle (contract)
+(defun contract-compute-largest-rectangle (contract)
   (macrolet ((when-scaling-needed (arg &body body)
                `(if (= scaler 1)
                     ,arg
