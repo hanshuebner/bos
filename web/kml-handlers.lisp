@@ -10,27 +10,26 @@
   (declare (ignore language))
   (let* ((sponsor (contract-sponsor contract))
 	 (name (user-full-name sponsor)))
-    (map 'string #'code-char
-	 (with-xml-output (cxml:make-octet-vector-sink)
-	   (with-element "div"
-	     (with-element "table"
-	       (with-element "tr"
-		 (with-element "td" (text "Sponsor-ID:"))
-		 (with-element "td" (text (princ-to-string (store-object-id sponsor)))))
-	       (with-element "tr"
-		 (with-element "td" (text "Name:"))
-		 (with-element "td" (if name name "[anonymous]")))
-	       (with-element "tr"
-		 (with-element "td" (text "Land:"))
-		 (with-element "td" (text (sponsor-country sponsor))))
-	       (with-element "tr"
-		 (with-element "td" (text "gesponsort:"))
-		 (with-element "td" (format nil "~D m²" (length (contract-m2s contract)))))
-	       (with-element "tr"
-		 (with-element "td" (text "seit:"))
-		 (with-element "td" (text (format-date-time (contract-date contract) :show-time nil)))))
-	     (when (sponsor-info-text sponsor)
-	       (sponsor-info-text sponsor)))))))
+    (with-xml-output (cxml:make-string-sink)
+      (with-element "div"
+        (with-element "table"
+          (with-element "tr"
+            (with-element "td" (text "Sponsor-ID:"))
+            (with-element "td" (text (princ-to-string (store-object-id sponsor)))))
+          (with-element "tr"
+            (with-element "td" (text "Name:"))
+            (with-element "td" (text (or name "[anonymous]"))))
+          (with-element "tr"
+            (with-element "td" (text "Land:"))
+            (with-element "td" (text (sponsor-country sponsor))))
+          (with-element "tr"
+            (with-element "td" (text "gesponsort:"))
+            (with-element "td" (text (format nil "~D m²" (length (contract-m2s contract))))))
+          (with-element "tr"
+            (with-element "td" (text "seit:"))
+            (with-element "td" (text (format-date-time (contract-date contract) :show-time nil)))))
+        (when (sponsor-info-text sponsor)
+          (sponsor-info-text sponsor))))))
 
 (defclass contract-kml-handler (object-handler)
   ())

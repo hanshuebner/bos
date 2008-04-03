@@ -144,7 +144,8 @@ to determine the intensity of the returned RGB value."
 (defgeneric generate-current-image (tile)
   (:documentation "Generate the transient image"))
 
-(defmethod image-tile-changed ((image-tile image-tile) &optional (time (get-universal-time)))
+(defmethod image-tile-changed ((image-tile image-tile) contract &optional (time (get-universal-time)))
+  (declare (ignore contract))
   (setf (slot-value image-tile 'changed-time) time))
 
 (defun image-from-tiles (image-pathname tiles &key if-exists)

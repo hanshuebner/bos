@@ -245,7 +245,7 @@
 
 (defmethod initialize-persistent-instance :after ((contract contract))
   (pushnew contract (sponsor-contracts (contract-sponsor contract)))
-  (contract-changed contract)
+  (publish-contract-change contract)
   (dolist (m2 (contract-m2s contract))
     (setf (m2-contract m2) contract))
   (setf (contract-largest-rectangle contract)
@@ -255,7 +255,7 @@
   (let ((sponsor (contract-sponsor contract)))
     (when sponsor
       (setf (sponsor-contracts sponsor) (remove contract (sponsor-contracts sponsor)))))
-  (contract-changed contract)
+  (publish-contract-change contract)
   (dolist (m2 (contract-m2s contract))
     (setf (m2-contract m2) nil))
   (return-m2s (contract-m2s contract)))
@@ -267,8 +267,10 @@
       (unless (subtypep (type-of contract) 'contract)
 	(error "invalid contract id (wrong type) ~A" id)))))
 
-(defmethod contract-changed ((contract contract))  
-  (publish-rect-change *rect-publisher* (contract-bounding-box contract)))
+(defun publish-contract-change (contract)  
+  "Note: This routine is to reinitialize the transient contract tree
+and thus may be called more than once."
+  (publish-rect-change *rect-publisher* (contract-bounding-box contract) contract))
 
 (defmethod contract-is-expired ((contract contract))
   (and (contract-expires contract)
@@ -276,7 +278,7 @@
 
 (deftransaction contract-set-paidp (contract newval)
   (setf (contract-paidp contract) newval)
-  (contract-changed contract)
+  (publish-contract-change contract)
   (add-contract-to-cache contract)
   (bknr.rss::add-item "news" contract))
 
@@ -428,8 +430,8 @@
 
 (defun contract-center (contract)
   (destructuring-bind (left top width height)
-      (contract-bounding-box contract)
-    (rectangle-center (list left top width height) :roundp t)))
+      (contract-largest-rectangle contract)
+    (rectangle-center (list left top width height) :roundp nil)))
 
 (defun contract-center-lon-lat (contract)
   (let ((center (contract-center contract)))

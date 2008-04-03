@@ -338,16 +338,17 @@ leading zeros, keep trailing zeros)"
 (defun register-rect-subscriber (publisher subscriber rectangle callback-fn)
   "Register SUBSCRIBER with associated RECTANGLE and CALLBACK-FN with
 PUBLISHER, so that on changes in RECTANGLE, CALLBACK-FN will be called
-with SUBSCRIBER as the only arg."
+with SUBSCRIBER and the published INFO as additional args."
   (push (make-rect-subscriber :object subscriber :rectangle (copy-list rectangle) :callback-fn callback-fn)
         (rect-publisher-subscribers publisher)))
 
-(defun publish-rect-change (publisher rectangle)
+(defun publish-rect-change (publisher rectangle &rest info)
   "Tells PUBLISHER about changes in RECTANGLE. All subscribers whose
-own rectangle intersects with RECTANGLE will be notified."
+own rectangle intersects with RECTANGLE will be notified. The kind of
+change can be further specified by INFO."
   (dolist (subscriber (rect-publisher-subscribers publisher))
     (when (rectangle-intersects-p rectangle (rect-subscriber-rectangle subscriber))      
-      (funcall (rect-subscriber-callback-fn subscriber) (rect-subscriber-object subscriber)))))
+      (apply (rect-subscriber-callback-fn subscriber) (rect-subscriber-object subscriber) info))))
 
 
 (in-package :screamer-user)

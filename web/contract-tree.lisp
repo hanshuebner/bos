@@ -31,7 +31,8 @@
    (children :initarg :children :reader children)
    (pixelize :initarg :pixelize :reader pixelize)
    (root :initarg :root :accessor root)
-   (depth :initarg :depth :accessor depth))
+   (depth :initarg :depth :accessor depth)
+   (contracts :initform nil :accessor contracts))
   (:metaclass indexed-class)
   (:class-indices (ids :index-type contract-tree-node-index
                        :slots (id)
@@ -52,8 +53,22 @@
   (print-unreadable-object (contract-tree-node stream :type t :identity t)
     (format stream "ID: ~d" (id contract-tree-node))))
 
-(defmethod contract-tree-node-changed ((contract-tree-node contract-tree-node))
-  (setf (timestamp contract-tree-node) (get-universal-time)))
+(defmethod contract-tree-node-changed ((contract-tree-node contract-tree-node) contract)
+  (flet ((contract-large-enough (contract-tree-node contract)
+           (if (children contract-tree-node)
+               (let* ((output-images-size (output-images-size (root contract-tree-node)))
+                      (rect (contract-largest-rectangle contract))
+                      (contract-size (min (third rect) (fourth rect)))
+                      (node-size (third (geo-location contract-tree-node)))
+                      (contract-pixel-size (* output-images-size (/ contract-size node-size))))
+                 (> contract-pixel-size 20))
+               t)))
+    (when (and (contract-paidp contract)
+               (geometry:point-in-rect-p (geometry:rectangle-center (contract-largest-rectangle contract))
+                                         (geo-location contract-tree-node))
+               (contract-large-enough contract-tree-node contract))
+      (setf (timestamp contract-tree-node) (get-universal-time))
+      (pushnew contract (contracts contract-tree-node)))))
 
 (defun map-children-rects (function left top width-heights depth)
   "Calls FUNCTION with (x y width height depth) for each of the
@@ -73,7 +88,7 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
 (defun make-contract-tree (geo-location &key
                            (output-images-size 256)
                            (pixelize 1)
-                           (max-pixel-per-meter 5))
+                           (min-pixel-per-meter 10))
   (labels ((ensure-square (rectangle)
              (geometry:with-rectangle rectangle
                (if (= width height)
@@ -118,7 +133,7 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
              (geometry:with-rectangle geo-location
                (declare (ignore left top))
                (>= (/ output-images-size (max width height))
-                   max-pixel-per-meter)))
+                   min-pixel-per-meter)))
            (rec (class geo-location pixelize &optional (depth 0))
              (let ((children (unless (leaf-node-p geo-location)
                                (mapcar #'(lambda (gl) (rec (cdr class) gl (cdr pixelize) (1+ depth)))
@@ -131,7 +146,10 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
     (let ((tree (rec (stick-on-last '(contract-tree contract-tree-node))
                      (ensure-square geo-location)
                      (stick-on-last (alexandria:ensure-list pixelize)))))
-      (setf-root-slots (children-setf-root tree tree)))))
+      (prog1
+          (setf-root-slots (children-setf-root tree tree))
+        (dolist (contract (class-instances 'contract))
+          (bos.m2::publish-contract-change contract))))))
 
 ;;; handlers
 (defclass contract-tree-handler (object-handler)
@@ -207,6 +225,14 @@ links are created."))
         (kml-region rect lod)
         (kml-overlay (format nil "~a:~a/contract-tree-image/~d" *website-url* *port* (id obj))
                      rect (+ 100 (depth obj)))
+        (dolist (c (contracts obj))
+          (let ((name (user-full-name (contract-sponsor c))))
+            (with-element "Placemark"
+              (with-element "name" (text (or name "anonymous")))
+              (with-element "description" (cdata (contract-description c :de)))
+              (with-element "Point"
+                (with-element "coordinates"
+                  (text (kml-format-points (list (contract-center-lon-lat c)))))))))
         (dolist (child (children obj))
           (kml-network-link (format nil "~a:~a/contract-tree-kml/~d" *website-url* *port* (id child))
                             (make-rectangle2 (geo-location child))
