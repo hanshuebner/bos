@@ -226,7 +226,7 @@
    (date :read)
    (paidp :update)
    (m2s :read)
-   (color :read)
+   (color :update)
    (download-only :update)
    (cert-issued :read)
    (worldpay-trans-id :update :initform nil)
@@ -489,6 +489,24 @@ Sponsor-ID: ~A
 				      m2-count (store-object-id sponsor)))
       (error 'allocation-areas-exhausted :numsqm m2-count))
     contract))
+
+(defun recolorize-contracts (&optional (colors *claim-colors*))
+  "Assigns a new color to each contract choosing from COLORS, so
+that CONTRACTS-WELL-COLORED-P holds."
+  (let ((contracts (class-instances 'contract)))
+    (with-transaction ()
+      (loop for contract in contracts
+         for color in (screamer-user:colorize colors contracts #'contract-neighbours)
+         do (setf (contract-color contract) color)))))
+
+(defun contracts-well-colored-p ()
+  "Checks if all contracts have a different color than all their
+neighbours."
+  (loop for contract in (class-instances 'contract)
+     do (when (member (contract-color contract) (contract-neighbours contract)
+                      :key #'contract-color :test #'equal)
+          (return nil))
+     finally (return t)))
 
 (defvar *last-contracts-cache* nil)
 (defconstant +last-contracts-cache-size+ 20)

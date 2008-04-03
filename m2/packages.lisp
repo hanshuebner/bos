@@ -158,6 +158,8 @@
 	   #:contract-download-only-p
 	   #:make-m2-javascript
 	   #:last-paid-contracts
+           #:recolorize-contracts
+           #:contracts-well-colored-p
 	   #:paidp
 
 	   #:allocation-area

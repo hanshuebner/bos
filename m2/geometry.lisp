@@ -381,3 +381,25 @@ point belongs to the region or not."
       ;; (best-value (solution (list left top width height) (reorder #'range-size (constantly nil) #'< #'linear-force)) area)
       (first (best-value (solution (list left top width height) (static-ordering #'linear-force)) area)))))
 
+(export 'colorize)
+(defun colorize (colors objects neighbours-fn)
+  (let* ((number-of-colors (length colors))
+         (object2color-var (make-hash-table))
+         (color-vars (mapcar #'(lambda (obj)
+                                 (setf (gethash obj object2color-var)
+                                       (an-integer-betweenv 1 number-of-colors)))
+                             objects))
+         (hash (make-hash-table :size (hash-table-size object2color-var))))    
+    (dolist (obj objects)
+      (setf (gethash obj hash) nil))
+    (loop for obj in objects
+       for obj-color in color-vars
+       do (dolist (neighbour (funcall neighbours-fn obj))
+            (unless (member obj (gethash neighbour hash))
+              (let ((neighbour-color (gethash neighbour object2color-var)))
+                (assert! (notv (=v obj-color neighbour-color)))
+                (push obj (gethash neighbour hash))))))
+    (one-value (mapcar #'(lambda (color-index) (nth (1- color-index) colors))
+                       (solution color-vars (static-ordering #'linear-force)))
+               (error "no solution to colorize problem"))))
+
