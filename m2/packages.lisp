@@ -140,6 +140,9 @@
            #:contract-date
            #:contract-m2s
 	   #:contract-bounding-box
+           #:contract-area
+           #:contract-polygon
+           #:contract-largest-rectangle
 	   #:contract-neighbours
 	   #:contract-center
 	   #:contract-center-lon-lat

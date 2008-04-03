@@ -350,3 +350,33 @@ own rectangle intersects with RECTANGLE will be notified."
       (funcall (rect-subscriber-callback-fn subscriber) (rect-subscriber-object subscriber)))))
 
 
+(in-package :screamer-user)
+
+(export 'largest-rectangle)
+(defun largest-rectangle (bounding-rectangle in-region-p)
+  "Returns the largest rectangle inside a region (a polygon), which is
+specified here by its BOUNDING-RECTANGLE and the predicate IN-REGION-P
+that will be called with two arguments X and Y to determine if a given
+point belongs to the region or not."
+  (destructuring-bind (l tt w h)
+      bounding-rectangle
+    (let ((left (an-integer-betweenv l (1- (+ l w)) 'left))
+          (top (an-integer-betweenv tt (1- (+ tt h)) 'top))
+          (width (an-integer-betweenv 1 w 'width))
+          (height (an-integer-betweenv 1 h 'height))
+          (right (an-integer-betweenv (1+ l) (+ l w) 'right))
+          (bottom (an-integer-betweenv (1+ tt) (+ tt h) 'bottom))
+          (area (an-integer-betweenv 1 (* w h) 'area)))
+      (assert! (=v width (-v right left)))
+      (assert! (=v height (-v bottom top)))
+      (assert! (=v area (*v width height)))
+      (assert! (funcallv #'(lambda (left top right bottom)                             
+                             (block result
+                               (loop for x from left below right
+                                  do (loop for y from top below bottom
+                                        do (unless (funcall in-region-p x y) (return-from result nil))))
+                               (return-from result t)))
+                         left top right bottom))
+      ;; (best-value (solution (list left top width height) (reorder #'range-size (constantly nil) #'< #'linear-force)) area)
+      (first (best-value (solution (list left top width height) (static-ordering #'linear-force)) area)))))
+

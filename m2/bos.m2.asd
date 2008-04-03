@@ -1,7 +1,9 @@
 (in-package :cl-user)
 
 (asdf:defsystem :bos.m2
-  :depends-on (:bknr.datastore :bknr.modules :cl-smtp :cl-mime :iconv :kmrcl :iterate :arnesi :cl-pdf)
+  :depends-on (:bknr.datastore :bknr.modules :cl-smtp :cl-mime
+                               :iconv :kmrcl :iterate :arnesi
+                               :cl-pdf :screamer)
   :components ((:file "packages")
 	       (:file "geo-utm" :depends-on ("packages"))
 	       (:file "geometry" :depends-on ("packages"))
