@@ -634,3 +634,47 @@ Sponsor-ID: ~A
 	      (ltk:create-text canvas (transform-x (first a)) (transform-y (second a)) "o")) 
 	    (ltk:pack canvas)))))))
 
+#+ltk
+(defun show-contract-center (contract)
+  (labels ((compute-bounding-box (m2s)
+	     (let* ((left (m2-x (elt m2s 0)))
+		    (top (m2-y (elt m2s 0)))
+		    (right left)
+		    (bottom top))
+	       (loop for i from 1 below (length m2s) do
+		    (let* ((v (elt m2s i))
+			   (x (m2-x v))
+			   (y (m2-y v)))
+		      (setf left (min left x)
+			    right (max right x)
+			    top (min top y)
+			    bottom (max bottom y))))
+	       (values left top (- right left) (- bottom top)))))	      
+    (let* ((m2s (contract-m2s contract))
+           (rectangle (contract-largest-rectangle contract))
+           (center (geometry:rectangle-center rectangle)))
+      (multiple-value-bind (left top width height)
+          (compute-bounding-box m2s)
+        (declare (ignore width height))
+        (finish-output)
+        (flet ((transform-x (x)
+                 (+ 30 (* 30 (- x left))))
+               (transform-y (y)
+                 (+ 30 (* 30 (- y top)))))	
+          (ltk:with-ltk ()
+            (let ((canvas (make-instance 'ltk:canvas :width 700 :height 700)))	  
+              ;; draw m2s
+              (loop for m2 in m2s
+                 for x = (transform-x (m2-x m2))
+                 for y = (transform-y (m2-y m2))
+                 do (ltk:create-text canvas (+ 10 x) (+ 10 y) "x"))
+              (geometry:with-rectangle rectangle
+                (ltk:create-rectangle canvas (transform-x left) (transform-y top)
+                                      (transform-x (+ left width)) (transform-y (+ top height))))
+              (destructuring-bind (x y)
+                  center
+                (geometry:with-rectangle ((list (- x 0.1) (- y 0.1) 0.2 0.2))
+                  (ltk:create-rectangle canvas (transform-x left) (transform-y top)
+                                        (transform-x (+ left width)) (transform-y (+ top height)))))
+              (ltk:pack canvas))))))))
+

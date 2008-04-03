@@ -15,6 +15,20 @@
               (when (and contract (contract-paidp contract))                
                 (setf (cl-gd:raw-pixel) (apply #'cl-gd:find-color (contract-color contract)))))))))))
 
+(defun draw-center-dots (image image-size geo-location contracts)
+  (geometry:with-rectangle geo-location
+    (declare (ignore height))
+    (let ((scaler (/ image-size width)))
+      (cl-gd:with-default-image (image)
+        (dolist (contract contracts)
+          (destructuring-bind (x y)
+              (geometry:rectangle-center (contract-largest-rectangle contract))
+            (let ((image-x (round (* (- x left) scaler)))
+                  (image-y (round (* (- y top) scaler))))
+              ;; (cl-gd:set-pixel image-x image-y :color (cl-gd:find-color 0 0 0 :alpha 0))
+              (cl-gd:draw-rectangle (list (- image-x 1) (- image-y 1) (+ image-x 1) (+ image-y 1))
+                                    :filled t :color (cl-gd:find-color 0 0 0 :alpha 0)))))))))
+
 
 (defclass contract-tree-node-index (unique-index)
   ((last-id :initform -1 :accessor last-id)))
@@ -202,6 +216,8 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
     (cl-gd:with-image (image image-size image-size t)      
       (print 'rendering-contract-tree-image)
       (draw-contract-image image image-size (geo-location object) (pixelize object))
+      (unless (children object)
+        (draw-center-dots image image-size (geo-location object) (contracts object)))
       (emit-image-to-browser image :png :date (timestamp object)))))
 
 (defmethod lod-min ((obj contract-tree-node))
