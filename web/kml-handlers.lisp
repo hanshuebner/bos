@@ -51,6 +51,7 @@
   (handle-object handler nil))
 
 (defmethod handle-object ((handler kml-root-handler) (object null))
+  (format t "query-params: ~s~%" (query-params))
   (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
                                     :root-element "kml")
     (with-element "Document"

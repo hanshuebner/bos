@@ -257,6 +257,8 @@ links are created."))
         (dolist (c (contracts obj))
           (let ((name (user-full-name (contract-sponsor c))))
             (with-element "Placemark"
+              ;; does not help to solve the duplicate placemark problem
+              ;; (attribute "id" (prin1-to-string (store-object-id c)))
               (when name (with-element "name" (text name)))
               (with-element "description" (cdata (contract-description c :de)))
               (with-element "Point"

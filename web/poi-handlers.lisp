@@ -413,11 +413,13 @@
   ())
 
 (defmethod handle ((handler poi-kml-all-handler))
-  (with-xml-response ()
-    ;; (sax:processing-instruction cxml::*sink* "xml-stylesheet" "href=\"/static/tri.xsl\" type=\"text/xsl\"")
-    (with-namespace (nil "http://earth.google.com/kml/2.1")
-      (with-element "kml"
-        (with-element "Document"
-          (mapc #'write-poi-kml (remove-if-not #'poi-area (class-instances 'poi))))))))
+  (with-query-params (lang)
+    (assert lang)
+    (with-xml-response ()
+      ;; (sax:processing-instruction cxml::*sink* "xml-stylesheet" "href=\"/static/tri.xsl\" type=\"text/xsl\"")
+      (with-namespace (nil "http://earth.google.com/kml/2.1")
+        (with-element "kml"
+          (with-element "Document"
+            (mapc #'(lambda (poi) (write-poi-kml poi lang)) (remove-if-not #'poi-area (class-instances 'poi)))))))))
 
 

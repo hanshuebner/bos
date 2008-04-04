@@ -227,9 +227,10 @@ var poi = { symbol: ~S,
               (with-element "movie"
                 (with-element "url" (text url))))))))))
 
-(defun write-poi-kml (poi)
+(defun write-poi-kml (poi language)
   (with-element "Placemark"
-    (with-element "name" (text (poi-name poi)))
+    (with-element "name" (text (or (slot-string poi 'title language nil)
+                                   (slot-string poi 'title "en"))))
     (with-element "description"
       (with-namespace ("bos" "http://headcraft.de/bos")
         (write-poi-xml poi "bos")))

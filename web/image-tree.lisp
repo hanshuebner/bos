@@ -260,7 +260,8 @@
 (defmethod kml-link ((href string))
   (with-element "Link"
     (with-element "href" (text href))
-    (with-element "viewRefreshMode" (text "onRegion"))))
+    (with-element "viewRefreshMode" (text "onRegion"))
+    (with-element "httpQuery" (text "lang=[language]"))))
 
 ;; (defmethod kml-link ((href puri:uri))
 ;;   (let ((string (with-output-to-string (out)
