@@ -37,7 +37,7 @@
 
 ;;;; IMAGE-TILE
 ;;;;
-;;;; Kachel mit Kartenausschnitt - Jede Kachel (tile) enthält ein
+;;;; Kachel mit Kartenausschnitt - Jede Kachel (tile) enthÃ¤lt ein
 ;;;; Image mit dem Ausschnitt aus dem Satellitenbild im Format 90x90
 ;;;; Pixel.  Das Image ist im Slot 'original-image im Originalzustand
 ;;;; abgelegt.  Im Slot 'current-images ist eine Hashtable mit Images
@@ -46,19 +46,19 @@
 ;;;; mit kolorierten verkauften Gebieten etc).
 
 ;;;; image-tiles verwalten die Erzeugung von Kacheln mit
-;;;; eingezeichneten Verträgen.  Die Verträge werden dabei farblich
+;;;; eingezeichneten VertrÃ¤gen.  Die VertrÃ¤ge werden dabei farblich
 ;;;; unterschiedlich markiert.  Die markierte Version der Kachel wird
-;;;; als transienter Slot mitgeführt, d.h. bei einem Neustart des
+;;;; als transienter Slot mitgefÃ¼hrt, d.h. bei einem Neustart des
 ;;;; Systems werden die Kacheln beim Zugriff neu berechnet.
 
 ;;;; Die Implementation der Bildverarbeitungsroutinen erfolgt dabei
 ;;;; mit einer primitiven Image-Klasse, die ein Truecolor-Bild als
 ;;;; 2D-Array von 32 bit langen RGBA-Werten behandelt.  Dies ist
 ;;;; notwendig, da cl-gd den Zugriff auf einzelne Pixelwerte derzeit
-;;;; nur über das FFI erlaubt, was extrem langsam ist.  Es gibt eine
-;;;; alternative API, mit der man schnell über cl-gd-images iterieren
+;;;; nur Ã¼ber das FFI erlaubt, was extrem langsam ist.  Es gibt eine
+;;;; alternative API, mit der man schnell Ã¼ber cl-gd-images iterieren
 ;;;; kann, sie ist jedoch makrobasiert und nicht flexibel - Sie
-;;;; erlaubt ausschließlich das Iterieren über ein Image.
+;;;; erlaubt ausschlieÃŸlich das Iterieren Ã¼ber ein Image.
 
 (defun colorize-pixel (pixel-rgb-value color-red color-green color-blue)
   "Colorize the given PIXEL-RGB-VALUE in the COLOR given.

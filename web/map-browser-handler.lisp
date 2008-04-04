@@ -7,13 +7,13 @@
 
 ;; map-browser-handler
 
-;; Dient zur Auswahl eines Punktes auf dem Projektgel‰nde.  Zun‰chst
-;; wird die ‹bersichtskarte angezeigt (360x360 Pixel).  Bei Klick auf
+;; Dient zur Auswahl eines Punktes auf dem Projektgel√§nde.  Zun√§chst
+;; wird die √úbersichtskarte angezeigt (360x360 Pixel).  Bei Klick auf
 ;; die Karte wird die unverkleinerte Overview-Ansicht angezeigt.
-;; Durch einen weiteren Klick wird die Position ausgew‰hlt.  Bei
+;; Durch einen weiteren Klick wird die Position ausgew√§hlt.  Bei
 ;; Auswahl des Punktes wird zu der im url-Parameter festgelegten URL
 ;; verzweigt, die Koordinaten des Punktes werden als 'x'- und
-;; 'y'-Parameter an diese URL ¸bergeben.
+;; 'y'-Parameter an diese URL √ºbergeben.
 
 (defclass map-browser-handler (prefix-handler)
   ())
