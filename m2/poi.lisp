@@ -193,6 +193,7 @@ var poi = { symbol: ~S,
              (format-image (element-name image)
                (with-element element-name
                  (with-element "id" (text (princ-to-string (store-object-id image))))
+                 (with-element "url" (text (format nil "http://createrainforest.org/image/~D" (store-object-id image))))
                  (with-element "name" (text (store-image-name image)))
                  (with-element "width" (text (princ-to-string (store-image-width image))))
                  (with-element "height" (text (princ-to-string (store-image-height image))))

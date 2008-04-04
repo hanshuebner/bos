@@ -1,7 +1,15 @@
 (in-package :bos.web)
 
-(defun kml-format-points (points)
-  (format nil "~:{~F,~F,0 ~}" points))
+(defun kml-format-points (points stream)
+  (mapc #'(lambda (point) (kml-format-point point stream)) points))
+
+(defmethod kml-format-point ((point list) stream)
+  (format stream "~F,~F,0 " (first point) (second point)))
+
+(defmethod kml-format-point ((point point) stream)
+  (multiple-value-bind (lon lat)
+      (point-lon-lat point)
+    (format stream "~F,~F,0 " lon lat)))
 
 (defun kml-format-color (color &optional (opacity 255))
   (format nil "~2,'0X~{~2,'0X~}" opacity (reverse color)))

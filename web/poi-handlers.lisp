@@ -420,3 +420,4 @@
         (with-element "Document"
           (mapc #'write-poi-kml (remove-if-not #'poi-area (class-instances 'poi))))))))
 
+
