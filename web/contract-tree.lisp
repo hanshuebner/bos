@@ -261,9 +261,11 @@ links are created."))
               (with-element "description" (cdata (contract-description c :de)))
               (with-element "Point"
                 (with-element "coordinates"
-                  (text (kml-format-points (list (contract-center-lon-lat c)))))))))
+                  (destructuring-bind (x y)
+                      (contract-center c)
+                    (text (kml-format-points (list (make-point :x x :y y))))))))))
         (dolist (child (children obj))
           (kml-network-link (format nil "~a:~a/contract-tree-kml/~d" *website-url* *port* (id child))
-                            (make-rectangle2 (geo-location child))
-                            `(:min ,(lod-min child) :max ,(lod-max child))))))))
+                            :rect (make-rectangle2 (geo-location child))
+                            :lod `(:min ,(lod-min child) :max ,(lod-max child))))))))
 

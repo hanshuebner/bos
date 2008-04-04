@@ -199,6 +199,7 @@ language preference weights."
 		 :handler-definitions `(("/edit-poi" edit-poi-handler)
 					("/edit-poi-image" edit-poi-image-handler)
 					("/edit-sponsor" edit-sponsor-handler)					
+                                        ("/kml-root" kml-root-handler)
                                         ("/image-tree-kml-latest" image-tree-kml-latest-handler)
                                         ("/image-tree-kml" image-tree-kml-handler)                                        
                                         ("/image-tree" image-tree-handler)

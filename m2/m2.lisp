@@ -440,6 +440,7 @@ and thus may be called more than once."
     (rectangle-center (list left top width height) :roundp nil)))
 
 (defun contract-center-lon-lat (contract)
+  (error "this function is deprecated")
   (let ((center (contract-center contract)))
     (with-points (center)
       (geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ center-x) (- +nw-utm-y+ center-y) +utm-zone+ t))))

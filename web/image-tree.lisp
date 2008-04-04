@@ -267,9 +267,10 @@
 ;;                   (puri:render-uri href out))))
 ;;     (kml-link string)))
 
-(defun kml-network-link (href rect lod)
+(defun kml-network-link (href &key rect lod name)
   (with-element "NetworkLink"
-    (kml-region rect lod)
+    (when name (with-element "name" (text name)))
+    (when rect (kml-region rect lod))
     (kml-link href)))
 
 (defun kml-lat-lon-box (rect &optional (element "LatLonBox"))
@@ -345,6 +346,9 @@ certain DEPTH and pointing to its PARENT and its CHILDREN."))
   (dolist (child (children obj))
     (setf (slot-value child 'parent) obj)))
 
+(defmethod geo-location ((obj image-tree-node))
+  (list (geo-x obj) (geo-y obj) (geo-width obj) (geo-height obj)))
+
 (defun make-image-tree-node (image &key geo-rect children
                              (class-name 'image-tree-node)
                              depth)
@@ -384,6 +388,9 @@ their geo-locations."
   "Initially intended to customize LOD-MIN according to the node's
 context.  It seems that a constant default value is sufficient here."
   256)
+
+(defmethod lod-min ((obj image-tree))
+  16)
 
 (defmethod lod-max ((obj image-tree-node))
   "See LOD-MIN."
@@ -614,9 +621,9 @@ links are created."))
                      rect (depth obj))
         (dolist (child (children obj))
           (kml-network-link (format nil "~a:~a/image-tree-kml/~d" *website-url* *port* (store-object-id child))
-                            (make-rectangle2 (list (geo-x child) (geo-y child)
+                            :rect (make-rectangle2 (list (geo-x child) (geo-y child)
                                                    (geo-width child) (geo-height child)))
-                            `(:min ,(lod-min child) :max ,(lod-max child))))))))
+                            :lod `(:min ,(lod-min child) :max ,(lod-max child))))))))
 
 (defclass image-tree-kml-latest-handler (page-handler)
   ()

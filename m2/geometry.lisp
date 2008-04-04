@@ -350,7 +350,7 @@ own rectangle intersects with RECTANGLE will be notified. The kind of
 change can be further specified by INFO."
   (dolist (subscriber (rect-publisher-subscribers publisher))
     (when (rectangle-intersects-p rectangle (rect-subscriber-rectangle subscriber))            
-      (print (rect-subscriber-callback-fn subscriber))
+      ;; (print (rect-subscriber-callback-fn subscriber))
       (apply (rect-subscriber-callback-fn subscriber) (rect-subscriber-object subscriber) info))))
 
 

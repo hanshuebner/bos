@@ -29,47 +29,37 @@
             (with-element "td" (text "seit:"))
             (with-element "td" (text (format-date-time (contract-date contract) :show-time nil)))))
         (when (sponsor-info-text sponsor)
+
           (text (sponsor-info-text sponsor)))))))
 
-(defclass contract-kml-handler (object-handler)
+(defparameter *contract-tree-root-id* 1364)
+(defparameter *image-tree-root-id* 2881402)
+
+(defclass kml-root-handler (object-handler)
   ())
 
-(defmethod handle-object ((handler contract-kml-handler) (contract contract))
-  (with-xml-response (:content-type "application/vnd.google-earth.kml+xml" :root-element "kml")
-    ;; when name is xmlns, the attribute does not show up - why (?)
-    ;; (attribute "xmlns" "http://earth.google.com/kml/2.2")
-    (with-element "Document"
-      (dolist (c (error "changed definition of contract-neighbours. (contract-neighbours contract 50)"))
-	(let ((polygon (m2s-polygon-lon-lat (contract-m2s c)))
-	      (name (user-full-name (contract-sponsor c))))
-	  (with-element "Placemark"
-	    (with-element "name" (format nil "~A ~Dm²"
-                                         (if name name "anonymous")
-                                         (length (contract-m2s c))))
-	    (with-element "description" (contract-description c :de))
-	    (with-element "Style"
-	      (attribute "id" "#region")
-	      (with-element "LineStyle"
-		(with-element "color" (text "ffff3500")))
-	      (with-element "PolyStyle"
-		(with-element "color" (text (kml-format-color (contract-color c) 175)))))
-	    (with-element "Polygon"
-	      (with-element "styleUrl" "#region")
-	      (with-element "tessellate" (text "1"))
-	      (with-element "outerBoundaryIs"
-		(with-element "LinearRing"
-		  (with-element "coordinates"
-		    (text (kml-format-points polygon)))))))
-	  ;; the center contract
-	  (when (eq c contract)
-	    (with-element "Placemark"
-	      (with-element "name" (format nil "~A ~Dm²"
-                                           (if name name "anonymous")
-                                           (length (contract-m2s c))))
-	      (with-element "description" (contract-description c :de))
-	      (with-element "Point"
-		(with-element "coordinates"
-		  (text (kml-format-points (list (contract-center-lon-lat c)))))))))))))
+(defmethod handle-object ((handler kml-root-handler) (object sponsor))
+  ;; later, we want a sponsor specific handler here
+  (handle-object handler nil))
 
-(defmethod handle-object ((handle-object contract-kml-handler) (object null))
-  (error "Contract not found."))
+(defmethod handle-object ((handler kml-root-handler) (object null))
+  (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
+                                    :root-element "kml")
+    (with-element "Document"
+      (with-element "name" (text "bos-kml"))
+      (let ((image-tree (find-store-object *image-tree-root-id*)))
+        (assert (and image-tree (typep image-tree 'image-tree)))
+        (kml-network-link (format nil "~a:~a/image-tree-kml/~d" *website-url* *port*
+                                  *image-tree-root-id*)
+                          :rect (make-rectangle2 (geo-location image-tree))
+                          :lod `(:min ,(lod-min image-tree) :max ,(lod-max image-tree))
+                          :name "sat-image"))
+      (let ((contract-tree (find-contract-tree-node *contract-tree-root-id*)))
+        (assert (and contract-tree (typep contract-tree 'contract-tree)))
+        (kml-network-link (format nil "~a:~a/contract-tree-kml/~d" *website-url* *port*
+                                  *contract-tree-root-id*)
+                          :rect (make-rectangle2 (geo-location contract-tree))
+                          :lod `(:min ,(lod-min contract-tree) :max ,(lod-max contract-tree))
+                          :name "contracts")
+        (kml-network-link (format nil "~a:~a/poi-kml-all" *website-url* *port*)
+                          :name "POIs")))))
