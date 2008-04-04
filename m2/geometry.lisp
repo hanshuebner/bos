@@ -384,6 +384,17 @@ point belongs to the region or not."
       ;; (best-value (solution (list left top width height) (reorder #'range-size (constantly nil) #'< #'linear-force)) area)
       (first (best-value (solution (list left top width height) (static-ordering #'linear-force)) area)))))
 
+(defun integer-random-force (variable)
+  (let ((variable (value-of variable)))
+    (when (screamer::variable? variable)
+      (screamer::restrict-value!
+       variable
+       (cond ((not (eq (screamer::variable-enumerated-domain variable) t))
+              (a-member-of (alexandria:shuffle (screamer::variable-enumerated-domain variable))))             
+             (t (error "INTEGER-RANDOM-FORCE is currently only implemented for ~
+                        variables that have an enumerated domain."))))))
+  (value-of variable))
+
 (export 'colorize)
 (defun colorize (colors objects neighbours-fn)
   (let* ((number-of-colors (length colors))
@@ -403,6 +414,6 @@ point belongs to the region or not."
                 (assert! (notv (=v obj-color neighbour-color)))
                 (push obj (gethash neighbour hash))))))
     (one-value (mapcar #'(lambda (color-index) (nth (1- color-index) colors))
-                       (solution color-vars (static-ordering #'linear-force)))
+                       (solution color-vars (static-ordering #'integer-random-force)))
                (error "no solution to colorize problem"))))
 
