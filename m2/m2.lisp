@@ -46,7 +46,10 @@
   (:class-indices (m2-index :index-type tiled-index
 			    :slots (x y)
 			    :index-reader m2-at
-			    :index-initargs (:width +width+ :height +width+ :tile-size +m2tile-width+ :tile-class 'image-tile))))
+			    :index-initargs (:width +width+
+                                             :height +width+
+                                             :tile-size +m2tile-width+
+                                             :tile-class 'image-tile))))
 
 (defmethod print-object ((object m2) stream)
   (print-unreadable-object (object stream :type t :identity nil)
