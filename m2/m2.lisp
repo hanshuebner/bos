@@ -229,7 +229,7 @@
    (date :read)
    (paidp :update)
    (m2s :read)
-   (color :update)
+   (color :read)
    (download-only :update)
    (cert-issued :read)
    (worldpay-trans-id :update :initform nil)
@@ -419,13 +419,13 @@ and thus may be called more than once."
 (defun contract-neighbours (contract)
   "Return all contracts that have an adjacent m2 to one of CONTRACT's
   m2s."
-  (macrolet ((push-neighbour (x y)
-               `(let ((m2 (get-m2 ,x ,y)))
-                  (when (and m2
-                             (m2-contract m2)
-                             (not (eq (m2-contract m2) contract))
-                             (pushnew (m2-contract m2) contracts))))))
-    (let (contracts)
+  (let (contracts)
+    (flet ((push-neighbour (x y)
+             (let ((m2 (get-m2 x y)))
+               (when (and m2
+                          (m2-contract m2)
+                          (not (eq (m2-contract m2) contract))
+                          (pushnew (m2-contract m2) contracts))))))
       (dolist (m2 (contract-m2s contract) contracts)
         (let ((x (m2-x m2))
               (y (m2-y m2)))
@@ -493,14 +493,14 @@ Sponsor-ID: ~A
       (error 'allocation-areas-exhausted :numsqm m2-count))
     contract))
 
-(defun recolorize-contracts (&optional (colors *claim-colors*))
+(deftransaction recolorize-contracts (&optional colors)
   "Assigns a new color to each contract choosing from COLORS, so
 that CONTRACTS-WELL-COLORED-P holds."
   (let ((contracts (class-instances 'contract)))
-    (with-transaction ()
-      (loop for contract in contracts
-         for color in (screamer-user:colorize colors contracts #'contract-neighbours)
-         do (setf (contract-color contract) color)))))
+    (loop for contract in contracts
+       for color in (screamer-user:colorize colors contracts #'contract-neighbours)
+       do (setf (slot-value contract 'color) color)
+       do (publish-contract-change contract))))
 
 (defun contracts-well-colored-p ()
   "Checks if all contracts have a different color than all their

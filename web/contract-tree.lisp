@@ -68,7 +68,7 @@
     (format stream "ID: ~d" (id contract-tree-node))))
 
 (defmethod contract-tree-node-changed ((contract-tree-node contract-tree-node) contract)
-  (flet ((contract-large-enough (contract-tree-node contract)
+  (flet ((contract-large-enough (contract-tree-node contract)           
            (if (children contract-tree-node)
                (let* ((output-images-size (output-images-size (root contract-tree-node)))
                       (rect (contract-largest-rectangle contract))
@@ -77,12 +77,17 @@
                       (contract-pixel-size (* output-images-size (/ contract-size node-size))))
                  (> contract-pixel-size 20))
                t)))
+    ;; we might only change a contracts color and want to rerender it in every node
+    (setf (timestamp contract-tree-node) (get-universal-time))
     (when (and (contract-paidp contract)
                (geometry:point-in-rect-p (geometry:rectangle-center (contract-largest-rectangle contract))
                                          (geo-location contract-tree-node))
-               (contract-large-enough contract-tree-node contract))
-      (setf (timestamp contract-tree-node) (get-universal-time))
+               (contract-large-enough contract-tree-node contract))            
       (pushnew contract (contracts contract-tree-node)))))
+
+(defmethod contract-tree-node-changed ((tree contract-tree) contract)
+  (declare (ignore contract))
+  (setf (timestamp tree) (get-universal-time)))
 
 (defun map-children-rects (function left top width-heights depth)
   "Calls FUNCTION with (x y width height depth) for each of the
@@ -165,6 +170,11 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
         (dolist (contract (class-instances 'contract))
           (bos.m2::publish-contract-change contract))))))
 
+(defun map-contract-tree-nodes (function node)
+  (funcall function node)
+  (dolist (child (children node))
+    (map-contract-tree-nodes function child)))
+
 ;;; handlers
 (defclass contract-tree-handler (object-handler)
   ()
@@ -214,7 +224,7 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
   (hunchentoot:handle-if-modified-since (timestamp object))
   (let ((image-size (output-images-size (root object))))
     (cl-gd:with-image (image image-size image-size t)      
-      (print 'rendering-contract-tree-image)
+      ;; (print 'rendering-contract-tree-image)
       (draw-contract-image image image-size (geo-location object) (pixelize object))
       (unless (children object)
         (draw-center-dots image image-size (geo-location object) (contracts object)))
@@ -222,6 +232,9 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
 
 (defmethod lod-min ((obj contract-tree-node))
   256)
+
+(defmethod lod-min ((obj contract-tree))
+  16)
 
 (defmethod lod-max ((obj contract-tree-node))
   (if (children obj) 1024 -1))
@@ -244,7 +257,7 @@ links are created."))
         (dolist (c (contracts obj))
           (let ((name (user-full-name (contract-sponsor c))))
             (with-element "Placemark"
-              (with-element "name" (text (or name "anonymous")))
+              (when name (with-element "name" (text name)))
               (with-element "description" (cdata (contract-description c :de)))
               (with-element "Point"
                 (with-element "coordinates"

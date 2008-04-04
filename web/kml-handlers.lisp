@@ -29,7 +29,7 @@
             (with-element "td" (text "seit:"))
             (with-element "td" (text (format-date-time (contract-date contract) :show-time nil)))))
         (when (sponsor-info-text sponsor)
-          (sponsor-info-text sponsor))))))
+          (text (sponsor-info-text sponsor)))))))
 
 (defclass contract-kml-handler (object-handler)
   ())

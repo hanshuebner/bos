@@ -109,8 +109,10 @@ that will be called between the rows."
 (defun point-in-rect-p (point rectangle)
   (with-point point
     (with-rectangle rectangle
-      (and (<= left point-x (1- (+ left width)))
-           (<= top point-y (1- (+ top height)))))))
+      (and (<= left point-x)
+           (< point-x (+ left width))
+           (<= top point-y)
+           (< point-y (+ top height))))))
 
 ;;; for fun...
 ;; (defun point-in-circle-p-test ()
@@ -347,7 +349,8 @@ with SUBSCRIBER and the published INFO as additional args."
 own rectangle intersects with RECTANGLE will be notified. The kind of
 change can be further specified by INFO."
   (dolist (subscriber (rect-publisher-subscribers publisher))
-    (when (rectangle-intersects-p rectangle (rect-subscriber-rectangle subscriber))      
+    (when (rectangle-intersects-p rectangle (rect-subscriber-rectangle subscriber))            
+      (print (rect-subscriber-callback-fn subscriber))
       (apply (rect-subscriber-callback-fn subscriber) (rect-subscriber-object subscriber) info))))
 
 
