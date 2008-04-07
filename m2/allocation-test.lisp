@@ -183,3 +183,19 @@
 
 
 
+(test allocation-area.delete
+  (with-fixture empty-store ()
+    (let ((area (make-allocation-rectangle 0 0 10 10))
+          (sponsor (make-sponsor :login "testuser"))
+          stripes)
+      (make-contract sponsor 10)
+      (make-contract sponsor 1)
+      (make-contract sponsor 10)
+      (make-contract sponsor 3)
+      (finishes (snapshot))
+      (setq stripes (bos.m2::allocation-area-stripes area))
+      (is (not (null stripes)))
+      (delete-object area)            
+      (is (object-destroyed-p area))
+      (is (every #'object-destroyed-p stripes))
+      (finishes (snapshot)))))
