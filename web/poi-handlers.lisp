@@ -203,7 +203,7 @@
 	      "to resize the image and upload it again.")
 	  (:p (cmslink (edit-object-url poi) "Back to POI")))
 	(return-from handle-object-form t)))
-    (change-slot-values poi 'airals (list (import-image uploaded-file
+    (change-slot-values poi 'airals (list (import-image (pathname uploaded-file)
 							:class-name 'store-image))))
   (redirect (format nil "/edit-poi/~D"
 		    (store-object-id poi))))
@@ -232,7 +232,7 @@
     (with-image-from-upload* (uploaded-file)
       ; just open the image to make sure that gd can process it
       )
-    (change-slot-values poi 'panoramas (cons (import-image uploaded-file
+    (change-slot-values poi 'panoramas (cons (import-image (pathname uploaded-file
 							   :class-name 'store-image)
 					     (poi-panoramas poi))))
   (redirect (format nil "/edit-poi/~D"
@@ -292,7 +292,7 @@
 	  (return-from handle-object-form t)))
       (if poi-image
 	  (blob-from-file poi-image uploaded-file)
-	  (setq poi-image (import-image uploaded-file
+	  (setq poi-image (import-image (pathname uploaded-file)
 					:class-name 'poi-image
 					:initargs `(:poi ,poi))))
       (redirect (format nil "/edit-poi-image/~D?poi=~D"
