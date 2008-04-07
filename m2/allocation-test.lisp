@@ -91,3 +91,56 @@
 		(finishes (make-contract sponsor size))
 		(decf total-free size)))))))
 
+(test allocation-area.auto-activation.1
+  (with-fixture empty-store ()
+    (let* ((area1 (make-allocation-rectangle 0 0 8 8))
+           (area2 (make-allocation-rectangle 10 10 8 8))
+           (sponsor (make-sponsor :login "test-sponsor")))
+      (is (not (allocation-area-active-p area1)))
+      (is (not (allocation-area-active-p area2)))
+      (finishes (make-contract sponsor 4 :paidp t))
+      (is (allocation-area-active-p area1))
+      (is (not (allocation-area-active-p area2)))
+      (finishes (make-contract sponsor 60 :paidp t))
+      (is (allocation-area-active-p area1))
+      (is (not (allocation-area-active-p area2))
+          "activating allocation-areas should really be lazy - ~
+           there is no need here to activate area2 only because ~
+           area1 is 100% used"))))
+
+(test allocation-area.auto-activation.2
+  (with-fixture empty-store ()
+    (let* ((area1 (make-allocation-rectangle 0 0 8 8))
+           (area2 (make-allocation-rectangle 10 10 8 8))
+           (sponsor (make-sponsor :login "test-sponsor")))
+      (is (not (allocation-area-active-p area1)))
+      (is (not (allocation-area-active-p area2)))
+      (dotimes (i 4)
+        (finishes (make-contract sponsor 16 :paidp t))
+        (is (allocation-area-active-p area1))
+        (is (not (allocation-area-active-p area2))))
+      (finishes (make-contract sponsor 16 :paidp t))
+      (is (allocation-area-active-p area1))
+      (is (allocation-area-active-p area2)))))
+
+
+(test allocation-area.auto-activation.3
+  (dolist (m2-count '(1000 100))
+    (with-fixture empty-store ()
+      (let* ((area1 (make-allocation-rectangle 0 0 8 8))
+             (area2 (make-allocation-rectangle 10 10 8 8))
+             (sponsor (make-sponsor :login "test-sponsor")))
+        (is (not (allocation-area-active-p area1)))
+        (is (not (allocation-area-active-p area2)))
+        (signals error (make-contract sponsor m2-count :paidp t))
+        (is (not (allocation-area-active-p area1))
+            "allocation areas should not be activated as a side effect,
+          when someone asks for too many m2s (~d) (which will result in
+          an error)" m2-count)
+        (is (not (allocation-area-active-p area2))
+            "allocation areas should not be activated as a side effect,
+          when someone asks for too many m2s (~d) (which will result in
+          an error)" m2-count)))))
+
+
+
