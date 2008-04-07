@@ -232,7 +232,7 @@
     (with-image-from-upload* (uploaded-file)
       ; just open the image to make sure that gd can process it
       )
-    (change-slot-values poi 'panoramas (cons (import-image (pathname uploaded-file
+    (change-slot-values poi 'panoramas (cons (import-image (pathname uploaded-file)
 							   :class-name 'store-image)
 					     (poi-panoramas poi))))
   (redirect (format nil "/edit-poi/~D"
