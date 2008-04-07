@@ -18,6 +18,9 @@
 
 (in-package :bos.m2)
 
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (error "currently not used in the production core"))
+
 (defvar *preallocate-stripes* nil)
 
 (define-persistent-class allocation-area ()
