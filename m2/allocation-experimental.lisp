@@ -659,7 +659,7 @@ not be returned by this function"
       (let ((area (find-inactive-allocation-area)))
         (when area
           (activate-allocation-area area)
-          (find-free-m2s n)))
+          (allocate-m2s-for-sell  n)))
       (find-free-m2s/underflow n)
       (warn "all allocation areas exhausted")
       nil))
