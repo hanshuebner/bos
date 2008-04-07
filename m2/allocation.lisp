@@ -647,7 +647,7 @@ not be returned by this function"
         (loop for area in (reverse (active-allocation-areas))
 	   append (allocation-area-stripes area))))
 
-(defun allocate-m2s-for-sell (n)
+(defun allocate-m2s-for-sale (n)
   "The main entry point to the allocation machinery.  Will return a
 list of N m2 instances or NIL if the requested amount cannot be
 allocated.
@@ -671,7 +671,7 @@ marked as in use) by the allocation algorithm, but see RETURN-M2S."
       (error "find-free-m2s called outside of the allocation transaction"))
     (or (allocate-in-active-areas n)
         (unless (can-possibly-allocate-request n)
-          (return-from allocate-m2s-for-sell nil))          
+          (return-from allocate-m2s-for-sale nil))          
         (loop
            for area in (find-inactive-nonempty-allocation-areas)
            for m2s = (allocate-without-activation area n) 
