@@ -197,11 +197,11 @@
   "Liefere alle aktiven Vergabegebiete, nach Alter sortiert."
   (remove-if-not #'allocation-area-active-p (all-allocation-areas)))
 
-(defun find-inactive-nonempty-allocation-area ()
-  (find-if #'(lambda (allocation-area)
-               (not (or (allocation-area-active-p allocation-area)
-                        (null (allocation-area-free-m2s allocation-area)))))
-	   (all-allocation-areas)))
+(defun find-inactive-nonempty-allocation-areas ()
+  (remove-if-not #'(lambda (allocation-area)
+                     (not (or (allocation-area-active-p allocation-area)
+                              (null (allocation-area-free-m2s allocation-area)))))
+                 (all-allocation-areas)))
 
 (deftransaction activate-allocation-area (area)
   (warn "activating ~S" area)
@@ -653,19 +653,35 @@ list of N m2 instances or NIL if the requested amount cannot be
 allocated.
 Returned m2s will not be allocated again (i.e. there are
 marked as in use) by the allocation algorithm, but see RETURN-M2S."
-  (assert (plusp n))
-  (unless (in-transaction-p)
-    (error "find-free-m2s called outside of the allocation transaction"))
-  (or (bos.m2.allocation-cache:find-exact-match n :remove t) 
-      (some (lambda (area) (allocation-area-find-free-m2s area n))
-	    (active-allocation-areas))
-      (let ((area (find-inactive-nonempty-allocation-area)))
-	(when area
-	  (activate-allocation-area area)
-	  (allocate-m2s-for-sell  n)))
-      (find-free-m2s/underflow n)
-      (warn "all allocation areas exhausted")
-      nil))
+  (macrolet ((with-temp-activation (area &body body)
+               (check-type area symbol)
+               `(let ((status (allocation-area-active-p ,area)))
+                  (unwind-protect
+                       (progn
+                         (setf (slot-value ,area 'active-p) t)
+                         ,@body)
+                    (setf (slot-value ,area 'active-p) status)))))
+    (labels ((allocate-in-active-areas (n)
+               (or (bos.m2.allocation-cache:find-exact-match n :remove t) 
+                   (some (lambda (area) (allocation-area-find-free-m2s area n))
+                         (active-allocation-areas))))
+             (can-possibly-allocate-request (n)
+               (find n (all-allocation-areas) :key #'allocation-area-free-m2s :test #'<=)))
+      (assert (plusp n))
+      (unless (in-transaction-p)
+        (error "find-free-m2s called outside of the allocation transaction"))
+      (or (allocate-in-active-areas n)
+          (unless (can-possibly-allocate-request n)
+            (return-from allocate-m2s-for-sell nil))          
+          (loop
+             for area in (find-inactive-nonempty-allocation-areas)
+             for m2s = (with-temp-activation area
+                         (allocate-in-active-areas n))
+             when m2s
+             do (activate-allocation-area area) and
+             return m2s)
+          ;; (find-free-m2s/underflow n) ; ks 2008-04-07: dont think this should be called here        
+          nil))))
 
 (defmethod return-m2s (m2s)
   "Mark the given square meters as free, so that they can be re-allocated."
