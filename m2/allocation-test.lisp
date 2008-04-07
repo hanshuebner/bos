@@ -143,9 +143,11 @@
           (is (every #'bos.m2::allocation-area-consistent-p areas))
           (cond
             ((request-feasible-p n areas)
-             (finishes (make-contract sponsor n :paidp t))
-             (is (= 1 (count-if #'allocation-area-active-p areas)))
-             (is (every #'bos.m2::allocation-area-consistent-p areas)))
+             (let ((contract (make-contract sponsor n :paidp t)))
+               (is (= 1 (count-if #'allocation-area-active-p areas)))
+               (is (every #'bos.m2::allocation-area-consistent-p areas))
+               (let ((used-area (find-if #'allocation-area-active-p areas)))
+                 (is (eq used-area (bos.m2::m2-allocation-area (first (contract-m2s contract))))))))
             (t
              (signals error (make-contract sponsor n :paidp t))
              (is (notany #'allocation-area-active-p areas))
@@ -198,3 +200,4 @@
       (is (object-destroyed-p area))
       (is (every #'object-destroyed-p stripes))
       (finishes (snapshot)))))
+
