@@ -559,7 +559,7 @@ neighbours."
 		      (format-date-time (contract-date contract) :show-time nil)))))))
 
 (defun delete-directory (pathname)
-  (cl-fad:delete-directory-and-files pathname))
+  (cl-fad:delete-directory-and-files pathname :if-does-not-exist :ignore))
 
 (defun reinit (&key delete directory website-url enable-mails)
   (format t "~&; Startup Quadratmeterdatenbank...~%")
