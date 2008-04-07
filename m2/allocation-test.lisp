@@ -142,5 +142,61 @@
           when someone asks for too many m2s (~d) (which will result in
           an error)" m2-count)))))
 
+(test allocation-area.auto-activation.4
+  (labels ((make-allocation-areas (widths)
+             (iter
+               (for w in widths)
+               (for pos initially 0 then (+ pos w))
+               (collect (make-allocation-rectangle pos pos w w))))
+           (request-feasible-p (n areas)
+             (some #'(lambda (area) (<= n (allocation-area-free-m2s area))) areas)))
+    (for-all ((allocation-area-widths  (gen-list :length (gen-integer :min 1 :max 5)
+                                                 :elements (gen-integer :min 1 :max 20)))
+              (n (gen-integer :min 1 :max 100)))
+      (with-fixture empty-store ()
+        (let* ((areas (make-allocation-areas allocation-area-widths))
+               (sponsor (make-sponsor :login "test-sponsor")))
+          (is (notany #'allocation-area-active-p areas))
+          (is (every #'bos.m2::allocation-area-consistent-p areas))
+          (cond
+            ((request-feasible-p n areas)
+             (finishes (make-contract sponsor n :paidp t))
+             (is (= 1 (count-if #'allocation-area-active-p areas)))
+             (is (every #'bos.m2::allocation-area-consistent-p areas)))
+            (t
+             (signals error (make-contract sponsor n :paidp t))
+             (is (notany #'allocation-area-active-p areas))
+             (is (every #'bos.m2::allocation-area-consistent-p areas)))))))))
+
+(test allocation-area.find-free-m2s
+  (flet ((m2p (obj)
+           (typep obj 'm2)))
+    (with-fixture empty-store ()
+      (let* ((area1 (make-allocation-rectangle 0 0 8 8))
+             (area2 (make-allocation-rectangle 10 10 9 9)))
+        (for-all ((n (gen-integer :min 1 :max 60)))
+          (let ((m2s (with-transaction () (bos.m2::find-free-m2s n))))        
+            (if (null m2s)
+                (pass)
+                (progn
+                  (is (listp m2s))
+                  (is (every #'m2p m2s))
+                  (is (= n (length m2s)))))))))))
+
+(test allocation-area.find-free-m2s.2
+  (flet ((m2p (obj)
+           (typep obj 'm2)))
+    (for-all ((n (gen-integer :min 1 :max 290)))
+      (with-fixture empty-store ()
+        (let* ((area1 (make-allocation-rectangle 0 0 8 8))
+               (area2 (make-allocation-rectangle 10 10 9 9))
+               (m2s (with-transaction () (bos.m2::find-free-m2s n))))
+          (if (null m2s)
+              (pass)
+              (progn
+                (is (listp m2s))
+                (is (every #'m2p m2s))
+                (is (= n (length m2s))))))))))
+
 
 
