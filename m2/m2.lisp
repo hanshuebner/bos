@@ -559,24 +559,7 @@ neighbours."
 		      (format-date-time (contract-date contract) :show-time nil)))))))
 
 (defun delete-directory (pathname)
-  (when (probe-file pathname)
-    ;; XXX Achtung, auf #-cmu folgt das Symlinks.
-    (loop for file in (directory pathname #+cmu :truenamep #+cmu nil)
-       when (pathname-name file)
-       do (delete-file file)
-       unless (pathname-name file)
-       do (delete-directory file))
-    #+allegro
-    ;; Das loescht doch eh schon die unterverzeichnisse mit?
-    (excl:delete-directory-and-files pathname)
-    #+cmu
-    (unix:unix-rmdir (ext:unix-namestring pathname))
-    #+sbcl
-    (sb-posix:rmdir (namestring pathname))
-    #+openmcl
-    (ccl::%rmdir (namestring pathname))
-    #-(or allegro cmu sbcl openmcl)
-    ...))
+  (cl-fad:delete-directory-and-files pathname))
 
 (defun reinit (&key delete directory website-url enable-mails)
   (format t "~&; Startup Quadratmeterdatenbank...~%")
