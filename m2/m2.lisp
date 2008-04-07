@@ -450,7 +450,7 @@ and thus may be called more than once."
   (tx-do-make-contract sponsor m2-count :date date :paidp paidp :expires expires))
 
 (deftransaction do-make-contract (sponsor m2-count &key date paidp expires download-only)
-  (let ((m2s (allocate-m2s-for-sell  m2-count)))
+  (let ((m2s (allocate-m2s-for-sale  m2-count)))
     (if m2s
 	(let ((contract (make-object 'contract
 				     :sponsor sponsor

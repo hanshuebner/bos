@@ -151,14 +151,14 @@
              (is (notany #'allocation-area-active-p areas))
              (is (every #'bos.m2::allocation-area-consistent-p areas)))))))))
 
-(test allocation-area.allocate-m2s-for-sell
+(test allocation-area.allocate-m2s-for-sale
   (flet ((m2p (obj)
            (typep obj 'm2)))
     (with-fixture empty-store ()
       (let* ((area1 (make-allocation-rectangle 0 0 8 8))
              (area2 (make-allocation-rectangle 10 10 9 9)))
         (for-all ((n (gen-integer :min 1 :max 60)))
-          (let ((m2s (with-transaction () (bos.m2::allocate-m2s-for-sell n))))        
+          (let ((m2s (with-transaction () (bos.m2::allocate-m2s-for-sale n))))        
             (if (null m2s)
                 (pass)
                 (progn
@@ -166,14 +166,14 @@
                   (is (every #'m2p m2s))
                   (is (= n (length m2s)))))))))))
 
-(test allocation-area.allocate-m2s-for-sell.2
+(test allocation-area.allocate-m2s-for-sale.2
   (flet ((m2p (obj)
            (typep obj 'm2)))
     (for-all ((n (gen-integer :min 1 :max 290)))
       (with-fixture empty-store ()
         (let* ((area1 (make-allocation-rectangle 0 0 8 8))
                (area2 (make-allocation-rectangle 10 10 9 9))
-               (m2s (with-transaction () (bos.m2::allocate-m2s-for-sell n))))
+               (m2s (with-transaction () (bos.m2::allocate-m2s-for-sale n))))
           (if (null m2s)
               (pass)
               (progn

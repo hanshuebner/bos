@@ -653,35 +653,33 @@ list of N m2 instances or NIL if the requested amount cannot be
 allocated.
 Returned m2s will not be allocated again (i.e. there are
 marked as in use) by the allocation algorithm, but see RETURN-M2S."
-  (macrolet ((with-temp-activation (area &body body)
-               (check-type area symbol)
-               `(let ((status (allocation-area-active-p ,area)))
-                  (unwind-protect
-                       (progn
-                         (setf (slot-value ,area 'active-p) t)
-                         ,@body)
-                    (setf (slot-value ,area 'active-p) status)))))
-    (labels ((allocate-in-active-areas (n)
-               (or (bos.m2.allocation-cache:find-exact-match n :remove t) 
-                   (some (lambda (area) (allocation-area-find-free-m2s area n))
-                         (active-allocation-areas))))
-             (can-possibly-allocate-request (n)
-               (find n (all-allocation-areas) :key #'allocation-area-free-m2s :test #'<=)))
-      (assert (plusp n))
-      (unless (in-transaction-p)
-        (error "find-free-m2s called outside of the allocation transaction"))
-      (or (allocate-in-active-areas n)
-          (unless (can-possibly-allocate-request n)
-            (return-from allocate-m2s-for-sell nil))          
-          (loop
-             for area in (find-inactive-nonempty-allocation-areas)
-             for m2s = (with-temp-activation area
-                         (allocate-in-active-areas n))
-             when m2s
-             do (activate-allocation-area area) and
-             return m2s)
-          ;; (find-free-m2s/underflow n) ; ks 2008-04-07: dont think this should be called here        
-          nil))))
+  (labels ((allocate-in-active-areas (n)
+             (or (bos.m2.allocation-cache:find-exact-match n :remove t) 
+                 (some (lambda (area) (allocation-area-find-free-m2s area n))
+                       (active-allocation-areas))))
+           (can-possibly-allocate-request (n)
+             (find n (all-allocation-areas) :key #'allocation-area-free-m2s :test #'<=))
+           (allocate-without-activation (area n)               
+             (let ((status (allocation-area-active-p area)))
+               (unwind-protect
+                    (progn
+                      (setf (slot-value area 'active-p) t)
+                      (allocate-in-active-areas n))
+                 (setf (slot-value area 'active-p) status)))))
+    (assert (plusp n))
+    (unless (in-transaction-p)
+      (error "find-free-m2s called outside of the allocation transaction"))
+    (or (allocate-in-active-areas n)
+        (unless (can-possibly-allocate-request n)
+          (return-from allocate-m2s-for-sell nil))          
+        (loop
+           for area in (find-inactive-nonempty-allocation-areas)
+           for m2s = (allocate-without-activation area n) 
+           when m2s
+           do (activate-allocation-area area) and
+           return m2s)
+        (find-free-m2s/underflow n)
+        nil)))
 
 (defmethod return-m2s (m2s)
   "Mark the given square meters as free, so that they can be re-allocated."
