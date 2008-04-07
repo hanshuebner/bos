@@ -197,9 +197,10 @@
   "Liefere alle aktiven Vergabegebiete, nach Alter sortiert."
   (remove-if-not #'allocation-area-active-p (all-allocation-areas)))
 
-(defun find-inactive-allocation-area ()
-  (find-if #'(lambda (allocation-area) (not (or (allocation-area-active-p allocation-area)
-						(null (allocation-area-free-m2s allocation-area)))))
+(defun find-inactive-nonempty-allocation-area ()
+  (find-if #'(lambda (allocation-area)
+               (not (or (allocation-area-active-p allocation-area)
+                        (null (allocation-area-free-m2s allocation-area)))))
 	   (all-allocation-areas)))
 
 (deftransaction activate-allocation-area (area)
@@ -653,7 +654,7 @@ not be returned by this function"
   (or (bos.m2.allocation-cache:find-exact-match n :remove t) 
       (some (lambda (area) (allocation-area-find-free-m2s area n))
 	    (active-allocation-areas))
-      (let ((area (find-inactive-allocation-area)))
+      (let ((area (find-inactive-nonempty-allocation-area)))
 	(when area
 	  (activate-allocation-area area)
 	  (find-free-m2s n)))
