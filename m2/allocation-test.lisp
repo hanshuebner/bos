@@ -91,8 +91,6 @@
 		(finishes (make-contract sponsor size))
 		(decf total-free size)))))))
 
-(in-suite :bos.test.kilian)
-
 (test allocation-area.auto-activation.2
   (with-fixture empty-store ()
     (let* ((area1 (make-allocation-rectangle 0 0 8 8))
