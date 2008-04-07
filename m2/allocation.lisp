@@ -106,6 +106,8 @@
 				'vector)))
 
 (defun make-allocation-area (vertices)
+  "Can be called like this:
+\(make-allocation-area #((0 . 0) (0 . 10) (10 . 0)))"
   (assert (>= (length vertices) 3))
   (map-edges (lambda (a b)
                (check-type (car a) integer)
