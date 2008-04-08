@@ -358,6 +358,17 @@ and thus may be called more than once."
       (setf max-y (max (m2-y m2) (or max-y (m2-y m2)))))
     (list min-x min-y (1+ (- max-x min-x)) (1+ (- max-y min-y)))))
 
+
+(defun contracts-bounding-box (&optional (contracts (all-contracts)))
+  (let (min-x min-y max-x max-y)
+    (dolist (contract contracts)
+      (dolist (m2 (contract-m2s contract))
+        (setf min-x (min (m2-x m2) (or min-x (m2-x m2))))
+        (setf min-y (min (m2-y m2) (or min-y (m2-y m2))))
+        (setf max-x (max (m2-x m2) (or max-x (m2-x m2))))
+        (setf max-y (max (m2-y m2) (or max-y (m2-y m2))))))
+    (list min-x min-y (1+ (- max-x min-x)) (1+ (- max-y min-y)))))
+
 (defun contract-area (contract)
   (length (contract-m2s contract)))
 
