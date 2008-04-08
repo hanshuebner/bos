@@ -227,13 +227,47 @@ var poi = { symbol: ~S,
               (with-element "movie"
                 (with-element "url" (text url))))))))))
 
+(let ((cache (make-hash-table :test #'equal)))
+  (defun poi-description-xslt-google-earth (poi language)
+    (macrolet ((getcache ()
+                 '(gethash (list poi language) cache)))
+      (labels ((xsl-path ()
+                 (namestring (merge-pathnames #p"static/poi-description-ge.xsl" bos.web::*website-directory*)))
+               (xml-to-tmp-file ()
+                 (let ((path (bknr.utils:make-temporary-pathname)))
+                   (with-open-file (out path :direction :output :external-format :utf-8)
+                     (with-xml-output (make-character-stream-sink out)
+                       (with-namespace ("bos" "http://headcraft.de/bos")
+                         (write-poi-xml poi "bos"))))                   
+                   path))
+               (call-xsltproc (input-path)
+                 "Will return the transformation as a string. 
+                  It also deletes the file at INPUT-PATH."
+                 (let ((output-path (bknr.utils:make-temporary-pathname)))
+                   (unwind-protect
+                        (progn
+                          (with-open-file (out output-path :direction :output :external-format :utf-8)
+                            (sb-ext:run-program
+                             "xsltproc" (list (xsl-path) (namestring input-path)
+                                              ;; "--stringparam" "lang" language
+                                              )
+                             :search t :wait t :output out))
+                          (arnesi:read-string-from-file output-path :external-format :utf-8))
+                     (delete-file input-path)
+                     (delete-file output-path))))
+               (compute ()                 
+                 (call-xsltproc (xml-to-tmp-file)))
+               (compute-if-needed ()
+                 (or (getcache)                      
+                     (setf (getcache) (compute)))))
+        (compute-if-needed)))))
+
 (defun write-poi-kml (poi language)
   (with-element "Placemark"
     (with-element "name" (text (or (slot-string poi 'title language nil)
                                    (slot-string poi 'title "en"))))
     (with-element "description"
-      (with-namespace ("bos" "http://headcraft.de/bos")
-        (write-poi-xml poi "bos")))
+      (cdata (poi-description-xslt-google-earth poi language)))
     (with-element "Point"
       (with-element "coordinates"
         (text (format nil "~{~F,~}0" (poi-center-lon-lat poi)))))))
