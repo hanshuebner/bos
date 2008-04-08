@@ -224,8 +224,6 @@
 	   #:poi-center-y
            #:poi-center-lon-lat
 	   #:make-poi-javascript
-           #:write-poi-xml
-           #:write-poi-kml
            
 	   ;; news
 	   #:news-item

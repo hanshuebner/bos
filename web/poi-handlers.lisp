@@ -388,6 +388,99 @@
 			    imageproc-arguments))
 	  (error "image index ~a out of bounds for poi ~a" image-index poi)))))
 
+
+(defun write-poi-xml (poi &optional prefix)
+  (macrolet ((with-element (qname &body body)
+               `(with-element* (prefix ,qname) ,@body)))
+    (labels ((format-hash-table (element-name hash-table)
+               (with-element element-name
+                 (maphash (lambda (k v)                        
+                            (with-element "content"
+                              (attribute "lang" k)
+                              (text v)))
+                          hash-table)))
+             (format-image (element-name image)
+               (with-element element-name
+                 (with-element "id" (text (princ-to-string (store-object-id image))))
+                 (with-element "url" (text (format nil "http://createrainforest.org/image/~D" (store-object-id image))))
+                 (with-element "name" (text (store-image-name image)))
+                 (with-element "width" (text (princ-to-string (store-image-width image))))
+                 (with-element "height" (text (princ-to-string (store-image-height image))))
+                 (when (typep image 'poi-image)
+                   (format-hash-table "title" (poi-image-title image))
+                   (format-hash-table "subtitle" (poi-image-subtitle image))
+                   (format-hash-table "description" (poi-image-description image))))))
+      (with-accessors ((id store-object-id)
+                       (name poi-name)
+                       (title poi-title)
+                       (subtitle poi-subtitle)
+                       (description poi-description)
+                       (airals poi-airals)
+                       (images poi-images)
+                       (panoramas poi-panoramas)
+                       (movies poi-movies)) poi
+        (with-element "poi"
+          (with-element "id" (text (princ-to-string id)))
+          (with-element "name" (text name))
+          (format-hash-table "title" title)
+          (format-hash-table "subtitle" subtitle)
+          (format-hash-table "description" description)        
+          (with-element "airals"
+            (mapc (alexandria:curry #'format-image "airal") airals))
+          (with-element "images"
+            (mapc (alexandria:curry #'format-image "image") images))
+          (with-element "panoramas"
+            (mapc (alexandria:curry #'format-image "panorama") panoramas))
+          (with-element "movies"
+            (dolist (url movies)
+              (with-element "movie"
+                (with-element "url" (text url))))))))))
+
+(let ((cache (make-hash-table :test #'equal)))
+  (defun poi-description-xslt-google-earth (poi language)
+    (macrolet ((getcache ()
+                 '(gethash (list poi language) cache)))
+      (labels ((xsl-path ()
+                 (namestring (merge-pathnames #p"static/poi-description-ge.xsl" *website-directory*)))
+               (xml-to-tmp-file ()
+                 (let ((path (bknr.utils:make-temporary-pathname)))
+                   (with-open-file (out path :direction :output :external-format :utf-8)
+                     (with-xml-output (make-character-stream-sink out)
+                       (with-namespace ("bos" "http://headcraft.de/bos")
+                         (write-poi-xml poi "bos"))))                   
+                   path))
+               (call-xsltproc (input-path)
+                 "Will return the transformation as a string. 
+                  It also deletes the file at INPUT-PATH."
+                 (let ((output-path (bknr.utils:make-temporary-pathname)))
+                   (unwind-protect
+                        (progn
+                          (with-open-file (out output-path :direction :output :external-format :utf-8)
+                            (sb-ext:run-program
+                             "xsltproc" (list (xsl-path) (namestring input-path)
+                                              ;; "--stringparam" "lang" language
+                                              )
+                             :search t :wait t :output out))
+                          (arnesi:read-string-from-file output-path :external-format :utf-8))
+                     (delete-file input-path)
+                     (delete-file output-path))))
+               (compute ()                 
+                 (call-xsltproc (xml-to-tmp-file)))
+               (compute-if-needed ()
+                 (or (getcache)                      
+                     (setf (getcache) (compute)))))
+        (compute-if-needed)))))
+
+(defun write-poi-kml (poi language)
+  (with-element "Placemark"
+    (with-element "name" (text (or (slot-string poi 'title language nil)
+                                   (slot-string poi 'title "en"))))
+    (with-element "description"
+      (cdata (poi-description-xslt-google-earth poi language)))
+    (with-element "Point"
+      (with-element "coordinates"
+        (text (format nil "~{~F,~}0" (poi-center-lon-lat poi)))))))
+
 (defclass poi-xml-handler (object-handler)
   ()
   (:default-initargs :object-class 'poi :query-function #'find-poi))
@@ -403,11 +496,12 @@
 
 
 (defmethod handle-object ((handler poi-kml-handler) poi)
-  (with-xml-response ()
-    (sax:processing-instruction cxml::*sink* "xml-stylesheet" "href=\"/static/trivial.xsl\" type=\"text/xsl\"")
-    (with-namespace (nil "http://earth.google.com/kml/2.1")
-      (with-element "kml"
-        (write-poi-kml poi)))))
+  (with-query-params (lang)
+    (with-xml-response ()
+      (sax:processing-instruction cxml::*sink* "xml-stylesheet" "href=\"/static/trivial.xsl\" type=\"text/xsl\"")
+      (with-namespace (nil "http://earth.google.com/kml/2.1")
+        (with-element "kml"
+          (write-poi-kml poi lang))))))
 
 (defclass poi-kml-all-handler (page-handler)
   ())
