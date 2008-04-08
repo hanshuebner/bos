@@ -5,6 +5,8 @@
 
 #+sbcl(require 'asdf)
 
+#+sbcl(assert (eql sb-impl::*default-external-format* :utf-8))
+
 (load (compile-file "../../thirdparty/asdf/asdf.lisp"))
 
 ;;; some helpers
