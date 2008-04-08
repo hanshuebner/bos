@@ -514,6 +514,7 @@
       (with-namespace (nil "http://earth.google.com/kml/2.1")
         (with-element "kml"
           (with-element "Document"
+            (kml-region (make-rectangle2 (list 0 0 +width+ +width+)) '(:min 600 :max -1))
             (mapc #'(lambda (poi) (write-poi-kml poi lang)) (remove-if-not #'poi-area (class-instances 'poi)))))))))
 
 
