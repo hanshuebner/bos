@@ -245,6 +245,20 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
 contract-tree-node.  If the node has children, corresponding network
 links are created."))
 
+(defun write-contract-placemark-kml (c)
+  (let ((name (user-full-name (contract-sponsor c))))
+    (with-element "Placemark"
+      ;; does not help to solve the duplicate placemark problem
+      ;; (attribute "id" (prin1-to-string (store-object-id c)))
+      (when name (with-element "name" (text name)))
+      (with-element "description" (cdata (contract-description c :de)))
+      (with-element "Point"
+        (with-element "coordinates"
+          (destructuring-bind (x y)
+              (contract-center c)
+            (text (with-output-to-string (out)
+                    (kml-format-point (make-point :x x :y y) out)))))))))
+
 (defmethod handle-object ((handler contract-tree-kml-handler) (obj contract-tree-node))
   (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
                                     :root-element "kml")
@@ -255,18 +269,7 @@ links are created."))
         (kml-overlay (format nil "~a:~a/contract-tree-image/~d" *website-url* *port* (id obj))
                      rect (+ 100 (depth obj)))
         (dolist (c (contracts obj))
-          (let ((name (user-full-name (contract-sponsor c))))
-            (with-element "Placemark"
-              ;; does not help to solve the duplicate placemark problem
-              ;; (attribute "id" (prin1-to-string (store-object-id c)))
-              (when name (with-element "name" (text name)))
-              (with-element "description" (cdata (contract-description c :de)))
-              (with-element "Point"
-                (with-element "coordinates"
-                  (destructuring-bind (x y)
-                      (contract-center c)
-                    (text (with-output-to-string (out)
-                            (kml-format-point (make-point :x x :y y) out)))))))))
+          (write-contract-placemark-kml c))
         (dolist (child (children obj))
           (kml-network-link (format nil "~a:~a/contract-tree-kml/~d" *website-url* *port* (id child))
                             :rect (make-rectangle2 (geo-location child))

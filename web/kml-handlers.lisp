@@ -46,16 +46,13 @@
 (defclass kml-root-handler (object-handler)
   ())
 
-(defmethod handle-object ((handler kml-root-handler) (object sponsor))
-  ;; later, we want a sponsor specific handler here
-  (handle-object handler nil))
-
-(defmethod handle-object ((handler kml-root-handler) (object null))
-  (format t "query-params: ~s~%" (query-params))
+(defun write-root-kml (&optional sponsor)  
   (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
                                     :root-element "kml")
     (with-element "Document"
       (with-element "name" (text "bos-kml"))
+      (when sponsor
+        (mapc #'write-contract-placemark-kml (sponsor-contracts sponsor)))
       (let ((image-tree (find-store-object *image-tree-root-id*)))
         (assert (and image-tree (typep image-tree 'image-tree)))
         (kml-network-link (format nil "~a:~a/image-tree-kml/~d" *website-url* *port*
@@ -72,3 +69,9 @@
                           :name "contracts")
         (kml-network-link (format nil "~a:~a/poi-kml-all" *website-url* *port*)
                           :name "POIs")))))
+
+(defmethod handle-object ((handler kml-root-handler) (object sponsor))
+  (write-root-kml object))
+
+(defmethod handle-object ((handler kml-root-handler) (object null))  
+  (write-root-kml))
