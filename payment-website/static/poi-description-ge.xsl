@@ -10,9 +10,7 @@
       <head>        
         <title>Sambodja POI template</title></head>
       <body>
-        <xsl:apply-templates select="//kml:Placemark">
-          <xsl:sort select="kml:name"/>
-        </xsl:apply-templates>
+        <xsl:apply-templates/>
       </body>
     </html>
   </xsl:template>
@@ -25,8 +23,9 @@
   <!-- image_width -->
   <xsl:param name="image_width" select="120"/>
   
-  <xsl:template match="kml:Placemark">  
-    <table style="background-color: rgb(186, 186, 186); width: 319px; height: 350px;" border="0" cellpadding="5" cellspacing="0">
+  <xsl:template match="bos:poi">     
+    <table width="500" style="background-color: rgb(186, 186, 186);"
+           border="0" cellpadding="5" cellspacing="0">
       <tbody>
         <tr>
           <td colspan="3" style="width: 99px; text-align: left;">             
@@ -35,12 +34,24 @@
         </tr>        
         <tr>
           <td style="width: 100px;">
-            <h1><xsl:value-of select="descendant::bos:title/bos:content[@lang=$lang]"/></h1>
-            <h2><xsl:value-of select="descendant::bos:subtitle/bos:content[@lang=$lang]"/></h2>
-            <div style="text-align: left;">
-              <xsl:value-of select="descendant::bos:description/bos:content[@lang=$lang]"/>
-            </div>
-            <br/>            
+            <h1><xsl:value-of select="bos:title/bos:content[@lang=$lang]"/></h1>
+            <h2><xsl:value-of select="bos:subtitle/bos:content[@lang=$lang]"/></h2>
+            <!--             <div width="400" style="text-align: left;"> -->
+            <!--               <xsl:value-of select="bos:description/bos:content[@lang=$lang]"/> -->
+            <!--             </div> -->
+            <table width="400">
+              <tr><td>
+                  <xsl:value-of select="bos:description/bos:content[@lang=$lang]"/>
+              </td></tr>
+            </table>        
+            <xsl:choose>
+              <xsl:when test="bos:name='selling-area'">
+                <p><a href="http://test.createrainforest.org/de/bestellung">Machen Sie mit!</a></p>
+              </xsl:when>
+              <xsl:otherwise>
+                <br/><br/>
+              </xsl:otherwise>
+            </xsl:choose>
             <table>
               <tbody>
                 <tr>
@@ -77,8 +88,8 @@
           </td>
         </tr>
       </tbody>
-    </table>
-    <p/>    
+      </table>
+      <p/>  
   </xsl:template>
   
   <xsl:template match="bos:image">
