@@ -11,11 +11,12 @@ msgminwait 0
 msgwait 0
 
 chdir /home/bknr/bknr-svn/projects/bos
+setenv LANG en_US.UTF-8
 
-screen -t webserver lisp -core bos.core -slime
+screen -t webserver sbcl --load start.lisp
 #logfile screen.log
 #log on
-screen -t cert-daemon lisp -core bos.core -cert-daemon
+#screen -t cert-daemon lisp -core bos.core -cert-daemon
 
 msgminwait 1
 msgwait 1
