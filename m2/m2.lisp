@@ -243,6 +243,12 @@
     :cert-issued nil
     :expires (+ (get-universal-time) *manual-contract-expiry-time*)))
 
+(defmethod print-object ((object contract) stream)
+  (print-unreadable-object (object stream :type t :identity nil)
+    (format stream "ID: ~D, ~A"
+            (store-object-id object)
+            (if (contract-paidp object) "paid" "unpaid"))))
+
 (defun contract-p (object)
   (equal (class-of object) (find-class 'contract)))
 
@@ -522,6 +528,21 @@ neighbours."
                       :key #'contract-color :test #'equal)
           (return nil))
      finally (return t)))
+
+(defun contract-consistent-p (contract)
+  (labels ((m2-points-to-contract (m2)
+             (eq contract (m2-contract m2))))
+    (let ((consistent t))
+      (unless (every #'m2-points-to-contract (contract-m2s contract))        
+        (let ((*print-length* 5))
+          (warn "~s of ~s dont point to it by M2-CONTRACT~
+                 ~%either those m2s are free or point to another contract~
+                 ~%the wrongly pointed to objs with duplicates removed are: ~s"
+                (remove-if #'m2-points-to-contract (contract-m2s contract))
+                contract
+                (remove-duplicates (remove contract (mapcar #'m2-contract (contract-m2s contract))))))
+        (setq consistent nil))
+      consistent)))
 
 (defvar *last-contracts-cache* nil)
 (defconstant +last-contracts-cache-size+ 20)
