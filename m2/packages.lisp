@@ -109,7 +109,7 @@
 	   #:m2s-polygon
 	   #:m2s-polygon-lon-lat
 	   #:escape-nl
-	   #:return-m2s
+	   #:return-contract-m2s
 
            #:sponsor
            #:make-sponsor

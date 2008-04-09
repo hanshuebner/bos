@@ -47,20 +47,19 @@
       (is (= (- 64 10) (allocation-area-free-m2s area)))
       (signals (error) (make-contract sponsor 64)))))
 
-(store-test allocation-area.return-m2s
+(store-test allocation-area.return-contract-m2s
   (let* ((area (make-allocation-rectangle 0 0 8 8))
 	 (sponsor (make-sponsor :login "test-sponsor"))
 	 (contract (make-contract sponsor 64)))
     (with-store-reopenings (area sponsor contract)	          
       (is (zerop (allocation-area-free-m2s area)))
       (signals (error) (make-contract sponsor 64))
-      (with-transaction ()
-	(destroy-object contract))
+      (delete-object contract)
       (is-true (bos.m2.allocation-cache:find-exact-match 64))
       (finishes (make-contract sponsor 10))
       (is (= (- (* 8 8) 10) (allocation-area-free-m2s area))))))
 
-(store-test allocation-area.return-m2s.big-uncached-contract
+(store-test allocation-area.return-contract-m2s.big-uncached-contract
   (let* ((area (make-allocation-rectangle 0 0 30 30))
 	 (sponsor (make-sponsor :login "test-sponsor"))
 	 (contract (make-contract sponsor 500)))

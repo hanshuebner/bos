@@ -267,7 +267,7 @@
   (publish-contract-change contract)
   (dolist (m2 (contract-m2s contract))
     (setf (m2-contract m2) nil))
-  (return-m2s (contract-m2s contract)))
+  (return-contract-m2s (contract-m2s contract)))
 
 (defun get-contract (id)
   (let ((contract (store-object-with-id id)))

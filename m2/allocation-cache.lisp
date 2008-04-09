@@ -247,7 +247,7 @@ is decremented."
     (unless (zerop region-count)
       (leave size))))
 
-(defmethod return-m2s :after (m2s)
+(defmethod return-contract-m2s :after (m2s)
   (let ((allocation-area (bos.m2::m2-allocation-area (first m2s))))
     (index-push (length m2s) (make-cache-entry :area allocation-area
 					       :region m2s))))

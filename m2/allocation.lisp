@@ -652,7 +652,7 @@ not be returned by this function"
 list of N m2 instances or NIL if the requested amount cannot be
 allocated.
 Returned m2s will not be allocated again (i.e. there are
-marked as in use) by the allocation algorithm, but see RETURN-M2S."
+marked as in use) by the allocation algorithm, but see RETURN-CONTRACT-M2S."
   (labels ((allocate-in-active-areas (n)
              (or (bos.m2.allocation-cache:find-exact-match n :remove t) 
                  (some (lambda (area) (allocation-area-find-free-m2s area n))
@@ -681,7 +681,7 @@ marked as in use) by the allocation algorithm, but see RETURN-M2S."
         (find-free-m2s/underflow n)
         nil)))
 
-(defmethod return-m2s (m2s)
+(defmethod return-contract-m2s (m2s)
   "Mark the given square meters as free, so that they can be re-allocated."
   (when m2s
     (loop for m2 in m2s
