@@ -440,7 +440,11 @@
   (defun poi-description-xslt-google-earth (poi language)
     (macrolet ((getcache ()
                  '(gethash (list poi language) cache)))
-      (labels ((xsl-path ()
+      (labels ((run-program (program args)
+                 #+sbcl(sb-ext:run-program program args :search t :wait t :output out)
+                 #+ccl(ccl:run-program program args :wait t :output out)
+                 #-(or sbcl ccl)(error "run-program not implemented for ~A" (lisp-implementation-type)))
+               (xsl-path ()
                  (namestring (merge-pathnames #p"static/poi-description-ge.xsl" *website-directory*)))
                (xml-to-tmp-file ()
                  (let ((path (bknr.utils:make-temporary-pathname)))
@@ -456,11 +460,10 @@
                    (unwind-protect
                         (progn
                           (with-open-file (out output-path :direction :output :external-format :utf-8)
-                            (sb-ext:run-program
+                            (run-program
                              "xsltproc" (list (xsl-path) (namestring input-path)
                                               ;; "--stringparam" "lang" language
-                                              )
-                             :search t :wait t :output out))
+                                              )))
                           (arnesi:read-string-from-file output-path :external-format :utf-8))
                      (delete-file input-path)
                      (delete-file output-path))))
