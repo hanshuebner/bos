@@ -102,7 +102,7 @@ language preference weights."
 (defmethod handle ((handler index-handler))
   (redirect (format nil "/~A/index" (or (find-browser-prefered-language)
 					*default-language*))
-	    :permanently t))
+	    :code hunchentoot:+http-moved-permanently+))
 
 (defclass infosystem-handler (page-handler)
   ())
