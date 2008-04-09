@@ -47,14 +47,6 @@
       (is (= (- 64 10) (allocation-area-free-m2s area)))
       (signals (error) (make-contract sponsor 64)))))
 
-(store-test allocation-area.one-contract.notany-m2-contract
-  (let ((area (make-allocation-rectangle 0 0 8 8))
-	(sponsor (make-sponsor :login "test-sponsor")))
-    (with-store-reopenings (area sponsor)
-      (finishes (make-contract sponsor 10))      
-      (is (= (- 64 10) (allocation-area-free-m2s area)))
-      (signals (error) (make-contract sponsor 64)))))
-
 (store-test allocation-area.return-m2s
   (let* ((area (make-allocation-rectangle 0 0 8 8))
 	 (sponsor (make-sponsor :login "test-sponsor"))
@@ -67,6 +59,14 @@
       (is-true (bos.m2.allocation-cache:find-exact-match 64))
       (finishes (make-contract sponsor 10))
       (is (= (- (* 8 8) 10) (allocation-area-free-m2s area))))))
+
+(store-test allocation-area.return-m2s.big-uncached-contract
+  (let* ((area (make-allocation-rectangle 0 0 30 30))
+	 (sponsor (make-sponsor :login "test-sponsor"))
+	 (contract (make-contract sponsor 500)))
+    (with-store-reopenings (area sponsor contract)	                      
+      (finishes (delete-object contract))      
+      (finishes (make-contract sponsor 10)))))
 
 (test allocation-area.two-areas
   (with-fixture empty-store ()    
