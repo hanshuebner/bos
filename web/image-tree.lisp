@@ -642,7 +642,7 @@ links are created."))
            (aref-indices (array indices)
              (mapcar #'(lambda (index-pair) (destructuring-bind (x y) index-pair (aref array x y))) indices)))
     (let ((array (make-array (list 4 4))))
-      (loop with *default-pathname-defaults* = #p"/home/paul/bos-satellitenbild/"
+      (loop with *default-pathname-defaults* = (merge-pathnames #p"tiles-2700/" (user-homedir-pathname))
          for name in '("sl_utm50s_01.png"
                        "sl_utm50s_02.png"
                        "sl_utm50s_03.png"
