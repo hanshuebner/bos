@@ -47,7 +47,7 @@
   ())
 
 (defun write-root-kml (&optional sponsor)  
-  (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
+  (with-xml-response (:content-type #+nil "text/xml" "application/vnd.google-earth.kml+xml"
                                     :root-element "kml")
     (with-element "Document"
       (with-element "name" (text "bos-kml"))
