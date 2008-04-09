@@ -440,9 +440,9 @@
   (defun poi-description-xslt-google-earth (poi language)
     (macrolet ((getcache ()
                  '(gethash (list poi language) cache)))
-      (labels ((run-program* (program args output)
-                 #+sbcl(sb-ext:run-program program args :search t :wait t :output output)
-                 #+ccl(ccl:run-program program args :wait t :output output)
+      (labels ((run-program* (program args)
+                 #+sbcl(sb-ext:run-program program args :search t :wait t :environment nil)
+                 #+ccl(ccl:run-program program args :wait t)
                  #-(or sbcl ccl)(error "run-program not implemented for ~A" (lisp-implementation-type)))
                (xsl-path ()
                  (namestring (merge-pathnames #p"static/poi-description-ge.xsl" *website-directory*)))
@@ -459,20 +459,17 @@
                  (let ((output-path (bknr.utils:make-temporary-pathname)))
                    (unwind-protect
                         (progn
-                          (with-open-file (out output-path :direction :output :external-format :utf-8)
-                            (run-program*
-                             "xsltproc" (list (xsl-path) (namestring input-path)
-                                              ;; "--stringparam" "lang" language
-                                              )
-                             out))
+                          (run-program*
+                           "xsltproc" (list "-o" (namestring output-path)
+                                            (xsl-path) (namestring input-path)
+                                            ;; "--stringparam" "lang" language                                            
+                                            ))
                           (arnesi:read-string-from-file output-path :external-format :utf-8))
                      (ignore-errors (delete-file input-path))
-                     (ignore-errors (delete-file output-path)))))
+                     (ignore-errors (delete-file output-path))
+                     )))
                (compute ()                 
-                 (handler-case
-                     (call-xsltproc (xml-to-tmp-file))
-                   (error (c) (error "while computing poi-description-xslt-google-earth for ~S, ~S:~A"
-                                     poi language c))))
+                 (call-xsltproc (xml-to-tmp-file)))
                (compute-if-needed ()
                  (or (getcache)                      
                      (setf (getcache) (compute)))))
