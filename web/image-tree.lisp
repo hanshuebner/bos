@@ -577,10 +577,8 @@ performed."
 
 (defun img-image-tree (object)
   (html
-   ((:a :href (website-make-path *website*
-                                 (format nil "image-tree/~d" (store-object-id object))))
-    ((:img :src (website-make-path *website*
-                                   (format nil "image/~d" (store-object-id object))))))))
+   ((:a :href (format nil "http://~a/image-tree/~d" (website-host) (store-object-id object)))
+    ((:img :src (format nil "http://~a/image/~d" (website-host) (store-object-id object)))))))
 
 (defmethod handle-object ((image-tree-handler image-tree-handler) (object image-tree-node))
   (with-bknr-page (:title (prin1-to-string object))
@@ -593,8 +591,7 @@ performed."
     (when (parent object)
       (html
        (:p
-        ((:a :href (website-make-path *website*
-                                      (format nil "image-tree/~d" (store-object-id (parent object)))))
+        ((:a :href (format nil "http://~a/image-tree/~d" (website-host) (store-object-id (parent object))))
          "go to parent"))))
     (:p "depth: " (:princ (depth object)) "lod-min:" (:princ (lod-min object)) "lod-max:" (:princ (lod-max object)))
     (:table
@@ -618,12 +615,12 @@ links are created."))
           (rect (make-rectangle2 (list (geo-x obj) (geo-y obj) (geo-width obj) (geo-height obj)))))
       (with-element "Document"
         (kml-region rect lod)
-        (kml-overlay (format nil "~a:~a/image/~d" *website-url* *port* (store-object-id obj))
+        (kml-overlay (format nil "http://~a/image/~d" (website-host) (store-object-id obj))
                      rect (depth obj))
         (dolist (child (children obj))
-          (kml-network-link (format nil "~a:~a/image-tree-kml/~d" *website-url* *port* (store-object-id child))
+          (kml-network-link (format nil "http://~a/image-tree-kml/~d" (website-host) (store-object-id child))
                             :rect (make-rectangle2 (list (geo-x child) (geo-y child)
-                                                   (geo-width child) (geo-height child)))
+                                                         (geo-width child) (geo-height child)))
                             :lod `(:min ,(lod-min child) :max ,(lod-max child))))))))
 
 (defclass image-tree-kml-latest-handler (page-handler)
@@ -632,7 +629,7 @@ links are created."))
   IMAGE-TREE-KML-HANDLER of the latest created image-tree."))
 
 (defmethod handle ((page-handler image-tree-kml-latest-handler))
-  (redirect (format nil "~a:~a/image-tree-kml/~d" *website-url* *port* (store-object-id (car (last (class-instances 'image-tree)))))))
+  (redirect (format nil "http://~a/image-tree-kml/~d" (website-host) (store-object-id (car (last (class-instances 'image-tree)))))))
 
 ;;;;
 (defun image-tree-import-satellitenbild ()

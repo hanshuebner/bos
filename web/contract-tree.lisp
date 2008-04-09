@@ -183,10 +183,8 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
 
 (defun img-contract-tree (object)
   (html
-   ((:a :href (website-make-path *website*
-                                 (format nil "contract-tree/~d" (id object))))
-    ((:img :src (website-make-path *website*
-                                   (format nil "contract-tree-image/~d" (id object))))))))
+   ((:a :href (format nil "http://~a/contract-tree/~d" (website-host) (id object)))
+    ((:img :src (format nil "http://~a/contract-tree-image/~d" (website-host) (id object)))))))
 
 (defmethod object-handler-get-object ((handler contract-tree-handler))
   (let ((id (parse-url)))
@@ -206,8 +204,7 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
     (when (root object)
       (html
        (:p
-        ((:a :href (website-make-path *website*
-                                      (format nil "contract-tree/~d" (id (root object)))))
+        ((:a :href (format nil "http://~a/contract-tree/~d" (website-host) (id (root object))))
          "go to root"))))
     ;; (:p "depth: " (:princ (depth object)) "lod-min:" (:princ (lod-min object)) "lod-max:" (:princ (lod-max object)))
     (:table
@@ -266,12 +263,12 @@ links are created."))
           (rect (make-rectangle2 (geo-location obj))))
       (with-element "Document"
         (kml-region rect lod)
-        (kml-overlay (format nil "~a:~a/contract-tree-image/~d" *website-url* *port* (id obj))
+        (kml-overlay (format nil "http://~a/contract-tree-image/~d" (website-host) (id obj))
                      rect (+ 100 (depth obj)))
         (dolist (c (contracts obj))
           (write-contract-placemark-kml c))
         (dolist (child (children obj))
-          (kml-network-link (format nil "~a:~a/contract-tree-kml/~d" *website-url* *port* (id child))
+          (kml-network-link (format nil "http://~a/contract-tree-kml/~d" (website-host) (id child))
                             :rect (make-rectangle2 (geo-location child))
                             :lod `(:min ,(lod-min child) :max ,(lod-max child))))))))
 
