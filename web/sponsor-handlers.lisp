@@ -148,6 +148,7 @@
 				 :value (sponsor-info-text sponsor)
 				 :rows 5
 				 :cols 40))))
+      (:p (cmslink (format nil "kml-root/~A" (store-object-id sponsor)) "Google Earth"))
       (:h2 "Contracts")
       ((:table :border "1")
        (:tr (:th "ID") (:th "date") (:th "# of sqm") (:th "UTM coordinate")(:th "paid?") (:th))
@@ -159,9 +160,7 @@
 					 (m2-utm-x (first (contract-m2s (first (sponsor-contracts sponsor)))))
 					 (m2-utm-y (first (contract-m2s (first (sponsor-contracts sponsor))))))))
 		    (:td (:princ-safe (if (contract-paidp contract) "paid" "not paid")))
-		    (:td (cmslink (format nil "contract-kml/~A" (store-object-id contract)) "Google Earth")
-			 :br
-			 (cmslink (format nil "cert-regen/~A" (store-object-id contract)) "Regenerate Certificate")
+		    (:td (cmslink (format nil "cert-regen/~A" (store-object-id contract)) "Regenerate Certificate")
 			 (when (probe-file (contract-pdf-pathname contract))
 			   (html :br (cmslink (contract-pdf-url contract) "Show Certificate")))
 			 (when (contract-worldpay-trans-id contract)
