@@ -248,9 +248,10 @@ is decremented."
       (leave size))))
 
 (defmethod return-contract-m2s :after (m2s)
-  (let ((allocation-area (bos.m2::m2-allocation-area (first m2s))))
-    (index-push (length m2s) (make-cache-entry :area allocation-area
-					       :region m2s))))
+  (when (<= (length m2s) +threshold+)
+    (let ((allocation-area (bos.m2::m2-allocation-area (first m2s))))
+      (index-push (length m2s) (make-cache-entry :area allocation-area
+                                                 :region m2s)))))
 
 ;;; subsystem
 (defclass allocation-cache-subsystem ()
