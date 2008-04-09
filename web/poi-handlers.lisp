@@ -469,7 +469,10 @@
                      (ignore-errors (delete-file input-path))
                      (ignore-errors (delete-file output-path)))))
                (compute ()                 
-                 (call-xsltproc (xml-to-tmp-file)))
+                 (handler-case
+                     (call-xsltproc (xml-to-tmp-file))
+                   (error (c) (error "while computing poi-description-xslt-google-earth for ~S, ~S:~A"
+                                     poi language c))))
                (compute-if-needed ()
                  (or (getcache)                      
                      (setf (getcache) (compute)))))
