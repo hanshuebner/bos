@@ -29,7 +29,14 @@
             (with-element "td" (text (or name "[anonymous]"))))
           (with-element "tr"
             (with-element "td" (text "Land:"))
-            (with-element "td" (text (sponsor-country sponsor))))
+            (with-element "td"
+              (text (sponsor-country sponsor))
+              (text " ")
+              (with-element "img"
+                (attribute "src" (format nil "http://~A/images/flags/~(~A~).gif"
+                                         (website-host) (sponsor-country sponsor)))
+                (attribute "width" "20")
+                (attribute "height" "12"))))
           (with-element "tr"
             (with-element "td" (text "gesponsort:"))
             (with-element "td" (text (format nil "~D m²" (length (contract-m2s contract))))))
@@ -37,7 +44,6 @@
             (with-element "td" (text "seit:"))
             (with-element "td" (text (format-date-time (contract-date contract) :show-time nil)))))
         (when (sponsor-info-text sponsor)
-
           (text (sponsor-info-text sponsor)))))))
 
 (defparameter *contract-tree-root-id* 1364)
