@@ -174,6 +174,20 @@
 	 :master-code (mod (+ (get-universal-time) (random 1000000)) 1000000)
          initargs))
 
+(defun sponsor-consistent-p (sponsor)
+  (labels ((contract-points-to-sponsor (contract)
+             (eq sponsor (contract-sponsor contract))))
+    (let ((consistent t))
+      (unless (every #'contract-points-to-sponsor (sponsor-contracts sponsor))        
+        (let ((*print-length* 5))
+          (warn "~s of ~s dont point to it by CONTRACT-SPONSOR~
+                 ~%the wrongly pointed to objs with duplicates removed are: ~s"
+                (remove-if #'contract-points-to-sponsor (sponsor-contracts sponsor))
+                sponsor
+                (remove-duplicates (remove sponsor (mapcar #'contract-sponsor (sponsor-contracts sponsor))))))
+        (setq consistent nil))
+      consistent)))
+
 (defmethod destroy-object :before ((sponsor sponsor))
   (mapc #'delete-object (sponsor-contracts sponsor)))
 
@@ -541,6 +555,9 @@ neighbours."
                 (remove-if #'m2-points-to-contract (contract-m2s contract))
                 contract
                 (remove-duplicates (remove contract (mapcar #'m2-contract (contract-m2s contract))))))
+        (setq consistent nil))
+      (when (null (contract-m2s contract))
+        (warn "~s has no m2s" contract)
         (setq consistent nil))
       consistent)))
 
