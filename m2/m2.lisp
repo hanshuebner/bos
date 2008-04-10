@@ -635,6 +635,15 @@ neighbours."
   (format t "~&; Startup der Quadratmeterdatenbank done.~%")
   (force-output))
 
+(defun consistent-p ()
+  (let ((inconsistent-objs
+         (list
+          (remove-if #'sponsor-consistent-p (class-instances 'sponsor))
+          (remove-if #'contract-consistent-p (class-instances 'contract))
+          (remove-if #'allocation-area-consistent-p (class-instances 'allocation-area)))))
+    (values (every #'null inconsistent-objs)
+            inconsistent-objs)))
+
 ;; testing
 
 (defun fill-with-random-contracts (&optional percentage)
