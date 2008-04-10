@@ -31,18 +31,23 @@
 
 ;;; load bos project
 (asdf:oos 'asdf:load-op :bos.web)
-(mapcar #'cl-gd::load-foreign-library   ; for now...
-        '("/usr/lib/libcrypto.so"
-          "/usr/lib/libssl.so"
-          "/usr/local/lib/libgd.so"
-          ))
-(format t "BOS Online-System~%")
-;;; slime
-(asdf:oos 'asdf:load-op :swank)
-(swank-loader::init)                    ; currently necessary
-(swank:create-server :port 4005 :dont-close t)
-;;; start the bos server
-(apply #'bos.m2::reinit (read-configuration "m2.rc"))
-(apply #'bos.web::init (read-configuration "web.rc"))
-(bknr.cron::start-cron)
 
+(defun start ()
+  (mapcar #'cl-gd::load-foreign-library ; for now...
+          '("/usr/lib/libcrypto.so"
+            "/usr/lib/libssl.so"
+            "/usr/local/lib/libgd.so"
+            ))
+  (format t "BOS Online-System~%")
+  ;; slime
+  (asdf:oos 'asdf:load-op :swank)
+  (swank-loader::init)                  ; currently necessary
+  (swank:create-server :port 4005 :dont-close t)
+  ;; start the bos server
+  (apply #'bos.m2::reinit (read-configuration "m2.rc"))
+  (apply #'bos.web::init (read-configuration "web.rc"))
+  (bknr.cron::start-cron))
+
+(defun start-cert-daemon ()
+  ;; whatever
+  )
