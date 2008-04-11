@@ -46,8 +46,8 @@
         (when (sponsor-info-text sponsor)
           (text (sponsor-info-text sponsor)))))))
 
-(defparameter *contract-tree-root-id* 1364)
-(defparameter *image-tree-root-id* 2881402)
+(defun image-tree-root-id ()
+  (store-object-id (first (class-instances 'image-tree))))
 
 (defclass kml-root-handler (object-handler)
   ())
@@ -59,9 +59,10 @@
       (with-element "name" (text "bos-kml"))
       (when sponsor
         (mapc #'write-contract-placemark-kml (sponsor-contracts sponsor)))
-      (let ((image-tree (find-store-object *image-tree-root-id*)))
-        (assert (and image-tree (typep image-tree 'image-tree)))
-        (kml-network-link (format nil "http://~a/image-tree-kml/~d" (website-host) *image-tree-root-id*)
+      (let ((image-tree (find-store-object (image-tree-root-id))))
+        (assert (and image-tree (typep image-tree 'image-tree)) nil
+		"(find-store-object (image-tree-root-id)) gives ~s" image-tree)
+        (kml-network-link (format nil "http://~a/image-tree-kml/~d" (website-host) (image-tree-root-id))
                           :rect (make-rectangle2 (geo-location image-tree))
                           :lod `(:min ,(lod-min image-tree) :max ,(lod-max image-tree))
                           :name "sat-image"))

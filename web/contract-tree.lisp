@@ -56,12 +56,17 @@
   ((output-images-size :initarg :output-images-size :accessor output-images-size))
   (:metaclass indexed-class))
 
+(defvar *contract-tree-root-id*)
+
 (defmethod initialize-instance :after ((contract-tree-node contract-tree-node) &key)
   (setf (id contract-tree-node)
         (incf (last-id (indexed-class-index-named (find-class 'contract-tree-node) 'ids))))
   (geometry:register-rect-subscriber *rect-publisher* contract-tree-node
                                      (geo-location contract-tree-node)
                                      #'contract-tree-node-changed))
+
+(defmethod initialize-instance :after ((contract-tree contract-tree) &key)
+  (setq *contract-tree-root-id* (id contract-tree)))
 
 (defmethod print-object ((contract-tree-node contract-tree-node) stream)
   (print-unreadable-object (contract-tree-node stream :type t :identity t)
@@ -235,6 +240,9 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
 
 (defmethod lod-max ((obj contract-tree-node))
   (if (children obj) 1024 -1))
+
+(defmethod lod-max ((obj contract-tree))
+  -1)
 
 (defclass contract-tree-kml-handler (contract-tree-handler)
   ()
