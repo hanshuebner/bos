@@ -398,7 +398,7 @@ function n_qm_warten() {
 		+ msg('seit') + ':</td><td class="PoiNavigation">' + n_profil.contracts[0].date
 		+ '</td></tr><tr> <td colspan="2" class="PoiNavigation"><img src="/infosystem/bilder/spacer.gif" width="1" height="10"/></td></tr>'		
 		+ '</td></tr><tr><td colspan="2" class="PoiNavigation"><a href="' + http_pfad +
-		  '/contract-kml/' + n_profil.contracts[0].id + '">Google Earth View</a></td></tr>'
+		  '/kml-root/' + n_profil['id'] + '">Google Earth View</a></td></tr>'
 		+ '</td></tr><tr> <td colspan="2" class="PoiNavigation"><img src="/infosystem/bilder/spacer.gif" width="1" height="20"/></td></tr>'
 		+ '<tr> <td colspan="2" class="PoiNavigation">'
 		+ n_profil['nachricht']
