@@ -1,0 +1,3 @@
+:directory (merge-pathnames #p"datastore/" (user-homedir-pathname))
+:website-url "http://createrainforest.org"
+:enable-mails nil

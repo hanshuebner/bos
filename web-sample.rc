@@ -1,0 +1,5 @@
+;; :listeners 30 ; not meaningful anymore (?)
+:website-directory (merge-pathnames #p"payment-website/" (user-homedir-pathname))
+:website-url "http://createrainforest.org"
+:worldpay-test-mode t
+:google-analytics-account "some-number"
