@@ -31,6 +31,8 @@
 
 ;;; load bos project
 (asdf:oos 'asdf:load-op :bos.web)
+;; load slime
+(asdf:oos 'asdf:load-op :swank)
 
 (defun start ()
   (mapcar #'cl-gd::load-foreign-library ; for now...
@@ -39,8 +41,7 @@
             "/usr/local/lib/libgd.so"
             ))
   (format t "BOS Online-System~%")
-  ;; slime
-  (asdf:oos 'asdf:load-op :swank)
+  ;; slime server start
   (swank-loader::init)                  ; currently necessary
   (swank:create-server :port 4005 :dont-close t)
   ;; start the bos server
