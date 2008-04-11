@@ -4,6 +4,7 @@
 #+cmu(load (compile-file "../../bknr/patches/patch-around-mop-cmucl19a.lisp"))
 
 #+sbcl(require 'asdf)
+#+sbcl(require 'sb-posix)
 
 #+sbcl(assert (eql sb-impl::*default-external-format* :utf-8))
 
@@ -39,7 +40,7 @@
 (defvar *sbcl-home* (sb-int:sbcl-homedir-pathname))
 
 (defun ensure-sbcl-home ()
-  (posix-setenv "SBCL_HOME" (namestring *sbcl-home*)))
+  (sb-posix:putenv (format nil "SBCL_HOME=~a" *sbcl-home*)))
 
 (defun start ()
   (ensure-sbcl-home)
