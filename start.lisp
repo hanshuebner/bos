@@ -9,6 +9,10 @@
 
 (load (compile-file "../../thirdparty/asdf/asdf.lisp"))
 
+;; cl-gd glue
+#+darwin(assert (zerop (asdf:run-shell-command "cd ../../thirdparty/cl-gd-0.5.6; make cl-gd-glue.dylib")))
+#-darwin(assert (zerop (asdf:run-shell-command "cd ../../thirdparty/cl-gd-0.5.6; make")))
+
 ;;; some helpers
 (defun setup-registry ()
   (format t "; setting up ASDF registry, please be patient...")
