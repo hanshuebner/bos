@@ -36,7 +36,13 @@
 ;;; load bos project
 (asdf:oos 'asdf:load-op :bos.web)
 
+(defvar *sbcl-home* (sb-int:sbcl-homedir-pathname))
+
+(defun ensure-sbcl-home ()
+  (posix-setenv "SBCL_HOME" (namestring *sbcl-home*)))
+
 (defun start ()
+  (ensure-sbcl-home)
   (mapcar #'cl-gd::load-foreign-library ; for now...
           '("/usr/lib/libcrypto.so"
             "/usr/lib/libssl.so"
@@ -53,6 +59,7 @@
   (bknr.cron::start-cron))
 
 (defun start-cert-daemon ()
+  (ensure-sbcl-home)
   (format t "; starting certificate generation daemon~%")
   (bos.m2.cert-generator:cert-daemon))
 
