@@ -44,6 +44,8 @@
 
 (defun start ()
   (ensure-sbcl-home)
+  ;; check for changes that are not yet in the core
+  (asdf:oos 'asdf:load-op :bos.web)
   (mapcar #'cl-gd::load-foreign-library ; for now...
           '("/usr/lib/libcrypto.so"
             "/usr/lib/libssl.so"
@@ -61,6 +63,7 @@
 
 (defun start-cert-daemon ()
   (ensure-sbcl-home)
+  (asdf:oos 'asdf:load-op :bos.web)
   (format t "; starting certificate generation daemon~%")
   (bos.m2.cert-generator:cert-daemon))
 
