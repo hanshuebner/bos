@@ -54,5 +54,6 @@
   (bknr.cron::start-cron))
 
 (defun start-cert-daemon ()
-  ;; whatever
-  )
+  (format t "; starting certificate generation daemon~%")
+  (bos.m2.cert-generator:cert-daemon))
+
