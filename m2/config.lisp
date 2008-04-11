@@ -29,7 +29,7 @@
 (defparameter *mail-amount* 30
   "Limit für den Versand der Urkunde per Post")
 
-(defparameter *pdf-base-directory* #p"home:certs/")
+(defparameter *pdf-base-directory* (merge-pathnames #p"certs/" (user-homedir-pathname)))
 (defparameter *cert-mail-directory* (merge-pathnames "mail-spool/" *pdf-base-directory*)
 	      "Verzeichnis für per Post zu versendende Urkunden-FDF-Dateien")
 (defparameter *cert-download-directory* (merge-pathnames "download-spool/" *pdf-base-directory*)
