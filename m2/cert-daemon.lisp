@@ -1,11 +1,11 @@
 (in-package :bos.m2.cert-generator)
 
 (defun run-tool (program &optional program-args &rest args)
-  (let* ((process (apply #'run-program program program-args :output :stream args))
+  (let* ((process (apply #'run-program program program-args :search t :output :stream args))
          (error-message (unless (zerop (process-exit-code process))
                           (with-output-to-string (*standard-output*)
                             (with-open-stream (output-stream (process-output process))
-                              (princ (read-line output-stream)))))))
+                              (princ (read-line output-stream nil)))))))
     (process-close process)
     (unless (zerop (process-exit-code process))
       (error "Error executing ~A - Exit code ~D~%Error message: ~A"
@@ -15,9 +15,9 @@
   (handler-case
       (progn
         (cond
-          ((unix-namestring pdf-pathname)
-           (run-tool "pdftk" (list (unix-namestring pdf-pathname)
-                                   "fill_form" (unix-namestring fdf-pathname)
+          ((namestring pdf-pathname)
+           (run-tool "pdftk" (list (namestring pdf-pathname)
+                                   "fill_form" (namestring fdf-pathname)
                                    "output" (namestring output-pathname)
                                    "flatten"))
            (format t "; generated ~A~%" output-pathname))
@@ -28,7 +28,7 @@
       (warn "While filling form ~A with ~A:~%~A" pdf-pathname fdf-pathname e))))
 
 (defun fill-forms (directory template-pathname)
-  (dolist (fdf-pathname (remove "fdf" (directory directory)
+  (dolist (fdf-pathname (remove "fdf" (cl-fad:list-directory directory)
 				:test (complement #'string-equal)
 				:key #'pathname-type))
     (handler-case
