@@ -13,10 +13,10 @@ msgwait 0
 chdir /home/bknr/bknr-svn/projects/bos
 setenv LANG en_US.UTF-8
 
-screen -t webserver sbcl --load start.lisp --eval '(start)'
+screen -t webserver sbcl --core bos.core --eval '(start)'
 #logfile screen.log
 #log on
-screen -t cert-daemon sbcl --load start.lisp --eval '(start-cert-daemon)'
+screen -t cert-daemon sbcl --core bos.core --eval '(start-cert-daemon)'
 
 msgminwait 1
 msgwait 1
