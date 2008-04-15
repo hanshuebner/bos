@@ -42,8 +42,19 @@
 (defun ensure-sbcl-home ()
   (sb-posix:putenv (format nil "SBCL_HOME=~a" *sbcl-home*)))
 
+(defun env-ascii-check ()
+  #+sbcl(assert (block top
+                  (dolist (string (posix-environ) t)
+                    (loop for ch across string
+                       unless (< 0 (char-code ch) 128)
+                       do (return-from top nil))))
+                nil
+                "We will have a problem if your environment contains anything else than ASCII characters.~
+             ~%So I'd like to enforce this here."))
+
 (defun start ()
   (ensure-sbcl-home)
+  (env-ascii-check)
   ;; check for changes that are not yet in the core
   (asdf:oos 'asdf:load-op :bos.web)
   (mapcar #'cl-gd::load-foreign-library ; for now...
@@ -63,6 +74,7 @@
 
 (defun start-cert-daemon ()
   (ensure-sbcl-home)
+  (env-ascii-check)
   (asdf:oos 'asdf:load-op :bos.web)
   (format t "; starting certificate generation daemon~%")
   (bos.m2.cert-generator:cert-daemon))
