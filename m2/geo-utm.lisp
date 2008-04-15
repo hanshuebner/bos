@@ -16,6 +16,10 @@
 ;; <P>Programmers: The JavaScript source code in this document may be copied
 ;; and reused without restriction.</P>
 
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defparameter *initial-read-default-float-format* *read-default-float-format*)
+  (setq *read-default-float-format* 'double-float))
+
 (defconstant sm-a 6378137.0)
 (defconstant sm-b 6356752.314)
 (defconstant sm-eccsquared 6.69437999013e-03)
@@ -236,4 +240,6 @@
 	(map-xyto-lat-lon x y cmeridian)
       (list (rad-to-deg lon) (rad-to-deg lat)))))
 
+(eval-when (:compile-toplevel :load-toplevel :execute)  
+  (setq *read-default-float-format* *initial-read-default-float-format*))
 
