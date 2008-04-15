@@ -441,7 +441,7 @@
     (macrolet ((getcache ()
                  '(gethash (list poi language) cache)))
       (labels ((run-program* (program args)
-                 #+sbcl(sb-ext:run-program program args :search t :wait t :environment nil)
+                 #+sbcl(sb-ext:run-program program args :search t :wait t)
                  #+ccl(ccl:run-program program args :wait t)
                  #-(or sbcl ccl)(error "run-program not implemented for ~A" (lisp-implementation-type)))
                (xsl-path ()
