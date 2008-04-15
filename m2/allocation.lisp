@@ -183,6 +183,18 @@
         (collect (list left top))
         (collect (list (1- (+ left width)) (1- (+ top height))))))))
 
+(defun allocation-areas-plus-contracts-bounding-box ()
+  "Returns the bounding-box as with ALLOCATION-AREAS-BOUNDING-BOX, but
+possibly augmented by any contracts that dont have an allocation-area
+anymore."  
+  (geometry:with-bounding-box-collect (collect)
+    (geometry:with-rectangle ((allocation-areas-bounding-box))
+      (collect (list left top))
+      (collect (list (1- (+ left width)) (1- (+ top height)))))
+    (geometry:with-rectangle ((contracts-bounding-box))
+      (collect (list left top))
+      (collect (list (1- (+ left width)) (1- (+ top height)))))))
+
 (defun gauge (area)
   "Liefere den Fuellpegel des Vergabegebiets (0 <= gauge <= 1)"
   (with-slots (y top height) area

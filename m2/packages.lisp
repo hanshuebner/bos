@@ -170,6 +170,7 @@
 	   #:allocation-area-bounding-box
 	   #:allocation-area-bounding-box2
            #:allocation-areas-bounding-box
+           #:allocation-areas-plus-contracts-bounding-box
 	   #:allocation-area-active-p
 	   #:allocation-area-top
 	   #:allocation-area-left
