@@ -280,3 +280,16 @@ links are created."))
                             :rect (make-rectangle2 (geo-location child))
                             :lod `(:min ,(lod-min child) :max ,(lod-max child))))))))
 
+(defun make-contract-tree-from-m2 ()  
+  (let ((max-width-height 2000))
+    (geometry:with-rectangle ((allocation-areas-plus-contracts-bounding-box))      
+      (assert (and (<= width max-width-height)
+                   (<= height max-width-height))
+              (max-width-height)
+              "ALLOCATION-AREAS-PLUS-CONTRACTS-BOUNDING-BOX is ~d x ~d,~
+             ~%but the current max-width-height for building a contract-tree is ~d"
+              width height max-width-height)
+      (make-contract-tree (list left top width height)))))
+
+(register-store-transient-init-function 'make-contract-tree-from-m2)
+

@@ -14,6 +14,17 @@
   (setf (slot-value store 'tile-index)
 	(indexed-class-index-named (find-class 'm2) 'm2-index)))
 
+(defvar *store-transient-init-functions* nil)
+
+(defun register-store-transient-init-function (function-name)
+  (check-type function-name symbol)
+  (pushnew function-name *store-transient-init-functions*))
+
+(defmethod bknr.datastore::restore-store :after ((store m2-store) &key until)
+  (declare (ignore store until))
+  (dolist (function-name *store-transient-init-functions*)
+    (funcall function-name)))
+
 (defun get-map-tile (x y)
   (get-tile (m2-store-tile-index *m2-store*) x y))
 
