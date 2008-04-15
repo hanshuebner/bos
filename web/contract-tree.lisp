@@ -45,6 +45,7 @@
    (children :initarg :children :reader children)
    (pixelize :initarg :pixelize :reader pixelize)
    (root :initarg :root :accessor root)
+   (parent :accessor parent)
    (depth :initarg :depth :accessor depth)
    (contracts :initform nil :accessor contracts))
   (:metaclass indexed-class)
@@ -53,7 +54,8 @@
                        :index-reader find-contract-tree-node)))
 
 (defclass contract-tree (contract-tree-node)
-  ((output-images-size :initarg :output-images-size :accessor output-images-size))
+  ((output-images-size :initarg :output-images-size :accessor output-images-size)
+   (parent :initform nil))
   (:metaclass indexed-class))
 
 (defvar *contract-tree-root-id*)
@@ -61,6 +63,8 @@
 (defmethod initialize-instance :after ((contract-tree-node contract-tree-node) &key)
   (setf (id contract-tree-node)
         (incf (last-id (indexed-class-index-named (find-class 'contract-tree-node) 'ids))))
+  (dolist (child (children contract-tree-node))
+    (setf (parent child) contract-tree-node))
   (geometry:register-rect-subscriber *rect-publisher* contract-tree-node
                                      (geo-location contract-tree-node)
                                      #'contract-tree-node-changed))
@@ -73,21 +77,27 @@
     (format stream "ID: ~d" (id contract-tree-node))))
 
 (defmethod contract-tree-node-changed ((contract-tree-node contract-tree-node) contract)
-  (flet ((contract-large-enough (contract-tree-node contract)           
-           (if (children contract-tree-node)
-               (let* ((output-images-size (output-images-size (root contract-tree-node)))
-                      (rect (contract-largest-rectangle contract))
-                      (contract-size (min (third rect) (fourth rect)))
-                      (node-size (third (geo-location contract-tree-node)))
-                      (contract-pixel-size (* output-images-size (/ contract-size node-size))))
-                 (> contract-pixel-size 20))
-               t)))
+  (labels ((contract-large-enough (contract-tree-node contract)           
+             "Is CONTRACT large enough to be displayed at the LOD of CONTRACT-TREE-NODE."
+             (if (children contract-tree-node)
+                 (let* ((output-images-size (output-images-size (root contract-tree-node)))
+                        (rect (contract-largest-rectangle contract))
+                        (contract-size (min (third rect) (fourth rect)))
+                        (node-size (third (geo-location contract-tree-node)))
+                        (contract-pixel-size (* output-images-size (/ contract-size node-size))))
+                   (> contract-pixel-size 20))
+                 t))
+           (contract-first-time-large-enough (contract-tree-node contract)
+             "Is CONTRACT-TREE-NODE the first node, where CONTRACT is large enough (coming from root)."
+             (and (contract-large-enough contract-tree-node contract)
+                  (or (null (parent contract-tree-node))
+                      (not (contract-large-enough (parent contract-tree-node) contract))))))
     ;; we might only change a contracts color and want to rerender it in every node
     (setf (timestamp contract-tree-node) (get-universal-time))
     (when (and (contract-paidp contract)
                (geometry:point-in-rect-p (geometry:rectangle-center (contract-largest-rectangle contract))
-                                         (geo-location contract-tree-node))
-               (contract-large-enough contract-tree-node contract))            
+                                         (geo-location contract-tree-node))               
+               (contract-first-time-large-enough contract-tree-node contract))            
       (pushnew contract (contracts contract-tree-node)))))
 
 (defmethod contract-tree-node-changed ((tree contract-tree) contract)
@@ -210,7 +220,11 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
       (html
        (:p
         ((:a :href (format nil "http://~a/contract-tree/~d" (website-host) (id (root object))))
-         "go to root"))))
+         "go to root"
+         (when (parent object)
+           (html
+            (:p ((:a :href (format nil "http://~a/contract-tree/~d" (website-host) (id (parent object))))
+                 "go to parent"))))))))
     ;; (:p "depth: " (:princ (depth object)) "lod-min:" (:princ (lod-min object)) "lod-max:" (:princ (lod-max object)))
     (:table
      (dolist (row (group-on (children object) :key #'(lambda (obj) (second (geo-location obj))) :include-key nil))
@@ -272,9 +286,12 @@ links are created."))
       (with-element "Document"
         (kml-region rect lod)
         (kml-overlay (format nil "http://~a/contract-tree-image/~d" (website-host) (id obj))
-                     rect (+ 100 (depth obj)))
-        (dolist (c (contracts obj))
-          (write-contract-placemark-kml c))
+                     rect (+ 100 (depth obj)))       
+        (with-element "Folder"
+          ;; infinite max lod for all placemarks at this level
+          (kml-region rect `(:min ,(getf lod :min) :max -1))
+          (dolist (c (contracts obj))
+            (write-contract-placemark-kml c)))
         (dolist (child (children obj))
           (kml-network-link (format nil "http://~a/contract-tree-kml/~d" (website-host) (id child))
                             :rect (make-rectangle2 (geo-location child))
