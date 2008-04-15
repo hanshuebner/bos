@@ -520,6 +520,8 @@
         (with-element "kml"
           (with-element "Document"
             (kml-region (make-rectangle2 (list 0 0 +width+ +width+)) '(:min 600 :max -1))
-            (mapc #'(lambda (poi) (write-poi-kml poi lang)) (remove-if-not #'poi-area (class-instances 'poi)))))))))
+            (mapc #'(lambda (poi) (write-poi-kml poi lang))
+                  (remove-if-not #'(lambda (poi) (and (poi-area poi) (poi-published poi)))
+                                 (class-instances 'poi)))))))))
 
 
