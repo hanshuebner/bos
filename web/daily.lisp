@@ -7,4 +7,6 @@
   (bknr.stats::make-yesterdays-stats :delete-events t)
   (format t "; snapshotting datastore~%")
   (snapshot)
+  (format t "; rebuilding allocation-cache~%")
+  (bos.m2.allocation-cache:rebuild-cache)
   (format t "; done~%"))
