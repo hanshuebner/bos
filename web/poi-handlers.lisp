@@ -459,12 +459,11 @@
                  (let ((output-path (bknr.utils:make-temporary-pathname)))
                    (unwind-protect
                         (progn
-                          (run-program*
-                           "/usr/local/bin/xsltproc"
-			   (list "-o" (namestring output-path)
-				 (xsl-path) (namestring input-path)
-				 ;; "--stringparam" "lang" language                                            
-				 ))
+                          (run-program* "xsltproc"
+                                        (list "-o" (namestring output-path)
+                                              (xsl-path) (namestring input-path)
+                                              ;; "--stringparam" "lang" language                                            
+                                              ))
                           (arnesi:read-string-from-file output-path :external-format :utf-8))
                      (ignore-errors (delete-file input-path))
                      (ignore-errors (delete-file output-path))
