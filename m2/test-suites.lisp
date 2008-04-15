@@ -3,11 +3,11 @@
 (def-suite :bos.test
     :description "The root suite. Contains all tests.")
 
-(def-suite :bos.test.allocation-area
+(def-suite :bos.test.allocation
     :in :bos.test
-    :description "Some basic tests for allocation-area.")
+    :description "Tests for everything about allocation, including the allocation-cache.")
 
-(def-suite :bos.test.allocation-cache
+(def-suite :bos.test.geometry
     :in :bos.test
-    :description "Tests for the newly introduced allocation-cache.")
+    :description "Tests for the small geometry helper package.")
 

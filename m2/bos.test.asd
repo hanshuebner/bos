@@ -6,6 +6,7 @@
   :components ((:file "packages-test")
 	       (:file "test-suites" :depends-on ("packages-test"))
 	       (:file "test-fixtures" :depends-on ("packages-test"))
-	       (:file "allocation-test" :depends-on ("test-suites" "test-fixtures"))	       
+	       (:file "allocation-test" :depends-on ("test-suites" "test-fixtures"))
+	       (:file "geometry-test" :depends-on ("test-suites"))
 	       ;; (:file "utils" :depends-on ("config"))
 	       ))

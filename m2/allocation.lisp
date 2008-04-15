@@ -188,12 +188,14 @@
 possibly augmented by any contracts that dont have an allocation-area
 anymore."  
   (geometry:with-bounding-box-collect (collect)
-    (geometry:with-rectangle ((allocation-areas-bounding-box))
-      (collect (list left top))
-      (collect (list (1- (+ left width)) (1- (+ top height)))))
-    (geometry:with-rectangle ((contracts-bounding-box))
-      (collect (list left top))
-      (collect (list (1- (+ left width)) (1- (+ top height)))))))
+    (awhen (allocation-areas-bounding-box)
+      (geometry:with-rectangle (it)
+        (collect (list left top))
+        (collect (list (1- (+ left width)) (1- (+ top height))))))
+    (awhen (contracts-bounding-box)
+      (geometry:with-rectangle (it)
+        (collect (list left top))
+        (collect (list (1- (+ left width)) (1- (+ top height))))))))
 
 (defun gauge (area)
   "Liefere den Fuellpegel des Vergabegebiets (0 <= gauge <= 1)"

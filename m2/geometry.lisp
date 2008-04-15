@@ -142,7 +142,8 @@ that will be called between the rows."
                 (setf max-x (max point-x (or max-x point-x)))
                 (setf max-y (max point-y (or max-y point-y))))))
        ,@body)
-     (list min-x min-y (1+ (- max-x min-x)) (1+ (- max-y min-y)))))
+     (when min-x
+       (list min-x min-y (1+ (- max-x min-x)) (1+ (- max-y min-y))))))
 
 ;;; directions
 

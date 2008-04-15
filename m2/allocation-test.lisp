@@ -1,5 +1,5 @@
 (in-package :bos.test)
-(in-suite :bos.test.allocation-area)
+(in-suite :bos.test.allocation)
 
 (store-test allocation-area.none-at-startup
   (is (null (class-instances 'bos.m2:allocation-area))))

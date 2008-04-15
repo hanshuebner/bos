@@ -6,7 +6,7 @@
                                :cl-pdf :screamer :cl-fad)
   :components ((:file "packages")
 	       (:file "geo-utm" :depends-on ("packages"))
-	       (:file "geometry" :depends-on ("packages"))
+	       (:file "geometry" :depends-on ("packages"))               
 	       (:file "config" :depends-on ("packages"))
 	       (:file "utils" :depends-on ("config"))
 	       (:file "news" :depends-on ("poi"))
