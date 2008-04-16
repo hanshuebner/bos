@@ -282,13 +282,13 @@ array of dimensions corresponding to WIDTH-HEIGHTS."
 contract-tree-node.  If the node has children, corresponding network
 links are created."))
 
-(defun write-contract-placemark-kml (c)
+(defun write-contract-placemark-kml (c language)
   (let ((name (user-full-name (contract-sponsor c))))
     (with-element "Placemark"
       ;; does not help to solve the duplicate placemark problem
       ;; (attribute "id" (prin1-to-string (store-object-id c)))
       (when name (with-element "name" (text name)))
-      (with-element "description" (cdata (contract-description c :de)))
+      (with-element "description" (cdata (contract-description c language)))
       (with-element "Point"
         (with-element "coordinates"
           (destructuring-bind (x y)
@@ -299,37 +299,38 @@ links are created."))
 (defmethod handle-object ((handler contract-tree-kml-handler) (obj contract-tree-node))
   (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
                                     :root-element "kml")
-    (let ((lod `(:min ,(lod-min obj) :max ,(lod-max obj)))
-          (rect (make-rectangle2 (geo-location obj))))
-      (with-element "Document"
-        (kml-region rect lod)
-        (kml-overlay (format nil "http://~a/contract-tree-image/~d" (website-host) (id obj))
-                     rect (+ 100 (depth obj)) 0)       
-        (cond
-          ;; we deal with small-contracts differently at last layer
-          ((null (children obj))
-           (let* ((predicate #'(lambda (area) (< area 5)))
-                  (big-contracts (remove-if predicate (contracts obj)
-                                            :key #'contract-area))
-                  (small-contracts (remove-if-not predicate (contracts obj)
-                                                  :key #'contract-area)))
-             (with-element "Folder"     
-               (kml-region rect `(:min ,(* 3 (getf lod :min)) :max -1))
-               (dolist (c small-contracts)
-                 (write-contract-placemark-kml c)))
-             (with-element "Folder"     
-               (kml-region rect `(:min ,(getf lod :min) :max -1))
-               (dolist (c big-contracts)
-                 (write-contract-placemark-kml c)))))
-          ;; on all other layers
-          (t (with-element "Folder"
-               (kml-region rect `(:min ,(getf lod :min) :max -1))
-               (dolist (c (contracts obj))
-                 (write-contract-placemark-kml c)))))
-        (dolist (child (children obj))
-          (kml-network-link (format nil "http://~a/contract-tree-kml/~d" (website-host) (id child))
-                            :rect (make-rectangle2 (geo-location child))
-                            :lod `(:min ,(lod-min child) :max ,(lod-max child))))))))
+    (with-query-params (lang)
+      (let ((lod `(:min ,(lod-min obj) :max ,(lod-max obj)))
+            (rect (make-rectangle2 (geo-location obj))))
+        (with-element "Document"
+          (kml-region rect lod)
+          (kml-overlay (format nil "http://~a/contract-tree-image/~d" (website-host) (id obj))
+                       rect (+ 100 (depth obj)) 0)       
+          (cond
+            ;; we deal with small-contracts differently at last layer
+            ((null (children obj))
+             (let* ((predicate #'(lambda (area) (< area 5)))
+                    (big-contracts (remove-if predicate (contracts obj)
+                                              :key #'contract-area))
+                    (small-contracts (remove-if-not predicate (contracts obj)
+                                                    :key #'contract-area)))
+               (with-element "Folder"     
+                 (kml-region rect `(:min ,(* 3 (getf lod :min)) :max -1))
+                 (dolist (c small-contracts)
+                   (write-contract-placemark-kml c lang)))
+               (with-element "Folder"     
+                 (kml-region rect `(:min ,(getf lod :min) :max -1))
+                 (dolist (c big-contracts)
+                   (write-contract-placemark-kml c lang)))))
+            ;; on all other layers
+            (t (with-element "Folder"
+                 (kml-region rect `(:min ,(getf lod :min) :max -1))
+                 (dolist (c (contracts obj))
+                   (write-contract-placemark-kml c lang)))))
+          (dolist (child (children obj))
+            (kml-network-link (format nil "http://~a/contract-tree-kml/~d" (website-host) (id child))
+                              :rect (make-rectangle2 (geo-location child))
+                              :lod `(:min ,(lod-min child) :max ,(lod-max child)))))))))
 
 (defun make-contract-tree-from-m2 ()  
   (let ((max-width-height 2000))

@@ -14,37 +14,49 @@
 (defun kml-format-color (color &optional (opacity 255))
   (format nil "~2,'0X~{~2,'0X~}" opacity (reverse color)))
 
-(defun contract-description (contract language)
-  (declare (ignore language))
+(defun contract-description (contract language)  
   (let* ((sponsor (contract-sponsor contract))
-	 (name (user-full-name sponsor)))
-    (with-xml-output (cxml:make-string-sink)
-      (with-element "div"
-        (with-element "table"
-          (with-element "tr"
-            (with-element "td" (text "Sponsor-ID:"))
-            (with-element "td" (text (princ-to-string (store-object-id sponsor)))))
-          (with-element "tr"
-            (with-element "td" (text "Name:"))
-            (with-element "td" (text (or name "[anonymous]"))))
-          (with-element "tr"
-            (with-element "td" (text "Land:"))
-            (with-element "td"
-              (text (sponsor-country sponsor))
-              (text " ")
-              (with-element "img"
-                (attribute "src" (format nil "http://~A/images/flags/~(~A~).gif"
-                                         (website-host) (sponsor-country sponsor)))
-                (attribute "width" "20")
-                (attribute "height" "12"))))
-          (with-element "tr"
-            (with-element "td" (text "gesponsort:"))
-            (with-element "td" (text (format nil "~D m²" (length (contract-m2s contract))))))
-          (with-element "tr"
-            (with-element "td" (text "seit:"))
-            (with-element "td" (text (format-date-time (contract-date contract) :show-time nil)))))
-        (when (sponsor-info-text sponsor)
-          (text (sponsor-info-text sponsor)))))))
+	 (name (user-full-name sponsor))
+         (language (if (member language '("en" "de") :test #'equal)
+                       language
+                       "en")))
+    (flet ((sponsor-id ()
+             (cdr (assoc language '(("de" . "Sponsor-ID:") ("en" . "Donor ID:")) :test #'equal)))
+           (name ()
+             (cdr (assoc language '(("de" . "Name:") ("en" . "Name:")) :test #'equal)))
+           (country ()
+             (cdr (assoc language '(("de" . "Land:") ("en" . "Country:")) :test #'equal)))
+           (donated ()
+             (cdr (assoc language '(("de" . "gesponsort:") ("en" . "donated:")) :test #'equal)))
+           (since ()
+             (cdr (assoc language '(("de" . "seit:") ("en" . "since:")) :test #'equal))))
+      (with-xml-output (cxml:make-string-sink)
+        (with-element "div"
+          (with-element "table"          
+            (with-element "tr"
+              (with-element "td" (text (sponsor-id)))
+              (with-element "td" (text (princ-to-string (store-object-id sponsor)))))
+            (with-element "tr"
+              (with-element "td" (text (name)))
+              (with-element "td" (text (or name "[anonymous]"))))
+            (with-element "tr"
+              (with-element "td" (text (country)))
+              (with-element "td"
+                (text (sponsor-country sponsor))
+                (text " ")
+                (with-element "img"
+                  (attribute "src" (format nil "http://~A/images/flags/~(~A~).gif"
+                                           (website-host) (sponsor-country sponsor)))
+                  (attribute "width" "20")
+                  (attribute "height" "12"))))
+            (with-element "tr"
+              (with-element "td" (text (donated)))
+              (with-element "td" (text (format nil "~D m²" (length (contract-m2s contract))))))
+            (with-element "tr"
+              (with-element "td" (text (since)))
+              (with-element "td" (text (format-date-time (contract-date contract) :show-time nil)))))
+          (when (sponsor-info-text sponsor)
+            (text (sponsor-info-text sponsor))))))))
 
 (defun image-tree-root-id ()
   (store-object-id (first (class-instances 'image-tree))))

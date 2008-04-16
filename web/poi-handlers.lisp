@@ -462,7 +462,7 @@
                           (run-program* "xsltproc"
                                         (list "-o" (namestring output-path)
                                               (xsl-path) (namestring input-path)
-                                              ;; "--stringparam" "lang" language                                            
+                                              "--stringparam" "lang" language                                            
                                               ))
                           (arnesi:read-string-from-file output-path :external-format :utf-8))
                      (ignore-errors (delete-file input-path))
