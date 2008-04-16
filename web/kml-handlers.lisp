@@ -67,25 +67,27 @@
 (defun write-root-kml (&optional sponsor)
   (with-xml-response (:content-type #+nil "text/xml" "application/vnd.google-earth.kml+xml"
                                     :root-element "kml")
-    (with-element "Document"
-      (with-element "name" (text "bos-kml"))
-      (when sponsor
-        (mapc #'write-contract-placemark-kml (sponsor-contracts sponsor)))
-      (let ((image-tree (find-store-object (image-tree-root-id))))
-        (assert (and image-tree (typep image-tree 'image-tree)) nil
-		"(find-store-object (image-tree-root-id)) gives ~s" image-tree)
-        (kml-network-link (format nil "http://~a/image-tree-kml/~d" (website-host) (image-tree-root-id))
-                          :rect (make-rectangle2 (geo-location image-tree))
-                          :lod `(:min ,(lod-min image-tree) :max ,(lod-max image-tree))
-                          :name "sat-image"))
-      (let ((contract-tree (find-contract-tree-node *contract-tree-root-id*)))
-        (assert (and contract-tree (typep contract-tree 'contract-tree)))
-        (kml-network-link (format nil "http://~a/contract-tree-kml/~d" (website-host) *contract-tree-root-id*)
-                          :rect (make-rectangle2 (geo-location contract-tree))
-                          :lod `(:min ,(lod-min contract-tree) :max ,(lod-max contract-tree))
-                          :name "contracts")
-        (kml-network-link (format nil "http://~a/poi-kml-all" (website-host))
-                          :name "POIs")))))
+    (with-query-params (lang)
+      (with-element "Document"
+        (with-element "name" (text "bos-kml"))
+        (when sponsor
+          (mapc #'(lambda (contract) (write-contract-placemark-kml contract lang))
+                (sponsor-contracts sponsor)))
+        (let ((image-tree (find-store-object (image-tree-root-id))))
+          (assert (and image-tree (typep image-tree 'image-tree)) nil
+                  "(find-store-object (image-tree-root-id)) gives ~s" image-tree)
+          (kml-network-link (format nil "http://~a/image-tree-kml/~d" (website-host) (image-tree-root-id))
+                            :rect (make-rectangle2 (geo-location image-tree))
+                            :lod `(:min ,(lod-min image-tree) :max ,(lod-max image-tree))
+                            :name "sat-image"))
+        (let ((contract-tree (find-contract-tree-node *contract-tree-root-id*)))
+          (assert (and contract-tree (typep contract-tree 'contract-tree)))
+          (kml-network-link (format nil "http://~a/contract-tree-kml/~d" (website-host) *contract-tree-root-id*)
+                            :rect (make-rectangle2 (geo-location contract-tree))
+                            :lod `(:min ,(lod-min contract-tree) :max ,(lod-max contract-tree))
+                            :name "contracts")
+          (kml-network-link (format nil "http://~a/poi-kml-all" (website-host))
+                            :name "POIs"))))))
 
 (defmethod handle-object ((handler kml-root-handler) (object sponsor))
   (write-root-kml object))
