@@ -314,19 +314,22 @@ links are created."))
                                               :key #'contract-area))
                     (small-contracts (remove-if-not predicate (contracts obj)
                                                     :key #'contract-area)))
-               (with-element "Folder"     
-                 (kml-region rect `(:min ,(* 3 (getf lod :min)) :max -1))
-                 (dolist (c small-contracts)
-                   (write-contract-placemark-kml c lang)))
-               (with-element "Folder"     
-                 (kml-region rect `(:min ,(getf lod :min) :max -1))
-                 (dolist (c big-contracts)
-                   (write-contract-placemark-kml c lang)))))
+               (when small-contracts
+                 (with-element "Folder"     
+                   (kml-region rect `(:min ,(* 3 (getf lod :min)) :max -1))
+                   (dolist (c small-contracts)
+                     (write-contract-placemark-kml c lang))))
+               (when big-contracts
+                 (with-element "Folder"     
+                   (kml-region rect `(:min ,(getf lod :min) :max -1))
+                   (dolist (c big-contracts)
+                     (write-contract-placemark-kml c lang))))))
             ;; on all other layers
-            (t (with-element "Folder"
-                 (kml-region rect `(:min ,(getf lod :min) :max -1))
-                 (dolist (c (contracts obj))
-                   (write-contract-placemark-kml c lang)))))
+            (t (when (contracts obj)
+                 (with-element "Folder"
+                   (kml-region rect `(:min ,(getf lod :min) :max -1))
+                   (dolist (c (contracts obj))
+                     (write-contract-placemark-kml c lang))))))
           (dolist (child (children obj))
             (kml-network-link (format nil "http://~a/contract-tree-kml/~d" (website-host) (id child))
                               :rect (make-rectangle2 (geo-location child))
