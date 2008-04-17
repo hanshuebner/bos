@@ -500,7 +500,7 @@
 
 
 (defmethod handle-object ((handler poi-kml-handler) poi)
-  (with-query-params (lang)
+  (with-query-params ((lang "en"))
     (with-xml-response ()
       (sax:processing-instruction cxml::*sink* "xml-stylesheet" "href=\"/static/trivial.xsl\" type=\"text/xsl\"")
       (with-namespace (nil "http://earth.google.com/kml/2.1")
@@ -511,8 +511,7 @@
   ())
 
 (defmethod handle ((handler poi-kml-all-handler))
-  (with-query-params (lang)
-    (assert lang)
+  (with-query-params ((lang "en"))  
     (with-xml-response ()
       ;; (sax:processing-instruction cxml::*sink* "xml-stylesheet" "href=\"/static/tri.xsl\" type=\"text/xsl\"")
       (with-namespace (nil "http://earth.google.com/kml/2.1")

@@ -299,7 +299,7 @@ links are created."))
 (defmethod handle-object ((handler contract-tree-kml-handler) (obj contract-tree-node))
   (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
                                     :root-element "kml")
-    (with-query-params (lang)
+    (with-query-params ((lang "en"))
       (let ((lod `(:min ,(lod-min obj) :max ,(lod-max obj)))
             (rect (make-rectangle2 (geo-location obj))))
         (with-element "Document"
