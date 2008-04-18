@@ -390,6 +390,9 @@
 
 
 (defun write-poi-xml (poi &optional prefix)
+  "Writes the poi xml format, where all languages are present."
+  ;; XXX just keeping this here for reference
+  ;; probably this function can be deleted later
   (macrolet ((with-element (qname &body body)
                `(with-element* (prefix ,qname) ,@body)))
     (labels ((format-hash-table (element-name hash-table)
@@ -435,6 +438,55 @@
             (dolist (url movies)
               (with-element "movie"
                 (with-element "url" (text url))))))))))
+
+(defun write-poi-xml2 (poi language)
+  "Writes the poi xml format for one specific language."
+  (macrolet ((with-media ((type title &optional (subtitle "")) &body body)
+               `(with-element "media"
+                  (attribute "type" ,type)
+                  (attribute "title" ,title)
+                  (attribute "subtitle" ,subtitle)
+                  ,@body)))
+    (labels ((poi-string (slot-name)
+               (slot-string poi slot-name language))
+             (format-image (image)
+               (with-element "image"
+                 (attribute "id" (princ-to-string (store-object-id image)))
+                 (when (typep image 'poi-image)                   
+                   (attribute "title" (slot-string image 'title language))
+                   (attribute "subtitle" (slot-string image 'subtitle language))                   
+                   (with-element "description" (text (slot-string image 'description language))))
+                 (with-element "url" (text (format nil "http://createrainforest.org/image/~D" (store-object-id image))))                 
+                 (with-element "width" (text (princ-to-string (store-image-width image))))
+                 (with-element "height" (text (princ-to-string (store-image-height image)))))))
+      (with-accessors ((id store-object-id)
+                       (name poi-name)
+                       (title poi-title)
+                       (subtitle poi-subtitle)
+                       (description poi-description)
+                       (airals poi-airals)
+                       (images poi-images)
+                       (panoramas poi-panoramas)
+                       (movies poi-movies)) poi
+        (with-element "poi"
+          (attribute "id" (princ-to-string id))
+          (attribute "title" (poi-string 'title))
+          (attribute "subtitle" (poi-string 'subtitle))
+          (with-element "menu"
+            (with-element "entry" (attribute "title" "Impressum") (attribute "href" "/de/impressum"))
+            (with-element "entry" (attribute "title" "Spenden") (attribute "href" "/de/spenden")))
+          (with-element "description" (text (poi-string 'description)))
+          (with-media ("image_gallery" "Bildergalerie")
+            (mapc #'format-image images))
+          (dolist (airal airals)
+            (with-media ("airal" "Luftbild")
+              (format-image airal)))
+          (dolist (panorama panoramas)
+            (with-media ("panorama" "Panorama" (store-image-name panorama))
+              (format-image panorama)))
+          (dolist (url movies)
+            (with-media ("movie" "Video")
+              (with-element "url" (text url)))))))))
 
 (let ((cache (make-hash-table :test #'equal)))
   (defun poi-description-xslt-google-earth (poi language)
@@ -491,8 +543,9 @@
 
 
 (defmethod handle-object ((handler poi-xml-handler) poi)
-  (with-xml-response ()
-    (write-poi-xml poi)))
+  (with-query-params ((lang "en"))
+    (with-xml-response ()
+      (write-poi-xml2 poi lang))))
 
 (defclass poi-kml-handler (object-handler)
   ()
