@@ -87,7 +87,9 @@
                             :lod `(:min ,(lod-min contract-tree) :max ,(lod-max contract-tree))
                             :name "contracts")
           (kml-network-link (format nil "http://~a/poi-kml-all" (website-host))
-                            :name "POIs"))))))
+                            :name "POIs"
+                            :rect (make-rectangle :x 0 :y 0 :width +width+ :height +width+)
+                            :lod '(:min 0 :max -1)))))))
 
 (defmethod handle-object ((handler kml-root-handler) (object sponsor))
   (write-root-kml object))
