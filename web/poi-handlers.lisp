@@ -493,13 +493,13 @@
     (macrolet ((getcache ()
                  '(gethash (list poi language) cache)))
       (labels ((run-program* (program args)
-                 #+sbcl(sb-ext:run-program program args :search t :wait t)
-                 #+ccl(ccl:run-program program args :wait t)
-                 #-(or sbcl ccl)(error "run-program not implemented for ~A" (lisp-implementation-type)))
+                 #+sbcl (sb-ext:run-program program args :search t :wait t)
+                 #+openmcl (ccl:run-program program (mapcar (lambda (string) (coerce string 'simple-string)) args) :wait t)
+                 #-(or sbcl openmcl) (error "run-program not implemented for ~A" (lisp-implementation-type)))
                (xsl-path ()
                  (namestring (merge-pathnames #p"static/poi-description-ge.xsl" *website-directory*)))
                (xml-to-tmp-file ()
-                 (let ((path (bknr.utils:make-temporary-pathname)))
+                 (let ((path (bknr.utils:make-temporary-pathname :defaults #P"/tmp/")))
                    (with-open-file (out path :direction :output :external-format :utf-8)
                      (with-xml-output (make-character-stream-sink out)
                        (with-namespace ("bos" "http://headcraft.de/bos")
@@ -508,18 +508,16 @@
                (call-xsltproc (input-path)
                  "Will return the transformation as a string. 
                   It also deletes the file at INPUT-PATH."
-                 (let ((output-path (bknr.utils:make-temporary-pathname)))
+                 (let ((output-path (bknr.utils:make-temporary-pathname :defaults #P"/tmp/")))
                    (unwind-protect
                         (progn
                           (run-program* "xsltproc"
                                         (list "-o" (namestring output-path)
-                                              (xsl-path) (namestring input-path)
-                                              "--stringparam" "lang" language                                            
-                                              ))
+                                              "--stringparam" "lang" language
+                                              (xsl-path) (namestring input-path)))
                           (arnesi:read-string-from-file output-path :external-format :utf-8))
                      (ignore-errors (delete-file input-path))
-                     (ignore-errors (delete-file output-path))
-                     )))
+                     (ignore-errors (delete-file output-path)))))
                (compute ()                 
                  (call-xsltproc (xml-to-tmp-file)))
                (compute-if-needed ()
