@@ -4,12 +4,12 @@
   (mapc #'(lambda (point) (kml-format-point point stream)) points))
 
 (defmethod kml-format-point ((point list) stream)
-  (format stream "~F,~F,0 " (first point) (second point)))
+  (format stream "~,20F,~,20F,0 " (first point) (second point)))
 
 (defmethod kml-format-point ((point point) stream)
   (multiple-value-bind (lon lat)
       (point-lon-lat point)
-    (format stream "~F,~F,0 " lon lat)))
+    (format stream "~,20F,~,20F,0 " lon lat)))
 
 (defun kml-format-color (color &optional (opacity 255))
   (format nil "~2,'0X~{~2,'0X~}" opacity (reverse color)))
@@ -65,7 +65,7 @@
   ())
 
 (defun write-root-kml (&optional sponsor)
-  (with-xml-response (:content-type #+nil "text/xml" "application/vnd.google-earth.kml+xml"
+  (with-xml-response (:content-type #+nil "text/xml" "application/vnd.google-earth.kml+xml; charset=utf-8"
                                     :root-element "kml")
     (with-query-params ((lang "en"))
       (with-element "Document"

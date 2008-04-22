@@ -1,11 +1,12 @@
 (in-package :bos.web)
 
 (defparameter *default-wd*
-  (let ((me #.*COMPILE-FILE-PATHNAME*))
+  (let ((me #.*compile-file-pathname*))
     (make-pathname
      :directory (append (butlast (pathname-directory me)) '("payment-website"))
      :device (pathname-device me)
-     :host (pathname-host me))))
+     :host (pathname-host me)
+     :version nil)))
 
 (defvar *webserver* nil)
 
@@ -19,10 +20,11 @@
 (defun init (&key (port 8080)
 	     (listeners 1)
 	     (vhosts '("localhost")) 
-	     website-directory
+	     (website-directory *default-wd*)
 	     website-url
 	     worldpay-test-mode
-	     (google-analytics-account "UA-3432041-1"))
+	     (google-analytics-account "UA-3432041-1")
+             debug)
   (setf *port* port)
   (setf *listeners* listeners)
   (setf *vhosts* vhosts)
@@ -30,9 +32,7 @@
   (setf *website-directory* website-directory)
   (setf *worldpay-test-mode* worldpay-test-mode)
   (setf *google-analytics-account* google-analytics-account)
-  (unless *website-directory*
-    (error ":website-directory not specified"))
-  (reinit))
+  (reinit :debug debug))
 
 (defun reinit (&key debug)
   (format t "~&; Publishing BOS handlers.~%")

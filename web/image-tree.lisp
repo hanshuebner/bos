@@ -125,11 +125,9 @@
        (point-equal (bottom-right a) (bottom-right b))))
 
 (defmethod bounding-box-lon-lat ((rect rectangle))
-  (multiple-value-bind
-        (west north)
+  (multiple-value-bind (west north)
       (point-lon-lat (top-left rect))
-    (multiple-value-bind
-          (east south)
+    (multiple-value-bind (east south)
         (point-lon-lat (bottom-right rect))
       (values-nsew))))
 
@@ -243,13 +241,13 @@
 
 
 (defun float-text (float)
-  (text (format nil "~F" float)))
+  (text (format nil "~,20F" float)))
 
 (defun integer-text (int)
   (text (format nil "~D" int)))
 
 (defun kml-format-points (points &optional (altitude 0))
-  (format nil "~:{~F,~F,~F ~}"
+  (format nil "~:{~,20F,~,20F,~,20F ~}"
           (mapcar #'(lambda (p) (append (multiple-value-list (point-lon-lat p))
                                         (list altitude)))
                   points)))
@@ -612,7 +610,7 @@ image-tree-node.  If the node has children, corresponding network
 links are created."))
 
 (defmethod handle-object ((handler image-tree-kml-handler) (obj image-tree-node))
-  (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
+  (with-xml-response (:content-type "text/xml; charset=utf-8" #+nil"application/vnd.google-earth.kml+xml"
                                     :root-element "kml")
     (let ((lod `(:min ,(lod-min obj) :max ,(lod-max obj)))
           (rect (make-rectangle2 (list (geo-x obj) (geo-y obj) (geo-width obj) (geo-height obj)))))

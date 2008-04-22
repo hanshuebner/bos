@@ -533,7 +533,7 @@
       (cdata (poi-description-xslt-google-earth poi language)))
     (with-element "Point"
       (with-element "coordinates"
-        (text (format nil "~{~F,~}0" (poi-center-lon-lat poi)))))))
+        (text (format nil "~{~,20F,~}0" (poi-center-lon-lat poi)))))))
 
 (defclass poi-xml-handler (object-handler)
   ()
