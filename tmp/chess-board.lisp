@@ -1,6 +1,6 @@
 (in-package :bos.web)
 
-;; this can be loaded on top of box
+;; this can be loaded on top of bos
 
 ;; ./chess-board.kml can be used to bootstrap in GE
 
