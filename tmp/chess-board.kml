@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2">
+  <Folder>
+    <name>Network Links</name>
+    <visibility>0</visibility>
+    <open>0</open>
+    <description>Network link example 2</description>
+    <NetworkLink>
+      <name>View Centered Placemark</name>
+      <visibility>0</visibility>
+      <open>0</open>
+      <refreshVisibility>0</refreshVisibility>
+      <flyToView>0</flyToView>
+      <Link>
+        <href>http://localhost:8080/chess-board</href>
+        <refreshInterval>2</refreshInterval>
+        <viewRefreshMode>onStop</viewRefreshMode>
+        <viewRefreshTime>1</viewRefreshTime>
+      </Link>
+    </NetworkLink>
+  </Folder>
+</kml>
