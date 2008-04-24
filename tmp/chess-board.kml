@@ -16,6 +16,7 @@
         <refreshInterval>2</refreshInterval>
         <viewRefreshMode>onStop</viewRefreshMode>
         <viewRefreshTime>1</viewRefreshTime>
+        <viewFormat>BBOX=[bboxWest],[bboxSouth],[bboxEast],[bboxNorth]&amp;CAMERA=[lookatLon],[lookatLat],[lookatRange],[lookatTilt],[lookatHeading]&amp;VIEW=[horizFov],[vertFov],[horizPixels],[vertPixels],[terrainEnabled]</viewFormat>
       </Link>
     </NetworkLink>
   </Folder>

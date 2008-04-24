@@ -59,8 +59,11 @@
       (make-box :west west :south south :east east :north north))))
 
 (hunchentoot:define-easy-handler (chess-board :uri "/chess-board")
-    ((bbox :real-name "BBOX")) ; will be a string like "-180,-90,180,24.16355923692617"
+    ((bbox :real-name "BBOX") ; will be a string like "-180,-90,180,24.16355923692617"
+     (camera :real-name "CAMERA")) 
   (print bbox)
+  (print camera)
+  (force-output)
   (with-xml-response (:root-element "kml")
     (with-element "Document"
       (with-element "Style"
@@ -76,7 +79,7 @@
       (handler-case
           (let* ((view-box (box-from-bbox-string bbox))
                  (tiles (remove-if-not #'(lambda (tile) (box-intersect-p view-box tile)) *tiles* :key #'first)))
-            #+(and sbcl darwin) (sb-ext:run-program "/usr/bin/say" (list (format nil "~a tiles" (length tiles))) :wait nil)
+            ;; #+(and sbcl darwin) (sb-ext:run-program "/usr/bin/say" (list (format nil "~a tiles" (length tiles))) :wait nil)
             (dolist (tile tiles)
               (with-element "Placemark"
                 (with-element "styleUrl"
