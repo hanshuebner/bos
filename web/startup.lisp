@@ -12,7 +12,6 @@
 
 (defvar *port*)
 (defvar *listeners*)
-(defvar *vhosts*)
 (defvar *website-directory*)
 (defvar *website-url*)
 (defvar *worldpay-test-mode*)
@@ -33,8 +32,7 @@
 (defun reinit (&key debug)
   (format t "~&; Publishing BOS handlers.~%")
   (unpublish)
-  (bos.web::publish-website :website-directory *website-directory*
-			    :vhosts *vhosts*
+  (bos.web::publish-website :website-directory *website-directory*			    
 			    :website-url *website-url*
 			    :worldpay-test-mode *worldpay-test-mode*)
   (format t "~&; Starting hunchentoot~@[ in debug mode~].~%" debug)
@@ -43,4 +41,4 @@
   (when *webserver*
     (hunchentoot:stop-server *webserver*))
   (setf hunchentoot:*hunchentoot-default-external-format* (flex:make-external-format :utf-8 :eol-style :lf))
-  (setq *webserver* (hunchentoot:start-server :port *port* :threaded (not debug))))
+  (setq *webserver* (hunchentoot:start-server :port *port* #+not-yet :threaded #+not-yet (not debug))))
