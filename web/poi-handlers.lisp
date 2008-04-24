@@ -390,9 +390,8 @@
 
 
 (defun write-poi-xml (poi &optional prefix)
-  "Writes the poi xml format, where all languages are present."
-  ;; XXX just keeping this here for reference
-  ;; probably this function can be deleted later
+  "Writes the poi xml format, including all languages."
+  ;; this will eventually be replaced by write-poi-xml2
   (macrolet ((with-element (qname &body body)
                `(with-element* (prefix ,qname) ,@body)))
     (labels ((format-hash-table (element-name hash-table)
@@ -440,7 +439,8 @@
                 (with-element "url" (text url))))))))))
 
 (defun write-poi-xml2 (poi language)
-  "Writes the poi xml format for one specific language."
+  "Writes the poi xml format for one specific language.  This is used
+   to generate the POI microsite using XSLT."
   (macrolet ((with-media ((type title &optional (subtitle "")) &body body)
                `(with-element "media"
                   (attribute "type" ,type)
@@ -456,7 +456,8 @@
                    (attribute "title" (slot-string image 'title language))
                    (attribute "subtitle" (slot-string image 'subtitle language))                   
                    (with-element "description" (text (slot-string image 'description language))))
-                 (with-element "url" (text (format nil "http://createrainforest.org/image/~D" (store-object-id image))))                 
+                 (with-element "url" (text (format nil "http://createrainforest.org/image/~D"
+                                                   (store-object-id image))))                 
                  (with-element "width" (text (princ-to-string (store-image-width image))))
                  (with-element "height" (text (princ-to-string (store-image-height image)))))))
       (with-accessors ((id store-object-id)
@@ -542,7 +543,7 @@
 
 (defmethod handle-object ((handler poi-xml-handler) poi)
   (with-query-params ((lang "en"))
-    (with-xml-response ()
+    (with-xml-response (:xsl-stylesheet-name "/static/poi.xsl")
       (write-poi-xml2 poi lang))))
 
 (defclass poi-kml-handler (object-handler)

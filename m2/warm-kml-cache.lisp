@@ -12,15 +12,16 @@
          (multiple-value-bind (content status-code headers)
              (drakma:http-request (format nil "~A?lang=de" url))
            (declare (ignore status-code))
-           (when (find (cdr (assoc :content-type headers))
+           (when (find (first (cl-ppcre:split "; *" (cdr (assoc :content-type headers))))
                        (list "text/xml" "application/vnd.google-earth.kml+xml")
                        :test #'string-equal)
              (find-links-in-xml (cxml:parse content (cxml-xmls:make-xmls-builder)))))))
-    (analyze-href (make-instance 'puri:uri
-                                 :scheme :http
-                                 :host host
-                                 :path "/kml-root"))))
-
+    (let ((drakma:*text-content-types* '(("text" . "nil")
+                                         ("application" . "vnd.google-earth.kml+xml"))))
+      (analyze-href (make-instance 'puri:uri
+                                   :scheme :http
+                                   :host host
+                                   :path "/kml-root")))))
 
 
 (defvar *parent-region*)
