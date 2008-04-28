@@ -5,3 +5,6 @@
 (test with-bounding-box-collect
   (is (null (geometry:with-bounding-box-collect (collect)))))
 
+(test will-fail
+      (is (= 1 2)))
+
