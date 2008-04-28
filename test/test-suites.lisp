@@ -11,3 +11,7 @@
     :in :bos.test
     :description "Tests for the small geometry helper package.")
 
+(def-suite :bos.test.web
+    :in :bos.test
+    :description "Tests for bos/web.")
+
