@@ -15,3 +15,7 @@
     :in :bos.test
     :description "Tests for bos/web.")
 
+(def-suite :bos.test.geo-utm
+    :in :bos.test
+    :description "Tests utm conversion.")
+
