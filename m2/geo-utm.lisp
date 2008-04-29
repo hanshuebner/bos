@@ -1,12 +1,7 @@
 (in-package :geo-utm)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; NOTE this file is mainly auto generated.
-;; You should not edit it manually or you
-;; might loose your changes
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Converted from Javascript
+;; Converted from Javascript originally almost automatically
+;; has now been tuned manually
 
 ;; Origin: http:;;home.hiwaay.net/~taylorc/toolbox/geography/geoutm.html
 ;; Copyright 1997-1998 by Charles L. Taylor
