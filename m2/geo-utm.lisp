@@ -20,6 +20,12 @@
     (#.(- (expt 2d0 64)))
     (#.(expt 2d0 64))))
 
+(deftype float-pair ()
+  '(simple-array double-float (2)))
+
+(defun make-float-pair ()
+  (make-array 2 :element-type 'double-float :initial-element 0d0))
+
 (defconstant sm-a 6378137.0)
 (defconstant sm-b 6356752.314)
 (defconstant sm-eccsquared 6.69437999013e-03)
@@ -28,6 +34,10 @@
 
 (define-modify-macro multiplyf (x) *)
 (define-modify-macro dividef (x) /)
+
+(declaim (ftype (function (double-float double-float float-pair)
+                          (values float-pair t t))
+                lon-lat-to-utm-x-y*))
 
 (locally
     (declare (optimize (speed 3) (safety 1) (debug 1)))
@@ -230,32 +240,46 @@
                      (* (* x5frac x5poly) x5))
                     (* (* x7frac x7poly) x7)))))))
 
-      (defun lon-lat-to-utm-x-y (lon lat)
-        "Returns four values X, Y, ZONE and SOUTHHEMI-P."
-        (let* ((lat (float lat 0d0))
-               (lon (float lon 0d0)))        
-          (declare ((double-float -180d0 180d0) lon)
-                   ((double-float -90d0 90d0) lat))
-          (let ((zone (+ (floor (+ lon 180.0) 6.0) 1)))            
-            (multiple-value-bind (x y)
-                (map-lat-lon-to-xy (deg-to-rad lat) (deg-to-rad lon) (utmcentral-meridian zone))
-              (setq x (+ (* x utmscale-factor) 500000.0))
-              (setq y (* y utmscale-factor))
-              (if (< y 0.0) (block nil (setq y (+ y 1.e7))) nil)
-              (list x y zone (minusp lat))))))
-
-      (defun utm-x-y-to-lon-lat (x y zone southhemi-p)
+      (defun lon-lat-to-utm-x-y* (lon lat float-pair)
+        "Returns list of four values X, Y, ZONE and SOUTHHEMI-P."
+        (declare ((double-float -180d0 180d0) lon)
+                 ((double-float -90d0 90d0) lat)
+                 (float-pair float-pair))
+        (let ((zone (+ (floor (+ lon 180.0) 6.0) 1)))            
+          (multiple-value-bind (x y)
+              (map-lat-lon-to-xy (deg-to-rad lat) (deg-to-rad lon) (utmcentral-meridian zone))
+            (setq x (+ (* x utmscale-factor) 500000.0))
+            (setq y (* y utmscale-factor))
+            (when (< y 0.0) (setq y (+ y 1.e7)))
+            (setf (aref float-pair 0) x
+                  (aref float-pair 1) y)
+            (values float-pair zone (minusp lat)))))
+            
+      (defun utm-x-y-to-lon-lat* (x y zone southhemi-p float-pair)
         "Returns list (LON LAT)."
-        (let ((x (float x 0d0))
-              (y (float y 0d0))
-              (cmeridian (utmcentral-meridian zone)))          
+        (declare (double-float x y) (float-pair float-pair))
+        (let ((cmeridian (utmcentral-meridian zone)))                    
           (decf x 500000.0)
           (dividef x utmscale-factor)
           (if southhemi-p (decf y 1.e7) nil)
           (dividef y utmscale-factor)
           (multiple-value-bind (lat lon)
-              (map-xyto-lat-lon x y cmeridian)
-            (list (rad-to-deg lon) (rad-to-deg lat))))))))
+              (map-xyto-lat-lon x y cmeridian)         
+            (setf (aref float-pair 0) (rad-to-deg lon)
+                  (aref float-pair 1) (rad-to-deg lat))
+            float-pair))))))
+
+(defun lon-lat-to-utm-x-y (lon lat)    
+  (multiple-value-bind (float-pair zone southhemi-p)
+      (lon-lat-to-utm-x-y* (float lon 0d0) (float lat 0d0) (make-float-pair))
+    (list (aref float-pair 0) (aref float-pair 1)
+          zone southhemi-p)))
+
+(defun utm-x-y-to-lon-lat (x y zone southhemi-p)
+  "Returns list (LON LAT)."    
+  (let ((lon-lat (utm-x-y-to-lon-lat* (float x 0d0) (float y 0d0)
+                                      zone southhemi-p (make-float-pair))))
+    (list (aref lon-lat 0) (aref lon-lat 1))))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)  
   (setq *read-default-float-format* *initial-read-default-float-format*))

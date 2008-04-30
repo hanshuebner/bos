@@ -24,7 +24,10 @@
 (defpackage :geo-utm
   (:use :cl)
   (:export #:lon-lat-to-utm-x-y
-	   #:utm-x-y-to-lon-lat))
+	   #:utm-x-y-to-lon-lat
+           #:make-float-pair
+           #:lon-lat-to-utm-x-y*
+	   #:utm-x-y-to-lon-lat*))
 
 (defpackage :bos.m2.config
   (:export #:+width+
