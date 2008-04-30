@@ -302,7 +302,7 @@
 	(error "invalid contract id (wrong type) ~A" id)))))
 
 (defun publish-contract-change (contract)  
-  "Note: This routine is to reinitialize the transient contract tree
+  "Note: This routine is (ab)used to reinitialize the transient contract tree
 and thus may be called more than once."
   (publish-rect-change *rect-publisher* (contract-bounding-box contract) contract))
 
