@@ -61,10 +61,10 @@
     (setf free-m2s (- total-m2s (calculate-allocated-m2-count allocation-area))))
   ;; FIXME probably we dont need this and should rely on *rect-publisher*
   (dolist (tile (allocation-area-tiles allocation-area))
-    (image-tile-changed tile nil)))
+    (image-tile-changed tile)))
 
 (defmethod notify-tiles ((allocation-area allocation-area))
-  (mapc #'(lambda (tile) (image-tile-changed tile nil)) (allocation-area-tiles allocation-area)))
+  (mapc #'(lambda (tile) (image-tile-changed tile)) (allocation-area-tiles allocation-area)))
 
 (defmethod destroy-object :before ((allocation-area allocation-area))
   (dolist (stripe (allocation-area-stripes allocation-area))

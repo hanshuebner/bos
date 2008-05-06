@@ -279,17 +279,17 @@
 
 (defmethod initialize-persistent-instance :after ((contract contract))
   (pushnew contract (sponsor-contracts (contract-sponsor contract)))
-  (publish-contract-change contract)
   (dolist (m2 (contract-m2s contract))
     (setf (m2-contract m2) contract))
   (setf (contract-largest-rectangle contract)
-        (contract-compute-largest-rectangle contract)))
+        (contract-compute-largest-rectangle contract))
+  (publish-contract-change contract))
 
 (defmethod destroy-object :before ((contract contract))
   (let ((sponsor (contract-sponsor contract)))
     (when sponsor
       (setf (sponsor-contracts sponsor) (remove contract (sponsor-contracts sponsor)))))
-  (publish-contract-change contract)
+  (publish-contract-change contract :type 'delete)
   (dolist (m2 (contract-m2s contract))
     (setf (m2-contract m2) nil))
   (return-contract-m2s (contract-m2s contract)))
@@ -301,10 +301,8 @@
       (unless (subtypep (type-of contract) 'contract)
 	(error "invalid contract id (wrong type) ~A" id)))))
 
-(defun publish-contract-change (contract)  
-  "Note: This routine is (ab)used to reinitialize the transient contract tree
-and thus may be called more than once."
-  (publish-rect-change *rect-publisher* (contract-bounding-box contract) contract))
+(defun publish-contract-change (contract &key type)    
+  (publish-rect-change *rect-publisher* (contract-bounding-box contract) contract :type type))
 
 (defmethod contract-is-expired ((contract contract))
   (and (contract-expires contract)
@@ -562,6 +560,12 @@ neighbours."
         (warn "~s has no m2s" contract)
         (setq consistent nil))
       consistent)))
+
+(defun contract-published-p (contract)
+  "Determines whether CONTRACT should be visible in the sat-app or in GE."
+  ;; this is a new function - there might still be places that
+  ;; use only CONTRACT-PAIDP, but mean CONTRACT-PUBLISHED-P
+  (contract-paidp contract))
 
 (defvar *last-contracts-cache* nil)
 (defconstant +last-contracts-cache-size+ 20)

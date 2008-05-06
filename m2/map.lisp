@@ -144,9 +144,9 @@ to determine the intensity of the returned RGB value."
 (defgeneric generate-current-image (tile)
   (:documentation "Generate the transient image"))
 
-(defmethod image-tile-changed ((image-tile image-tile) contract &optional (time (get-universal-time)))
-  (declare (ignore contract))
-  (setf (slot-value image-tile 'changed-time) time))
+(defmethod image-tile-changed ((image-tile image-tile) &rest args)
+  (declare (ignore args))
+  (setf (slot-value image-tile 'changed-time) (get-universal-time)))
 
 (defun image-from-tiles (image-pathname tiles &key if-exists)
   "Draw an image consisting of the given tiles on a new canvas which encloses all the tiles"

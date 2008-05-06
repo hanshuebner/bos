@@ -13,4 +13,5 @@
                (:module :web
                         :depends-on ("test-suites")
                         :components
-                        ((:file "startup")))))
+                        ((:file "startup")
+                         (:file "contract-tree")))))

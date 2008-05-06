@@ -342,8 +342,16 @@ leading zeros, keep trailing zeros)"
   "Register SUBSCRIBER with associated RECTANGLE and CALLBACK-FN with
 PUBLISHER, so that on changes in RECTANGLE, CALLBACK-FN will be called
 with SUBSCRIBER and the published INFO as additional args."
+  (remove-rect-subscriber publisher subscriber)
   (push (make-rect-subscriber :object subscriber :rectangle (copy-list rectangle) :callback-fn callback-fn)
-        (rect-publisher-subscribers publisher)))
+        (rect-publisher-subscribers publisher))
+  subscriber)
+
+(defun remove-rect-subscriber (publisher subscriber)
+  "Unsubscribes SUBSCRIBER from PUBLISHER."
+  (setf (rect-publisher-subscribers publisher)
+        (delete subscriber (rect-publisher-subscribers publisher)
+                :key #'rect-subscriber-object)))
 
 (defun publish-rect-change (publisher rectangle &rest info)
   "Tells PUBLISHER about changes in RECTANGLE. All subscribers whose

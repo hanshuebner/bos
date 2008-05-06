@@ -19,6 +19,7 @@
            ;;
            #:make-rect-publisher
            #:register-rect-subscriber
+           #:remove-rect-subscriber
            #:publish-rect-change))
 
 (defpackage :geo-utm
@@ -165,6 +166,7 @@
 	   #:last-paid-contracts
            #:recolorize-contracts
            #:contracts-well-colored-p
+           #:contract-published-p
 	   #:paidp
 
 	   #:allocation-area

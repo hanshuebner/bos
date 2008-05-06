@@ -15,6 +15,10 @@
     :in :bos.test
     :description "Tests for bos/web.")
 
+(def-suite :bos.test.web.contract-tree
+    :in :bos.test.web
+    :description "Tests for the contract-tree.")
+
 (def-suite :bos.test.geo-utm
     :in :bos.test
     :description "Tests utm conversion.")
