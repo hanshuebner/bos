@@ -32,7 +32,7 @@
 (defun reinit (&key debug)
   (format t "~&; Publishing BOS handlers.~%")
   (unpublish)
-  (bos.web::publish-website :website-directory *website-directory*			    
+  (bos.web::publish-website :website-directory *website-directory*
 			    :website-url *website-url*
 			    :worldpay-test-mode *worldpay-test-mode*)
   (format t "~&; Starting hunchentoot~@[ in debug mode~].~%" debug)

@@ -266,10 +266,10 @@ language preference weights."
 		 :vhosts vhosts)
 
   (publish-directory :prefix "/static/"
-                     :destination (namestring (merge-pathnames "static/" website-directory)))
+                     :destination (merge-pathnames "static/" website-directory))
   (publish-directory :prefix "/images/"
-                     :destination (namestring (merge-pathnames "images/" website-directory)))
+                     :destination (merge-pathnames "images/" website-directory))
   (publish-directory :prefix "/infosystem/"
-		     :destination (namestring (merge-pathnames "infosystem/" website-directory)))
+		     :destination (merge-pathnames "infosystem/" website-directory))
   (publish-directory :prefix "/certificates/"
-		     :destination (namestring *cert-download-directory*)))
+		     :destination *cert-download-directory*))
