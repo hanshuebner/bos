@@ -66,7 +66,7 @@
     (with-element "name" (text (format nil "link to path ~a" path)))
     (box-kml-region (path-to-box path))
     (with-element "Link"
-      (with-element "href" (text (format nil "http://192.168.5.2:8080/ge-test?path=~{~d~}" path)))
+      (with-element "href" (text (format nil "http://plfreebsd:8080/ge-test?path=~{~d~}" path)))
       (with-element "viewRefreshMode" (text "onRegion")))))
 
 (defun parse-path (path)
@@ -128,7 +128,7 @@
           (with-element "name" (text (format nil "GroundOverlay for ~a" path)))
           (with-element "drawOrder" (text (princ-to-string (length path))))
           (with-element "Icon"
-            (with-element "href" (text (format nil "http://192.168.5.2:8080/test-image?text=~{~d~}&path=~{~d~}" path path))))
+            (with-element "href" (text (format nil "http://plfreebsd:8080/test-image?text=~{~d~}&path=~{~d~}" path path))))
           (box-kml-lat-lon (path-to-box path)))
         (dolist (child-path (child-paths path))
           (path-network-link child-path))))))
