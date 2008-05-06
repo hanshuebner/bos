@@ -203,7 +203,7 @@ returns indices of those children that would intersect with GEO-BOX."
 
 ;;; XXX soll spaeter von was anderem abhaengen
 (defmethod leaf-node-p ((node contract-tree-node))
-  (= 6 (depth node)))
+  (= 9 (depth node)))
 
 (defun contract-geo-box (contract)
   (destructuring-bind (x y width height)
