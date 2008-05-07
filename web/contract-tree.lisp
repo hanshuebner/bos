@@ -276,16 +276,22 @@ with its center placemark."
            (remove-contract contract-tree contract)))))
 
 ;;; kml handler
-(defmethod lod-min ((obj contract-tree-node))
-  (if (zerop (depth obj))
+(defmethod network-link-lod-min ((node contract-tree-node))
+  (if (zerop (depth node))
       16
       256))
 
-(defmethod lod-max ((obj contract-tree-node))
-  (if (zerop (depth obj))
+(defmethod network-link-lod-max ((node contract-tree-node))
+  -1)
+
+(defmethod ground-overlay-lod-min ((node contract-tree-node))  
+  (network-link-lod-min node))
+
+(defmethod ground-overlay-lod-max ((node contract-tree-node))
+  (if (zerop (depth node))
       -1
-      (if (node-has-children-p obj)
-          1024
+      (if (node-has-children-p node)
+          (* 1024 4)
           -1)))
 
 (defclass contract-tree-kml-handler (page-handler)
@@ -316,13 +322,15 @@ links are created."))
     (with-query-params ((lang "en") (path))
       (let* ((path (parse-path path))
              (obj (find-node-with-path *contract-tree* path))
-             (lod `(:min ,(lod-min obj) :max ,(lod-max obj)))
+             (lod `(:min ,(network-link-lod-min obj) :max ,(network-link-lod-max obj)))
              (box (geo-box obj))
              (rect (geo-box-rectangle box)))       
         (with-element "Document"
           (kml-region rect lod)
           (kml-overlay (format nil "http://~a/contract-tree-image?path=~{~d~}" (website-host) path)
-                       rect (+ 100 (depth obj)) 0)
+                       rect (+ 100 (depth obj)) 0
+                       ;; GroundOverlay specific LOD
+                       `(:min ,(ground-overlay-lod-min obj) :max ,(ground-overlay-lod-max obj)))
           
           ;; (cond
           ;;             ;; we deal with small-contracts differently at last layer
@@ -353,7 +361,7 @@ links are created."))
               (when child
                 (kml-network-link (format nil "http://~a/contract-tree-kml?path=~{~d~}~d" (website-host) path i)
                                   :rect (geo-box-rectangle (geo-box child))
-                                  :lod `(:min ,(lod-min child) :max ,(lod-max child))))))
+                                  :lod `(:min ,(network-link-lod-min child) :max ,(network-link-lod-max child))))))
           )))))
 
 

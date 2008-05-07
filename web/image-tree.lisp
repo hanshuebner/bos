@@ -283,9 +283,10 @@
 (defun kml-lat-lon-alt-box (rect)
   (kml-lat-lon-box rect "LatLonAltBox"))
 
-(defun kml-overlay (img-path rect &optional (drawOrder 0) absolute)
+(defun kml-overlay (img-path rect &optional (drawOrder 0) absolute lod)
   (with-element "GroundOverlay"
     (with-element "name" (text (file-namestring img-path)))
+    (when lod (kml-region rect lod))
     (with-element "drawOrder" (integer-text drawOrder))
     (with-element "Icon"
       (with-element "href" (text img-path))
