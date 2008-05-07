@@ -333,32 +333,31 @@ links are created."))
           (kml-overlay (format nil "http://~a/contract-tree-image?path=~{~d~}" (website-host) path)
                        rect (+ 100 (depth obj)) 0
                        ;; GroundOverlay specific LOD
-                       `(:min ,(ground-overlay-lod-min obj) :max ,(ground-overlay-lod-max obj)))
-          
-          ;; (cond
-          ;;             ;; we deal with small-contracts differently at last layer
-          ;;             ((null (children obj))
-          ;;              (let* ((predicate #'(lambda (area) (< area 5)))
-          ;;                     (big-contracts (remove-if predicate (contracts obj)
-          ;;                                               :key #'contract-area))
-          ;;                     (small-contracts (remove-if-not predicate (contracts obj)
-          ;;                                                     :key #'contract-area)))
-          ;;                (when small-contracts
-          ;;                  (with-element "Folder"     
-          ;;                    (kml-region rect `(:min ,(* 3 (getf lod :min)) :max -1))
-          ;;                    (dolist (c small-contracts)
-          ;;                      (write-contract-placemark-kml c lang))))
-          ;;                (when big-contracts
-          ;;                  (with-element "Folder"     
-          ;;                    (kml-region rect `(:min ,(getf lod :min) :max -1))
-          ;;                    (dolist (c big-contracts)
-          ;;                      (write-contract-placemark-kml c lang))))))
-          ;;             ;; on all other layers
-          ;;             (t (when (contracts obj)
-          ;;                  (with-element "Folder"
-          ;;                    (kml-region rect `(:min ,(getf lod :min) :max -1))
-          ;;                    (dolist (c (contracts obj))
-          ;;                      (write-contract-placemark-kml c lang))))))          
+                       `(:min ,(ground-overlay-lod-min obj) :max ,(ground-overlay-lod-max obj)))          
+          (cond
+            ;; we deal with small-contracts differently at last layer
+            ((not (node-has-children-p obj))
+             (let* ((predicate #'(lambda (area) (< area 5)))
+                    (big-contracts (remove-if predicate (contract-placemarks obj)
+                                              :key #'contract-area))
+                    (small-contracts (remove-if-not predicate (contract-placemarks obj)
+                                                    :key #'contract-area)))
+               (when small-contracts
+                 (with-element "Folder"     
+                   (kml-region rect `(:min ,(* 3 (getf lod :min)) :max -1))
+                   (dolist (c small-contracts)
+                     (write-contract-placemark-kml c lang))))
+               (when big-contracts
+                 (with-element "Folder"     
+                   (kml-region rect `(:min ,(getf lod :min) :max -1))
+                   (dolist (c big-contracts)
+                     (write-contract-placemark-kml c lang))))))
+            ;; on all other layers
+            (t (when (contract-placemarks obj)
+                 (with-element "Folder"
+                   (kml-region rect `(:min ,(getf lod :min) :max -1))
+                   (dolist (c (contract-placemarks obj))
+                     (write-contract-placemark-kml c lang))))))          
           (dotimes (i 4)
             (let ((child (child obj i)))
               (when child
