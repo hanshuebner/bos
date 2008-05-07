@@ -25,7 +25,7 @@
 (defun geo-box-intersect-p (a b)
   (declare (optimize speed))
   (not (or (>= (geo-box-west a) (geo-box-east b))
-           (<= (geo-box-east a) (geo-box-west b))      
+           (<= (geo-box-east a) (geo-box-west b))
            (<= (geo-box-north a) (geo-box-south b)) ; north -> south: + -> -
            (>= (geo-box-south a) (geo-box-north b))))) ; north -> south: + -> -
 
@@ -58,13 +58,13 @@
       (setf (geo-box-north subbox) (- north (* y height-unit))
             (geo-box-south subbox) (- north (* (1+ y) height-unit))
             (geo-box-west subbox) (+ west (* x width-unit))
-            (geo-box-east subbox) (+ west (* (1+ x) width-unit)))      
+            (geo-box-east subbox) (+ west (* (1+ x) width-unit)))
       subbox)))
 
 (let ((float-pair (geo-utm:make-float-pair)))
   (defun geo-box-middle-m2coord (box)
     (declare (optimize speed))
-    (labels ((geo-box-middle (box)             
+    (labels ((geo-box-middle (box)
                (with-accessors ((north geo-box-north)
                                 (south geo-box-south)
                                 (west geo-box-west)
@@ -74,7 +74,7 @@
                        (height (- north south)))
                    (values (+ west (/ width 2))
                            (- north (/ height 2))))))
-             (geo-box-middle-utm (box)
+             (geo-box-middle-utm (box)               
                (multiple-value-bind (lon lat)
                    (geo-box-middle box)
                  (geo-utm:lon-lat-to-utm-x-y* lon lat float-pair))))
@@ -104,9 +104,9 @@
                    (south geo-box-south)
                    (west geo-box-west)
                    (east geo-box-east))
-      (geo-box node)    
+      (geo-box node)
     (let ((middle-north (- north (/ (- north south) 2d0)))
-          (middle-west (+ west (/ (- east west) 2d0))))      
+          (middle-west (+ west (/ (- east west) 2d0))))
       (ecase index
         (0 (make-geo-box   west         north         middle-west  middle-north))
         (1 (make-geo-box   middle-west  north         east         middle-north))
@@ -188,15 +188,8 @@ returns indices of those children that would intersect with GEO-BOX."
 
 ;;; contract-tree-node
 (defclass contract-tree-node (quad-tree-node)
-  ((timestamp :accessor timestamp :initform (get-universal-time))      
-   ;; (root :initarg :root :accessor root)
-   ;;    (parent :accessor parent)
-   (contract-placemarks :initform nil :accessor contract-placemarks)))
-
-;; (defclass contract-tree (contract-tree-node)
-;;   ((output-images-size :initarg :output-images-size :accessor output-images-size :initform 256)
-;;    ;; (parent :initform nil)
-;;    ))
+  ((timestamp :accessor timestamp :initform (get-universal-time))
+   (placemark-contracts :initform nil :accessor placemark-contracts)))
 
 (defvar *contract-tree* nil)
 (defparameter *contract-tree-images-size* 256)
@@ -236,7 +229,7 @@ with its center placemark."
             (let* ((output-images-size *contract-tree-images-size*)
                    (rect (contract-largest-rectangle contract))
                    (contract-width (third rect))
-                   (contract-height (fourth rect))                 
+                   (contract-height (fourth rect))
                    (geo-width (- geo-box-utm-east geo-box-utm-west))
                    (geo-height (- geo-box-utm-north geo-box-utm-south))
                    (contract-pixel-size (min (* contract-width (/ output-images-size geo-width))
@@ -255,15 +248,15 @@ with its center placemark."
                                         :prune-test (lambda (node)
                                                       (not (geo-point-in-box-p (geo-box node) geo-center))))))
       (assert placemark-node)
-      (push contract (contract-placemarks placemark-node)))))
+      (push contract (placemark-contracts placemark-node)))))
 
 (defun remove-contract (contract-tree contract)
   (let ((geo-box (contract-geo-box contract))
-        (node (find-node-if (lambda (node) (member contract (contract-placemarks node)))
+        (node (find-node-if (lambda (node) (member contract (placemark-contracts node)))
                             contract-tree)))
     ;; if CONTRACT is not in CONTRACT-TREE this is a noop
     (when node
-      (alexandria:deletef contract (contract-placemarks node))
+      (alexandria:deletef contract (placemark-contracts node))
       ;; mark intersecting children as dirty
       (ensure-intersecting-children contract-tree geo-box
                                     (lambda (node) (setf (timestamp node) (get-universal-time)))))))
@@ -284,7 +277,7 @@ with its center placemark."
 (defmethod network-link-lod-max ((node contract-tree-node))
   -1)
 
-(defmethod ground-overlay-lod-min ((node contract-tree-node))  
+(defmethod ground-overlay-lod-min ((node contract-tree-node))
   (network-link-lod-min node))
 
 (defmethod ground-overlay-lod-max ((node contract-tree-node))
@@ -327,44 +320,43 @@ links are created."))
              (obj (find-node-with-path *contract-tree* path))
              (lod `(:min ,(network-link-lod-min obj) :max ,(network-link-lod-max obj)))
              (box (geo-box obj))
-             (rect (geo-box-rectangle box)))       
+             (rect (geo-box-rectangle box)))
         (with-element "Document"
           (kml-region rect lod)
           (kml-overlay (format nil "http://~a/contract-tree-image?path=~{~d~}" (website-host) path)
                        rect (+ 100 (depth obj)) 0
                        ;; GroundOverlay specific LOD
-                       `(:min ,(ground-overlay-lod-min obj) :max ,(ground-overlay-lod-max obj)))          
+                       `(:min ,(ground-overlay-lod-min obj) :max ,(ground-overlay-lod-max obj)))
           (cond
             ;; we deal with small-contracts differently at last layer
             ((not (node-has-children-p obj))
              (let* ((predicate #'(lambda (area) (< area 5)))
-                    (big-contracts (remove-if predicate (contract-placemarks obj)
+                    (big-contracts (remove-if predicate (placemark-contracts obj)
                                               :key #'contract-area))
-                    (small-contracts (remove-if-not predicate (contract-placemarks obj)
+                    (small-contracts (remove-if-not predicate (placemark-contracts obj)
                                                     :key #'contract-area)))
                (when small-contracts
-                 (with-element "Folder"     
+                 (with-element "Folder"
                    (kml-region rect `(:min ,(* 3 (getf lod :min)) :max -1))
                    (dolist (c small-contracts)
                      (write-contract-placemark-kml c lang))))
                (when big-contracts
-                 (with-element "Folder"     
+                 (with-element "Folder"
                    (kml-region rect `(:min ,(getf lod :min) :max -1))
                    (dolist (c big-contracts)
                      (write-contract-placemark-kml c lang))))))
             ;; on all other layers
-            (t (when (contract-placemarks obj)
+            (t (when (placemark-contracts obj)
                  (with-element "Folder"
                    (kml-region rect `(:min ,(getf lod :min) :max -1))
-                   (dolist (c (contract-placemarks obj))
-                     (write-contract-placemark-kml c lang))))))          
+                   (dolist (c (placemark-contracts obj))
+                     (write-contract-placemark-kml c lang))))))
           (dotimes (i 4)
             (let ((child (child obj i)))
               (when child
                 (kml-network-link (format nil "http://~a/contract-tree-kml?path=~{~d~}~d" (website-host) path i)
                                   :rect (geo-box-rectangle (geo-box child))
-                                  :lod `(:min ,(network-link-lod-min child) :max ,(network-link-lod-max child))))))
-          )))))
+                                  :lod `(:min ,(network-link-lod-min child) :max ,(network-link-lod-max child)))))))))))
 
 
 ;;; image handler
@@ -377,14 +369,14 @@ links are created."))
            (node (find-node-with-path *contract-tree* path))
            (box (geo-box node))
            (image-size *contract-tree-images-size*))
-      (cl-gd:with-image (cl-gd:*default-image* image-size image-size t)      
+      (cl-gd:with-image (cl-gd:*default-image* image-size image-size t)
         (setf (cl-gd:save-alpha-p) t
               (cl-gd:alpha-blending-p) nil)
         (let ((white (cl-gd:find-color 255 255 255 :alpha 127))
               (subbox (make-geo-box 0d0 0d0 0d0 0d0)))
           (cl-gd:do-rows (y)
-            (cl-gd:do-pixels-in-row (x)        
-              (let ((subbox (geo-subbox box x y image-size subbox)))            
+            (cl-gd:do-pixels-in-row (x)
+              (let ((subbox (geo-subbox box x y image-size subbox)))
                 (multiple-value-bind (m2x m2y)
                     (geo-box-middle-m2coord subbox)
                   (setf (cl-gd:raw-pixel)
@@ -397,7 +389,7 @@ links are created."))
                               (destructuring-bind (r g b)
                                   (contract-color contract)
                                 (cl-gd:find-color r g b))
-                              white))))))))        
+                              white))))))))
         (emit-image-to-browser cl-gd:*default-image* :png)))))
 
 ;;; make-contract-tree-from-m2
@@ -407,20 +399,8 @@ links are created."))
   (setq *contract-tree* (make-instance 'contract-tree-node :geo-box *m2-geo-box*))
   (dolist (contract (class-instances 'contract))
     (insert-contract *contract-tree* contract))
-  (geometry:register-rect-subscriber *rect-publisher* *contract-tree* 
+  (geometry:register-rect-subscriber *rect-publisher* *contract-tree*
                                      (list 0 0 +width+ +width+)
-                                     #'contract-tree-changed)
-  ;; (let ((max-width-height 2000))
-  ;;     (let ((box (allocation-areas-plus-contracts-bounding-box)))
-  ;;       (when box
-  ;;         (geometry:with-rectangle (box)      
-  ;;           (assert (and (<= width max-width-height)
-  ;;                        (<= height max-width-height))
-  ;;                   (max-width-height)
-  ;;                   "ALLOCATION-AREAS-PLUS-CONTRACTS-BOUNDING-BOX is ~d x ~d,~
-  ;;              ~%but the current max-width-height for building a contract-tree is ~d"
-  ;;                   width height max-width-height)
-  ;;           (make-contract-tree (list left top width height))))))
-  )
+                                     #'contract-tree-changed))
 
 (register-store-transient-init-function 'make-contract-tree-from-m2)
