@@ -288,11 +288,14 @@ with its center placemark."
   (network-link-lod-min node))
 
 (defmethod ground-overlay-lod-max ((node contract-tree-node))
-  (if (zerop (depth node))
-      -1
-      (if (node-has-children-p node)
-          (* 1024 4)
-          -1)))
+  ;; (if (zerop (depth node))
+  ;;       -1
+  ;;       (if (node-has-children-p node)
+  ;;           (* 1024 4)
+  ;;           -1))
+  (if (node-has-children-p node)
+      (* 1024 4)
+      -1))
 
 (defclass contract-tree-kml-handler (page-handler)
   ()
@@ -376,7 +379,9 @@ links are created."))
            (box (geo-box node))
            (image-size *contract-tree-images-size*))
       (cl-gd:with-image (cl-gd:*default-image* image-size image-size t)      
-        (let ((white (cl-gd:find-color 255 255 255))
+        (setf (cl-gd:save-alpha-p) t
+              (cl-gd:alpha-blending-p) nil)
+        (let ((white (cl-gd:find-color 255 255 255 :alpha 127))
               (subbox (make-geo-box 0d0 0d0 0d0 0d0)))
           (cl-gd:do-rows (y)
             (cl-gd:do-pixels-in-row (x)        
