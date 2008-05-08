@@ -1,3 +1,4 @@
+;;; -*- coding: utf-8 -*-
 (in-package :bos.web)
 
 (defun kml-format-points (points stream)
@@ -51,7 +52,7 @@
                   (attribute "height" "12"))))
             (with-element "tr"
               (with-element "td" (text (donated)))
-              (with-element "td" (text (format nil "~D m²" (length (contract-m2s contract))))))
+              (with-element "td" (text (format nil "~D mÂ²" (length (contract-m2s contract))))))
             (with-element "tr"
               (with-element "td" (text (since)))
               (with-element "td" (text (format-date-time (contract-date contract) :show-time nil)))))
@@ -93,10 +94,42 @@
         (kml-network-link (format nil "http://~a/poi-kml-all" (website-host))
                           :name "POIs"
                           :rect (make-rectangle :x 0 :y 0 :width +width+ :height +width+)
-                          :lod '(:min 0 :max -1))))))
+                          :lod '(:min 0 :max -1))
+        ;; Country-Stats
+        (with-element "Folder"
+          (with-element "name" (text "Country-Stats"))
+          (with-element "Style"
+            (attribute "id" "countryStatsStyle")
+            (with-element "IconStyle"
+              (with-element "Icon"
+                ;; (with-element "href" (text "http://maps.google.com/mapfiles/kml/pal3/icon23.png"))
+                (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
+          (dolist (country-contracts (sort (group-on (all-contracts)
+                                                     :test #'equal
+                                                     :key (lambda (contract) (string-upcase (sponsor-country (contract-sponsor contract)))))
+                                           #'> :key (lambda (entry) (length (cdr entry)))))
+            (let ((coords (cdr (assoc (make-keyword-from-string (car country-contracts)) *country-coords*))))
+              (when coords
+                (destructuring-bind (lon lat)
+                    coords
+                  (let ((contracts (cdr country-contracts)))
+                    (with-element "Placemark"
+                      ;; (with-element "name" (text (format nil "~a ~a" (car country-contracts) (length (cdr country-contracts)))))
+                      (with-element "styleUrl" (text "#countryStatsStyle"))
+                      (with-element "description"
+                        (text (format nil "<p>~d sponsors from ~a have supported the activities of
+                                           <a href='http://createrainforest.com/'>BOS</a>.</p>
+                                           <p>In total, they have contributed ~d m².</p><br>"
+                                      (length contracts)
+                                      (second (assoc (make-keyword-from-string (car country-contracts)) *country-english-names*))
+                                      (reduce #'+ contracts :key #'contract-area))))
+                      (with-element "Point"
+                        (with-element "coordinates"
+                          (text (format nil "~,20F,~,20F,0" lat lon)))))))))))))))
 
 (defmethod handle-object ((handler kml-root-handler) (object sponsor))
   (write-root-kml object))
 
 (defmethod handle-object ((handler kml-root-handler) (object null))
   (write-root-kml))
+
