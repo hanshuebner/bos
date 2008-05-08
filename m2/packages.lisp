@@ -136,9 +136,10 @@
 	   #:editor-p
 
            #:contract
-           #:make-contract
+           #:make-contract           
 	   #:contract-p
            #:get-contract
+           #:all-contracts
            #:contract-sponsor
            #:contract-paidp
 	   #:contract-download-only
