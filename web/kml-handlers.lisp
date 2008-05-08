@@ -82,7 +82,7 @@
                             :name "sat-image"))
         (kml-network-link (format nil "http://~a/contract-tree-kml" (website-host))
                           :rect (geo-box-rectangle (geo-box *contract-tree*))
-                          :lod `(:min ,(lod-min *contract-tree*) :max ,(lod-max *contract-tree*))
+                          :lod `(:min ,(network-link-lod-min *contract-tree*) :max ,(network-link-lod-max *contract-tree*))
                           :name "contracts")
         (kml-network-link (format nil "http://~a/poi-kml-all" (website-host))
                           :name "POIs"

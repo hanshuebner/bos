@@ -618,7 +618,7 @@ links are created."))
       (with-element "Document"
         (kml-region rect lod)
         (kml-overlay (format nil "http://~a/image/~d" (website-host) (store-object-id obj))
-                     rect (depth obj))
+                     rect (* 2 (depth obj)) 0)
         (dolist (child (children obj))
           (kml-network-link (format nil "http://~a/image-tree-kml/~d" (website-host) (store-object-id child))
                             :rect (make-rectangle2 (list (geo-x child) (geo-y child)

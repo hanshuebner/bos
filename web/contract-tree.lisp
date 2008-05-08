@@ -277,19 +277,6 @@ with its center placemark."
 (defmethod network-link-lod-max ((node contract-tree-node))
   -1)
 
-(defmethod ground-overlay-lod-min ((node contract-tree-node))
-  (network-link-lod-min node))
-
-(defmethod ground-overlay-lod-max ((node contract-tree-node))
-  ;; (if (zerop (depth node))
-  ;;       -1
-  ;;       (if (node-has-children-p node)
-  ;;           (* 1024 4)
-  ;;           -1))
-  (if (node-has-children-p node)
-      (* 1024 4)
-      -1))
-
 (defclass contract-tree-kml-handler (page-handler)
   ()
   (:documentation "Generates a kml representation of the queried
@@ -324,9 +311,9 @@ links are created."))
         (with-element "Document"
           (kml-region rect lod)
           (kml-overlay (format nil "http://~a/contract-tree-image?path=~{~d~}" (website-host) path)
-                       rect (+ 100 (depth obj)) 0
+                       rect (+ 1 (* 2 (depth obj))) 0
                        ;; GroundOverlay specific LOD
-                       `(:min ,(ground-overlay-lod-min obj) :max ,(ground-overlay-lod-max obj)))
+                       `(:min ,(network-link-lod-min obj) :max ,(network-link-lod-max obj)))
           (cond
             ;; we deal with small-contracts differently at last layer
             ((not (node-has-children-p obj))
