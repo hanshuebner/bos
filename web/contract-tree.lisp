@@ -287,8 +287,9 @@ links are created."))
   (let ((name (user-full-name (contract-sponsor c))))
     (with-element "Placemark"
       (when name (with-element "name" (text name)))
+      (with-element "styleUrl" (text "#contractPlacemarkIcon"))
       (with-element "description" (cdata (contract-description c language)))
-      (with-element "Point"
+      (with-element "Point"        
         (with-element "coordinates"
           (destructuring-bind (x y)
               (contract-center c)
@@ -309,6 +310,13 @@ links are created."))
              (box (geo-box obj))
              (rect (geo-box-rectangle box)))
         (with-element "Document"
+          (with-element "Style"
+            (attribute "id" "contractPlacemarkIcon")
+            (with-element "IconStyle"
+              ;; (with-element "color" (text "ffffffff"))
+              (with-element "scale" (text "0.8"))
+              (with-element "Icon"
+                (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
           (kml-region rect lod)
           (kml-overlay (format nil "http://~a/contract-tree-image?path=~{~d~}" (website-host) path)
                        rect (+ 1 (* 2 (depth obj))) 0

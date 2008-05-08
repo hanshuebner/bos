@@ -69,8 +69,14 @@
                                     :root-element "kml")
     (with-query-params ((lang "en"))
       (with-element "Document"
-        (with-element "name" (text "bos-kml"))
+        (with-element "name" (text "bos-kml"))        
         (when sponsor
+          (with-element "Style"
+            (attribute "id" "contractPlacemarkIcon")
+            (with-element "IconStyle"
+              (with-element "Icon"
+                ;; (with-element "href" (text "http://maps.google.com/mapfiles/kml/pal3/icon23.png"))
+                (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
           (mapc #'(lambda (contract) (write-contract-placemark-kml contract lang))
                 (sponsor-contracts sponsor)))
         (let ((image-tree (find-store-object (image-tree-root-id))))
