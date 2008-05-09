@@ -52,7 +52,7 @@
                   (attribute "height" "12"))))
             (with-element "tr"
               (with-element "td" (text (donated)))
-              (with-element "td" (text (format nil "~D mÂ²" (length (contract-m2s contract))))))
+              (with-element "td" (text (format nil "~D m²" (length (contract-m2s contract))))))
             (with-element "tr"
               (with-element "td" (text (since)))
               (with-element "td" (text (format-date-time (contract-date contract) :show-time nil)))))
