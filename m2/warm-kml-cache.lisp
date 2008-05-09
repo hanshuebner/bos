@@ -10,9 +10,7 @@
        (analyze-href (url)
          (print url)
          (multiple-value-bind (content status-code headers)
-             (drakma:http-request (if (cl-ppcre:scan "/image/" url)
-                                      url
-                                      (format nil "~A?lang=de" url)))
+             (drakma:http-request url)
            (declare (ignore status-code))
            (when (find (first (cl-ppcre:split "; *" (cdr (assoc :content-type headers))))
                        (list "text/xml" "application/vnd.google-earth.kml+xml")
