@@ -31,10 +31,10 @@
 	 (:h2 "Choose a POI to edit")
 	 (:ul
 	  (loop for poi in (sort (store-objects-with-class 'poi) #'string-lessp :key #'poi-name)
-		do (html (:li (cmslink (edit-object-url poi)
-				(:princ-safe (poi-name poi))
-				" - "
-				(:princ-safe (slot-string poi 'title (hunchentoot:session-value :language)))))))))
+             do (html (:li (cmslink (edit-object-url poi)
+                             (:princ-safe (poi-name poi))
+                             " - "
+                             (:princ-safe (slot-string poi 'title (hunchentoot:session-value :language)))))))))
 	(html (:h2 "No POIs created yet")))
     ((:form :method "post" :action "/make-poi")
      "Make new POI named "
@@ -108,22 +108,22 @@
 	      ((:table)
 	       (:tr
 		(loop for image in (poi-images poi)
-		      for index from 1 by 1
-		      do (html (:td ((:a :href (format nil "/edit-poi-image/~a?poi=~A" (store-object-id image) (store-object-id poi)))
-				     ((:img :border "0" :src (format nil "/image/~a/thumbnail,,55,55" (store-object-id image)))))
-				    :br
-				    (if (eql index 1)
-					(html ((:img :src "/images/trans.gif" :width "16")))
-					(html ((:a :href (format nil "/edit-poi/~A?shift=~A&shift-by=-1"
-								 (store-object-id poi)
-								 (store-object-id image)))
-					       ((:img :border "0" :src "/images/pfeil-l.gif")))))
-				    ((:img :src "/images/trans.gif" :width "23"))
-				    (unless (eql index (length (poi-images poi)))
-				      (html ((:a :href (format nil "/edit-poi/~A?shift=~A&shift-by=1"
-							       (store-object-id poi)
-							       (store-object-id image)))
-					     ((:img :border "0" :src "/images/pfeil-r.gif"))))))))))
+                   for index from 1 by 1
+                   do (html (:td ((:a :href (format nil "/edit-poi-image/~a?poi=~A" (store-object-id image) (store-object-id poi)))
+                                  ((:img :border "0" :src (format nil "/image/~a/thumbnail,,55,55" (store-object-id image)))))
+                                 :br
+                                 (if (eql index 1)
+                                     (html ((:img :src "/images/trans.gif" :width "16")))
+                                     (html ((:a :href (format nil "/edit-poi/~A?shift=~A&shift-by=-1"
+                                                              (store-object-id poi)
+                                                              (store-object-id image)))
+                                            ((:img :border "0" :src "/images/pfeil-l.gif")))))
+                                 ((:img :src "/images/trans.gif" :width "23"))
+                                 (unless (eql index (length (poi-images poi)))
+                                   (html ((:a :href (format nil "/edit-poi/~A?shift=~A&shift-by=1"
+                                                            (store-object-id poi)
+                                                            (store-object-id image)))
+                                          ((:img :border "0" :src "/images/pfeil-r.gif"))))))))))
 	      (unless (eql 6 (length (poi-images poi)))
 		(html
 		 :br
@@ -230,7 +230,7 @@
     (unless uploaded-file
       (error "no file uploaded in upload handler"))
     (with-image-from-upload* (uploaded-file)
-      ; just open the image to make sure that gd can process it
+                                        ; just open the image to make sure that gd can process it
       )
     (change-slot-values poi 'panoramas (cons (import-image (upload-pathname uploaded-file)
 							   :class-name 'store-image)
@@ -310,24 +310,24 @@
 	((:input :type "hidden" :name "poi" :value poi))
 	(:table (:tr (:td "thumbnail")
 		     (:td ((:img :src (format nil "/image/~A/thumbnail,,55,55" (store-object-id poi-image))))))
-	  (:tr (:td "full image")
-	       (:td ((:img :src (format nil "/image/~A" (store-object-id poi-image))))))
-	  (:tr (:td "upload new image")
-	       (:td ((:input :type "file" :name "image-file"))
-		    :br
-		    (submit-button "upload" "upload")))
-	  (:tr (:td "title")
-	       (:td (text-field "title"
-				:value (slot-string poi-image 'title language))))
-	  (:tr (:td "subtitle")
-	       (:td (text-field "subtitle"
-				:value (slot-string poi-image 'subtitle language))))
-	  (:tr (:td "description")
-	       (:td (textarea-field "description"
-				    :value (slot-string poi-image 'description language)
-				    :rows 5
-				    :cols 40)))
-	  (:tr (:td (submit-button "save" "save") (submit-button "delete" "delete" :confirm "Really delete the image?")))))))))
+                (:tr (:td "full image")
+                     (:td ((:img :src (format nil "/image/~A" (store-object-id poi-image))))))
+                (:tr (:td "upload new image")
+                     (:td ((:input :type "file" :name "image-file"))
+                          :br
+                          (submit-button "upload" "upload")))
+                (:tr (:td "title")
+                     (:td (text-field "title"
+                                      :value (slot-string poi-image 'title language))))
+                (:tr (:td "subtitle")
+                     (:td (text-field "subtitle"
+                                      :value (slot-string poi-image 'subtitle language))))
+                (:tr (:td "description")
+                     (:td (textarea-field "description"
+                                          :value (slot-string poi-image 'description language)
+                                          :rows 5
+                                          :cols 40)))
+                (:tr (:td (submit-button "save" "save") (submit-button "delete" "delete" :confirm "Really delete the image?")))))))))
 
 (defmethod handle-object-form ((handler edit-poi-image-handler) (action (eql :save)) poi-image)
   (with-query-params (title subtitle description language)
@@ -361,14 +361,14 @@
 (defmethod handle ((handler poi-javascript-handler))
   (with-http-response (:content-type "text/html; charset=UTF-8")
     (setf (hunchentoot:header-out :cache-control) "no-cache")
-      (setf (hunchentoot:header-out :pragma) "no-cache")
-      (setf (hunchentoot:header-out :expires) "-1")
-      (with-http-body ()
-        (html
-         ((:script :language "JavaScript")
-	  (:princ (make-poi-javascript (or (hunchentoot:session-value :language) *default-language*)))
-	  (:princ "parent.poi_fertig(pois, anzahlSponsoren, anzahlVerkauft);")
-	  (:princ (format nil "parent.last_sponsors([~{~A~^,~%~}]);" (mapcar #'contract-js (last-paid-contracts)))))))))
+    (setf (hunchentoot:header-out :pragma) "no-cache")
+    (setf (hunchentoot:header-out :expires) "-1")
+    (with-http-body ()
+      (html
+       ((:script :language "JavaScript")
+        (:princ (make-poi-javascript (or (hunchentoot:session-value :language) *default-language*)))
+        (:princ "parent.poi_fertig(pois, anzahlSponsoren, anzahlVerkauft);")
+        (:princ (format nil "parent.last_sponsors([~{~A~^,~%~}]);" (mapcar #'contract-js (last-paid-contracts)))))))))
 
 (defclass poi-image-handler (object-handler)
   ()
@@ -389,56 +389,7 @@
 	  (error "image index ~a out of bounds for poi ~a" image-index poi)))))
 
 
-(defun write-poi-xml (poi &optional prefix)
-  "Writes the poi xml format, including all languages."
-  ;; this will eventually be replaced by write-poi-xml2
-  (macrolet ((with-element (qname &body body)
-               `(with-element* (prefix ,qname) ,@body)))
-    (labels ((format-hash-table (element-name hash-table)
-               (with-element element-name
-                 (maphash (lambda (k v)                        
-                            (with-element "content"
-                              (attribute "lang" k)
-                              (text v)))
-                          hash-table)))
-             (format-image (element-name image)
-               (with-element element-name
-                 (with-element "id" (text (princ-to-string (store-object-id image))))
-                 (with-element "url" (text (format nil "http://createrainforest.org/image/~D" (store-object-id image))))
-                 (with-element "name" (text (store-image-name image)))
-                 (with-element "width" (text (princ-to-string (store-image-width image))))
-                 (with-element "height" (text (princ-to-string (store-image-height image))))
-                 (when (typep image 'poi-image)
-                   (format-hash-table "title" (poi-image-title image))
-                   (format-hash-table "subtitle" (poi-image-subtitle image))
-                   (format-hash-table "description" (poi-image-description image))))))
-      (with-accessors ((id store-object-id)
-                       (name poi-name)
-                       (title poi-title)
-                       (subtitle poi-subtitle)
-                       (description poi-description)
-                       (airals poi-airals)
-                       (images poi-images)
-                       (panoramas poi-panoramas)
-                       (movies poi-movies)) poi
-        (with-element "poi"
-          (with-element "id" (text (princ-to-string id)))
-          (with-element "name" (text name))
-          (format-hash-table "title" title)
-          (format-hash-table "subtitle" subtitle)
-          (format-hash-table "description" description)        
-          (with-element "airals"
-            (mapc (alexandria:curry #'format-image "airal") airals))
-          (with-element "images"
-            (mapc (alexandria:curry #'format-image "image") images))
-          (with-element "panoramas"
-            (mapc (alexandria:curry #'format-image "panorama") panoramas))
-          (with-element "movies"
-            (dolist (url movies)
-              (with-element "movie"
-                (with-element "url" (text url))))))))))
-
-(defun write-poi-xml2 (poi language)
+(defun write-poi-xml (poi language)
   "Writes the poi xml format for one specific language.  This is used
    to generate the POI microsite using XSLT."
   (macrolet ((with-media ((type title &optional (subtitle "")) &body body)
@@ -504,7 +455,7 @@
                    (with-open-file (out path :direction :output :external-format :utf-8)
                      (with-xml-output (make-character-stream-sink out)
                        (with-namespace ("bos" "http://headcraft.de/bos")
-                         (write-poi-xml poi "bos"))))                   
+                         (write-poi-xml poi language))))                   
                    path))
                (call-xsltproc (input-path)
                  "Will return the transformation as a string. 
@@ -514,6 +465,7 @@
                         (progn
                           (run-program* "xsltproc"
                                         (list "-o" (namestring output-path)
+                                              "--stringparam" "host" (website-host)
                                               "--stringparam" "lang" language
                                               (xsl-path) (namestring input-path)))
                           (arnesi:read-string-from-file output-path :external-format :utf-8))
@@ -544,7 +496,7 @@
 (defmethod handle-object ((handler poi-xml-handler) poi)
   (with-query-params ((lang "en"))
     (with-xml-response (:xsl-stylesheet-name "/static/poi.xsl")
-      (write-poi-xml2 poi lang))))
+      (write-poi-xml poi lang))))
 
 (defclass poi-kml-handler (object-handler)
   ()
@@ -553,8 +505,7 @@
 
 (defmethod handle-object ((handler poi-kml-handler) poi)
   (with-query-params ((lang "en"))
-    (with-xml-response ()
-      (sax:processing-instruction cxml::*sink* "xml-stylesheet" "href=\"/static/trivial.xsl\" type=\"text/xsl\"")
+    (with-xml-response ()      
       (with-namespace (nil "http://earth.google.com/kml/2.1")
         (with-element "kml"
           (write-poi-kml poi lang))))))
