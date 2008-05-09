@@ -115,7 +115,7 @@
                   (let ((contracts (cdr country-contracts)))
                     (with-element "Placemark"
                       ;; (with-element "name" (text (format nil "~a ~a" (car country-contracts) (length (cdr country-contracts)))))
-                      (with-element "StyleUrl" (text "#countryStatsStyle"))
+                      (with-element "styleUrl" (text "#countryStatsStyle"))
                       (with-element "description"
                         (text (format nil "<p>~d sponsors from ~a have supported the activities of
                                            <a href='http://createrainforest.com/'>BOS</a>.</p>
