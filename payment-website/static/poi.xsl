@@ -52,7 +52,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:if test="@type='image_gallery'">
       <div class="accordion_toggle"><xsl:value-of select="@title"/>:<xsl:value-of select="@subtitle"/></div>
       <div class="accordion_content">
-        <div>
+        <div class="image_gallery">
           <xsl:apply-templates select="image" /></div>
       </div>
     </xsl:if>
@@ -72,7 +72,11 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <xsl:variable name="height"><xsl:value-of select="image/height"/></xsl:variable>
       <div class="accordion_toggle"><xsl:value-of select="@title"/>:<xsl:value-of select="@subtitle"/></div>
       <div class="accordion_content">
-        <div class="scrollpane" style="border: 1px solid black; width: 600px; height: {$height}px; background-image: url({$url}); background-position: 0px 0px; background-repeat:no-repeat" id="pano-{$id}"></div>
+        <div class="scrollpane" style="border: 1px solid black; width: 600px; height:{$height}px; background-image: url({$url}); background-position: -690px 0px; background-repeat:repeat-x;" id="pano-{$id}"></div>
+        <script type="text/javascript">
+		var myPano = new Pano();
+		myPano.scrollPano('<xsl:value-of select="image/url"/>', 690, <xsl:value-of select="image/height"/>, 'pano-<xsl:value-of select="image/@id"/>');
+        </script>
       </div>
     </xsl:if>
     <xsl:if test="@type='movie'">

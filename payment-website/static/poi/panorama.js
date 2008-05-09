@@ -1,30 +1,33 @@
-﻿var _initialized = false;
-var _imageloaded = false;
-var _pos = 0;            // Current scroll position
-var _increment = 1;      // How many pixels to shift per frame
-var _paneWidth = 200;    // Width of the scrollpane
-var _img;                // The image
-var _pane;               // The scrollpane
-var _htmlBackup;         // Backup of the pane content
+// JavaScript Document
+function Pano()
+{
 
-/*
- * scroll(image, width)
- * 
- *  Setup a pane for scrolling.
- *  The pane (normally a <div>) must have the id "scrollpane".
- *
- * Arguments:
- *
- *  image: URI to the image that's to be scrolled
- *
- *  width: optional, the width of the scroll pane
- */
-function scroll(image, width, div_id) {
+	var _initialized = false;
+	var _imageloaded = false;
+	var _pos = 0;            // Current scroll position
+	var _increment = 1;      // How many pixels to shift per frame
+	var _paneWidth = 200;    // Width of the scrollpane
+	var _img;                // The image
+	var _pane;               // The scrollpane
+	var _htmlBackup;         // Backup of the pane content
+    var _height = "360px";
+	
+	this.scrollPano = scrollPano;
+	this.imageHasLoaded = imageHasLoaded;
+	
+/*	function setDiv(div){
+		_div = 	div;
+	}*/
+	
+	function scrollPano(image, width, height, div) {
         if (!_initialized) {
 			//alert(div_id);
-            _pane = document.getElementById(div_id);
+            _pane = document.getElementById(div);
             if (width) {
                 _paneWidth = width;
+            }
+			 if (height) {
+                _height = height + "px";
             }
              _pane.style.width = 200 + "px";
             _pane.style.height = 50 + "px";
@@ -50,37 +53,20 @@ function scroll(image, width, div_id) {
             _pos = (_pos - _increment) % _img.width;
         }
         
-        self.setTimeout("scroll()", 50);
+        //self.setTimeout("scrollPano()", 50);
+        setTimeout(function() { scrollPano(); }, 30);
+		
     
-}
-
-function imageHasLoaded() {
+     }
+	 
+	 function imageHasLoaded() {
     _pane.innerHTML = _htmlBackup;
     //_pane.style.height = _img.height + "px";
 	//_pane.style.height = (_img.height /2) + "px";
-	_pane.style.height =  "360px";
+	_pane.style.height =  _height;
     _pane.style.width = _paneWidth + "px";
     _imageloaded = true;
-}
+     }
 
-function makeFaster() {
-    _increment++;
-}
-
-function makeSlower() {
-    _increment--;
-}
-
-function makeBigger() {
-   // if (_initialized) {
-        _paneWidth += 20;
-        _pane.style.width = _paneWidth + "px";
-    //}
-}
-
-function makeSmaller() {
-    //if (_initialized) {
-        _paneWidth -= 20;
-        _pane.style.width = _paneWidth + "px";
-    //}
+   
 }
