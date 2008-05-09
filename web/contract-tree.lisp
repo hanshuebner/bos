@@ -314,7 +314,7 @@ links are created."))
             (attribute "id" "contractPlacemarkIcon")
             (with-element "IconStyle"
               ;; (with-element "color" (text "ffffffff"))
-              (with-element "scale" (text "0.8"))
+              (with-element "scale" (text "0.5"))
               (with-element "Icon"
                 (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
           (kml-region rect lod)
@@ -383,7 +383,7 @@ links are created."))
                           (if contract
                               (destructuring-bind (r g b)
                                   (contract-color contract)
-                                (cl-gd:find-color r g b))
+                                (cl-gd:find-color r g b :alpha 50))
                               white))))))))
         (emit-image-to-browser cl-gd:*default-image* :png)))))
 

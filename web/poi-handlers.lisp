@@ -482,6 +482,7 @@
   (with-element "Placemark"
     (with-element "name" (text (or (slot-string poi 'title language nil)
                                    (slot-string poi 'title "en"))))
+    (with-element "styleUrl" (text "#poiPlacemarkIcon"))
     (with-element "description"
       (cdata (poi-description-xslt-google-earth poi language)))
     (with-element "Point"
@@ -520,6 +521,13 @@
       (with-namespace (nil "http://earth.google.com/kml/2.1")
         (with-element "kml"
           (with-element "Document"
+            (with-element "Style"
+              (attribute "id" "poiPlacemarkIcon")
+              (with-element "IconStyle"
+                ;; (with-element "color" (text "ffffffff"))
+                (with-element "scale" (text "0.8"))
+                (with-element "Icon"
+                  (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
             (kml-region (make-rectangle2 (list 0 0 +width+ +width+)) '(:min 600 :max -1))
             (mapc #'(lambda (poi) (write-poi-kml poi lang))
                   (remove-if-not #'(lambda (poi) (and (poi-area poi) (poi-published poi)))
