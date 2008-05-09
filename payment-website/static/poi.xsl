@@ -47,7 +47,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <!--Anfang der templates-->
   <xsl:template match="poi">
     <xsl:value-of select="@id"/><br />
-    <!--<xsl:value-of select="@href"/><br />-->
   </xsl:template>
   <xsl:template match="media">
     <xsl:if test="@type='image_gallery'">
@@ -74,7 +73,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
       <div class="accordion_toggle"><xsl:value-of select="@title"/>:<xsl:value-of select="@subtitle"/></div>
       <div class="accordion_content">
         <div class="scrollpane" style="border: 1px solid black; width: 600px; height: {$height}px; background-image: url({$url}); background-position: 0px 0px; background-repeat:no-repeat" id="pano-{$id}"></div>
-        <script type="text/javascript">scroll('<xsl:value-of select="image/url"/>', 600, 'pano-<xsl:value-of select="image/@id"/>');</script>
       </div>
     </xsl:if>
     <xsl:if test="@type='movie'">

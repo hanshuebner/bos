@@ -125,8 +125,9 @@ accordion.prototype = {
 			},
 			afterFinish: function() {
 				this.showAccordion.setStyle({
-          height: 'auto',
-					display: 'none'
+		       display: 'none',
+               height: 'auto'
+					
 				});				
 				this.showAccordion = null;
 				this.animating = false;

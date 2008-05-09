@@ -84,7 +84,6 @@
             </table>
           </td>
         </tr>
-        <!-- this will later become a link that goes directly to poi info -->
         <tr><td align="center" colspan="3"><a href="{$poi_xml_link}">learn more</a></td></tr>
         <tr>
           <td style="width: 99px;" colspan="3" align="center" valign="middle">
