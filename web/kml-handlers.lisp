@@ -80,6 +80,13 @@
                 (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
           (mapc #'(lambda (contract) (write-contract-placemark-kml contract lang))
                 (sponsor-contracts sponsor)))
+        (with-element "LookAt"
+          (with-element "longitude" (text "117.0181387825428"))
+          (with-element "latitude" (text "-1.07997466318112"))
+          (with-element "altitude" (text "0"))
+          (with-element "range" (text "32826.94626281255"))
+          (with-element "tilt" (text "0"))
+          (with-element "heading" (text "1.390706061810851")))
         (let ((image-tree (find-store-object (image-tree-root-id))))
           (assert (and image-tree (typep image-tree 'image-tree)) nil
                   "(find-store-object (image-tree-root-id)) gives ~s" image-tree)
