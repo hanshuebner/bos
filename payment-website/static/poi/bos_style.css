@@ -6,6 +6,8 @@ margin-left: 0px;*/
 margin: 0px;
 	font-size: 11px;/*100.1%;*/
 	font-family:Georgia, serif;
+	overflow:auto;
+	overflow: -moz-scrollbars-vertical;
 }
 
 .clearer{
