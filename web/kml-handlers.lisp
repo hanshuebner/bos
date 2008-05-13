@@ -96,7 +96,8 @@
                             :name "sat-image"))
         (kml-network-link (format nil "http://~a/contract-tree-kml" (website-host))
                           :rect (geo-box-rectangle (geo-box *contract-tree*))
-                          :lod `(:min ,(network-link-lod-min *contract-tree*) :max ,(network-link-lod-max *contract-tree*))
+                          :lod `(:min ,(network-link-lod-min *contract-tree*)
+                                      :max ,(network-link-lod-max *contract-tree*))
                           :name "contracts")
         (kml-network-link (format nil "http://~a/poi-kml-all" (website-host))
                           :name "POIs"
@@ -113,7 +114,8 @@
                 (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
           (dolist (country-contracts (sort (group-on (all-contracts)
                                                      :test #'equal
-                                                     :key (lambda (contract) (string-upcase (sponsor-country (contract-sponsor contract)))))
+                                                     :key (lambda (contract)
+                                                            (string-upcase (sponsor-country (contract-sponsor contract)))))
                                            #'> :key (lambda (entry) (length (cdr entry)))))
             (let ((coords (cdr (assoc (make-keyword-from-string (car country-contracts)) *country-coords*))))
               (when coords

@@ -268,6 +268,12 @@ with its center placemark."
            (insert-contract contract-tree contract)
            (remove-contract contract-tree contract)))))
 
+(defmacro handle-if-node-modified (&body body)
+  `(let* ((path (parse-path path))
+          (node (find-node-with-path *contract-tree* path)))
+     (hunchentoot:handle-if-modified-since (timestamp node))
+     ,@body))
+
 ;;; kml handler
 (defmethod network-link-lod-min ((node contract-tree-node))
   (if (zerop (depth node))
@@ -304,88 +310,89 @@ links are created."))
   (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
                                     :root-element "kml")
     (with-query-params ((lang "en") (path))
-      (let* ((path (parse-path path))
-             (obj (find-node-with-path *contract-tree* path))
-             (lod `(:min ,(network-link-lod-min obj) :max ,(network-link-lod-max obj)))
-             (box (geo-box obj))
-             (rect (geo-box-rectangle box)))
-        (with-element "Document"
-          (with-element "Style"
-            (attribute "id" "contractPlacemarkIcon")
-            (with-element "IconStyle"
-              ;; (with-element "color" (text "ffffffff"))
-              (with-element "scale" (text "0.8"))
-              (with-element "Icon"
-                (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
-          (kml-region rect lod)
-          (kml-overlay (format nil "http://~a/contract-tree-image?path=~{~d~}" (website-host) path)
-                       rect (+ 1 (* 2 (depth obj))) 0
-                       ;; GroundOverlay specific LOD
-                       `(:min ,(network-link-lod-min obj) :max ,(network-link-lod-max obj)))
-          (cond
-            ;; we deal with small-contracts differently at last layer
-            ((not (node-has-children-p obj))
-             (let* ((predicate #'(lambda (area) (< area 5)))
-                    (big-contracts (remove-if predicate (placemark-contracts obj)
-                                              :key #'contract-area))
-                    (small-contracts (remove-if-not predicate (placemark-contracts obj)
-                                                    :key #'contract-area)))
-               (when small-contracts
-                 (with-element "Folder"
-                   (kml-region rect `(:min ,(* 3 (getf lod :min)) :max -1))
-                   (dolist (c small-contracts)
-                     (write-contract-placemark-kml c lang))))
-               (when big-contracts
-                 (with-element "Folder"
-                   (kml-region rect `(:min ,(getf lod :min) :max -1))
-                   (dolist (c big-contracts)
-                     (write-contract-placemark-kml c lang))))))
-            ;; on all other layers
-            (t (when (placemark-contracts obj)
-                 (with-element "Folder"
-                   (kml-region rect `(:min ,(getf lod :min) :max -1))
-                   (dolist (c (placemark-contracts obj))
-                     (write-contract-placemark-kml c lang))))))
-          (dotimes (i 4)
-            (let ((child (child obj i)))
-              (when child
-                (kml-network-link (format nil "http://~a/contract-tree-kml?path=~{~d~}~d" (website-host) path i)
-                                  :rect (geo-box-rectangle (geo-box child))
-                                  :lod `(:min ,(network-link-lod-min child) :max ,(network-link-lod-max child)))))))))))
+      (handle-if-node-modified
+        (setf (hunchentoot:header-out :last-modified)
+              (hunchentoot:rfc-1123-date (timestamp node)))
+        (let* ((lod `(:min ,(network-link-lod-min node) :max ,(network-link-lod-max node)))
+               (box (geo-box node))
+               (rect (geo-box-rectangle box)))
+          (with-element "Document"
+            (with-element "Style"
+              (attribute "id" "contractPlacemarkIcon")
+              (with-element "IconStyle"
+                ;; (with-element "color" (text "ffffffff"))
+                (with-element "scale" (text "0.8"))
+                (with-element "Icon"
+                  (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
+            (kml-region rect lod)
+            (kml-overlay (format nil "http://~a/contract-tree-image?path=~{~d~}" (website-host) path)
+                         rect (+ 1 (* 2 (depth node))) 0
+                         ;; GroundOverlay specific LOD
+                         `(:min ,(network-link-lod-min node) :max ,(network-link-lod-max node)))
+            (cond
+              ;; we deal with small-contracts differently at last layer
+              ((not (node-has-children-p node))
+               (let* ((predicate #'(lambda (area) (< area 5)))
+                      (big-contracts (remove-if predicate (placemark-contracts node)
+                                                :key #'contract-area))
+                      (small-contracts (remove-if-not predicate (placemark-contracts node)
+                                                      :key #'contract-area)))
+                 (when small-contracts
+                   (with-element "Folder"
+                     (kml-region rect `(:min ,(* 3 (getf lod :min)) :max -1))
+                     (dolist (c small-contracts)
+                       (write-contract-placemark-kml c lang))))
+                 (when big-contracts
+                   (with-element "Folder"
+                     (kml-region rect `(:min ,(getf lod :min) :max -1))
+                     (dolist (c big-contracts)
+                       (write-contract-placemark-kml c lang))))))
+              ;; on all other layers
+              (t (when (placemark-contracts node)
+                   (with-element "Folder"
+                     (kml-region rect `(:min ,(getf lod :min) :max -1))
+                     (dolist (c (placemark-contracts node))
+                       (write-contract-placemark-kml c lang))))))
+            (dotimes (i 4)
+              (let ((child (child node i)))
+                (when child
+                  (kml-network-link
+                   (format nil "http://~a/contract-tree-kml?path=~{~d~}~d" (website-host) path i)
+                   :rect (geo-box-rectangle (geo-box child))
+                   :lod `(:min ,(network-link-lod-min child) :max ,(network-link-lod-max child))))))))))))
 
 
 ;;; image handler
 (defclass contract-tree-image-handler (page-handler)
   ())
 
-(defmethod handle ((handler contract-tree-image-handler))
+(defmethod handle ((handler contract-tree-image-handler))  
   (with-query-params (path)
-    (let* ((path (parse-path path))
-           (node (find-node-with-path *contract-tree* path))
-           (box (geo-box node))
-           (image-size *contract-tree-images-size*))
-      (cl-gd:with-image (cl-gd:*default-image* image-size image-size t)
-        (setf (cl-gd:save-alpha-p) t
-              (cl-gd:alpha-blending-p) nil)
-        (let ((white (cl-gd:find-color 255 255 255 :alpha 127))
-              (subbox (make-geo-box 0d0 0d0 0d0 0d0)))
-          (cl-gd:do-rows (y)
-            (cl-gd:do-pixels-in-row (x)
-              (let ((subbox (geo-subbox box x y image-size subbox)))
-                (multiple-value-bind (m2x m2y)
-                    (geo-box-middle-m2coord subbox)
-                  (setf (cl-gd:raw-pixel)
-                        (let* ((m2 (ignore-errors (get-m2 m2x m2y)))
-                               (contract (and m2
-                                              (m2-contract m2)
-                                              (contract-paidp (m2-contract m2))
-                                              (m2-contract m2))))
-                          (if contract
-                              (destructuring-bind (r g b)
-                                  (contract-color contract)
-                                (cl-gd:find-color r g b :alpha 50))
-                              white))))))))
-        (emit-image-to-browser cl-gd:*default-image* :png)))))
+    (handle-if-node-modified
+      (let ((box (geo-box node))
+            (image-size *contract-tree-images-size*))        
+        (cl-gd:with-image (cl-gd:*default-image* image-size image-size t)
+          (setf (cl-gd:save-alpha-p) t
+                (cl-gd:alpha-blending-p) nil)
+          (let ((white (cl-gd:find-color 255 255 255 :alpha 127))
+                (subbox (make-geo-box 0d0 0d0 0d0 0d0)))
+            (cl-gd:do-rows (y)
+              (cl-gd:do-pixels-in-row (x)
+                (let ((subbox (geo-subbox box x y image-size subbox)))
+                  (multiple-value-bind (m2x m2y)
+                      (geo-box-middle-m2coord subbox)
+                    (setf (cl-gd:raw-pixel)
+                          (let* ((m2 (ignore-errors (get-m2 m2x m2y)))
+                                 (contract (and m2
+                                                (m2-contract m2)
+                                                (contract-paidp (m2-contract m2))
+                                                (m2-contract m2))))
+                            (if contract
+                                (destructuring-bind (r g b)
+                                    (contract-color contract)
+                                  (cl-gd:find-color r g b :alpha 50))
+                                white))))))))
+          (emit-image-to-browser cl-gd:*default-image* :png :date (timestamp node)))))))
 
 ;;; make-contract-tree-from-m2
 (defun make-contract-tree-from-m2 ()

@@ -611,8 +611,11 @@ image-tree-node.  If the node has children, corresponding network
 links are created."))
 
 (defmethod handle-object ((handler image-tree-kml-handler) (obj image-tree-node))
+  (hunchentoot:handle-if-modified-since (blob-timestamp obj))
   (with-xml-response (:content-type "text/xml; charset=utf-8" #+nil"application/vnd.google-earth.kml+xml"
                                     :root-element "kml")
+    (setf (hunchentoot:header-out :last-modified)
+          (hunchentoot:rfc-1123-date (blob-timestamp obj)))
     (let ((lod `(:min ,(lod-min obj) :max ,(lod-max obj)))
           (rect (make-rectangle2 (list (geo-x obj) (geo-y obj) (geo-width obj) (geo-height obj)))))
       (with-element "Document"
