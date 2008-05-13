@@ -256,7 +256,8 @@ with its center placemark."
                             contract-tree)))
     ;; if CONTRACT is not in CONTRACT-TREE this is a noop
     (when node
-      (alexandria:deletef contract (placemark-contracts node))
+      (setf (placemark-contracts node)
+            (delete contract (placemark-contracts node)))
       ;; mark intersecting children as dirty
       (ensure-intersecting-children contract-tree geo-box
                                     (lambda (node) (setf (timestamp node) (get-universal-time)))))))
