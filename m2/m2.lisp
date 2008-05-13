@@ -531,6 +531,7 @@ Sponsor-ID: ~A
 (deftransaction recolorize-contracts (&optional colors)
   "Assigns a new color to each contract choosing from COLORS, so
 that CONTRACTS-WELL-COLORED-P holds."
+  (assert (consistent-p))
   (let ((contracts (class-instances 'contract)))
     (loop for contract in contracts
        for color in (screamer-user:colorize colors contracts #'contract-neighbours)
