@@ -448,22 +448,25 @@
                 (and m2 (eql contract (m2-contract m2))))))))))))
 
 (defun contract-neighbours (contract)
-  "Return all contracts that have an adjacent m2 to one of CONTRACT's
-  m2s."
+  "Return all contracts that have an adjacent m2 to one of CONTRACT's m2s."
   (let (contracts)
     (flet ((push-neighbour (x y)
              (let ((m2 (get-m2 x y)))
                (when (and m2
                           (m2-contract m2)
-                          (not (eq (m2-contract m2) contract))
-                          (pushnew (m2-contract m2) contracts))))))
+                          (not (eq (m2-contract m2) contract)))
+                 (pushnew (m2-contract m2) contracts)))))
       (dolist (m2 (contract-m2s contract) contracts)
         (let ((x (m2-x m2))
-              (y (m2-y m2)))
-          (push-neighbour (1- x) (1- y))
+              (y (m2-y m2)))        
+          (push-neighbour (1- x) y)
+          (push-neighbour x (1- y))
+          (push-neighbour (1+ x) y)
+          (push-neighbour x (1+ y))
           (push-neighbour (1- x) (1+ y))
-          (push-neighbour (1+ x) (1- y))
-          (push-neighbour (1+ x) (1+ y)))))))
+          (push-neighbour (1- x) (1- y))
+          (push-neighbour (1+ x) (1+ y))
+          (push-neighbour (1+ x) (1- y)))))))
 
 (defun contract-center (contract)
   (destructuring-bind (left top width height)
