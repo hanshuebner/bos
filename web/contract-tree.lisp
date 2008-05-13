@@ -339,7 +339,7 @@ links are created."))
                                                       :key #'contract-area)))
                  (when small-contracts
                    (with-element "Folder"
-                     (kml-region rect `(:min ,(* 3 (getf lod :min)) :max -1))
+                     (kml-region rect `(:min ,(* 6 (getf lod :min)) :max -1))
                      (dolist (c small-contracts)
                        (write-contract-placemark-kml c lang))))
                  (when big-contracts
@@ -400,7 +400,8 @@ links are created."))
     (geometry:remove-rect-subscriber *rect-publisher* *contract-tree*))
   (setq *contract-tree* (make-instance 'contract-tree-node :geo-box *m2-geo-box*))
   (dolist (contract (class-instances 'contract))
-    (insert-contract *contract-tree* contract))
+    (when (contract-published-p contract)
+      (insert-contract *contract-tree* contract)))
   (geometry:register-rect-subscriber *rect-publisher* *contract-tree*
                                      (list 0 0 +width+ +width+)
                                      #'contract-tree-changed))
