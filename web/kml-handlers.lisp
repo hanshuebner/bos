@@ -81,12 +81,12 @@
           (mapc #'(lambda (contract) (write-contract-placemark-kml contract lang))
                 (sponsor-contracts sponsor)))
         (with-element "LookAt"
-          (with-element "longitude" (text "117.0181387825428"))
-          (with-element "latitude" (text "-1.07997466318112"))
+          (with-element "longitude" (text "116.988156014724"))
+          (with-element "latitude" (text "-1.045791509671129"))
           (with-element "altitude" (text "0"))
-          (with-element "range" (text "32826.94626281255"))
+          (with-element "range" (text "1134.262777389377"))
           (with-element "tilt" (text "0"))
-          (with-element "heading" (text "1.390706061810851")))
+          (with-element "heading" (text "1.391362238653075")))
         (let ((image-tree (find-store-object (image-tree-root-id))))
           (assert (and image-tree (typep image-tree 'image-tree)) nil
                   "(find-store-object (image-tree-root-id)) gives ~s" image-tree)
