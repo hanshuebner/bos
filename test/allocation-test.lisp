@@ -200,3 +200,11 @@
       (is (every #'object-destroyed-p stripes))
       (finishes (snapshot)))))
 
+(store-test contract-tree.1
+  (make-allocation-rectangle 0 0 8 8)
+  (finishes (delete-object (make-contract (make-sponsor :login "test-sponsor") 1 :paidp t))))
+
+(store-test contract-tree.2
+  (make-allocation-rectangle 0 0 8 8)
+  (finishes (delete-object (make-contract (make-sponsor :login "test-sponsor") 1 :paidp nil))))
+
