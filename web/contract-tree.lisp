@@ -236,7 +236,9 @@ with its center placemark."
                                              (* contract-height (/ output-images-size geo-height)))))
               (if (< (contract-area contract) 4)
                   nil
-                  (> contract-pixel-size 20))))))))
+                  (if (< (depth node) 6)
+                      (> contract-pixel-size 15)
+                      (> contract-pixel-size 30)))))))))
 
 (defun insert-contract (contract-tree contract)
   (let ((geo-box (contract-geo-box contract))

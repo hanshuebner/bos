@@ -448,7 +448,8 @@
                 (and m2 (eql contract (m2-contract m2))))))))))))
 
 (defun contract-neighbours (contract)
-  "Return all contracts that have an adjacent m2 to one of CONTRACT's m2s."
+  "Return all contracts that have an adjacent m2 to one of CONTRACT's m2s.
+Note that this function takes also diagonally connected m2s into account."
   (let (contracts)
     (flet ((push-neighbour (x y)
              (let ((m2 (get-m2 x y)))
