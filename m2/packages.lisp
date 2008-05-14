@@ -14,8 +14,9 @@
            #:bounding-box
            #:with-bounding-box-collect
 	   #:find-boundary-point
-	   #:region-to-polygon
+	   #:region-to-polygon           
 	   #:format-lon-lat
+           #:nodes-connected-p
            ;;
            #:make-rect-publisher
            #:register-rect-subscriber

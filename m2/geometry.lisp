@@ -119,8 +119,8 @@ that will be called between the rows."
 ;;   (let ((center (list 4 4)))
 ;;     (dorect (p (0 0 10 10) :row-change #'terpri)
 ;;       (if (point-in-circle-p p center 3)
-;; 	  (princ "x")
-;; 	  (princ ".")))))
+;;	  (princ "x")
+;;	  (princ ".")))))
 
 (defun bounding-box (objects &key (key #'identity))
   (let (min-x min-y max-x max-y)
@@ -134,7 +134,7 @@ that will be called between the rows."
     (list min-x min-y (1+ (- max-x min-x)) (1+ (- max-y min-y)))))
 
 (defmacro with-bounding-box-collect ((collect) &body body)
-  `(let (min-x min-y max-x max-y)     
+  `(let (min-x min-y max-x max-y)
      (flet ((,collect (point)
               (with-point point
                 (setf min-x (min point-x (or min-x point-x)))
@@ -155,7 +155,7 @@ that will be called between the rows."
 ;; which can be used to move from one
 ;; point to another in that direction
 ;;
-;; the mapping is as follows: 
+;; the mapping is as follows:
 ;;
 ;;  dx  dy    symbol
 ;;  --  --    -----
@@ -254,7 +254,7 @@ It defines the region whose bounding polygon is to be found."
 	       (when (and (eql direction initial-direction)
 			  (equal point boundary-point))
 		 (incf count)
-		 (= 2 count))) 
+		 (= 2 count)))
 	     (push-point (point direction)
 	       "Add a point to POLYGON. The actual point
                 depends on the DIRECTION."
@@ -268,7 +268,7 @@ It defines the region whose bounding polygon is to be found."
 	     (traverse (point direction)
 	       "Go to next POINT by DIRECTION."
 	       (push-point point direction)
-	       (unless (terminate point direction)		 
+	       (unless (terminate point direction)
 		 (destructuring-bind (next-point next-direction)
 		     (choose-next point direction)
 		   (traverse next-point next-direction)))))
@@ -358,7 +358,7 @@ with SUBSCRIBER and the published INFO as additional args."
 own rectangle intersects with RECTANGLE will be notified. The kind of
 change can be further specified by INFO."
   (dolist (subscriber (rect-publisher-subscribers publisher))
-    (when (rectangle-intersects-p rectangle (rect-subscriber-rectangle subscriber))            
+    (when (rectangle-intersects-p rectangle (rect-subscriber-rectangle subscriber))
       ;; (print (rect-subscriber-callback-fn subscriber))
       (apply (rect-subscriber-callback-fn subscriber) (rect-subscriber-object subscriber) info))))
 
@@ -383,7 +383,7 @@ point belongs to the region or not."
       (assert! (=v width (-v right left)))
       (assert! (=v height (-v bottom top)))
       (assert! (=v area (*v width height)))
-      (assert! (funcallv #'(lambda (left top right bottom)                             
+      (assert! (funcallv #'(lambda (left top right bottom)
                              (block result
                                (loop for x from left below right
                                   do (loop for y from top below bottom
@@ -399,7 +399,7 @@ point belongs to the region or not."
       (screamer::restrict-value!
        variable
        (cond ((not (eq (screamer::variable-enumerated-domain variable) t))
-              (a-member-of (alexandria:shuffle (screamer::variable-enumerated-domain variable))))             
+              (a-member-of (alexandria:shuffle (screamer::variable-enumerated-domain variable))))
              (t (error "INTEGER-RANDOM-FORCE is currently only implemented for ~
                         variables that have an enumerated domain."))))))
   (value-of variable))
@@ -412,7 +412,7 @@ point belongs to the region or not."
                                  (setf (gethash obj object2color-var)
                                        (an-integer-betweenv 1 number-of-colors)))
                              objects))
-         (hash (make-hash-table :size (hash-table-size object2color-var))))    
+         (hash (make-hash-table :size (hash-table-size object2color-var))))
     (dolist (obj objects)
       (setf (gethash obj hash) nil))
     (loop for obj in objects
@@ -426,3 +426,22 @@ point belongs to the region or not."
                        (solution color-vars (static-ordering #'integer-random-force)))
                (error "no solution to colorize problem"))))
 
+(in-package :geometry)
+
+(defun nodes-connected-p (nodes node-neighbours &optional (test #'eql))
+  (let ((hash (make-hash-table :test test)))
+    (labels ((visited-p (node)
+               (gethash node hash))
+             (mark (node)
+               (setf (gethash node hash) t))
+             (traverse (stack)
+               (let ((current (pop stack)))
+                 (when current
+                   (mark current)
+                   (dolist (neighbour (funcall node-neighbours current))
+                     (unless (visited-p neighbour)
+                       (push neighbour stack)))
+                   (traverse stack)))))   
+      (traverse (list (first nodes)))
+      (= (length nodes)
+         (hash-table-count hash)))))
