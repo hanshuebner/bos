@@ -314,13 +314,16 @@ links are created."))
 (defmethod handle ((handler contract-tree-kml-handler))
   (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
                                     :root-element "kml")
-    (with-query-params ((lang "en") (path))
+    (with-query-params ((lang "en") (path)
+                        (rmcpath) (rmcid))
       (handle-if-node-modified
         (setf (hunchentoot:header-out :last-modified)
               (hunchentoot:rfc-1123-date (timestamp node)))
         (let* ((lod `(:min ,(network-link-lod-min node) :max ,(network-link-lod-max node)))
                (box (geo-box node))
-               (rect (geo-box-rectangle box)))
+               (rect (geo-box-rectangle box))
+               (rmcid (when rmcid (parse-integer rmcid)))
+               (rmcpath (parse-path rmcpath)))
           (with-element "Document"
             (with-element "Style"
               (attribute "id" "contractPlacemarkIcon")
@@ -336,36 +339,44 @@ links are created."))
                          ;; GroundOverlay specific LOD
                          `(:min ,(network-link-lod-min node) :max ,(network-link-lod-max node)))
             ;; placemark-contracts
-            (cond
-              ;; we deal with small-contracts differently at last layer
-              ((not (node-has-children-p node))
-               (let* ((predicate #'(lambda (area) (< area 5)))
-                      (big-contracts (remove-if predicate (placemark-contracts node)
-                                                :key #'contract-area))
-                      (small-contracts (remove-if-not predicate (placemark-contracts node)
-                                                      :key #'contract-area)))
-                 (when small-contracts
-                   (with-element "Folder"
-                     (kml-region rect `(:min ,(* 6 (getf lod :min)) :max -1))
-                     (dolist (c small-contracts)
-                       (write-contract-placemark-kml c lang))))
-                 (when big-contracts
-                   (with-element "Folder"
-                     (kml-region rect `(:min ,(getf lod :min) :max -1))
-                     (dolist (c big-contracts)
-                       (write-contract-placemark-kml c lang))))))
-              ;; on all other layers
-              (t (when (placemark-contracts node)
-                   (with-element "Folder"
-                     (kml-region rect `(:min ,(getf lod :min) :max -1))
-                     (dolist (c (placemark-contracts node))
-                       (write-contract-placemark-kml c lang))))))
+            (let ((placemark-contracts
+                   (if (and rmcid (null rmcpath))
+                       (remove rmcid (placemark-contracts node) :key #'store-object-id)
+                       (placemark-contracts node))))
+              (cond
+                ;; we deal with small-contracts differently at last layer
+                ((not (node-has-children-p node))
+                 (let* ((predicate #'(lambda (area) (< area 5)))
+                        (big-contracts (remove-if predicate placemark-contracts
+                                                  :key #'contract-area))
+                        (small-contracts (remove-if-not predicate placemark-contracts
+                                                        :key #'contract-area)))
+                   (when small-contracts
+                     (with-element "Folder"
+                       (kml-region rect `(:min ,(* 6 (getf lod :min)) :max -1))
+                       (dolist (c small-contracts)
+                         (write-contract-placemark-kml c lang))))
+                   (when big-contracts
+                     (with-element "Folder"
+                       (kml-region rect `(:min ,(getf lod :min) :max -1))
+                       (dolist (c big-contracts)
+                         (write-contract-placemark-kml c lang))))))
+                ;; on all other layers
+                (t (when placemark-contracts
+                     (with-element "Folder"
+                       (kml-region rect `(:min ,(getf lod :min) :max -1))
+                       (dolist (c placemark-contracts)
+                         (write-contract-placemark-kml c lang)))))))
             ;; network-links
             (dotimes (i 4)
               (let ((child (child node i)))
                 (when child
                   (kml-network-link
-                   (format nil "http://~a/contract-tree-kml?path=~{~d~}~d" (website-host) path i)
+                   (if (and rmcpath
+                            (= (car rmcpath) i))
+                       (format nil "http://~A/contract-tree-kml?path=~{~D~}~d&rmcid=~D&rmcpath=~{~D~}"
+                               (website-host) path i rmcid (cdr rmcpath))
+                       (format nil "http://~A/contract-tree-kml?path=~{~D~}~D" (website-host) path i))
                    :rect (geo-box-rectangle (geo-box child))
                    :lod `(:min ,(network-link-lod-min child) :max ,(network-link-lod-max child))))))))))))
 

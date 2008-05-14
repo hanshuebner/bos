@@ -66,76 +66,84 @@
   ())
 
 (defun write-root-kml (&optional sponsor)
-  (with-xml-response (:content-type #+nil "text/xml" "application/vnd.google-earth.kml+xml; charset=utf-8"
-                                    :root-element "kml")
-    (with-query-params ((lang "en"))
-      (with-element "Document"
-        (with-element "name" (text "bos-kml"))        
-        (when sponsor
-          (with-element "Style"
-            (attribute "id" "contractPlacemarkIcon")
-            (with-element "IconStyle"
-              (with-element "color" (text "ff0000ff"))
-              (with-element "Icon"
-                ;; (with-element "href" (text "http://maps.google.com/mapfiles/kml/pal3/icon23.png"))
-                (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
-          (mapc #'(lambda (contract) (write-contract-placemark-kml contract lang))
-                (sponsor-contracts sponsor)))
-        (with-element "LookAt"
-          (with-element "longitude" (text "116.988156014724"))
-          (with-element "latitude" (text "-1.045791509671129"))
-          (with-element "altitude" (text "0"))
-          (with-element "range" (text "1134.262777389377"))
-          (with-element "tilt" (text "0"))
-          (with-element "heading" (text "1.391362238653075")))
-        (let ((image-tree (find-store-object (image-tree-root-id))))
-          (assert (and image-tree (typep image-tree 'image-tree)) nil
-                  "(find-store-object (image-tree-root-id)) gives ~s" image-tree)
-          (kml-network-link (format nil "http://~a/image-tree-kml/~d" (website-host) (image-tree-root-id))
-                            :rect (make-rectangle2 (geo-location image-tree))
-                            :lod `(:min ,(lod-min image-tree) :max ,(lod-max image-tree))
-                            :name "sat-image"))
-        (kml-network-link (format nil "http://~a/contract-tree-kml" (website-host))
-                          :rect (geo-box-rectangle (geo-box *contract-tree*))
-                          :lod `(:min ,(network-link-lod-min *contract-tree*)
-                                      :max ,(network-link-lod-max *contract-tree*))
-                          :name "contracts")
-        (kml-network-link (format nil "http://~a/poi-kml-all" (website-host))
-                          :name "POIs"
-                          :rect (make-rectangle :x 0 :y 0 :width +width+ :height +width+)
-                          :lod '(:min 0 :max -1))
-        ;; Country-Stats
-        (with-element "Folder"
-          (with-element "name" (text "Country-Stats"))
-          (with-element "Style"
-            (attribute "id" "countryStatsStyle")
-            (with-element "IconStyle"
-              (with-element "Icon"
-                ;; (with-element "href" (text "http://maps.google.com/mapfiles/kml/pal3/icon23.png"))
-                (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
-          (dolist (country-contracts (sort (group-on (all-contracts)
-                                                     :test #'equal
-                                                     :key (lambda (contract)
-                                                            (string-upcase (sponsor-country (contract-sponsor contract)))))
-                                           #'> :key (lambda (entry) (length (cdr entry)))))
-            (let ((coords (cdr (assoc (make-keyword-from-string (car country-contracts)) *country-coords*))))
-              (when coords
-                (destructuring-bind (lon lat)
-                    coords
-                  (let ((contracts (cdr country-contracts)))
-                    (with-element "Placemark"
-                      ;; (with-element "name" (text (format nil "~a ~a" (car country-contracts) (length (cdr country-contracts)))))
-                      (with-element "styleUrl" (text "#countryStatsStyle"))
-                      (with-element "description"
-                        (text (format nil "<p>~d sponsors from ~a have supported the activities of
+  (let ((contract (when sponsor (first (sponsor-contracts sponsor)))))
+    ;; only the first contract of SPONSOR will be shown
+    (with-xml-response (:content-type #+nil "text/xml" "application/vnd.google-earth.kml+xml; charset=utf-8"
+                                      :root-element "kml")
+      (with-query-params ((lang "en"))
+        (with-element "Document"
+          (with-element "name" (text "bos-kml"))        
+          (when contract
+            (with-element "Style"
+              (attribute "id" "contractPlacemarkIcon")
+              (with-element "IconStyle"
+                (with-element "color" (text "ff0000ff"))
+                (with-element "Icon"
+                  ;; (with-element "href" (text "http://maps.google.com/mapfiles/kml/pal3/icon23.png"))
+                  (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
+            (write-contract-placemark-kml contract lang))
+          (with-element "LookAt"
+            (with-element "longitude" (text "116.988156014724"))
+            (with-element "latitude" (text "-1.045791509671129"))
+            (with-element "altitude" (text "0"))
+            (with-element "range" (text "1134.262777389377"))
+            (with-element "tilt" (text "0"))
+            (with-element "heading" (text "1.391362238653075")))
+          (let ((image-tree (find-store-object (image-tree-root-id))))
+            (assert (and image-tree (typep image-tree 'image-tree)) nil
+                    "(find-store-object (image-tree-root-id)) gives ~s" image-tree)
+            (kml-network-link (format nil "http://~a/image-tree-kml/~d" (website-host) (image-tree-root-id))
+                              :rect (make-rectangle2 (geo-location image-tree))
+                              :lod `(:min ,(lod-min image-tree) :max ,(lod-max image-tree))
+                              :name "sat-image"))
+          (let ((href (if (not contract)
+                          (format nil "http://~a/contract-tree-kml" (website-host))
+                          (let* ((node (find-contract-node *contract-tree* contract))
+                                 (path (node-path *contract-tree* node))
+                                 (contract-id (store-object-id contract)))
+                            (format nil "http://~a/contract-tree-kml?rmcid=~D&rmcpath=~{~D~}"
+                                    (website-host) contract-id path)))))            
+            (kml-network-link href
+                              :rect (geo-box-rectangle (geo-box *contract-tree*))
+                              :lod `(:min ,(network-link-lod-min *contract-tree*)
+                                          :max ,(network-link-lod-max *contract-tree*))
+                              :name "contracts"))
+          (kml-network-link (format nil "http://~a/poi-kml-all" (website-host))
+                            :name "POIs"
+                            :rect (make-rectangle :x 0 :y 0 :width +width+ :height +width+)
+                            :lod '(:min 0 :max -1))
+          ;; Country-Stats
+          (with-element "Folder"
+            (with-element "name" (text "Country-Stats"))
+            (with-element "Style"
+              (attribute "id" "countryStatsStyle")
+              (with-element "IconStyle"
+                (with-element "Icon"
+                  ;; (with-element "href" (text "http://maps.google.com/mapfiles/kml/pal3/icon23.png"))
+                  (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
+            (dolist (country-contracts (sort (group-on (all-contracts)
+                                                       :test #'equal
+                                                       :key (lambda (contract)
+                                                              (string-upcase (sponsor-country (contract-sponsor contract)))))
+                                             #'> :key (lambda (entry) (length (cdr entry)))))
+              (let ((coords (cdr (assoc (make-keyword-from-string (car country-contracts)) *country-coords*))))
+                (when coords
+                  (destructuring-bind (lon lat)
+                      coords
+                    (let ((contracts (cdr country-contracts)))
+                      (with-element "Placemark"
+                        ;; (with-element "name" (text (format nil "~a ~a" (car country-contracts) (length (cdr country-contracts)))))
+                        (with-element "styleUrl" (text "#countryStatsStyle"))
+                        (with-element "description"
+                          (text (format nil "<p>~d sponsors from ~a have supported the activities of
                                            <a href='http://createrainforest.com/'>BOS</a>.</p>
                                            <p>In total, they have contributed ~d m².</p><br>"
-                                      (length contracts)
-                                      (second (assoc (make-keyword-from-string (car country-contracts)) *country-english-names*))
-                                      (reduce #'+ contracts :key #'contract-area))))
-                      (with-element "Point"
-                        (with-element "coordinates"
-                          (text (format nil "~,20F,~,20F,0" lat lon)))))))))))))))
+                                        (length contracts)
+                                        (second (assoc (make-keyword-from-string (car country-contracts)) *country-english-names*))
+                                        (reduce #'+ contracts :key #'contract-area))))
+                        (with-element "Point"
+                          (with-element "coordinates"
+                            (text (format nil "~,20F,~,20F,0" lat lon))))))))))))))))
 
 (defmethod handle-object ((handler kml-root-handler) (object sponsor))
   (write-root-kml object))
