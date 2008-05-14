@@ -75,6 +75,7 @@
           (with-element "Style"
             (attribute "id" "contractPlacemarkIcon")
             (with-element "IconStyle"
+              (with-element "color" (text "ff0000ff"))
               (with-element "Icon"
                 ;; (with-element "href" (text "http://maps.google.com/mapfiles/kml/pal3/icon23.png"))
                 (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
