@@ -240,6 +240,9 @@ with its center placemark."
                       (> contract-pixel-size 15)
                       (> contract-pixel-size 30)))))))))
 
+(defun find-contract-node (node contract)
+  (find-node-if (lambda (node) (member contract (placemark-contracts node))) node))
+
 (defun insert-contract (contract-tree contract)
   (let ((geo-box (contract-geo-box contract))
         (geo-center (contract-geo-center contract)))
@@ -254,8 +257,7 @@ with its center placemark."
 
 (defun remove-contract (contract-tree contract)
   (let ((geo-box (contract-geo-box contract))
-        (node (find-node-if (lambda (node) (member contract (placemark-contracts node)))
-                            contract-tree)))
+        (node (find-contract-node contract-tree contract)))
     ;; if CONTRACT is not in CONTRACT-TREE this is a noop
     (when node
       (setf (placemark-contracts node)
@@ -328,10 +330,12 @@ links are created."))
                 (with-element "Icon"
                   (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
             (kml-region rect lod)
+            ;; overlay
             (kml-overlay (format nil "http://~a/contract-tree-image?path=~{~d~}" (website-host) path)
                          rect (+ 1 (* 2 (depth node))) 0
                          ;; GroundOverlay specific LOD
                          `(:min ,(network-link-lod-min node) :max ,(network-link-lod-max node)))
+            ;; placemark-contracts
             (cond
               ;; we deal with small-contracts differently at last layer
               ((not (node-has-children-p node))
@@ -356,6 +360,7 @@ links are created."))
                      (kml-region rect `(:min ,(getf lod :min) :max -1))
                      (dolist (c (placemark-contracts node))
                        (write-contract-placemark-kml c lang))))))
+            ;; network-links
             (dotimes (i 4)
               (let ((child (child node i)))
                 (when child
