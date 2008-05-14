@@ -139,6 +139,9 @@
 (defmethod handle-object ((handler kml-root-handler) (object sponsor))
   (write-root-kml object))
 
+(defmethod handle-object ((handler kml-root-handler) (object contract))
+  (handle-object handler (contract-sponsor object)))
+
 (defmethod handle-object ((handler kml-root-handler) (object null))
   (write-root-kml))
 
