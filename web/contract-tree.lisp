@@ -393,7 +393,7 @@ links are created."))
                             (if contract
                                 (destructuring-bind (r g b)
                                     (contract-color contract)
-                                  (cl-gd:find-color r g b :alpha 50))
+                                  (cl-gd:find-color r g b :alpha 40))
                                 white))))))))
           (emit-image-to-browser cl-gd:*default-image* :png :date (timestamp node)))))))
 
