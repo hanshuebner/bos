@@ -314,7 +314,7 @@ links are created."))
 
 (defun parse-path (path)
   (loop for i from 0 below (length path)
-     collect (parse-integer (make-string 1 :initial-element (char path i)))))
+     collect (parse-integer path :start i :end (1+ i))))
 
 (defmethod handle ((handler contract-tree-kml-handler))
   (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
