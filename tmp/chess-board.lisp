@@ -161,7 +161,7 @@
                        (dolist (obj visible-nodes)
                          (let ((rect (make-rectangle2 (geo-location obj))))
                            (kml-overlay (format nil "http://~a/contract-tree-image/~d" (website-host) (id obj))
-                                        rect (+ 100 (depth obj)) 0)))       
+                                        rect :draw-order (+ 100 (depth obj)) :absolute 0)))       
                        ;; (cond
                        ;;                            ;; we deal with small-contracts differently at last layer
                        ;;                            ((null (children obj))

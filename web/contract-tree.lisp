@@ -134,6 +134,9 @@ returns indices of those children that would intersect with GEO-BOX."
 (defun node-has-children-p (node)
   (some #'identity (children node)))
 
+(defun any-child (node)
+  (find-if #'identity (children node)))
+
 (defun child-index (node child)
   (dotimes (i 4)
     (when (eq (child node i) child)
@@ -189,7 +192,9 @@ returns indices of those children that would intersect with GEO-BOX."
 ;;; contract-tree-node
 (defclass contract-tree-node (quad-tree-node)
   ((timestamp :accessor timestamp :initform (get-universal-time))
-   (placemark-contracts :initform nil :accessor placemark-contracts)))
+   (placemark-contracts :initform nil :accessor placemark-contracts)
+   (kml-req-count :initform 0 :accessor kml-req-count)
+   (image-req-count :initform 0 :accessor image-req-count)))
 
 (defvar *contract-tree* nil)
 (defparameter *contract-tree-images-size* 256)
@@ -283,7 +288,7 @@ with its center placemark."
 (defmethod network-link-lod-min ((node contract-tree-node))
   (if (zerop (depth node))
       16
-      256))
+      512))
 
 (defmethod network-link-lod-max ((node contract-tree-node))
   -1)
@@ -317,6 +322,7 @@ links are created."))
     (with-query-params ((lang "en") (path)
                         (rmcpath) (rmcid))
       (handle-if-node-modified
+        (incf (kml-req-count node))
         (setf (hunchentoot:header-out :last-modified)
               (hunchentoot:rfc-1123-date (timestamp node)))
         (let* ((lod `(:min ,(network-link-lod-min node) :max ,(network-link-lod-max node)))
@@ -335,9 +341,14 @@ links are created."))
             (kml-region rect lod)
             ;; overlay
             (kml-overlay (format nil "http://~a/contract-tree-image?path=~{~d~}" (website-host) path)
-                         rect (+ 1 (* 2 (depth node))) 0
+                         rect
+                         :draw-order (+ 1000 (depth node))
+                         ;; :absolute 0
                          ;; GroundOverlay specific LOD
-                         `(:min ,(network-link-lod-min node) :max ,(network-link-lod-max node)))
+                         :lod `(:min ,(network-link-lod-min node)
+                                     :max ,(if (node-has-children-p node)
+                                               (* 6 (network-link-lod-min (any-child node)))
+                                               -1)))
             ;; placemark-contracts
             (let ((placemark-contracts
                    (if (and rmcid (null rmcpath))
@@ -388,11 +399,13 @@ links are created."))
 (defmethod handle ((handler contract-tree-image-handler))  
   (with-query-params (path)
     (handle-if-node-modified
+      (incf (image-req-count node))
       (let ((box (geo-box node))
-            (image-size *contract-tree-images-size*))        
+            (image-size (progn *contract-tree-images-size* 128)))        
         (cl-gd:with-image (cl-gd:*default-image* image-size image-size t)
           (setf (cl-gd:save-alpha-p) t
                 (cl-gd:alpha-blending-p) nil)
+          ;; (cl-gd:draw-rectangle* 0 0 127 127 :filled nil :color (cl-gd:find-color 255 0 0))
           (let ((white (cl-gd:find-color 255 255 255 :alpha 127))
                 (subbox (make-geo-box 0d0 0d0 0d0 0d0)))
             (cl-gd:do-rows (y)

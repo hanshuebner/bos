@@ -283,11 +283,11 @@
 (defun kml-lat-lon-alt-box (rect)
   (kml-lat-lon-box rect "LatLonAltBox"))
 
-(defun kml-overlay (img-path rect &optional (drawOrder 0) absolute lod)
+(defun kml-overlay (img-path rect &key (draw-order 0) absolute lod)
   (with-element "GroundOverlay"
     (with-element "name" (text (file-namestring img-path)))
     (when lod (kml-region rect lod))
-    (with-element "drawOrder" (integer-text drawOrder))
+    (with-element "drawOrder" (integer-text draw-order))
     (with-element "Icon"
       (with-element "href" (text img-path))
       ;; (with-element "refreshMode" (text "..."))
@@ -621,7 +621,10 @@ links are created."))
       (with-element "Document"
         (kml-region rect lod)
         (kml-overlay (format nil "http://~a/image/~d" (website-host) (store-object-id obj))
-                     rect (* 2 (depth obj)) 0)
+                     rect
+                     :draw-order (depth obj)
+                     ;; :absolute 0
+                     )
         (dolist (child (children obj))
           (kml-network-link (format nil "http://~a/image-tree-kml/~d" (website-host) (store-object-id child))
                             :rect (make-rectangle2 (list (geo-x child) (geo-y child)
