@@ -14,4 +14,4 @@
                         :depends-on ("test-suites")
                         :components
                         ((:file "startup")
-                         (:file "contract-tree")))))
+                         (:file "quad-tree")))))

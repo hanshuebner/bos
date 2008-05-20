@@ -15,7 +15,7 @@
     :in :bos.test
     :description "Tests for bos/web.")
 
-(def-suite :bos.test.web.contract-tree
+(def-suite :bos.test.web.quad-tree
     :in :bos.test.web
     :description "Tests for the contract-tree.")
 
