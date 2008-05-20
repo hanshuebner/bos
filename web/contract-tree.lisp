@@ -89,15 +89,40 @@
 (defvar *m2-geo-box* (make-geo-box 116.92538417241805d0 -0.9942953097298868d0
                                    117.02245623511905d0 -1.0920067364569994d0))
 
-;;; quad-tree-node
-(defclass quad-tree-node ()
-  ((geo-box :accessor geo-box :initarg :geo-box :type geo-box)
-   (children :accessor children :initarg :children :initform (make-array 4 :initial-element nil))
-   (depth :accessor depth :initarg :depth :initform 0)))
+;;; quad-node
+(defclass quad-node ()
+  ((geo-box :reader geo-box :initarg :geo-box :type geo-box)
+   (children :reader children :initarg :children :initform (make-array 4 :initial-element nil))
+   (depth :reader depth :initarg :depth :initform 0)
+   (extensions :reader extensions :initarg :extensions :initform nil)))
+
+(defmethod shared-initialize ((obj quad-node) slot-names &key parent-node index &allow-other-keys)
+  (declare (ignore parent-node index))
+  (call-next-method))
+
+;; (defmethod (setf extensions) :after (new-value (node quad-node))
+;;   (declare (ignore new-value))
+;;   (dolist (extension (extensions node))
+;;     (setf (base-node extension) node)))
+
+(defmethod extensions ((node null)) nil)
+
+(defclass node-extension ()
+  ((base-node :accessor base-node)
+   (name :accessor name :initarg :name)))
+
+(defmethod shared-initialize :after ((obj node-extension) slot-names &key parent-node index &allow-other-keys)    
+  (setf (base-node obj) (ensure-child (base-node parent-node) index)))
+
+(defun equal-extension-type (a b)
+  (and (eql (type-of a)
+            (type-of b))
+       (eql (name a)
+            (name b))))
 
 (defgeneric leaf-node-p (node))
 
-(defun child-geo-box (node index)
+(defun compute-child-geo-box (node index)
   (declare #+nil(optimize speed)
            (fixnum index))
   (with-accessors ((north geo-box-north)
@@ -106,7 +131,7 @@
                    (east geo-box-east))
       (geo-box node)
     (let ((middle-north (- north (/ (- north south) 2d0)))
-          (middle-west (+ west (/ (- east west) 2d0))))
+          (middle-west (+ west (/ (- east west) 2d0))))      
       (ecase index
         (0 (make-geo-box   west         north         middle-west  middle-north))
         (1 (make-geo-box   middle-west  north         east         middle-north))
@@ -117,18 +142,34 @@
   "Independently of whether a certain child of NODE actually exists,
 returns indices of those children that would intersect with GEO-BOX."
   (loop for index from 0 to 3
-     for child-box = (child-geo-box node index)
+     for child-box = (compute-child-geo-box node index)
      when (geo-box-intersect-p child-box geo-box)
      collect index))
 
-(defmacro child (node index)
-  `(aref (children ,node) ,index))
+(defgeneric child (node index)
+  (:method ((node quad-node) index)
+    (aref (children node) index))
+  (:method ((node node-extension) index)
+    (let ((base-child (child (base-node node) index)))
+      (find node (extensions base-child) :test #'equal-extension-type))))
+
+(defgeneric (setf child) (child node index)
+  (:method (new-value (node quad-node) index)
+    (setf (aref (children node) index) new-value))
+  (:method (child (node node-extension) index)
+    (let ((base-child (child (base-node node) index)))
+      (assert (not (find child (extensions base-child) :test #'equal-extension-type)))
+      (push child (extensions base-child))
+      child)))
 
 (defun ensure-child (node index)
   (let ((child (child node index)))
     (or child
         (setf (child node index)
-              (make-instance (class-of node) :geo-box (child-geo-box node index)
+              (make-instance (class-of node)
+                             :parent-node node
+                             :index index
+                             :geo-box (compute-child-geo-box node index)
                              :depth (1+ (depth node)))))))
 
 (defun node-has-children-p (node)
@@ -189,9 +230,10 @@ returns indices of those children that would intersect with GEO-BOX."
                tree
                :prune-test (lambda (n) (not (geo-box-intersect-p (geo-box n) (geo-box node)))))))
 
-;;; contract-tree-node
-(defclass contract-tree-node (quad-tree-node)
-  ((timestamp :accessor timestamp :initform (get-universal-time))
+;;; contract-node
+(defclass contract-node (node-extension)
+  ((name :allocation :class :initform 'contract-node)
+   (timestamp :accessor timestamp :initform (get-universal-time))
    (placemark-contracts :initform nil :accessor placemark-contracts)
    (kml-req-count :initform 0 :accessor kml-req-count)
    (image-req-count :initform 0 :accessor image-req-count)))
@@ -200,7 +242,7 @@ returns indices of those children that would intersect with GEO-BOX."
 (defparameter *contract-tree-images-size* 256)
 
 ;;; XXX soll spaeter von was anderem abhaengen
-(defmethod leaf-node-p ((node contract-tree-node))
+(defmethod leaf-node-p ((node contract-node))
   (= 9 (depth node)))
 
 (defun contract-geo-box (contract)
@@ -285,18 +327,18 @@ with its center placemark."
      ,@body))
 
 ;;; kml handler
-(defmethod network-link-lod-min ((node contract-tree-node))
+(defmethod network-link-lod-min ((node contract-node))
   (if (zerop (depth node))
       16
       512))
 
-(defmethod network-link-lod-max ((node contract-tree-node))
+(defmethod network-link-lod-max ((node contract-node))
   -1)
 
 (defclass contract-tree-kml-handler (page-handler)
   ()
   (:documentation "Generates a kml representation of the queried
-contract-tree-node. For existing children, corresponding network
+contract-node. For existing children, corresponding network
 links are created."))
 
 (defun write-contract-placemark-kml (c language)
@@ -430,7 +472,7 @@ links are created."))
 (defun make-contract-tree-from-m2 ()
   (when *contract-tree*
     (geometry:remove-rect-subscriber *rect-publisher* *contract-tree*))
-  (setq *contract-tree* (make-instance 'contract-tree-node :geo-box *m2-geo-box*))
+  (setq *contract-tree* (make-instance 'contract-node :geo-box *m2-geo-box*))
   (dolist (contract (class-instances 'contract))
     (when (contract-published-p contract)
       (insert-contract *contract-tree* contract)))
