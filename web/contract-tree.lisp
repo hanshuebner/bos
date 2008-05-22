@@ -254,5 +254,5 @@ links are created."))
 
 (register-store-transient-init-function 'make-contract-tree-from-m2
                                         'make-quad-tree
-                                        'make-rect-publisher)
+                                        'geometry::make-rect-publisher)
 
