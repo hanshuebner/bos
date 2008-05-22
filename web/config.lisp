@@ -1,3 +1,4 @@
+;;; -*- coding: utf-8 -*-
 (in-package :bos.web)
 
 ;; Worldpay installation ID
