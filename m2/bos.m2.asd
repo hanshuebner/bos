@@ -6,14 +6,15 @@
                                :cl-pdf :screamer :cl-fad)
   :components ((:file "packages")
 	       (:file "geo-utm" :depends-on ("packages"))
-	       (:file "geometry" :depends-on ("packages"))               
+	       (:file "geometry" :depends-on ("packages" "m2-store"))               
 	       (:file "config" :depends-on ("packages"))
 	       (:file "utils" :depends-on ("config"))
 	       (:file "news" :depends-on ("poi"))
 	       (:file "tiled-index" :depends-on ("config"))
 	       (:file "mail-generator" :depends-on ("config"))
 	       (:file "make-certificate" :depends-on ("config"))
-	       (:file "m2" :depends-on ("tiled-index"
+	       (:file "m2-store" :depends-on ("packages"))
+               (:file "m2" :depends-on ("tiled-index"
 					"utils"
 					"make-certificate"
 					"mail-generator"
