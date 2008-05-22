@@ -628,7 +628,7 @@ neighbours."
       (format t "profil.country = ~S;~%" (or (sponsor-country sponsor) "[unbekannt]"))
       (format t "profil.anzahl = ~D;~%" (loop for contract in paid-contracts
 					   sum (length (contract-m2s contract))))
-      (format t "profil.nachricht = '~A';~%" (string-safe (sponsor-info-text sponsor)))
+      (format t "profil.nachricht = \"~A\";~%" (string-safe (sponsor-info-text sponsor)))
       (format t "profil.contracts = [ ];~%")
       (loop for contract in paid-contracts
 	 do (destructuring-bind (left top width height) (contract-bounding-box contract)
