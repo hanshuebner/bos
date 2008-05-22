@@ -736,8 +736,7 @@ neighbours."
   (format t "~&; Startup Quadratmeterdatenbank...~%")
   (force-output)
   (setf *enable-mails* enable-mails)
-  (setf *website-url* website-url)
-  (setf *rect-publisher* (make-rect-publisher))
+  (setf *website-url* website-url)  
   (unless directory
     (error ":DIRECTORY parameter not set in m2.rc"))
   (assert (and (null (pathname-name directory))

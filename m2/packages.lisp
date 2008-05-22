@@ -18,6 +18,7 @@
 	   #:format-lon-lat
            #:nodes-connected-p
            ;;
+           #:*rect-publisher*
            #:make-rect-publisher
            #:register-rect-subscriber
            #:remove-rect-subscriber
@@ -252,8 +253,7 @@
 	   #:mail-print-pdf
 
 	   #:*cert-download-directory*
-
-           #:*rect-publisher*))
+           ))
 
 (defpackage :bos.m2.cert-generator
   (:use :cl

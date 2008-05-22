@@ -329,11 +329,18 @@ leading zeros, keep trailing zeros)"
 	  (plusp lon)))
 
 ;;; publish - subscribe on rectangles
-(defstruct rect-publisher
-  subscribers)
 
-(setf (documentation 'make-rect-publisher 'function)
-      "MAKE-RECT-PUBLISHER creates a new publisher object.")
+;;; rect-publisher
+(defvar *rect-publisher*)
+
+(defun make-rect-publisher ()
+  "MAKE-RECT-PUBLISHER creates a new publisher object."
+  (setf *rect-publisher* (%make-rect-publisher)))
+
+(bos.m2::register-store-transient-init-function 'make-rect-publisher)
+
+(defstruct (rect-publisher (:constructor %make-rect-publisher))
+  subscribers)
 
 (defstruct rect-subscriber
   object rectangle callback-fn)

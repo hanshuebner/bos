@@ -239,9 +239,7 @@ links are created."))
           (emit-image-to-browser cl-gd:*default-image* :png :date (timestamp node)))))))
 
 ;;; make-contract-tree-from-m2
-(defun make-contract-tree-from-m2 ()
-  (when *contract-tree*
-    (geometry:remove-rect-subscriber *rect-publisher* *contract-tree*))
+(defun make-contract-tree-from-m2 ()  
   (setq *contract-tree* (make-instance 'contract-node
                                        ;; we know that MAKE-QUAD-TREE
                                        ;; has already been called
@@ -255,5 +253,6 @@ links are created."))
                                      #'contract-tree-changed))
 
 (register-store-transient-init-function 'make-contract-tree-from-m2
-                                        'make-quad-tree)
+                                        'make-quad-tree
+                                        'make-rect-publisher)
 

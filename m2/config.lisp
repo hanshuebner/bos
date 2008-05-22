@@ -74,6 +74,3 @@ Download-Urkunden erzeugt werden sollen")
 ;; Einschalten des Mail-Versands (normalerweise aus)
 (defvar *enable-mails* nil)
 
-;;; rect-publisher
-(defvar *rect-publisher*)
-
