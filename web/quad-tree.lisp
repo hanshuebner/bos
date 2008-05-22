@@ -261,3 +261,11 @@ returns indices of those children that would intersect with GEO-BOX."
                tree
                :prune-test (lambda (n) (not (geo-box-intersect-p (geo-box n) (geo-box node)))))))
 
+;;; *quad-tree*
+(defvar *quad-tree*)
+
+(defun ensure-quad-tree ()
+  (unless (boundp '*quad-tree*)
+    (setq *quad-tree* (make-instance 'quad-node :geo-box *m2-geo-box*)))
+  *quad-tree*)
+

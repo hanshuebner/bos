@@ -242,16 +242,15 @@ links are created."))
 (defun make-contract-tree-from-m2 ()
   (when *contract-tree*
     (geometry:remove-rect-subscriber *rect-publisher* *contract-tree*))
-  (let ((quad-tree (make-instance 'quad-node :geo-box *m2-geo-box*)))
-    (setq *contract-tree* (make-instance 'contract-node
-                                         :base-node quad-tree
-                                         :name '*contract-tree*))
-    (dolist (contract (class-instances 'contract))
-      (when (contract-published-p contract)
-        (insert-contract *contract-tree* contract)))
-    (geometry:register-rect-subscriber *rect-publisher* *contract-tree*
-                                       (list 0 0 +width+ +width+)
-                                       #'contract-tree-changed)))
+  (setq *contract-tree* (make-instance 'contract-node
+                                       :base-node (ensure-quad-tree)
+                                       :name '*contract-tree*))
+  (dolist (contract (class-instances 'contract))
+    (when (contract-published-p contract)
+      (insert-contract *contract-tree* contract)))
+  (geometry:register-rect-subscriber *rect-publisher* *contract-tree*
+                                     (list 0 0 +width+ +width+)
+                                     #'contract-tree-changed))
 
 (register-store-transient-init-function 'make-contract-tree-from-m2)
 
