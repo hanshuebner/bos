@@ -94,25 +94,52 @@
   ((geo-box :reader geo-box :initarg :geo-box :type geo-box)
    (children :reader children :initarg :children :initform (make-array 4 :initial-element nil))
    (depth :reader depth :initarg :depth :initform 0)
-   (extensions :reader extensions :initarg :extensions :initform nil)))
+   (extensions :reader extensions :accessor %extensions :initarg :extensions :initform nil)))
 
 (defmethod shared-initialize ((obj quad-node) slot-names &key parent-node index &allow-other-keys)
   (declare (ignore parent-node index))
-  (call-next-method))
+  (call-next-method)
+  (check-type (slot-value obj 'geo-box) geo-box))
 
-;; (defmethod (setf extensions) :after (new-value (node quad-node))
-;;   (declare (ignore new-value))
-;;   (dolist (extension (extensions node))
-;;     (setf (base-node extension) node)))
+(defmethod shared-initialize :after ((obj quad-node) slot-names &key)
+  (assert (and (slot-boundp obj 'geo-box) (geo-box obj)) ((slot-value obj 'geo-box))
+          "~s needs a geo-box" obj))
 
 (defmethod extensions ((node null)) nil)
 
 (defclass node-extension ()
-  ((base-node :accessor base-node)
-   (name :accessor name :initarg :name)))
+  ((base-node :reader base-node :accessor %base-node :initform nil)
+   (name :reader name :initarg :name :initform nil)))
 
-(defmethod shared-initialize :after ((obj node-extension) slot-names &key parent-node index &allow-other-keys)    
-  (setf (base-node obj) (ensure-child (base-node parent-node) index)))
+(defmethod (setf %base-node) :before (base-node (node node-extension))
+  (assert (not (member node (%extensions base-node) :test #'equal-extension-type))))
+
+(defmethod (setf %base-node) :after (base-node (node node-extension))
+  (push node (%extensions base-node)))
+
+(defmethod shared-initialize :after ((obj node-extension) slot-names
+                                     &key base-node parent-node index
+                                     &allow-other-keys)     
+  (flet ((xor (a b)
+           (or (and (not a) b)
+               (and a (not b)))))
+    (assert (xor base-node (and parent-node index)))
+    (if base-node
+        (setf (%base-node obj) base-node)
+        (setf (%base-node obj) (ensure-child (base-node parent-node) index)
+              (slot-value obj 'name) (name parent-node)))
+    ;; (assert (base-node obj) nil "~s needs a base-node" obj)
+    (assert (name obj) ((slot-value obj 'name)) "~s needs a name" obj)))
+
+(macrolet ((def-extension-reader (reader)
+             `(defmethod ,reader ((node node-extension))
+                (,reader (base-node node)))))
+  (def-extension-reader geo-box)
+  (def-extension-reader depth))
+
+(defmethod print-object ((node node-extension) stream)
+  (print-unreadable-object (node stream :type t :identity t)
+    (format stream "~s" (name node))))
 
 (defun equal-extension-type (a b)
   (and (eql (type-of a)
@@ -157,9 +184,8 @@ returns indices of those children that would intersect with GEO-BOX."
   (:method (new-value (node quad-node) index)
     (setf (aref (children node) index) new-value))
   (:method (child (node node-extension) index)
-    (let ((base-child (child (base-node node) index)))
-      (assert (not (find child (extensions base-child) :test #'equal-extension-type)))
-      (push child (extensions base-child))
+    (let ((base-child (child (base-node node) index)))      
+      (pushnew child (%extensions base-child ))
       child)))
 
 (defun ensure-child (node index)
@@ -173,10 +199,15 @@ returns indices of those children that would intersect with GEO-BOX."
                              :depth (1+ (depth node)))))))
 
 (defun node-has-children-p (node)
-  (some #'identity (children node)))
+  (any-child node))
 
-(defun any-child (node)
-  (find-if #'identity (children node)))
+(defgeneric any-child (node)
+  (:method ((node quad-node))
+    (find-if #'identity (children node)))
+  (:method ((node node-extension))
+    (dotimes (i 4)
+      (let ((child (child node i)))
+        (when child (return child))))))
 
 (defun child-index (node child)
   (dotimes (i 4)
@@ -472,12 +503,16 @@ links are created."))
 (defun make-contract-tree-from-m2 ()
   (when *contract-tree*
     (geometry:remove-rect-subscriber *rect-publisher* *contract-tree*))
-  (setq *contract-tree* (make-instance 'contract-node :geo-box *m2-geo-box*))
-  (dolist (contract (class-instances 'contract))
-    (when (contract-published-p contract)
-      (insert-contract *contract-tree* contract)))
-  (geometry:register-rect-subscriber *rect-publisher* *contract-tree*
-                                     (list 0 0 +width+ +width+)
-                                     #'contract-tree-changed))
+  (let ((quad-tree (make-instance 'quad-node :geo-box *m2-geo-box*)))
+    (setq *contract-tree* (make-instance 'contract-node
+                                         :base-node quad-tree
+                                         :name '*contract-tree*))
+    (dolist (contract (class-instances 'contract))
+      (when (contract-published-p contract)
+        (insert-contract *contract-tree* contract)))
+    (geometry:register-rect-subscriber *rect-publisher* *contract-tree*
+                                       (list 0 0 +width+ +width+)
+                                       #'contract-tree-changed)))
 
 (register-store-transient-init-function 'make-contract-tree-from-m2)
+
