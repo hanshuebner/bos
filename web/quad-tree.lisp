@@ -112,7 +112,8 @@
    (name :reader name :initarg :name :initform nil)))
 
 (defmethod (setf %base-node) :before (base-node (node node-extension))
-  (assert (not (member node (%extensions base-node) :test #'equal-extension-type))))
+  (assert (not (member node (%extensions base-node) :test #'equal-extension-type)) nil
+          "~s already exists in ~s as an extension" node base-node))
 
 (defmethod (setf %base-node) :after (base-node (node node-extension))
   (push node (%extensions base-node)))
@@ -264,8 +265,8 @@ returns indices of those children that would intersect with GEO-BOX."
 ;;; *quad-tree*
 (defvar *quad-tree*)
 
-(defun ensure-quad-tree ()
-  (unless (boundp '*quad-tree*)
-    (setq *quad-tree* (make-instance 'quad-node :geo-box *m2-geo-box*)))
-  *quad-tree*)
+(defun make-quad-tree ()
+  (setq *quad-tree* (make-instance 'quad-node :geo-box *m2-geo-box*)))
+
+(register-store-transient-init-function 'make-quad-tree)
 

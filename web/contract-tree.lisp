@@ -243,7 +243,9 @@ links are created."))
   (when *contract-tree*
     (geometry:remove-rect-subscriber *rect-publisher* *contract-tree*))
   (setq *contract-tree* (make-instance 'contract-node
-                                       :base-node (ensure-quad-tree)
+                                       ;; we know that MAKE-QUAD-TREE
+                                       ;; has already been called
+                                       :base-node *quad-tree*
                                        :name '*contract-tree*))
   (dolist (contract (class-instances 'contract))
     (when (contract-published-p contract)
@@ -252,5 +254,6 @@ links are created."))
                                      (list 0 0 +width+ +width+)
                                      #'contract-tree-changed))
 
-(register-store-transient-init-function 'make-contract-tree-from-m2)
+(register-store-transient-init-function 'make-contract-tree-from-m2
+                                        'make-quad-tree)
 
