@@ -248,11 +248,11 @@ links are created."))
   (dolist (contract (class-instances 'contract))
     (when (contract-published-p contract)
       (insert-contract *contract-tree* contract)))
-  (geometry:register-rect-subscriber *rect-publisher* *contract-tree*
+  (geometry:register-rect-subscriber geometry:*rect-publisher* *contract-tree*
                                      (list 0 0 +width+ +width+)
                                      #'contract-tree-changed))
 
 (register-store-transient-init-function 'make-contract-tree-from-m2
                                         'make-quad-tree
-                                        'geometry::make-rect-publisher)
+                                        'geometry:make-rect-publisher)
 
