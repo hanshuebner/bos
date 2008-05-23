@@ -337,8 +337,6 @@ leading zeros, keep trailing zeros)"
   "MAKE-RECT-PUBLISHER creates a new publisher object."
   (setf *rect-publisher* (%make-rect-publisher)))
 
-(bos.m2::register-store-transient-init-function 'make-rect-publisher)
-
 (defstruct (rect-publisher (:constructor %make-rect-publisher))
   subscribers)
 
