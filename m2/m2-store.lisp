@@ -1,7 +1,6 @@
 (in-package :bos.m2)
 
-;;;; M2-STORE
-
+;;;; m2-store
 (defvar *m2-store* nil)
 
 (defclass m2-store (mp-store)
@@ -16,6 +15,7 @@
 	(indexed-class-index-named (find-class 'm2) 'm2-index)))
 
 ;;; store-transient-init-functions
+;;;
 ;;; Allows for registering transient init functions that
 ;;; will be called after each restore of m2-store
 
