@@ -112,8 +112,9 @@
    (name :reader name :initarg :name :initform nil)))
 
 (defmethod (setf %base-node) :before (base-node (node node-extension))
-  (assert (not (member node (%extensions base-node) :test #'equal-extension-type)) nil
-          "~s already exists in ~s as an extension" node base-node))
+  (assert (not (member node (%extensions base-node) :test #'equal-extension-type)) nil         
+          "Cannot add ~s to extensions of ~s.~
+         ~%An extension of same class and name already exists." node base-node))
 
 (defmethod (setf %base-node) :after (base-node (node node-extension))
   (push node (%extensions base-node)))
@@ -140,7 +141,7 @@
 
 (defmethod print-object ((node node-extension) stream)
   (print-unreadable-object (node stream :type t :identity t)
-    (format stream "~s" (name node))))
+    (format stream "name: ~s" (name node))))
 
 (defun equal-extension-type (a b)
   (and (eql (type-of a)
