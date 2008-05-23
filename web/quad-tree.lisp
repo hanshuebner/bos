@@ -110,9 +110,10 @@
 (defmethod extensions ((node null)) nil)
 
 ;;; node-extension
-(defclass node-extension ()
-  ((base-node :reader base-node :accessor %base-node :initform nil)
-   (name :reader name :initarg :name :initform nil)))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defclass node-extension ()
+    ((base-node :reader base-node :accessor %base-node :initform nil)
+     (name :reader name :initarg :name :initform nil))))
 
 (defmethod (setf %base-node) :before (base-node (node node-extension))
   (assert (not (member node (%extensions base-node) :test #'equal-extension-type)) nil         
@@ -277,4 +278,8 @@ returns indices of those children that would intersect with GEO-BOX."
 (defpersistent-class persistent-node-extension (node-extension)
   ((base-node :transient t)
    (path :reader node-path)))
+
+(defmethod initialize-transient-instance :after ((node persistent-node-extension))
+  (setf (slot-value node 'base-node)
+        (find-node-with-path *quad-tree* (node-path node))))
 
