@@ -109,6 +109,7 @@
 
 (defmethod extensions ((node null)) nil)
 
+;;; node-extension
 (defclass node-extension ()
   ((base-node :reader base-node :accessor %base-node :initform nil)
    (name :reader name :initarg :name :initform nil)))
@@ -254,17 +255,6 @@ returns indices of those children that would intersect with GEO-BOX."
                :prune-test prune-test)
     nil))
 
-(defun node-path (tree node)
-  (let (prev-n path)
-    (map-nodes (lambda (n)
-                 (when prev-n
-                   (push (child-index prev-n n) path))
-                 (when (eq n node)
-                   (return-from node-path (nreverse path)))
-                 (setq prev-n n))
-               tree
-               :prune-test (lambda (n) (not (geo-box-intersect-p (geo-box n) (geo-box node)))))))
-
 ;;; *quad-tree*
 (defvar *quad-tree*)
 
@@ -272,4 +262,19 @@ returns indices of those children that would intersect with GEO-BOX."
   (setq *quad-tree* (make-instance 'quad-node :geo-box *m2-geo-box*)))
 
 (register-store-transient-init-function 'make-quad-tree)
+
+(defmethod node-path (node)
+  (let (prev-n path)
+    (map-nodes (lambda (n)
+                 (when prev-n
+                   (push (child-index prev-n n) path))
+                 (when (eq n node)
+                   (return-from node-path (nreverse path)))
+                 (setq prev-n n))
+               *quad-tree*
+               :prune-test (lambda (n) (not (geo-box-intersect-p (geo-box n) (geo-box node)))))))
+
+(defpersistent-class persistent-node-extension (node-extension)
+  ((base-node :transient t)
+   (path :reader node-path)))
 

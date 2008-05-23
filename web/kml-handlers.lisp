@@ -99,7 +99,7 @@
           (let ((href (if (not contract)
                           (format nil "http://~a/contract-tree-kml" (website-host))
                           (let* ((node (find-contract-node *contract-tree* contract))
-                                 (path (node-path *contract-tree* node))
+                                 (path (node-path node))
                                  (contract-id (store-object-id contract)))
                             (format nil "http://~a/contract-tree-kml?rmcid=~D&rmcpath=~{~D~}"
                                     (website-host) contract-id path)))))            

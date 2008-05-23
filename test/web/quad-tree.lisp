@@ -140,9 +140,7 @@
       (is (= 7 (count-nodes tree))))))
 
 (test node-path.1
-  (let ((tree (make-instance 'quad-node :geo-box *m2-geo-box*)))
+  (let ((bos.web::*quad-tree* (make-instance 'quad-node :geo-box *m2-geo-box*)))
     (for-all ((path (gen-list :elements (gen-integer :min 0 :max 3))))
-      (is (equal path (node-path tree (ensure-node-with-path tree path)))))))
-
-
+      (is (equal path (node-path (ensure-node-with-path tree path)))))))
 
