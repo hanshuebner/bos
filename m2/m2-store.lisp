@@ -18,12 +18,8 @@
 ;;; Allows for registering transient init functions that
 ;;; will be called after each restore of m2-store
 
-#+sbcl
 (defun topological-sort (objects constraints tie-breaker)
-  (sb-kernel::topological-sort objects constraints tie-breaker))
-
-#-sbcl 
-(defun topological-sort (objects constraints tie-breaker)
+  ;; copied from sb-kernel::topological-sort
   (declare (list objects constraints)
            (function tie-breaker))
   (let ((obj-info (make-hash-table :size (length objects)))
@@ -71,10 +67,11 @@
 (defvar *store-transient-init-constraints* nil)
 
 (defun register-store-transient-init-function (init-function &rest dependencies)
-  "Register INIT-FUNCTION to be called after each restore of m2-store.
-Optionally, names of other init-functions can be specified as
-DEPENDENCIES. The given INIT-FUNCTION will only be called after
-all of its DEPENDENCIES have been called."
+  "Register INIT-FUNCTION (a function-name) to be called after
+each restore of m2-store.  Optionally, names of other
+init-functions can be specified as DEPENDENCIES. The specified
+INIT-FUNCTION will only be called after all of its DEPENDENCIES
+have been called."
   (labels ((ignorant-tie-breaker (choices reverse-partial-solution)
              (declare (ignore reverse-partial-solution))         
              ;; we dont care about making any particular choice here -
