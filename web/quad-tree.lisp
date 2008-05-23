@@ -98,11 +98,13 @@
 
 (defmethod shared-initialize ((obj quad-node) slot-names &key parent-node index &allow-other-keys)
   (declare (ignore parent-node index))
-  (call-next-method)
-  (check-type (slot-value obj 'geo-box) geo-box))
+  (call-next-method))
 
 (defmethod shared-initialize :after ((obj quad-node) slot-names &key)
-  (assert (and (slot-boundp obj 'geo-box) (geo-box obj)) ((slot-value obj 'geo-box))
+  (assert (and (slot-boundp obj 'geo-box)
+               (geo-box obj)
+               (typep (geo-box obj) 'geo-box))
+          ((slot-value obj 'geo-box))
           "~s needs a geo-box" obj))
 
 (defmethod extensions ((node null)) nil)
