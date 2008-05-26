@@ -44,6 +44,13 @@
    (> (geo-box-north SUPER-BOX) (geo-box-south sub-box)) ; north -> south: + -> -
    (>= (geo-box-south sub-box) (geo-box-south SUPER-BOX))))
 
+(defun geo-box-intersection (a b)
+  (assert (geo-box-intersect-p a b))
+  (make-geo-box (max (geo-box-west a) (geo-box-west b))
+                (min (geo-box-north a) (geo-box-north b))
+                (min (geo-box-east a) (geo-box-east b))
+                (max (geo-box-south a) (geo-box-south b))))
+
 (defun geo-point-in-box-p (box point)
   (destructuring-bind (west north)
       point
