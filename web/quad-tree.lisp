@@ -275,16 +275,5 @@ returns indices of those children that would intersect with GEO-BOX."
                *quad-tree*
                :prune-test (lambda (n) (not (geo-box-intersect-p (geo-box n) (geo-box node)))))))
 
-(defpersistent-class persistent-node-extension (store-object node-extension)
-  ((base-node :transient t)
-   (path :reader node-path)))
 
-(defmethod initialize-persistent-instance :after ((node persistent-node-extension))
-  (assert (base-node node))             ; possibly redundant
-  (setf (slot-value node 'path)
-        (node-path (base-node node))))
-
-(defmethod initialize-transient-instance :after ((node persistent-node-extension))
-  (setf (slot-value node 'base-node)
-        (ensure-node-with-path *quad-tree* (node-path node))))
 
