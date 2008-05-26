@@ -6,6 +6,8 @@
             bos.web::*m2-geo-box*
             bos.web::ensure-child
             bos.web::geo-box-intersect-p
+            bos.web::geo-box-encloses-p
+            bos.web::make-geo-box
             bos.web::geo-box
             bos.web::geo-box-west
             bos.web::geo-box-east
@@ -40,6 +42,37 @@
     (loop for a in '(0 1 2 3)
        do (is-true (geo-box-intersect-p (geo-box (child tree a))
                                         (geo-box tree))))))
+
+(test geo-box-encloses-p.1
+  (let ((tree (make-instance 'quad-node :geo-box *m2-geo-box*)))
+    (ensure-child tree 0)
+    (ensure-child tree 1)
+    (ensure-child tree 2)
+    (ensure-child tree 3)
+    (loop for (a b) in '((2 3) (1 3) (1 2) (0 3) (0 2) (0 1))
+       do (progn
+            (is-false (geo-box-encloses-p (geo-box (child tree a))
+                                          (geo-box (child tree b))))
+            (is-false (geo-box-encloses-p (geo-box (child tree b))
+                                          (geo-box (child tree a))))))
+    (loop for (a b) in '((0 0) (1 1) (2 2) (3 3))
+       do (is-true (geo-box-encloses-p (geo-box (child tree a))
+                                       (geo-box (child tree b)))))
+    (loop for a in '(0 1 2 3)
+       do (progn
+            (is-true (geo-box-encloses-p (geo-box tree)
+                                         (geo-box (child tree a))))
+            (is-false (geo-box-encloses-p (geo-box (child tree a))
+                                          (geo-box tree)))))
+    (let ((a *m2-geo-box*)
+          ;; slightly moved
+          (b (make-geo-box (+ (geo-box-west *m2-geo-box*) 0.01d0)
+                           (- (geo-box-north *m2-geo-box*) 0.01d0)
+                           (+ (geo-box-east *m2-geo-box*) 0.01d0)                           
+                           (- (geo-box-south *m2-geo-box*) 0.01d0))))
+      (assert (geo-box-intersect-p a b))
+      (is-false (geo-box-encloses-p a b))
+      (is-false (geo-box-encloses-p b a)))))
 
 (test geo-point-in-box-p
   (let* ((tree (make-instance 'quad-node :geo-box *m2-geo-box*))

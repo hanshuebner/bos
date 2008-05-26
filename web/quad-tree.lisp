@@ -29,6 +29,21 @@
            (<= (geo-box-north a) (geo-box-south b)) ; north -> south: + -> -
            (>= (geo-box-south a) (geo-box-north b))))) ; north -> south: + -> -
 
+(defun geo-box-encloses-p (super-box sub-box)
+  "Does SUPER-BOX completely contain SUB-BOX?"
+  (declare (optimize speed))
+  (and
+   ;; west - east
+   (<= (geo-box-west SUPER-BOX) (geo-box-west sub-box))
+   (< (geo-box-west sub-box) (geo-box-east SUPER-BOX))
+   (< (geo-box-west SUPER-BOX) (geo-box-east sub-box))
+   (<= (geo-box-east sub-box) (geo-box-east SUPER-BOX))
+   ;; north - south
+   (>= (geo-box-north SUPER-BOX) (geo-box-north sub-box)) ; north -> south: + -> -
+   (> (geo-box-north sub-box) (geo-box-south SUPER-BOX))
+   (> (geo-box-north SUPER-BOX) (geo-box-south sub-box)) ; north -> south: + -> -
+   (>= (geo-box-south sub-box) (geo-box-south SUPER-BOX))))
+
 (defun geo-point-in-box-p (box point)
   (destructuring-bind (west north)
       point
