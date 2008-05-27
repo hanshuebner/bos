@@ -255,10 +255,14 @@ returns indices of those children that would intersect with GEO-BOX."
       node
       (ensure-node-with-path (ensure-child node (first path)) (rest path))))
 
-(defun ensure-intersecting-children (node geo-box &optional function)
+(defun ensure-intersecting-children (node geo-box &optional function (leaf-test #'leaf-node-p))
+  "Maps FUNCTION over NODE and all children of NODE that intersect
+with GEO-BOX.  Children that dont exist yet are created on the fly. If
+LEAF-TEST returns true, the children of the current node are not
+further recursed into."
   (when function
     (funcall function node))
-  (unless (leaf-node-p node)
+  (unless (funcall leaf-test node)
     (dolist (index (intersecting-children-indices node geo-box))
       (ensure-intersecting-children (ensure-child node index) geo-box function))))
 
@@ -278,6 +282,15 @@ returns indices of those children that would intersect with GEO-BOX."
                :prune-test prune-test)
     nil))
 
+(defun collect-nodes (test node &key (prune-test (constantly nil)))
+  (let (nodes)
+    (map-nodes (lambda (node)
+                 (when (funcall test node)
+                   (push node nodes)))
+               node
+               :prune-test prune-test)
+    (nreverse nodes)))
+
 ;;; *quad-tree*
 (defvar *quad-tree*)
 
@@ -286,7 +299,7 @@ returns indices of those children that would intersect with GEO-BOX."
 
 (register-store-transient-init-function 'make-quad-tree)
 
-(defmethod node-path (node)
+(defun node-path (node)
   (let (prev-n path)
     (map-nodes (lambda (n)
                  (when prev-n
@@ -295,7 +308,6 @@ returns indices of those children that would intersect with GEO-BOX."
                    (return-from node-path (nreverse path)))
                  (setq prev-n n))
                *quad-tree*
-               :prune-test (lambda (n) (not (geo-box-intersect-p (geo-box n) (geo-box node)))))))
-
-
+               :prune-test (lambda (n) (not (geo-box-intersect-p (geo-box n)
+                                                                 (geo-box node)))))))
 
