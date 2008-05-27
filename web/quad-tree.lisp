@@ -64,6 +64,13 @@
                  :top-left (make-point :lon (geo-box-west box) :lat (geo-box-north box))
                  :bottom-right (make-point :lon (geo-box-east box) :lat (geo-box-south box))))
 
+(defun rectangle-geo-box (rectangle)
+  (multiple-value-bind (west north)
+      (point-lon-lat (top-left rectangle))
+    (multiple-value-bind (east south)
+        (point-lon-lat (bottom-right rectangle))
+      (make-geo-box west north east south))))
+
 (defun geo-subbox (box x y divisor subbox)
   (declare (optimize speed)
            (fixnum x y divisor) (geo-box subbox))
@@ -128,6 +135,10 @@
                (typep (geo-box obj) 'geo-box))
           ((slot-value obj 'geo-box))
           "~s needs a geo-box" obj))
+
+(defmethod print-object ((node quad-node) stream)
+  (print-unreadable-object (node stream :type t :identity t)
+    (format stream "path: ~a" (node-path node))))
 
 (defmethod extensions ((node null)) nil)
 
@@ -264,7 +275,7 @@ further recursed into."
     (funcall function node))
   (unless (funcall leaf-test node)
     (dolist (index (intersecting-children-indices node geo-box))
-      (ensure-intersecting-children (ensure-child node index) geo-box function))))
+      (ensure-intersecting-children (ensure-child node index) geo-box function leaf-test))))
 
 (defun map-nodes (function node &key (prune-test (constantly nil)))
   (funcall function node)
