@@ -5,14 +5,34 @@
 
 (defpersistent-class sat-layer ()
   ((name :reader name :initarg :name
-         :index-type unique-index
-	 :index-reader find-sat-layer)))
+                               :index-type unique-index
+                               :index-reader find-sat-layer)
+   (geo-box :reader geo-box :initarg :geo-box)))
+
+(defun sat-layer-top-level-nodes (sat-layer)
+  (warn "this function is till buggy")
+  (let (nodes
+        top-level-depth)
+    (map-nodes (lambda (n)                 
+                 (let ((sat-node (find-if (lambda (e) (and (eql (name e) (name sat-layer))                                                        
+                                                           (typep e 'sat-node)))
+                                          (extensions n))))
+                   (when sat-node
+                     (unless top-level-depth
+                       (setq top-level-depth (depth n)))
+                     (if (= top-level-depth (depth n))
+                         (push sat-node nodes)
+                         nil))))
+               *quad-tree*
+               :prune-test (lambda (n) (not (geo-box-intersect-p (geo-box n) (geo-box sat-layer)))))
+    (nreverse nodes)))
 
 (defpersistent-class sat-image (store-image)
   ((layer :reader layer :initarg :layer)
    (node :reader node :initarg :node :transient t)
    (path :reader path :initarg :path)
-   (image-geo-box :accessor image-geo-box :initarg :image-geo-box
+   (image-geo-box :accessor image-geo-box
+                  :initarg :image-geo-box
                   :type geo-box
                   :documentation "can be different from base-node's geo-box")))
 
@@ -72,17 +92,18 @@
                           pw ph
                           :resize t :resample t
                           :dest-width tw :dest-height th)
-        (make-instance 'node-extension
+        (make-instance 'sat-node
                        :name name
                        :base-node quad-node
                        :image (make-store-image :class-name 'sat-image
                                                 :name (format nil "~A-~{~D~}" name path)
                                                 :initargs `(:path ,path
-                                                                  :image-geo-box ,rounded-geo-box)))))))
+                                                            :image-geo-box ,rounded-geo-box)))))))
 
 (defun make-sat-layer (image geo-box name &optional (start-depth 0))  
   (check-type name symbol)
-  (assert (not (find-sat-layer name)))
+  (assert (not (find-sat-layer name)) (name)
+          "A sat-layer of name ~S already exists." name)
   (check-type image cl-gd::image)
   (assert (geo-box-encloses-p *m2-geo-box* geo-box))  
   (check-type start-depth (integer 0))
@@ -106,12 +127,13 @@
            (max-scaling (nodes)
              (reduce #'max nodes
                      :key (lambda (node)
-                            (sat-image-tile-properties image geo-box (tile-geo-box node))))))    
+                            (sat-image-tile-properties image geo-box (tile-geo-box node))))))        
     (let* ((nodes (remove-if-not #'pw-ph-large-enough (layer-quad-nodes)))           
            (max-scaling (max-scaling nodes)))
       (dolist (node nodes)
         (make-sat-image-tile image geo-box (quad-node node)
-                             (tile-geo-box node) name max-scaling)))))
+                             (tile-geo-box node) name max-scaling)))
+    (make-object 'sat-layer :name name :geo-box geo-box)))
 
 ;; (with-store-image (image (first (class-instances 'store-image)))
 ;;   (make-sat-layer image
