@@ -97,14 +97,6 @@ with its center placemark."
      ,@body))
 
 ;;; kml handler
-(defmethod network-link-lod-min ((node contract-node))
-  (if (zerop (depth node))
-      16
-      512))
-
-(defmethod network-link-lod-max ((node contract-node))
-  -1)
-
 (defclass contract-tree-kml-handler (page-handler)
   ()
   (:documentation "Generates a kml representation of the queried
@@ -137,7 +129,7 @@ links are created."))
         (incf (kml-req-count node))
         (setf (hunchentoot:header-out :last-modified)
               (hunchentoot:rfc-1123-date (timestamp node)))
-        (let* ((lod `(:min ,(network-link-lod-min node) :max ,(network-link-lod-max node)))
+        (let* ((lod (node-lod node))
                (box (geo-box node))
                (rect (geo-box-rectangle box))
                (rmcid (when rmcid (parse-integer rmcid)))
@@ -154,13 +146,10 @@ links are created."))
             ;; overlay
             (kml-overlay (format nil "http://~a/contract-tree-image?path=~{~d~}" (website-host) path)
                          rect
-                         :draw-order (+ 1000 (depth node))
+                         :draw-order (compute-draw-order node (1- +max-num-of-local-draw-order-levels+))
                          ;; :absolute 0
                          ;; GroundOverlay specific LOD
-                         :lod `(:min ,(network-link-lod-min node)
-                                     :max ,(if (node-has-children-p node)
-                                               (* 6 (network-link-lod-min (any-child node)))
-                                               -1)))
+                         :lod lod)
             ;; placemark-contracts
             (let ((placemark-contracts
                    (if (and rmcid (null rmcpath))
@@ -201,7 +190,7 @@ links are created."))
                                (website-host) path i rmcid (cdr rmcpath))
                        (format nil "http://~A/contract-tree-kml?path=~{~D~}~D" (website-host) path i))
                    :rect (geo-box-rectangle (geo-box child))
-                   :lod `(:min ,(network-link-lod-min child) :max ,(network-link-lod-max child))))))))))))
+                   :lod (node-lod child)))))))))))
 
 
 ;;; image handler

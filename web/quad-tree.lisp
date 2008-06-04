@@ -118,6 +118,23 @@
 (defvar *m2-geo-box* (make-geo-box 116.92538417241805d0 -0.9942953097298868d0
                                    117.02245623511905d0 -1.0920067364569994d0))
 
+;;; simple queue
+(defun make-queue ()
+  (cons nil nil))
+
+(defun queue-empty-p (queue)
+  (null (car queue)))
+
+(defun enqueue (x queue)
+  (if (null (car queue))
+      (setf (cdr queue) (setf (car queue) (list x)))
+    (setf (cdr (cdr queue)) (list x)
+          (cdr queue) (cdr (cdr queue))))
+  (car queue))
+
+(defun dequeue (queue)
+  (pop (car queue)))
+
 ;;; quad-node
 (defclass quad-node ()
   ((geo-box :reader geo-box :initarg :geo-box :type geo-box)
@@ -178,7 +195,11 @@
 
 (defmethod print-object ((node node-extension) stream)
   (print-unreadable-object (node stream :type t :identity t)
-    (format stream "name: ~s" (name node))))
+    (format stream "name: ~s path: ~s" (name node) (node-path node))))
+
+(defmethod delete-node-extension ((node node-extension))  
+  (setf (%extensions (base-node node))
+        (delete node (%extensions (base-node node)))))
 
 (defun equal-extension-type (a b)
   (and (eql (type-of a)
@@ -277,40 +298,85 @@ further recursed into."
     (dolist (index (intersecting-children-indices node geo-box))
       (ensure-intersecting-children (ensure-child node index) geo-box function leaf-test))))
 
-(defun map-nodes (function node &key (prune-test (constantly nil)))
-  (funcall function node)
-  (dotimes (i 4)
-    (let ((child (child node i)))
-      (when (and child (not (funcall prune-test child)))
-        (map-nodes function child :prune-test prune-test)))))
+(defun map-nodes-internal (nodes function prune-test remove-node add-node)
+  "Used by MAP-NODES for depth-first and breadth-first
+traversal.
 
-(defun find-node-if (test node &key (prune-test (constantly nil)))
+NODES is an opaque collection, that is accessed via the given
+functions REMOVE-NODE and ADD-NODE.
+
+REMOVE-NODE will be called with NODES and has to return two
+values: The removed node and the updated NODES.
+
+ADD-NODE will be called with a node to be added and NODES. It has
+to return the updated NODES.
+
+FUNCTION will be called on each visited node.
+
+If PRUNE-TEST returns true, the given node will not be visited."
+  (labels ((pop* ()
+             (multiple-value-bind (node new-nodes)
+                 (funcall remove-node nodes)
+               (setq nodes new-nodes)
+               node))
+           (push* (node)
+             (setq nodes (funcall add-node node nodes))))
+    (let ((node (pop*)))
+      (when node
+        (funcall function node)
+        (dotimes (i 4)
+          (let ((child (child node i)))
+            (when (and child (not (funcall prune-test child)))
+              (push* child))))
+        (map-nodes-internal nodes function prune-test remove-node add-node)))))
+
+(defun map-nodes-depth-first (function node prune-test)
+  ;; nodes is here a stack
+  (map-nodes-internal (list node) function prune-test
+                      (lambda (nodes)
+                        (values (car nodes) (cdr nodes)))
+                      (lambda (node nodes)
+                        (cons node nodes))))
+
+(defun map-nodes-breadth-first (function node prune-test)
+  ;; nodes is here a queue
+  (let ((nodes (make-queue)))
+    (enqueue node nodes)
+    (map-nodes-internal nodes function prune-test
+                        (lambda (nodes)
+                          (values (dequeue nodes) nodes))
+                        (lambda (node nodes)
+                          (enqueue node nodes)
+                          nodes))))
+
+(defun map-nodes (function node &key (prune-test (constantly nil)) (order :depth-first))  
+  (check-type order (member :depth-first :breadth-first))
+  (let ((mapper (case order
+                  (:depth-first #'map-nodes-depth-first)
+                  (:breadth-first #'map-nodes-breadth-first))))
+    (funcall mapper function node prune-test)))
+
+(defun find-node-if (test node &key (prune-test (constantly nil)) (order :depth-first))
   (block nil
     (map-nodes (lambda (node)
                  (when (funcall test node)
                    (return node)))
                node
-               :prune-test prune-test)
+               :prune-test prune-test
+               :order order)
     nil))
 
-(defun collect-nodes (test node &key (prune-test (constantly nil)))
+(defun collect-nodes (test node &key (prune-test (constantly nil)) (order :depth-first))
   (let (nodes)
     (map-nodes (lambda (node)
                  (when (funcall test node)
                    (push node nodes)))
                node
-               :prune-test prune-test)
+               :prune-test prune-test
+               :order order)
     (nreverse nodes)))
 
-;;; *quad-tree*
-(defvar *quad-tree*)
-
-(defun make-quad-tree ()
-  (setq *quad-tree* (make-instance 'quad-node :geo-box *m2-geo-box*)))
-
-(register-store-transient-init-function 'make-quad-tree)
-
-(defun node-path (node)
+(defmethod node-path ((node quad-node))
   (let (prev-n path)
     (map-nodes (lambda (n)
                  (when prev-n
@@ -320,5 +386,28 @@ further recursed into."
                  (setq prev-n n))
                *quad-tree*
                :prune-test (lambda (n) (not (geo-box-intersect-p (geo-box n)
-                                                                 (geo-box node)))))))
+                                                                 (geo-box node))))
+               :order :depth-first)))
+
+(defmethod node-path ((node node-extension))
+  (node-path (base-node node)))
+
+;;; *quad-tree*
+(defvar *quad-tree*)
+
+(defun make-quad-tree ()
+  (setq *quad-tree* (make-instance 'quad-node :geo-box *m2-geo-box*)))
+
+(defun node-lod (node)
+  (if (zerop (depth node))
+      '(:min 16 :max -1)
+      '(:min 512 :max -1)))
+
+(defconstant +max-num-of-local-draw-order-levels+ 10)
+
+(defun compute-draw-order (node local-draw-order)
+  (+ local-draw-order
+     (* (depth node) +max-num-of-local-draw-order-levels+)))
+
+(register-store-transient-init-function 'make-quad-tree)
 

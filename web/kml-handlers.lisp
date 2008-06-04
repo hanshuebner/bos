@@ -63,13 +63,17 @@
   (store-object-id (first (class-instances 'image-tree))))
 
 (defclass kml-root-handler (object-handler)
-  ())
+  ((timestamp :accessor timestamp :initform (get-universal-time))))
 
-(defun write-root-kml (&optional sponsor)
-  (let ((contract (when sponsor (first (sponsor-contracts sponsor)))))
+(defun write-root-kml (handler sponsor)
+  (let ((*print-case* :downcase)
+        (contract (when sponsor (first (sponsor-contracts sponsor)))))
+    (hunchentoot:handle-if-modified-since (timestamp handler))
     ;; only the first contract of SPONSOR will be shown
     (with-xml-response (:content-type #+nil "text/xml" "application/vnd.google-earth.kml+xml; charset=utf-8"
                                       :root-element "kml")
+      (setf (hunchentoot:header-out :last-modified)
+            (hunchentoot:rfc-1123-date (timestamp handler)))
       (with-query-params ((lang "en"))
         (with-element "Document"
           (with-element "name" (text "bos-kml"))        
@@ -95,7 +99,14 @@
             (kml-network-link (format nil "http://~a/image-tree-kml/~d" (website-host) (image-tree-root-id))
                               :rect (make-rectangle2 (geo-location image-tree))
                               :lod `(:min ,(lod-min image-tree) :max ,(lod-max image-tree))
-                              :name "sat-image"))
+                              :name "old-image-tree"
+                              :http-query nil))
+          (dolist (sat-layer (class-instances 'sat-layer))
+            (kml-network-link (format nil "http://~a/sat-root-kml?name=~A" (website-host) (name sat-layer))
+                              :rect (geo-box-rectangle *m2-geo-box*)
+                              :lod '(:min 0 :max -1)
+                              :name (princ-to-string (name sat-layer))
+                              :http-query nil))
           (let ((href (if (not contract)
                           (format nil "http://~a/contract-tree-kml" (website-host))
                           (let* ((node (find-contract-node *contract-tree* contract))
@@ -105,8 +116,7 @@
                                     (website-host) contract-id path)))))            
             (kml-network-link href
                               :rect (geo-box-rectangle (geo-box *contract-tree*))
-                              :lod `(:min ,(network-link-lod-min *contract-tree*)
-                                          :max ,(network-link-lod-max *contract-tree*))
+                              :lod (node-lod *contract-tree*)
                               :name "contracts"))
           (kml-network-link (format nil "http://~a/poi-kml-all" (website-host))
                             :name "POIs"
@@ -146,11 +156,11 @@
                             (text (format nil "~,20F,~,20F,0" lat lon))))))))))))))))
 
 (defmethod handle-object ((handler kml-root-handler) (object sponsor))
-  (write-root-kml object))
+  (write-root-kml handler object))
 
 (defmethod handle-object ((handler kml-root-handler) (object contract))
   (handle-object handler (contract-sponsor object)))
 
 (defmethod handle-object ((handler kml-root-handler) (object null))
-  (write-root-kml))
+  (write-root-kml handler nil))
 
