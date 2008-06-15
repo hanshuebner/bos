@@ -78,7 +78,7 @@
   "Determine the language prefered by the user, as determined by the Accept-Language header
 present in the HTTP request.  Header decoding is done according to RFC2616, considering individual
 language preference weights."
-  (let ((accept-language (hunchentoot:header-in :accept-language)))
+  (let ((accept-language (hunchentoot:header-in* :accept-language)))
     (dolist (language (mapcar #'car
 			      (sort (mapcar #'(lambda (language-spec-string)
 						(if (find #\; language-spec-string)
@@ -169,7 +169,7 @@ language preference weights."
 	(call-next-method))))
 
 (defmethod authorize :after ((authorizer bos-authorizer))
-  (let ((new-language (or (language-from-url (hunchentoot:request-uri))
+  (let ((new-language (or (language-from-url (hunchentoot:request-uri*))
 			  (query-param "language")))
 	(current-language (hunchentoot:session-value :language)))
     (when (or (not current-language)

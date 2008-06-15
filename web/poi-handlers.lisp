@@ -95,11 +95,11 @@
 		     (html (:princ-safe (format nil "~D/~D " (first (poi-area poi)) (second (poi-area poi)))))
 		     (cmslink (format nil "map-browser/~A/~A?chosen-url=~A"
 				      (first (poi-area poi)) (second (poi-area poi))
-				      (encode-urlencoded (format nil "~A?action=save&" (hunchentoot:request-uri))))
+				      (encode-urlencoded (format nil "~A?action=save&" (hunchentoot:request-uri*))))
 		       "[relocate]"))
 		    (t
 		     (cmslink (format nil "map-browser/?chosen-url=~A"
-				      (encode-urlencoded (format nil "~A?action=save&" (hunchentoot:request-uri))))
+				      (encode-urlencoded (format nil "~A?action=save&" (hunchentoot:request-uri*))))
 		       "[choose]")))))
 	(:tr (:td "icon")
 	     (:td (icon-chooser "icon" (poi-icon poi))))

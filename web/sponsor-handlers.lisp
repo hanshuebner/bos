@@ -192,7 +192,7 @@
 	  (html (:p "Changed contract status to \"paid\""))))
       (unless changed
 	(html (:p "No changes have been made")))
-      (html (cmslink (hunchentoot:request-uri)
+      (html (cmslink (hunchentoot:request-uri*)
 	      "Return to sponsor profile")))))
 
 (defmethod handle-object-form ((handler edit-sponsor-handler) (action (eql :delete)) sponsor)

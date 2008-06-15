@@ -49,7 +49,7 @@
     "Content languages: "
     (loop for (language-symbol language-name) in (website-languages)
 	  do (labels ((show-language-link ()
-			(html (cmslink (format nil "~A?language=~A" (hunchentoot:request-uri) language-symbol)
+			(html (cmslink (format nil "~A?language=~A" (hunchentoot:request-uri*) language-symbol)
 				(:princ-safe language-name)))))
 	       (if (equal (hunchentoot:session-value :language) language-symbol)
 		   (html "[" (show-language-link) "]")

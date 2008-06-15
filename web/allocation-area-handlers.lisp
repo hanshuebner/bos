@@ -158,7 +158,7 @@
 			 x y
 			 (encode-urlencoded "Choose lower right point of allocation area")
 			 (encode-urlencoded (format nil "~A?left=~A&top=~A&"
-						   (hunchentoot:request-uri)
+						   (hunchentoot:request-uri*)
 						   x y)))))
       (t
        (with-bos-cms-page (:title "Create allocation area")
@@ -179,7 +179,7 @@
     (redirect (format nil "/map-browser/~A/~A?heading=~A&chosen-url=~A&"
 		      start-x start-y
 		      (encode-urlencoded "Choose upper left point of allocation area")
-		      (encode-urlencoded (format nil "~A?" (hunchentoot:request-uri)))))))
+		      (encode-urlencoded (format nil "~A?" (hunchentoot:request-uri*)))))))
 
 (defmethod handle-form ((handler create-allocation-area-handler) (action (eql :upload)))
   (let ((uploaded-text-file (request-uploaded-file "text-file")))

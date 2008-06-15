@@ -111,7 +111,7 @@
 	      (with-bos-cms-page (:title "Not sold")
 		(html (:h2 "this square meter has not been sold yet")))))
 	(with-bos-cms-page (:title "Browsing tile")
-	  (:a ((:a :href (hunchentoot:request-uri))
+	  (:a ((:a :href (hunchentoot:request-uri*))
 	       ((:img :width "360" :ismap "ismap" :height "360" :border "0" :src (tile-url tile tile-x tile-y)))))
 	  (map-navigator tile-x tile-y "/enlarge-overview/")))))
 
