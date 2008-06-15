@@ -52,7 +52,7 @@
                 "We will have a problem if your environment contains anything else than ASCII characters.~
              ~%So I'd like to enforce this here."))
 
-(defun start ()
+(defun start (&key (swank-port 4005))
   (ensure-sbcl-home)
   (env-ascii-check)
   ;; check for changes that are not yet in the core
@@ -65,8 +65,8 @@
   (format t "BOS Online-System~%")
   ;; slime
   (asdf:oos 'asdf:load-op :swank)
-  (eval (read-from-string "(progn (swank-loader::init)
-                             (swank:create-server :port 4005 :dont-close t))"))
+  (eval (read-from-string (format nil "(progn (swank-loader::init)
+                                         (swank:create-server :port ~D :dont-close t))" swank-port)))
   ;; start the bos server
   (apply #'bos.m2::reinit (read-configuration "m2.rc"))
   (apply #'bos.web::init (read-configuration "web.rc"))
