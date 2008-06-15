@@ -2,7 +2,7 @@
 
 (asdf:defsystem :bos.test
   :description "BOS Online-System test-suite"
-  :depends-on (:bos.web :fiveam)
+  :depends-on (:bos.web :fiveam :drakma)
   :components ((:file "packages-test")
                (:file "test-suites" :depends-on ("packages-test"))
                (:file "test-fixtures" :depends-on ("packages-test"))
