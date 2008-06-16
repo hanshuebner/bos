@@ -21,6 +21,7 @@
   :components ((:file "packages")
 	       (:file "utf-8" :depends-on ("packages"))
 	       (:file "config" :depends-on ("packages"))
+               (:file "multi-language-dictionary" :depends-on ("packages"))
 	       (:file "web-macros" :depends-on ("config"))
 	       (:file "web-utils" :depends-on ("web-macros"))
 	       (:file "cms-links" :depends-on ("web-utils"))
