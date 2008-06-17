@@ -48,6 +48,7 @@
 	 (bos.m2::reinit :delete t
 			 :directory #p"/tmp/test-store.tmp/"
 			 :website-url bos.m2::*website-url*)
+         (make-user "anonymous")        ; needed for web tests
 	 (&body))
     (close-store)))
 

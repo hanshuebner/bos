@@ -11,7 +11,7 @@
                (:file "geo-utm-test" :depends-on ("test-suites"))
                ;; (:file "utils" :depends-on ("config"))
                (:module :web
-                        :depends-on ("test-suites")
+                        :depends-on ("test-suites" "test-fixtures")
                         :components
                         ((:file "startup")
                          (:file "quad-tree")))))

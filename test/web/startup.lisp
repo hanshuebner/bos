@@ -3,12 +3,13 @@
 
 (defmacro with-bos-test-server ((port-var) &body body)
   (check-type port-var symbol)
-  `(let* ((,port-var (+ 70000 (random 5253)))
-          (server (bos.web::init :port ,port-var
-                                 :worldpay-test-mode t)))
-     (unwind-protect
-          (progn ,@body)
-       (hunchentoot:stop-server server))))
+  `(with-fixture empty-store ()
+     (let* ((,port-var (+ 70000 (random 5253)))
+            (server (bos.web::init :port ,port-var
+                                   :worldpay-test-mode t)))
+       (unwind-protect
+            (progn ,@body)
+         (hunchentoot:stop-server server)))))
 
 (test web-init    
   (with-bos-test-server (port)
