@@ -68,7 +68,7 @@
       (finishes (make-contract sponsor 10)))))
 
 (test allocation-area.two-areas
-  (with-fixture empty-store ()    
+  (with-fixture initial-bos-store ()    
     (let ((snapshot nil) (bypass t))
       (declare (ignorable snapshot bypass))
       (let* ((area1 (make-allocation-rectangle 0 0 8 8))
@@ -91,7 +91,7 @@
 		(decf total-free size)))))))
 
 (test allocation-area.auto-activation.2
-  (with-fixture empty-store ()
+  (with-fixture initial-bos-store ()
     (let* ((area1 (make-allocation-rectangle 0 0 8 8))
            (area2 (make-allocation-rectangle 10 10 8 8))
            (sponsor (make-sponsor :login "test-sponsor")))
@@ -108,7 +108,7 @@
 
 (test allocation-area.auto-activation.3
   (dolist (m2-count '(1000 100))
-    (with-fixture empty-store ()
+    (with-fixture initial-bos-store ()
       (let* ((area1 (make-allocation-rectangle 0 0 8 8))
              (area2 (make-allocation-rectangle 10 10 8 8))
              (sponsor (make-sponsor :login "test-sponsor")))
@@ -135,7 +135,7 @@
     (for-all ((allocation-area-widths  (gen-list :length (gen-integer :min 1 :max 5)
                                                  :elements (gen-integer :min 1 :max 20)))
               (n (gen-integer :min 1 :max 100)))
-      (with-fixture empty-store ()
+      (with-fixture initial-bos-store ()
         (let* ((areas (make-allocation-areas allocation-area-widths))
                (sponsor (make-sponsor :login "test-sponsor")))
           (is (notany #'allocation-area-active-p areas))
@@ -155,7 +155,7 @@
 (test allocation-area.allocate-m2s-for-sale
   (flet ((m2p (obj)
            (typep obj 'm2)))
-    (with-fixture empty-store ()
+    (with-fixture initial-bos-store ()
       (let* ((area1 (make-allocation-rectangle 0 0 8 8))
              (area2 (make-allocation-rectangle 10 10 9 9)))
         (for-all ((n (gen-integer :min 1 :max 60)))
@@ -171,7 +171,7 @@
   (flet ((m2p (obj)
            (typep obj 'm2)))
     (for-all ((n (gen-integer :min 1 :max 290)))
-      (with-fixture empty-store ()
+      (with-fixture initial-bos-store ()
         (let* ((area1 (make-allocation-rectangle 0 0 8 8))
                (area2 (make-allocation-rectangle 10 10 9 9))
                (m2s (with-transaction () (bos.m2::allocate-m2s-for-sale n))))
@@ -185,7 +185,7 @@
 
 
 (test allocation-area.delete
-  (with-fixture empty-store ()
+  (with-fixture initial-bos-store ()
     (let ((area (make-allocation-rectangle 0 0 10 10))
           (sponsor (make-sponsor :login "testuser"))
           stripes)

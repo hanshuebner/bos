@@ -42,7 +42,7 @@
        (,@store-object-vars)
      ,@body))
 
-(def-fixture empty-store ()  
+(def-fixture initial-bos-store ()  
   (unwind-protect
        (progn
 	 (bos.m2::reinit :delete t
@@ -62,7 +62,7 @@
 			     (intern (format nil "~a.~a" name (getf config :suffix)))
 			     name))
 	(collect `(test ,test-name
-		    (with-fixture empty-store ()
+		    (with-fixture initial-bos-store ()
 		      (let ((snapshot ,(getf config :snapshot))
 			    (bypass ,(getf config :bypass)))
 			(declare (ignorable snapshot bypass))
