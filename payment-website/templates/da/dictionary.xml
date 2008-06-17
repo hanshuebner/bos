@@ -1,4 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <dictionary>
-  <title>ein dänischer titel</title>
-  <description>eine dänische beschreibung</description>
+  <!-- in /tmp/ttt.lisp 
+       /tmp/ttt2.lisp  -->
+  <entry>
+    <key>
+      hallo wie gehts?
+    </key>
+    <value>
+    </value>
+  </entry>
+  <!-- in /tmp/ttt.lisp -->
+  <entry>
+    <key>
+      na?
+    </key>
+    <value>
+    </value>
+  </entry>
+  <!-- in NIL -->
+  <entry>
+    <key>
+      test
+    </key>
+    <value>
+    </value>
+  </entry>
 </dictionary>

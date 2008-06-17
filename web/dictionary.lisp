@@ -2,11 +2,16 @@
 
 (defvar *dictionary* (make-hash-table :test #'equal))
 (defvar *dictionary-last-reads-alist* nil)
+(defvar *dictionary-keys* nil
+  "An alist of key compile-file-pathnames pairs that is
+  automatically build at compile-time from all occurences of
+  DICTIONARY-ENTRY in user-code.")
 
-(defparameter *dictionary-directory* *website-directory*
+(defmacro dictionary-directory ()
   "The xml files containing dictionary definitions for a
   particular language are stored under
-  *dictionary-directory*/<language>/dictionary.xml.")
+  (dictionary-directory)/<language>/dictionary.xml."
+  '*website-directory*)
 
 (deftype dictionary-language ()
   'keyword)
@@ -20,18 +25,36 @@
     (string (intern (string-upcase language-designator) #.(find-package "KEYWORD")))
     (keyword language-designator)))
 
-(defun dictionary-entry (key language)  
+(defun dictionary-key-occurences (key)
+  (cdr (assoc key *dictionary-keys* :test #'string=)))
+
+(defun (setf dictionary-key-occurences) (value key)
+  (let ((cons (assoc key *dictionary-keys* :test #'string=)))
+    (if cons
+        (rplacd cons value)
+        (push (cons key value) *dictionary-keys*))))
+
+(defun %dictionary-entry (key language)  
   (let ((language (dictionary-language language)))
     (load-dictionary-if-needed language)
     (or (cdr (assoc language (gethash key *dictionary*)))
         key)))
 
-(defun (setf dictionary-entry) (value key language)  
+(defun (setf %dictionary-entry) (value key language)  
   (let* ((language (dictionary-language language))
          (it (assoc language (gethash key *dictionary*))))
     (if it
         (rplacd it value)
         (push (cons language value) (gethash key *dictionary*)))))
+
+(defmacro dictionary-entry (key language)
+  (flet ((pathname-equal (a b)
+           (equal (namestring a) (namestring b))))
+    (check-type key string)  
+    (when *compile-file-pathname*
+      (pushnew *compile-file-pathname* (dictionary-key-occurences key)
+               :test #'pathname-equal))
+    `(%dictionary-entry ,key ,language)))
 
 (defun dictionary-clear-entries-by-language (language)
   (declare (dictionary-language language))
@@ -60,25 +83,35 @@
   (merge-pathnames (make-pathname :name "dictionary"
                                   :type "xml"
                                   :directory (list :relative "templates" (string-downcase (string language))))
-                   *dictionary-directory*))
+                   (dictionary-directory)))
 
 (defun load-dictionary (language xml-path)
   (declare (dictionary-language language))
-  (labels ((load-language (language xml-path)             
+  (labels ((trim-whitespace (string)
+             (string-trim '(#\space #\newline #\tab) string))
+           (load-language (language xml-path)             
              (handler-case
                  (let ((xmls (cxml:parse-file xml-path (cxml-xmls:make-xmls-builder))))
                    (assert (equal "dictionary" (cxml-xmls:node-name xmls)) nil
                            "root element should be \"dictionary\"")
                    (dolist (element (cxml-xmls:node-children xmls))
-                     (when (consp element)
-                       (let ((key (cxml-xmls:node-name element))
-                             (value (first (cxml-xmls:node-children element))))                         
-                         (assert (or (null value) (stringp value)))
-                         (when value
-                           (setf (dictionary-entry key language) value))))))
+                     (when (consp element)                       
+                       (assert (equal "entry" (cxml-xmls:node-name element)) nil
+                               "expected element \"entry\"")
+                       (let ((key-value (remove-if #'atom (cxml-xmls:node-children element))))
+                         (assert (equal "key" (cxml-xmls:node-name (first key-value))) nil
+                                 "expected element \"key\"")
+                         (assert (equal "value" (cxml-xmls:node-name (second key-value))) nil
+                                 "expected element \"value\"")
+                         (let ((key (trim-whitespace (first (cxml-xmls:node-children (first key-value)))))
+                               (value (trim-whitespace (first (cxml-xmls:node-children (second key-value))))))
+                           (assert (stringp key))
+                           (assert (stringp value))                           
+                           (unless (zerop (length value))
+                             (setf (%dictionary-entry key language) value)))))))
                (error (c)
                  (error "Error while loading ~a:~%~a"
-                        (enough-namestring xml-path *dictionary-directory*) c)))))    
+                        (enough-namestring xml-path (dictionary-directory)) c)))))    
     (dictionary-clear-entries-by-language language)
     (load-language language xml-path)    
     (setf (dictionary-last-read language) (get-universal-time))
@@ -90,4 +123,13 @@
     (when (> (file-write-date xml-path)
              (dictionary-last-read language))
       (load-dictionary language xml-path))))
+
+(defun dictionary-write-template (&optional (stream *standard-output*))
+  (cxml:with-xml-output (make-character-stream-sink stream :canonical nil :indentation 2)
+    (with-element "dictionary"       
+      (loop for (key . paths) in (sort (copy-list *dictionary-keys*) #'string< :key #'car)
+         do (cxml:comment (format nil " in ~A ~{~%~8T~A  ~}" (first paths) (rest paths)))      
+         do (with-element "entry"
+              (with-element "key" (text key))
+              (with-element "value" (text "")))))))
 
