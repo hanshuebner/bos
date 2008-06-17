@@ -43,14 +43,17 @@
      ,@body))
 
 (def-fixture initial-bos-store ()  
-  (unwind-protect
-       (progn
-	 (bos.m2::reinit :delete t
-			 :directory #p"/tmp/test-store.tmp/"
-			 :website-url bos.m2::*website-url*)
-         (make-user "anonymous")        ; needed for web tests
-	 (&body))
-    (close-store)))
+  (let ((store-path (parse-namestring
+                     (format nil "/tmp/test-store-~D.tmp/" (get-universal-time)))))
+    (unwind-protect
+         (progn
+           (bos.m2::reinit :delete t
+                           :directory store-path
+                           :website-url bos.m2::*website-url*)
+           (make-user "anonymous")      ; needed for web tests
+           (&body))
+      (close-store)
+      (cl-fad:delete-directory-and-files store-path))))
 
 (defmacro store-test (name &body body)
   `(progn
