@@ -20,3 +20,7 @@
     (let ((uri (format nil "http://localhost:~D" port)))
       (is (= 200 (nth-value 1 (drakma:http-request uri)))))))
 
+(test request-start-page.tmp  
+      (let ((uri "http://test.createrainforest.org"))
+        (is (= 200 (nth-value 1 (drakma:http-request uri))))))
+
