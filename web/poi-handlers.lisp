@@ -391,7 +391,7 @@
 
 (defun write-poi-xml (poi language)
   "Writes the poi xml format for one specific language.  This is used
-   to generate the POI microsite using XSLT."
+   to generate the POI microsite using XSLT (client side)."
   (macrolet ((with-media ((type title &optional (subtitle "")) &body body)
                `(with-element "media"
                   (attribute "type" ,type)
@@ -440,43 +440,104 @@
             (with-media ("movie" "Video")
               (with-element "url" (text url)))))))))
 
-(let ((cache (make-hash-table :test #'equal)))
-  (defun poi-description-xslt-google-earth (poi language)
-    (macrolet ((getcache ()
-                 '(gethash (list poi language) cache)))
-      (labels ((run-program* (program args)
-                 #+sbcl (sb-ext:run-program program args :search t :wait t)
-                 #+openmcl (ccl:run-program program (mapcar (lambda (string) (coerce string 'simple-string)) args) :wait t)
-                 #-(or sbcl openmcl) (error "run-program not implemented for ~A" (lisp-implementation-type)))
-               (xsl-path ()
-                 (namestring (merge-pathnames #p"static/poi-description-ge.xsl" *website-directory*)))
-               (xml-to-tmp-file ()
-                 (let ((path (bknr.utils:make-temporary-pathname :defaults #P"/tmp/")))
-                   (with-open-file (out path :direction :output :external-format :utf-8)
-                     (with-xml-output (make-character-stream-sink out)
-                       (with-namespace ("bos" "http://headcraft.de/bos")
-                         (write-poi-xml poi language))))                   
-                   path))
-               (call-xsltproc (input-path)
-                 "Will return the transformation as a string. 
-                  It also deletes the file at INPUT-PATH."
-                 (let ((output-path (bknr.utils:make-temporary-pathname :defaults #P"/tmp/")))
-                   (unwind-protect
-                        (progn
-                          (run-program* "xsltproc"
-                                        (list "-o" (namestring output-path)
-                                              "--stringparam" "host" (website-host)
-                                              "--stringparam" "lang" language
-                                              (xsl-path) (namestring input-path)))
-                          (arnesi:read-string-from-file output-path :external-format :utf-8))
-                     (ignore-errors (delete-file input-path))
-                     (ignore-errors (delete-file output-path)))))
-               (compute ()                 
-                 (call-xsltproc (xml-to-tmp-file)))
-               (compute-if-needed ()
-                 (or (getcache)                      
-                     (setf (getcache) (compute)))))
-        (compute-if-needed)))))
+(defun poi-description-google-earth (poi language &key (image-width 120))
+  (labels ((website-path (path &rest args)
+             (format nil "http://~a~a" (website-host)
+                     (apply #'format nil path args)))
+           (poi-xml-path ()
+             (website-path "/poi-xml/~D?lang=~A" (store-object-id poi) language))
+           (img-thumbnail (image)
+             (let* ((id (store-object-id image))
+                    (height (store-image-height image))
+                    (width (store-image-width image))
+                    (aspect-ratio (floor width height))
+                    (h (* aspect-ratio image-width))
+                    (w image-width))
+               (with-element "img"
+                 (attribute "height" (prin1-to-string h))
+                 (attribute "width" (prin1-to-string w))
+                 (attribute "src" (website-path "/image/~D/thumbnail,,~D,~D" id w h)))))
+           (img-td (image)
+             (with-element "td"
+               (with-element "a"
+                 (attribute "href" (poi-xml-path))
+                 (img-thumbnail image))))
+           (img-td-title (image)
+             (with-element "td"
+               (attribute "valign" "top")
+               (with-element "span"
+                 (attribute "style" "font-size: small;")
+                 (text (slot-string image 'title language)))))
+           (images-2trs (images)
+             ;; images
+             (with-element "tr"
+               (dolist (image images)
+                 (img-td image)))                    
+             ;; titles
+             (with-element "tr"
+               (dolist (image images)
+                 (img-td-title image)))))
+    (handler-case
+        (with-xml-output (make-string-sink)
+          (with-element "html"    
+            (with-element "head")
+            (with-element "body"
+              (with-element "table"
+                (attribute "cellspacing" "0") (attribute "width" "500") (attribute "cellpadding" "5") (attribute "border" "0")
+                (attribute "style" "background-color: rgb(186, 186, 186);")                
+                (with-element "tbody"
+                  (with-element "tr"
+                    (with-element "td"
+                      (attribute "style" "width: 99px; text-align: left;")
+                      (attribute "colspan" "3")
+                      (with-element "img"
+                        (attribute "width" "400")
+                        (attribute "alt" "create rainforest banner / bos logo")
+                        (attribute "src" (website-path "/images/header_ganzneu.gif")))))
+                  (with-element "tr"
+                    (with-element "td"
+                      (attribute "style" "width: 100px;")
+                      (with-element "h1" (text (slot-string poi 'title language)))
+                      (with-element "h2" (text (slot-string poi 'subtitle language)))
+                      (with-element "table"
+                        (attribute "width" "400")
+                        (with-element "tr" (with-element "td" (text (slot-string poi 'description language)))))
+                      (cond
+                        ((= 1983023 (store-object-id poi))
+                         (with-element "p" (with-element "a"
+                                             (attribute "href" (website-path "/~a/bestellung" language))
+                                             (text (dictionary-entry "Machen Sie mit!" language)))))
+                        (t
+                         (with-element "br")
+                         (with-element "br")))
+                      (with-element "table"
+                        (with-element "tbody"
+                          (let ((images (poi-images poi)))
+                            (images-2trs (subseq images 0 (min 3 (length images))))
+                            (when (> (length images) 3)
+                              (images-2trs (subseq images 3 (min 6 (length images))))))))))
+                  (with-element "tr"
+                    (with-element "td"
+                      (attribute "colspan" "3")
+                      (attribute "align" "center")
+                      (with-element "a"
+                        (attribute "href" (poi-xml-path))
+                        (text (dictionary-entry "learn more" language)))))
+                  (with-element "tr"
+                    (with-element "td"
+                      (attribute "valign" "middle")
+                      (attribute "align" "center")
+                      (attribute "colspan" "3")
+                      (attribute "style" "width: 99px;")
+                      (with-element "font"
+                        (attribute "color" "#999999")
+                        (with-element "a"
+                          (attribute "href" (website-path "/~A/index" language))
+                          (text "create rainforest"))
+                        (text " | copyright")))))))))
+      (error (c) (error "while generating poi-description-google-earth for ~s:~%~a" poi c)))))
+
+
 
 (defun write-poi-kml (poi language)
   (with-element "Placemark"
@@ -484,7 +545,7 @@
                                    (slot-string poi 'title "en"))))
     (with-element "styleUrl" (text "#poiPlacemarkIcon"))
     (with-element "description"
-      (cdata (poi-description-xslt-google-earth poi language)))
+      (cdata (poi-description-google-earth poi language)))
     (with-element "Point"
       (with-element "coordinates"
         (text (format nil "~{~,20F,~}0" (poi-center-lon-lat poi)))))))

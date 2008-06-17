@@ -27,7 +27,7 @@
 	       (:file "cms-links" :depends-on ("web-utils"))
 	       (:file "map-handlers" :depends-on ("web-utils"))
 	       (:file "map-browser-handler" :depends-on ("web-utils"))
-	       (:file "poi-handlers" :depends-on ("web-utils"))
+	       (:file "poi-handlers" :depends-on ("web-utils" "dictionary"))
 	       (:file "boi-handlers" :depends-on ("web-utils"))
 	       (:file "contract-handlers" :depends-on ("web-utils"))
 	       (:file "contract-image-handler" :depends-on ("web-utils"))
