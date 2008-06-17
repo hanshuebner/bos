@@ -1,21 +1,21 @@
 (in-package :bos.web)
 
-(defvar *multi-language-dictionary* (make-hash-table :test #'equal))
-(defvar *multi-language-dictionary-last-read* 0)
+(defvar *dictionary* (make-hash-table :test #'equal))
+(defvar *dictionary-last-read* 0)
 
 (defmethod dictionary-entry ((key string) (language website-language))
   (load-dictionary-if-needed)
-  (cdr (assoc language (gethash key *multi-language-dictionary*))))
+  (cdr (assoc language (gethash key *dictionary*))))
 
 (defmethod dictionary-entry ((key string) (code string))
   (assert (language-with-code code) (code) "language with code ~s does not exist" code)
   (dictionary-entry key (language-with-code code)))
 
 (defmethod (setf dictionary-entry) ((value string) (key string) (language website-language))  
-  (let ((it (assoc language (gethash key *multi-language-dictionary*))))
+  (let ((it (assoc language (gethash key *dictionary*))))
     (if it
         (rplacd it value)
-        (push (cons language value) (gethash key *multi-language-dictionary*)))))
+        (push (cons language value) (gethash key *dictionary*)))))
 
 (defun dictionary-xml-path (language)
   (merge-pathnames (make-pathname :name "dictionary"
@@ -51,15 +51,15 @@
                (error (c)
                  (error "Error while loading ~a:~%~a"
                         (enough-namestring xml-path *website-directory*) c)))))
-    (clrhash *multi-language-dictionary*)
+    (clrhash *dictionary*)
     (mapc #'load-language languages xml-paths)
-    (setf *multi-language-dictionary-last-read* (get-universal-time))
-    *multi-language-dictionary*))
+    (setf *dictionary-last-read* (get-universal-time))
+    *dictionary*))
 
 (defun load-dictionary-if-needed ()
   (let* ((languages (class-instances 'website-language))
          (xml-paths (mapcar #'dictionary-xml-path languages)))    
     (when (> (dictionary-xml-files-last-write-date xml-paths)
-             *multi-language-dictionary-last-read*)
+             *dictionary-last-read*)
       (load-dictionary languages xml-paths))))
 
