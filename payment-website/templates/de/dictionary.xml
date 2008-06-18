@@ -1,21 +1,254 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dictionary>
-<!-- in /usr/home/paul/src/bknr-svn/projects/bos/web/poi-handlers.lisp -->
-  <entry>
-    <key>
-      Machen Sie mit!
-    </key>
-    <value>
-    </value>
-  </entry>
-<!-- in /usr/home/paul/src/bknr-svn/projects/bos/web/poi-handlers.lisp -->
-  <entry>
-    <key>
-      learn more
-    </key>
-    <value>
-    </value>
-  </entry>
-<!--   country names -->
-<entry><key>Bulgaria</key><value>Bulgarien</value></entry>
+  <!-- in /usr/home/paul/src/bknr-svn/projects/bos/web/poi-handlers.lisp -->
+  <entry><key>Machen Sie mit!</key><value>Machen Sie mit!</value></entry>
+  <!-- in /usr/home/paul/src/bknr-svn/projects/bos/web/poi-handlers.lisp -->
+  <entry><key>learn more</key><value></value></entry>
+  <!-- in /home/paul/src/bknr-svn/projects/bos/web/kml-handlers.lisp -->
+  <entry><key>Country-Stats</key><value>Länderstatistik</value></entry>
+  <entry><key>BOS says thank you to all sponsors!</key>
+    <value>BOS bedankt sich bei allen Sponsoren für ihre Unterstützung!</value></entry>
+  <entry><key>sponsor</key><value>Sponsor</value></entry>
+  <entry><key>sponsors</key><value>Sponsoren</value></entry>
+  <entry><key>total contribution</key><value>Gesamtfläche</value></entry>
+  <!--    -->
+  <!--   country names -->
+  <entry><key>Afghanistan</key><value>Afghanistan</value></entry>
+  <entry><key>Albania</key><value>Albanien</value></entry>
+  <entry><key>Algeria</key><value>Algerien</value></entry>
+  <entry><key>American Samoa</key><value>Amerikanisch-Samoa</value></entry>
+  <entry><key>Andorra</key><value>Andorra</value></entry>
+  <entry><key>Angola</key><value>Angola</value></entry>
+  <entry><key>Anguilla</key><value>Anguilla</value></entry>
+  <entry><key>Antarctica</key><value>Antarktis</value></entry>
+  <entry><key>Antigua and Barbuda</key><value>Antigua und Barbuda</value></entry>
+  <entry><key>Argentina</key><value>Argentinien</value></entry>
+  <entry><key>Armenia</key><value>Armenien</value></entry>
+  <entry><key>Aruba</key><value>Aruba</value></entry>
+  <entry><key>Australia</key><value>Australien</value></entry>
+  <entry><key>Austria</key><value>Österreich</value></entry>
+  <entry><key>Azerbaijan</key><value>Aserbaidschan</value></entry>
+  <entry><key>Bahamas</key><value>Bahamas</value></entry>
+  <entry><key>Bahrain</key><value>Bahrain</value></entry>
+  <entry><key>Bangladesh</key><value>Bangladesch</value></entry>
+  <entry><key>Barbados</key><value>Barbados</value></entry>
+  <entry><key>Belarus</key><value>Belarus</value></entry>
+  <entry><key>Belgium</key><value>Belgien</value></entry>
+  <entry><key>Belize</key><value>Belize</value></entry>
+  <entry><key>Benin</key><value>Benin</value></entry>
+  <entry><key>Bermuda</key><value>die Bermudas</value></entry>
+  <entry><key>Bhutan</key><value>Bhutan</value></entry>
+  <entry><key>Bolivia</key><value>Bolivien</value></entry>
+  <entry><key>Bosnia and Herzegovina</key><value>Bosnien und Herzegowina</value></entry>
+  <entry><key>Botswana</key><value>Botsuana</value></entry>
+  <entry><key>Bouvet Island</key><value>Bouvetinsel</value></entry>
+  <entry><key>Brazil</key><value>Brasilien</value></entry>
+  <entry><key>British Indian Ocean Territory</key><value>Britisches Territorium im Indischen Ozean</value></entry>
+  <entry><key>British Virgin Islands</key><value>Britische Jungferninseln</value></entry>
+  <entry><key>Brunei Darussalam</key><value>Brunei Darussalam</value></entry>
+  <entry><key>Bulgaria</key><value>Bulgarien</value></entry>
+  <entry><key>Burkina Faso</key><value>Burkina Faso</value></entry>
+  <entry><key>Burundi</key><value>Burundi</value></entry>
+  <entry><key>Cambodia</key><value>Kambodscha</value></entry>
+  <entry><key>Cameroon</key><value>Kamerun</value></entry>
+  <entry><key>Canada</key><value>Kanada</value></entry>
+  <entry><key>Cape Verde</key><value>Kap Verde</value></entry>
+  <entry><key>Cayman Islands</key><value>Kaimaninseln</value></entry>
+  <entry><key>Central African Republic</key><value>Zentralafrikanische Republik</value></entry>
+  <entry><key>Chad</key><value>Tschad</value></entry>
+  <entry><key>Chile</key><value>Chile</value></entry>
+  <entry><key>China</key><value>China</value></entry>
+  <entry><key>Christmas Island</key><value>Weihnachtsinsel</value></entry>
+  <entry><key>Cocos (Keeling) Islands</key><value>Kokosinseln</value></entry>
+  <entry><key>Colombia</key><value>Kolumbien</value></entry>
+  <entry><key>Comoros</key><value>Komoren</value></entry>
+  <entry><key>Congo</key><value>Kongo</value></entry>
+  <entry><key>Cook Islands</key><value>Cookinseln</value></entry>
+  <entry><key>Costa Rica</key><value>Costa Rica</value></entry>
+  <entry><key>Croatia</key><value>Kroatien</value></entry>
+  <entry><key>Cuba</key><value>Kuba</value></entry>
+  <entry><key>Cyprus</key><value>Zypern</value></entry>
+  <entry><key>Czech Republic</key><value>Tschechische Republik</value></entry>
+  <entry><key>Côte d'Ivoire</key><value>Côte d'Ivoire</value></entry>
+  <entry><key>Denmark</key><value>Dänemark</value></entry>
+  <entry><key>Djibouti</key><value>Dschibuti</value></entry>
+  <entry><key>Dominica</key><value>Dominica</value></entry>
+  <entry><key>Dominican Republic</key><value>Dominikanische Republik</value></entry>
+  <entry><key>Ecuador</key><value>Ecuador</value></entry>
+  <entry><key>Egypt</key><value>Ägypten</value></entry>
+  <entry><key>El Salvador</key><value>El Salvador</value></entry>
+  <entry><key>Equatorial Guinea</key><value>Äquatorialguinea</value></entry>
+  <entry><key>Eritrea</key><value>Eritrea</value></entry>
+  <entry><key>Estonia</key><value>Estland</value></entry>
+  <entry><key>Ethiopia</key><value>Äthiopien</value></entry>
+  <entry><key>Falkland Islands (Malvinas)</key><value>Falklandinseln</value></entry>
+  <entry><key>Faroe Islands</key><value>Färöer</value></entry>
+  <entry><key>Federated States of Micronesia</key><value>Mikronesien</value></entry>
+  <entry><key>Fiji</key><value>Fidschi</value></entry>
+  <entry><key>Finland</key><value>Finnland</value></entry>
+  <entry><key>France</key><value>Frankreich</value></entry>
+  <entry><key>French Guiana</key><value>Französisch-Guayana</value></entry>
+  <entry><key>French Polynesia</key><value>Französisch-Polynesien</value></entry>
+  <entry><key>French Southern Territories</key><value>Französische Gebiete im südlichen Indischen Ozean</value></entry>
+  <entry><key>Gabon</key><value>Gabun</value></entry>
+  <entry><key>Gambia</key><value>Gambia</value></entry>
+  <entry><key>Georgia</key><value>Georgien</value></entry>
+  <entry><key>Germany</key><value>Deutschland</value></entry>
+  <entry><key>Ghana</key><value>Ghana</value></entry>
+  <entry><key>Gibraltar</key><value>Gibraltar</value></entry>
+  <entry><key>Greece</key><value>Griechenland</value></entry>
+  <entry><key>Greenland</key><value>Grönland</value></entry>
+  <entry><key>Grenada</key><value>Grenada</value></entry>
+  <entry><key>Guadeloupe</key><value>Guadeloupe</value></entry>
+  <entry><key>Guam</key><value>Guam</value></entry>
+  <entry><key>Guatemala</key><value>Guatemala</value></entry>
+  <entry><key>Guinea-Bissau</key><value>Guinea-Bissau</value></entry>
+  <entry><key>Guinea</key><value>Guinea</value></entry>
+  <entry><key>Guyana</key><value>Guyana</value></entry>
+  <entry><key>Haiti</key><value>Haiti</value></entry>
+  <entry><key>Heard Island and McDonald Islands</key><value>Heard und McDonaldinseln</value></entry>
+  <entry><key>Holy See</key><value>Vatikanstadt</value></entry>
+  <entry><key>Honduras</key><value>Honduras</value></entry>
+  <entry><key>Hong Kong</key><value>Hongkong</value></entry>
+  <entry><key>Hungary</key><value>Ungarn</value></entry>
+  <entry><key>Iceland</key><value>Island</value></entry>
+  <entry><key>India</key><value>Indien</value></entry>
+  <entry><key>Indonesia</key><value>Indonesien</value></entry>
+  <entry><key>Iraq</key><value>Irak</value></entry>
+  <entry><key>Ireland</key><value>Irland</value></entry>
+  <entry><key>Islamic Republic of Iran</key><value>Iran</value></entry>
+  <entry><key>Israel</key><value>Israel</value></entry>
+  <entry><key>Italy</key><value>Italien</value></entry>
+  <entry><key>Jamaica</key><value>Jamaika</value></entry>
+  <entry><key>Japan</key><value>Japan</value></entry>
+  <entry><key>Jordan</key><value>Jordanien</value></entry>
+  <entry><key>Kazakhstan</key><value>Kasachstan</value></entry>
+  <entry><key>Kenya</key><value>Kenia</value></entry>
+  <entry><key>Kiribati</key><value>Kiribati</value></entry>
+  <entry><key>Korea</key><value>Demokratische Volksrepublik Korea</value></entry>
+  <entry><key>Kuwait</key><value>Kuwait</value></entry>
+  <entry><key>Kyrgyzstan</key><value>Kirgisistan</value></entry>
+  <entry><key>Lao People's Democratic Republic</key><value>Laos</value></entry>
+  <entry><key>Latvia</key><value>Lettland</value></entry>
+  <entry><key>Lebanon</key><value>Libanon</value></entry>
+  <entry><key>Lesotho</key><value>Lesotho</value></entry>
+  <entry><key>Liberia</key><value>Liberia</value></entry>
+  <entry><key>Libyan Arab Jamahiriya</key><value>Libyen</value></entry>
+  <entry><key>Liechtenstein</key><value>Liechtenstein</value></entry>
+  <entry><key>Lithuania</key><value>Litauen</value></entry>
+  <entry><key>Luxembourg</key><value>Luxemburg</value></entry>
+  <entry><key>Macao</key><value>Macau</value></entry>
+  <entry><key>Madagascar</key><value>Madagaskar</value></entry>
+  <entry><key>Malawi</key><value>Malawi</value></entry>
+  <entry><key>Malaysia</key><value>Malaysia</value></entry>
+  <entry><key>Maldives</key><value>Malediven</value></entry>
+  <entry><key>Mali</key><value>Mali</value></entry>
+  <entry><key>Malta</key><value>Malta</value></entry>
+  <entry><key>Marshall Islands</key><value>Marshallinseln</value></entry>
+  <entry><key>Martinique</key><value>Martinique</value></entry>
+  <entry><key>Mauritania</key><value>Mauretanien</value></entry>
+  <entry><key>Mauritius</key><value>Mauritius</value></entry>
+  <entry><key>Mayotte</key><value>Mayotte</value></entry>
+  <entry><key>Mexico</key><value>Mexiko</value></entry>
+  <entry><key>Moldova</key><value>Republik Moldau</value></entry>
+  <entry><key>Monaco</key><value>Monaco</value></entry>
+  <entry><key>Mongolia</key><value>Mongolei</value></entry>
+  <entry><key>Montserrat</key><value>Montserrat</value></entry>
+  <entry><key>Morocco</key><value>Marokko</value></entry>
+  <entry><key>Mozambique</key><value>Mosambik</value></entry>
+  <entry><key>Myanmar</key><value>Myanmar</value></entry>
+  <entry><key>Namibia</key><value>Namibia</value></entry>
+  <entry><key>Nauru</key><value>Nauru</value></entry>
+  <entry><key>Nepal</key><value>Nepal</value></entry>
+  <entry><key>Netherlands Antilles</key><value>Niederländische Antillen</value></entry>
+  <entry><key>Netherlands</key><value>Niederlande</value></entry>
+  <entry><key>New Caledonia</key><value>Neukaledonien</value></entry>
+  <entry><key>New Zealand</key><value>Neuseeland</value></entry>
+  <entry><key>Nicaragua</key><value>Nicaragua</value></entry>
+  <entry><key>Niger</key><value>Niger</value></entry>
+  <entry><key>Nigeria</key><value>Nigeria</value></entry>
+  <entry><key>Niue</key><value>Niue</value></entry>
+  <entry><key>Norfolk Island</key><value>Norfolkinsel</value></entry>
+  <entry><key>Northern Mariana Islands</key><value>Nördliche Marianen</value></entry>
+  <entry><key>Norway</key><value>Norwegen</value></entry>
+  <entry><key>Oman</key><value>Oman</value></entry>
+  <entry><key>Pakistan</key><value>Pakistan</value></entry>
+  <entry><key>Palau</key><value>Palau</value></entry>
+  <entry><key>Panama</key><value>Panama</value></entry>
+  <entry><key>Papua New Guinea</key><value>Papua-Neuguinea</value></entry>
+  <entry><key>Paraguay</key><value>Paraguay</value></entry>
+  <entry><key>Peru</key><value>Peru</value></entry>
+  <entry><key>Philippines</key><value>Philippinen</value></entry>
+  <entry><key>Pitcairn</key><value>Pitcairninseln</value></entry>
+  <entry><key>Poland</key><value>Polen</value></entry>
+  <entry><key>Portugal</key><value>Portugal</value></entry>
+  <entry><key>Puerto Rico</key><value>Puerto Rico</value></entry>
+  <entry><key>Qatar</key><value>Katar</value></entry>
+  <entry><key>Romania</key><value>Rumänien</value></entry>
+  <entry><key>Russian Federation</key><value>Russische Föderation</value></entry>
+  <entry><key>Rwanda</key><value>Ruanda</value></entry>
+  <entry><key>Réunion</key><value>Réunion</value></entry>
+  <entry><key>Saint Helena</key><value>St. Helena</value></entry>
+  <entry><key>Saint Kitts and Nevis</key><value>St. Kitts und Nevis</value></entry>
+  <entry><key>Saint Lucia</key><value>St. Lucia</value></entry>
+  <entry><key>Saint Pierre and Miquelon</key><value>St. Pierre und Miquelon</value></entry>
+  <entry><key>Saint Vincent and the Grenadines</key><value>St. Vincent und die Grenadinen</value></entry>
+  <entry><key>Samoa</key><value>Samoa</value></entry>
+  <entry><key>San Marino</key><value>San Marino</value></entry>
+  <entry><key>Sao Tome and Principe</key><value>São Tomé und Príncipe</value></entry>
+  <entry><key>Saudi Arabia</key><value>Saudi-Arabien</value></entry>
+  <entry><key>Senegal</key><value>Senegal</value></entry>
+  <entry><key>Seychelles</key><value>Seychellen</value></entry>
+  <entry><key>Sierra Leone</key><value>Sierra Leone</value></entry>
+  <entry><key>Singapore</key><value>Singapur</value></entry>
+  <entry><key>Slovakia</key><value>Slowakei</value></entry>
+  <entry><key>Slovenia</key><value>Slowenien</value></entry>
+  <entry><key>Solomon Islands</key><value>Salomonen</value></entry>
+  <entry><key>Somalia</key><value>Somalia</value></entry>
+  <entry><key>South Africa</key><value>Südafrika</value></entry>
+  <entry><key>South Georgia and the South Sandwich Islands</key><value>Südgeorgien und Südliche Sandwichinseln</value></entry>
+  <entry><key>South Korea</key><value>Republik Korea</value></entry>
+  <entry><key>Spain</key><value>Spanien</value></entry>
+  <entry><key>Sri Lanka</key><value>Sri Lanka</value></entry>
+  <entry><key>Sudan</key><value>Sudan</value></entry>
+  <entry><key>Suriname</key><value>Suriname</value></entry>
+  <entry><key>Svalbard and Jan Mayen</key><value>Svalbard und Jan Mayen</value></entry>
+  <entry><key>Swaziland</key><value>Swasiland</value></entry>
+  <entry><key>Sweden</key><value>Schweden</value></entry>
+  <entry><key>Switzerland</key><value>Schweiz</value></entry>
+  <entry><key>Syrian Arab Republic</key><value>Syrien</value></entry>
+  <entry><key>Taiwan</key><value>Taiwan</value></entry>
+  <entry><key>Tajikistan</key><value>Tadschikistan</value></entry>
+  <entry><key>Thailand</key><value>Thailand</value></entry>
+  <entry><key>Timor-Leste</key><value>Osttimor</value></entry>
+  <entry><key>Togo</key><value>Togo</value></entry>
+  <entry><key>Tokelau</key><value>Tokelau</value></entry>
+  <entry><key>Tonga</key><value>Tonga</value></entry>
+  <entry><key>Trinidad and Tobago</key><value>Trinidad und Tobago</value></entry>
+  <entry><key>Tunisia</key><value>Tunesien</value></entry>
+  <entry><key>Turkey</key><value>Türkei</value></entry>
+  <entry><key>Turkmenistan</key><value>Turkmenistan</value></entry>
+  <entry><key>Turks and Caicos Islands</key><value>Turks- und Caicosinseln</value></entry>
+  <entry><key>Tuvalu</key><value>Tuvalu</value></entry>
+  <entry><key>U.S. Virgin Islands</key><value>Amerikanische Jungferninseln</value></entry>
+  <entry><key>Uganda</key><value>Uganda</value></entry>
+  <entry><key>Ukraine</key><value>Ukraine</value></entry>
+  <entry><key>United Arab Emirates</key><value>Vereinigte Arabische Emirate</value></entry>
+  <entry><key>United Kingdom</key><value>Vereinigtes Königreich</value></entry>
+  <entry><key>United Republic of Tanzania</key><value>Tansania</value></entry>
+  <entry><key>United States Minor Outlying Islands</key><value>Kleinere amerikanische Überseeinseln</value></entry>
+  <entry><key>United States</key><value>Vereinigte Staaten</value></entry>
+  <entry><key>Uruguay</key><value>Uruguay</value></entry>
+  <entry><key>Uzbekistan</key><value>Usbekistan</value></entry>
+  <entry><key>Vanuatu</key><value>Vanuatu</value></entry>
+  <entry><key>Venezuela</key><value>Venezuela</value></entry>
+  <entry><key>Viet Nam</key><value>Vietnam</value></entry>
+  <entry><key>Wallis and Futuna</key><value>Wallis und Futuna</value></entry>
+  <entry><key>Western Sahara</key><value>Westsahara</value></entry>
+  <entry><key>Yemen</key><value>Jemen</value></entry>
+  <entry><key>Zambia</key><value>Sambia</value></entry>
+  <entry><key>Zimbabwe</key><value>Simbabwe</value></entry>
+  <entry><key>the Democratic Republic of the Congo</key><value>Demokratische Republik Kongo</value></entry>
+  <entry><key>the former Yugoslav Republic of Macedonia</key><value>ehemalige jugoslawische Republik Mazedonien</value></entry>
 </dictionary>
+
