@@ -1,27 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <dictionary>
-  <!-- in /tmp/ttt.lisp 
-       /tmp/ttt2.lisp  -->
+<!-- in /usr/home/paul/src/bknr-svn/projects/bos/web/poi-handlers.lisp -->
   <entry>
     <key>
-      hallo wie gehts?
+      Machen Sie mit!
     </key>
     <value>
     </value>
   </entry>
-  <!-- in /tmp/ttt.lisp -->
+<!-- in /usr/home/paul/src/bknr-svn/projects/bos/web/poi-handlers.lisp -->
   <entry>
     <key>
-      na?
-    </key>
-    <value>
-    </value>
-  </entry>
-  <!-- in NIL -->
-  <entry>
-    <key>
-      test
+      learn more
     </key>
     <value>
     </value>
