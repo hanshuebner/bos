@@ -149,7 +149,8 @@
                                            <a href='http://createrainforest.com/'>BOS</a>.</p>
                                            <p>In total, they have contributed ~d m².</p><br>"
                                         (length contracts)
-                                        (second (assoc (make-keyword-from-string (car country-contracts)) *country-english-names*))
+                                        (dictionary-entry
+                                         (second (assoc (make-keyword-from-string (car country-contracts)) *country-english-names*)) lang)
                                         (reduce #'+ contracts :key #'contract-area))))
                         (with-element "Point"
                           (with-element "coordinates"
