@@ -50,10 +50,11 @@
 (defmacro dictionary-entry (key language)
   (flet ((pathname-equal (a b)
            (equal (namestring a) (namestring b))))
-    (check-type key string)  
-    (when *compile-file-pathname*
-      (pushnew *compile-file-pathname* (dictionary-key-occurences key)
-               :test #'pathname-equal))
+    (when (constantp key)
+      (check-type key string)  
+      (when *compile-file-pathname*
+        (pushnew *compile-file-pathname* (dictionary-key-occurences key)
+                 :test #'pathname-equal)))
     `(%dictionary-entry ,key ,language)))
 
 (defun dictionary-clear-entries-by-language (language)
