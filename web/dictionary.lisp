@@ -104,12 +104,15 @@
                                  "expected element \"key\"")
                          (assert (equal "value" (cxml-xmls:node-name (second key-value))) nil
                                  "expected element \"value\"")
-                         (let ((key (trim-whitespace (first (cxml-xmls:node-children (first key-value)))))
-                               (value (trim-whitespace (first (cxml-xmls:node-children (second key-value))))))
-                           (assert (stringp key))
-                           (assert (stringp value))                           
-                           (unless (zerop (length value))
-                             (setf (%dictionary-entry key language) value)))))))
+                         (let ((key (first (cxml-xmls:node-children (first key-value))))
+                               (value (first (cxml-xmls:node-children (second key-value)))))
+                           (when value
+                             (let ((key (trim-whitespace key))
+                                   (value (trim-whitespace value)))
+                               (assert (stringp key))
+                               (assert (stringp value))                          
+                               (unless (zerop (length value))
+                                 (setf (%dictionary-entry key language) value)))))))))
                (error (c)
                  (error "Error while loading ~a:~%~a"
                         (enough-namestring xml-path (dictionary-directory)) c)))))    
