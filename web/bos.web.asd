@@ -37,7 +37,10 @@
                (:file "contract-tree" :depends-on ("quad-tree"))
                (:file "sat-tree" :depends-on ("quad-tree" "contract-tree"))
                (:file "countries" :depends-on ("packages"))
-               (:file "kml-handlers" :depends-on ("packages" "web-macros" "countries" "dictionary"))
+               (:file "kml-handlers" :depends-on ("packages"
+                                                  "web-macros"
+                                                  "countries"
+                                                  "dictionary"))
 	       (:file "sponsor-handlers" :depends-on ("web-utils"))
 	       (:file "news-handlers" :depends-on ("web-utils"))
 	       (:file "allocation-area-handlers" :depends-on ("web-utils"))

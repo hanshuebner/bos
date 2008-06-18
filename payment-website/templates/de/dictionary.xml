@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dictionary>
   <!-- in /usr/home/paul/src/bknr-svn/projects/bos/web/poi-handlers.lisp -->
-  <entry><key>Machen Sie mit!</key><value>Machen Sie mit!</value></entry>
+  <entry><key>Join in!</key><value>Machen Sie mit!</value></entry>
   <!-- in /usr/home/paul/src/bknr-svn/projects/bos/web/poi-handlers.lisp -->
   <entry><key>learn more</key><value></value></entry>
   <!-- in /home/paul/src/bknr-svn/projects/bos/web/kml-handlers.lisp -->
+  
+  <!--  kml-root  -->
+  <entry><key>Squaremetre Area</key><value>Quadratmetergebiet</value></entry>
+  <entry><key>sat-2007</key><value>Satellitenbild von 2007</value></entry>
+  <entry><key>POIs</key><value>Interessante Orte</value></entry>  
+
+  <!-- GE contract balloon -->  
+  <entry><key>Donor ID:</key><value>Sponsor-ID:</value></entry>
+  <entry><key>Name:</key><value>Name:</value></entry>
+  <entry><key>Country:</key><value>Land:</value></entry>
+  <entry><key>donated:</key><value>gesponsort:</value></entry>
+  <entry><key>since:</key><value>seit:</value></entry>
+  
+
   <entry><key>Country-Stats</key><value>Länderstatistik</value></entry>
   <entry><key>BOS says thank you to all sponsors!</key>
     <value>BOS bedankt sich bei allen Sponsoren für ihre Unterstützung!</value></entry>

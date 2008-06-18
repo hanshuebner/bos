@@ -223,8 +223,7 @@
                         (kml-network-link (format nil "http://~A/sat-tree-kml?name=~A&path=~{~D~}"
                                                   (website-host) (name layer) (append path (list i)))
                                           :rect (geo-box-rectangle (geo-box child))
-                                          :lod (node-lod child)
-                                          :http-query nil)))))))))))))
+                                          :lod (node-lod child))))))))))))))
 
 (defclass sat-root-kml-handler (page-handler)
   ())
@@ -246,6 +245,5 @@
               (kml-network-link (format nil "http://~A/sat-tree-kml?name=~A&path=~{~D~}"
                                         (website-host) (name layer) (node-path node))
                                 :rect (geo-box-rectangle (geo-box node))
-                                :lod (node-lod node)
-                                :http-query nil))))))))
+                                :lod (node-lod node)))))))))
 

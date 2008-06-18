@@ -15,4 +15,13 @@
 	 (attribute "failure" 1)
 	 (text (princ-to-string e)))))))
 
+(defmacro handle-every-n-seconds ((n-seconds) &body body)
+  (let ((=time= (gensym "TIME"))
+        (=timestamp= (gensym "TIMESTAMP")))
+    `(let* ((,=time= (get-universal-time))
+            (,=timestamp= (- ,=time= (mod ,=time= ,n-seconds))))
+       (hunchentoot:handle-if-modified-since ,=timestamp=)
+       (setf (hunchentoot:header-out :last-modified)
+             (hunchentoot:rfc-1123-date ,=timestamp=))
+       ,@body)))
 

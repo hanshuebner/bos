@@ -186,9 +186,9 @@ links are created."))
                   (kml-network-link
                    (if (and rmcpath
                             (= (car rmcpath) i))
-                       (format nil "http://~A/contract-tree-kml?path=~{~D~}~d&rmcid=~D&rmcpath=~{~D~}"
-                               (website-host) path i rmcid (cdr rmcpath))
-                       (format nil "http://~A/contract-tree-kml?path=~{~D~}~D" (website-host) path i))
+                       (format nil "http://~A/contract-tree-kml?path=~{~D~}~d&rmcid=~D&rmcpath=~{~D~}&lang=~A"
+                               (website-host) path i rmcid (cdr rmcpath) lang)
+                       (format nil "http://~A/contract-tree-kml?path=~{~D~}~D&lang=~A" (website-host) path i lang))
                    :rect (geo-box-rectangle (geo-box child))
                    :lod (node-lod child)))))))))))
 

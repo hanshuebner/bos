@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dictionary>
-<!-- in /usr/home/paul/src/bknr-svn/projects/bos/web/poi-handlers.lisp -->
-  <entry>
-    <key>
-      Machen Sie mit!
-    </key>
-    <value>
-    </value>
-  </entry>
-<!-- in /usr/home/paul/src/bknr-svn/projects/bos/web/poi-handlers.lisp -->
-  <entry>
-    <key>
-      learn more
-    </key>
-    <value>
-    </value>
-  </entry>
+  <entry><key>sat-2007</key><value>Satellite Image 2007</value></entry>  
+  <entry><key>POIs</key><value>Points of Interest</value></entry>  
   <!--    -->
   <!--   country names -->
   <!--   not needed in the english dictionary -->

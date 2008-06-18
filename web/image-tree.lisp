@@ -255,7 +255,7 @@
 (defun kml-format-color (color &optional (opacity 255))
   (format nil "~2,'0X~{~2,'0X~}" opacity (reverse color)))
 
-(defmethod kml-link ((href string) &key (http-query "lang=[language]"))
+(defmethod kml-link ((href string) &key http-query)
   (with-element "Link"
     (with-element "href" (text href))
     (with-element "viewRefreshMode" (text "onRegion"))
@@ -267,11 +267,13 @@
 ;;                   (puri:render-uri href out))))
 ;;     (kml-link string)))
 
-(defun kml-network-link (href &key rect lod name (http-query "lang=[language]"))
+(defun kml-network-link (href &key rect lod name http-query
+                         fly-to-view)
   (with-element "NetworkLink"
     (when name (with-element "name" (text name)))
     (when rect (kml-region rect lod))
-    (kml-link href :http-query http-query)))
+    (when fly-to-view (with-element "flyToView" (text "1")))
+    (kml-link href)))
 
 (defun kml-lat-lon-box (rect &optional (element "LatLonBox"))
   (bind-nsew (bounding-box-lon-lat rect)
@@ -630,8 +632,7 @@ links are created."))
           (kml-network-link (format nil "http://~a/image-tree-kml/~d" (website-host) (store-object-id child))
                             :rect (make-rectangle2 (list (geo-x child) (geo-y child)
                                                          (geo-width child) (geo-height child)))
-                            :lod `(:min ,(lod-min child) :max ,(lod-max child))
-                            :http-query nil))))))
+                            :lod `(:min ,(lod-min child) :max ,(lod-max child))))))))
 
 (defclass image-tree-kml-latest-handler (page-handler)
   ()

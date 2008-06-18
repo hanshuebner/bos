@@ -506,7 +506,7 @@
                         ((= 1983023 (store-object-id poi))
                          (with-element "p" (with-element "a"
                                              (attribute "href" (website-path "/~a/bestellung" language))
-                                             (text (dictionary-entry "Machen Sie mit!" language)))))
+                                             (text (dictionary-entry "Join in!" language)))))
                         (t
                          (with-element "br")
                          (with-element "br")))
