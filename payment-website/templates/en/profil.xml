@@ -61,7 +61,7 @@
      <tr>
       <td class="Label">square metres</td>
       <td class="Input">a total of $(numsqm) m² has been bought<br />UTM-coordinate: N$(sqm-x) E$(sqm-y)
-      <br /><a href="/kml-root/$(sponsor-id)">Your square metres in Google Earth</a></td>
+      <br /><a href="/kml-root/$(sponsor-id)?lang=$(sponsor-language)">Your square metres in Google Earth</a></td>
       <td class="Info"></td>
      </tr>
      <tr>

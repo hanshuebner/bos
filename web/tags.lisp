@@ -163,6 +163,7 @@
       (when infotext
 	(change-slot-values sponsor 'info-text infotext)))
     (setf (get-template-var :sponsor-id) (format nil "~D" (store-object-id sponsor)))
+    (setf (get-template-var :sponsor-language) (format nil "~D" (sponsor-language sponsor)))
     (setf (get-template-var :contract-id) (format nil "~D" (store-object-id contract)))
     (setf (get-template-var :country) (sponsor-country sponsor))
     (setf (get-template-var :infotext) (sponsor-info-text sponsor))

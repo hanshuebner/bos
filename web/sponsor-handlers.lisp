@@ -148,7 +148,7 @@
 				 :value (sponsor-info-text sponsor)
 				 :rows 5
 				 :cols 40))))
-      (:p (cmslink (format nil "kml-root/~A" (store-object-id sponsor)) "Google Earth"))
+      (:p (cmslink (format nil "kml-root/~A?lang=~A" (store-object-id sponsor) (sponsor-language sponsor)) "Google Earth"))
       (:h2 "Contracts")
       ((:table :border "1")
        (:tr (:th "ID") (:th "date") (:th "# of sqm") (:th "UTM coordinate")(:th "paid?") (:th))
