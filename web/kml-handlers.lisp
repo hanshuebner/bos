@@ -129,7 +129,7 @@
   ())
 
 (defmethod handle ((handler country-stats-handler))
-  (handle-every-n-seconds (1)
+  (handle-every-n-seconds (60)
     (with-xml-response (:content-type #+nil "text/xml" "application/vnd.google-earth.kml+xml; charset=utf-8"
                                       :root-element "kml")      
       (with-query-params ((lang "en"))
