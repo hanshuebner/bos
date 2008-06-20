@@ -16,8 +16,8 @@
     (pass)))
 
 (test request-start-page
-  #+ccl(skip "known to fail on ccl")  
-  #-ccl
+  #+(or ccl openmcl)(skip "known to fail on ccl")  
+  #-(or ccl openmcl)
   (with-bos-test-server (port)
     (let ((uri (format nil "http://localhost:~D" port)))
       (is (= 200 (nth-value 1 (drakma:http-request uri)))))))
