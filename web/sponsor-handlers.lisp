@@ -166,7 +166,7 @@
 			 (when (contract-worldpay-trans-id contract)
 			   (html :br ((:a :class "cmslink"
 					  :target "_new"
-					  :href (format nil "https://select.worldpay.com/wcc/admin?op-transInfo-~A=1"
+					  :href (format nil "https://select.worldpay.com/merchant/orderList/showOrderDetailMerchant.html?orderCode=~A"
 							(contract-worldpay-trans-id contract)))
 				      "Show WorldPay transaction"))))))))
       (:p (submit-button "save" "save")
