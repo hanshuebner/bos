@@ -14,6 +14,7 @@
 	:puri
 	#+(or) :mime
         :bknr.web
+	:bknr.web.frontend
 	:bknr.datastore
 	:bknr.indices
 	:bknr.utils
