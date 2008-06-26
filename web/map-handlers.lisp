@@ -49,7 +49,7 @@
 	     (submit-button "view" "view" :formcheck formcheck)
 	     (submit-button "save" "save"))))))))
 
-(defclass image-tile-handler (object-handler)
+(defclass image-tile-handler (cachable-handler object-handler)
   ())
 
 (defmethod object-handler-get-object ((handler image-tile-handler))
