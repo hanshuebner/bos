@@ -45,7 +45,8 @@
   (setq hunchentoot:*catch-errors-p* (not debug))
   (when *webserver*
     (hunchentoot:stop-server *webserver*))
-  (setf hunchentoot:*hunchentoot-default-external-format* (flex:make-external-format :utf-8 :eol-style :lf))
+  (setf *hunchentoot-default-external-format* (flex:make-external-format :utf-8 :eol-style :lf)
+        hunchentoot:*rewrite-for-session-urls* nil)  
   (setq *webserver* (hunchentoot:start-server :port *port* #+not-yet :threaded #+not-yet (not debug)))
   (if start-frontend
       (start-frontend :host host :backend-port port :port frontend-port)
