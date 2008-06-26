@@ -49,4 +49,5 @@
   (setq *webserver* (hunchentoot:start-server :port *port* #+not-yet :threaded #+not-yet (not debug)))
   (if start-frontend
       (start-frontend :host host :backend-port port :port frontend-port)
-      (warn "frontend not started - to achieve this specify :start-frontend t")))
+      (warn "frontend not started - to achieve this specify :start-frontend t"))
+  *webserver*)
