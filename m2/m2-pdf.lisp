@@ -8,7 +8,7 @@
         (pdf:draw-left-text x y part font 8 300)
         (incf y 10))))
 
-(defun contract-pdf (contract pdf-pathname)
+(defun make-m2-pdf (contract &key print)
   (pdf:with-document ()
     (pdf:with-page ()
       (pdf:in-text-mode
@@ -22,9 +22,10 @@
                  (last-m2 (first (last m2s)))
                  (scale (/ 80 (max bb-width bb-height))))
 
-            (draw-coordinate 100 160 (m2-lon-lat first-m2))
+            (draw-coordinate 110 160 (m2-lon-lat first-m2))
 
-            (draw-coordinate 180 40 (m2-lon-lat last-m2))
+            (unless (eq first-m2 last-m2)
+              (draw-coordinate 190 40 (m2-lon-lat last-m2)))
 
             (pdf:translate (+ 65.0 (if (>= bb-width bb-height) 0
                                        (* 0.5 (abs (- bb-width bb-height)) scale)))
@@ -55,9 +56,9 @@
                 (pdf:line-to (1+ x) (1+ y))
                 (pdf:line-to (1+ x) y)
                 (pdf:line-to x y)
-                (pdf:fill-and-stroke)))))))
+                (pdf:close-fill-and-stroke)))))))
 
-    (with-open-file (f pdf-pathname :direction :output :if-exists :supersede)
+    (with-open-file (f (contract-m2-pdf-pathname contract :print print) :direction :output :if-exists :supersede)
       ;; cl-pdf does not really handle non-ascii characters in a very
       ;; usable manner.  In order to avoid having to deal with
       ;; embedding fonts and encoding, just work around the issue:
@@ -67,5 +68,6 @@
                          (pdf:write-document s))))
              f))
     t))
+
 #+(or)
-(contract-pdf (random-elt (class-instances 'contract)) "/tmp/out.pdf")
+(make-m2-pdf (random-elt (class-instances 'contract)))

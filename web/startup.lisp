@@ -11,7 +11,6 @@
 (defvar *webserver* nil)
 
 (defvar *port*)
-(defvar *listeners*)
 (defvar *website-directory*)
 (defvar *website-url*)
 (defvar *worldpay-test-mode*)

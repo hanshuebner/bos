@@ -184,7 +184,7 @@ language preference weights."
 (defun publish-directory (&key prefix destination)
   (push (hunchentoot:create-folder-dispatcher-and-handler prefix destination) hunchentoot:*dispatch-table*))
 
-(defun publish-website (&key website-directory website-url (worldpay-test-mode t) (vhosts :wild))
+(defun publish-website (&key website-directory website-url (worldpay-test-mode t))
   (setf *website-directory* website-directory)
 
   (when website-url
@@ -264,8 +264,7 @@ language preference weights."
 		 :authorizer (make-instance 'bos-authorizer)
 		 :site-logo-url "/images/bos-logo.gif"
 		 :style-sheet-urls '("/static/cms.css")
-		 :javascript-urls '("/static/cms.js" "/static/tiny_mce/tiny_mce.js")
-		 :vhosts vhosts)
+		 :javascript-urls '("/static/cms.js" "/static/tiny_mce/tiny_mce.js"))
 
   (publish-directory :prefix "/static/"
                      :destination (merge-pathnames "static/" website-directory))

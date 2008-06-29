@@ -11,15 +11,18 @@
       (error "Error executing ~A - Exit code ~D~%Error message: ~A"
              (format nil "\"~A~{ ~A~}\"" program program-args) (process-exit-code process) error-message))))
 
-(defun fill-form (fdf-pathname pdf-pathname output-pathname)
+(defun fill-form (fdf-pathname pdf-pathname m2-pdf-pathname output-pathname)
   (handler-case
-      (progn
+      (with-temporary-file (temporary-pdf-pathname :defaults #P"/tmp/.pdf")
         (cond
           ((namestring pdf-pathname)
            (run-tool "pdftk" (list (namestring pdf-pathname)
                                    "fill_form" (namestring fdf-pathname)
-                                   "output" (namestring output-pathname)
+                                   "output" (namestring temporary-pdf-pathname)
                                    "flatten"))
+           (run-tool "pdftk" (list (namestring m2-pdf-pathname)
+                                   "background" (namestring temporary-pdf-pathname)
+                                   "output" (namestring output-pathname)))
            (format t "; generated ~A~%" output-pathname))
           (t
            (warn "Warning, stray FDF file ~A deleted, no such contract exists" fdf-pathname)))
@@ -32,13 +35,21 @@
 				:test (complement #'string-equal)
 				:key #'pathname-type))
     (handler-case
-	(destructuring-bind (id &optional (country "en")) (split "-" (pathname-name fdf-pathname))
-	  (let ((language-specific-template-pathname (merge-pathnames (make-pathname :name (format nil "~A-~A" (pathname-name template-pathname) country))
-								      template-pathname))
+	(destructuring-bind (id &optional (country "en"))
+            (split "-" (pathname-name fdf-pathname))
+	  (let ((language-specific-template-pathname (merge-pathnames
+                                                      (make-pathname :name (format nil "~A-~A" (pathname-name template-pathname)
+                                                                                   country))
+                                                      template-pathname))
+                (m2-pdf-pathname (merge-pathnames
+                                  (make-pathname :name (format nil "~A-m2s" id))
+                                  fdf-pathname))
 		(output-pathname (merge-pathnames (make-pathname :name id :type "pdf") fdf-pathname)))
-	    (fill-form fdf-pathname (if (probe-file language-specific-template-pathname)
+	    (fill-form fdf-pathname
+                       (if (probe-file language-specific-template-pathname)
 					language-specific-template-pathname
 					template-pathname)
+                       m2-pdf-pathname
 		       output-pathname)))
       (error (e)
 	(format "Error generating certificate from file ~A: ~A~%" fdf-pathname e)))))

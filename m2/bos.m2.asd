@@ -20,6 +20,7 @@
 					"mail-generator"
 					"geo-utm"
                                         "geometry"))
+               (:file "m2-pdf" :depends-on ("m2"))
 	       (:file "contract-expiry" :depends-on ("m2"))
 	       (:file "allocation" :depends-on ("m2"))
 	       (:file "allocation-cache" :depends-on ("packages" "geometry"))

@@ -310,6 +310,11 @@
 				  :type "fdf")
 		   (if print *cert-mail-directory* *cert-download-directory*)))
 
+(defmethod contract-m2-pdf-pathname ((contract contract) &key print)
+  (merge-pathnames (make-pathname :name (format nil "~D-m2s" (store-object-id contract))
+				  :type "pdf")
+		   (if print bos.m2::*cert-mail-directory* bos.m2::*cert-download-directory*)))
+
 (defmethod contract-pdf-pathname ((contract contract) &key print)
   (merge-pathnames (make-pathname :name (format nil "~D" (store-object-id contract))
 				  :type "pdf")
