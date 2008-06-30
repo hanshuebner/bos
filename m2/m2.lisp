@@ -153,11 +153,19 @@
   (or (call-next-method)
       "en"))
 
+(defvar *sponsor-counter-lock* (bknr.datastore::mp-make-lock "Sponsor Counter Lock"))
+
 (defvar *sponsor-counter* 0)
+
+(defun next-sponsor-counter ()
+  "Return a unique number to use when generating a sponsor.
+  Uniqueness is guaranteed only across the running time of the process."
+  (bknr.datastore::mp-with-lock-held (*sponsor-counter-lock*)
+    (incf *sponsor-counter*)))
 
 (defun make-sponsor (&rest initargs &key login &allow-other-keys)
   (apply #'make-object 'sponsor
-         :login (or login (format nil "s-~36R-~36R" (incf *sponsor-counter*) (get-universal-time)))
+         :login (or login (format nil "s-~36R-~36R" (next-sponsor-counter) (get-universal-time)))
 	 :master-code (mod (+ (get-universal-time) (random 1000000)) 1000000)
          initargs))
 
