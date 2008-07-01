@@ -6,8 +6,8 @@
   title="REGENWALD für SAMBOJA LESTARI"
   xmlns="http://www.w3.org/1999/xhtml"
   xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+  xmlns:bos="http://headcraft.de/bos">
+        <bos:set-cachable/>
 	<!-- container content_main -->
 	<div id="content_main">
 		<div id="textbox_content">
