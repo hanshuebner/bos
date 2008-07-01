@@ -22,7 +22,7 @@
 ;; If the requested URL is /handle-sale, we do the sales processing
 ;; and change the template name according to the outcome.
 
-(defmethod find-template-pathname ((Handler worldpay-template-handler) template-name)
+(defmethod find-template-pathname ((handler worldpay-template-handler) template-name)
   (cond
     ((scan #?r"(^|.*/)handle-sale" template-name)
      (with-query-params (cartId name address country transStatus lang MC_gift)

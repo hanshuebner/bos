@@ -79,12 +79,43 @@ to determine the intensity of the returned RGB value."
     (setf (ldb (byte 8 0) pixel-rgb-value) blue)
     pixel-rgb-value))
 
-(defun point-in-any-allocation-area-p (x-coord y-coord)
+(defvar *allocation-area-cache* nil
+  "Array of bits indicating whether a certain square meter is inside of an allocation area")
+
+(defvar *allocation-cache-x* nil
+  "Top left X coordinate of the allocation cache")
+(defvar *allocation-cache-y* nil
+  "Top left Y coordinate of the allocation cache")
+(defvar *allocation-cache-width* nil
+  "Width of the allocation cache")
+(defvar *allocation-cache-height* nil
+  "Height of the allocation cache")
+
+(defun point-in-any-allocation-area-p% (x-coord y-coord)
   (find-if #'(lambda (allocation-area)
 	       ;; first check whether point is in bounding box, then do full polygon check
 	       (and (point-in-polygon-p x-coord y-coord (allocation-area-bounding-box allocation-area))
 		    (point-in-polygon-p x-coord y-coord (allocation-area-vertices allocation-area))))
 	   (store-objects-with-class 'allocation-area)))
+
+(defun initialize-allocation-cache ()
+  (destructuring-bind (top-left-x top-left-y width height) (allocation-areas-bounding-box)
+    (setf *allocation-area-cache* (make-array (list width height) :element-type '(unsigned-byte 1))
+          *allocation-cache-x* top-left-x
+          *allocation-cache-y* top-left-y
+          *allocation-cache-width* width
+          *allocation-cache-height* height)
+    (dotimes (x width)
+      (dotimes (y height)
+        (when (point-in-any-allocation-area-p (+ x top-left-x) (+ y top-left-y))
+          (setf (aref *allocation-area-cache* x y) 1))))))
+
+(defun point-in-any-allocation-area-p (x-coord y-coord)
+  (and (< -1 (- x-coord *allocation-cache-x*) *allocation-cache-width*)
+       (< -1 (- y-coord *allocation-cache-y*) *allocation-cache-height*)
+       (plusp (aref *allocation-area-cache*
+                    (- x-coord *allocation-cache-x*)
+                    (- y-coord *allocation-cache-y*)))))
   
 (defclass image-tile (tile)
   ((original-image :documentation "Original satellite image"

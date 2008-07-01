@@ -4,9 +4,8 @@
 
 (defun emit-without-quoting (str)
   ;; das ist fuer WPDISPLAY
-  (let ((s (cxml::chained-handler *html-sink*)))
-    (cxml::maybe-close-tag s)
-    (map nil (lambda (c) (cxml::write-rune c s)) str)))
+  (cxml::maybe-close-tag *html-sink*)
+  (map nil (lambda (c) (cxml::sink-write-rune c *html-sink*)) str))
 
 (defun language-options-1 (current-language)
   (loop for (language-symbol language-name) in (website-languages)
