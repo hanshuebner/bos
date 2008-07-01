@@ -193,3 +193,5 @@ document.write(unescape('%3Cscript src=%22' + gaJsHost + 'google-analytics.com/g
 	((:script :type "text/javascript")
 	 (:princ #?"if (_gat) { var pageTracker = _gat._getTracker('$(*google-analytics-account*)'); pageTracker._initData(); pageTracker._trackPageview(); }"))))
 
+(define-bknr-tag set-cachable ()
+  (setf (hunchentoot:header-out :cache-control) "max-age=300"))
