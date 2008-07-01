@@ -7,6 +7,7 @@
   xmlns:bknr="http://bknr.net"
   xmlns:bos="http://headcraft.de/bos"
   >
+  <bos:set-cachable/>
 	<!-- content 3teilig-->
 	<div id="content">
 		<!-- content left-->

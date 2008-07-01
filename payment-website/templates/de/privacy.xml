@@ -8,6 +8,7 @@
   xmlns:bknr="http://bknr.net"
   xmlns:bos="http://headcraft.de/bos"
   >
+  <bos:set-cachable/>
 	<h1 class="extra">Datenschutzgrundsätze (Privacy Policy) von BOS Deutschland e.V.</h1>
 	<p class="text_content">
 		<p>

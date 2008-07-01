@@ -8,6 +8,7 @@
   xmlns:bknr="http://bknr.net"
   xmlns:bos="http://headcraft.de/bos"
   >
+  <bos:set-cachable/>
 	<h1 class="extra">Imprint</h1>
 	<p class="text_content">
 		<strong>www.create-rainforest.org </strong>is a webpage by:<br /><br />
