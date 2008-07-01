@@ -40,346 +40,73 @@
        probabilities must be 100 -->
 
   <sessions>
-
-
-    <session name='quick-visit' probability='56'  type='ts_http'>
+    <session name='front-site-without-sat-app' probability='90'  type='ts_http'>
       <request><http url='/' version='1.1' method='GET'></http></request>
       <request><http url='/index' version='1.1' method='GET'></http></request>
-      <transaction name='en_index'>
-	<request><http url='/en/index' version='1.1' method='GET'></http></request>
-      </transaction>      
-      
-      <thinktime random='true' value='4'/>
+      <request><http url='/en/index' version='1.1' method='GET'></http></request>
+      <request><http url='/static/toplevel_style.css' version='1.1' method='GET'></http></request>
+      <request><http url='/static/content_style.css' version='1.1' method='GET'></http></request>
+      <request><http url='/static/bos.js' version='1.1' method='GET'></http></request>
+      <request><http url='/favicon.ico' version='1.1' method='GET'></http></request>
+      <request><http url='/images/header_ganzneu.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/images/pfeil_link_on.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/images/spenden.jpg' version='1.1' method='GET'></http></request>
+      <request><http url='/images/trans.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/infosystem/bilder/submit.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/images/start_pic_headline1.jpg' version='1.1' method='GET'></http></request>
+      <request><http url='/images/start_pic_headline2b.jpg' version='1.1' method='GET'></http></request>
+      <request><http url='/images/start_pic_headline3.jpg' version='1.1' method='GET'></http></request>
+      <request><http url='/images/bg_content_right.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/images/satellite_ganzneu2.gif' version='1.1' method='GET'></http></request>
 
-      <transaction name='en_idea'>
-	<request><http url='/en/idea' version='1.1' method='GET'></http></request>
-      </transaction>      
+      <thinktime random='true' value='7'/>
+
+      <request><http url='/en/headline2' version='1.1' method='GET'></http></request>
+      <request><http url='/images/pfeil_back.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/images/pic_headline2_big.jpg' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='10'/>
+
+      <request><http url='/en/headline3' version='1.1' method='GET'></http></request>
+      <request><http url='/images/pic_h3_orangutan.jpg' version='1.1' method='GET'></http></request>
+      <request><http url='/images/pic_h3_baer.jpg' version='1.1' method='GET'></http></request>
+      <request><http url='/images/pic_h3_vogel.jpg' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='18'/>
+
+      <request><http url='/en/idea' version='1.1' method='GET'></http></request>
+      <request><http url='/images/projekt_pic_headline1b.jpg' version='1.1' method='GET'></http></request>
+      <request><http url='/images/projekt_pic_headline1c.gif' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='12'/>
+
+      <request><http url='/en/idea_subtitle1' version='1.1' method='GET'></http></request>
+      <request><http url='/images/pic_headline1b_big.jpg' version='1.1' method='GET'></http></request>
+      <request><http url='/images/ring_en.jpg' version='1.1' method='GET'></http></request>
 
       <thinktime random='true' value='6'/>
 
-      <request><http url='/en/bestellung' version='1.1' method='GET'></http></request>
+      <request><http url='/en/idea_subtitle2' version='1.1' method='GET'></http></request>
+      <request><http url='/images/projekt_pic_en.jpg' version='1.1' method='GET'></http></request>
 
-      <thinktime random='true' value='4'/>
+      <thinktime random='true' value='9'/>
 
       <request><http url='/en/bos' version='1.1' method='GET'></http></request>
+      <request><http url='/images/bos-logo.gif' version='1.1' method='GET'></http></request>
 
-      <thinktime random='true' value='5'/>
+      <thinktime random='true' value='3'/>
+
+      <request><http url='/en/bestellung' version='1.1' method='GET'></http></request>
+      <request><http url='/static/bos_en.js' version='1.1' method='GET'></http></request>
+      <request><http url='/images/step1.gif' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='4'/>
 
       <request><http url='/en/contact' version='1.1' method='GET'></http></request>
     </session>
 
 
-
-    <session name='long visit sat infosystem' probability='9'  type='ts_http'>
-      <request><http url='/' version='1.1' method='GET'></http></request>
-      <request><http url='/index' version='1.1' method='GET'></http></request>
-      <request><http url='/en/index' version='1.1' method='GET'></http></request>
-
-      <thinktime random='true' value='4'/>
-
-      <request><http url='/infosystem?__sponsorid=&amp;__password=' version='1.1' method='GET'></http></request>
-      <request><http url='/infosystem/de/satellitenkarte.htm' version='1.1' method='GET'></http></request>
-      <request><http url='/infosystem/satellitenkarte_style.css' version='1.1' method='GET'></http></request>
-      <request><http url='/infosystem/de/messages.js' version='1.1' method='GET'></http></request>
-      <request><http url='/infosystem/MochiKit.js' version='1.1' method='GET'></http></request>
-      <request><http url='/infosystem/javascript.js' version='1.1' method='GET'></http></request>
-      <request><http url='/infosystem/bilder/head.gif' version='1.1' method='GET'></http></request>
-      <request><http url='/infosystem/bilder/spacer.gif' version='1.1' method='GET'></http></request>
-      <request><http url='/infosystem/bilder/uebersichtskarte_klein.gif' version='1.1' method='GET'></http></request>
-      <request><http url='/infosystem/bilder/uebersicht_info2.gif' version='1.1' method='GET'></http></request>
-      <request><http url='/sponsor-login' version='1.1' method='GET'></http></request>
-      <request><http url='/infosystem/bilder/uebersicht_info1.gif' version='1.1' method='GET'></http></request>
-      <request><http url='/infosystem/bilder/karte_uebersicht.jpg' version='1.1' method='GET'></http></request>
-      <request><http url='/m2-javascript/' version='1.1' method='GET'></http></request>
-      <request><http url='/infosystem/bilder/lupe.gif' version='1.1' method='GET'></http></request>
-      <request><http url='/poi-javascript' version='1.1' method='GET'></http></request>
-
-      <thinktime random='true' value='1'/>
-
-      <request><http url='/images/palme.gif' version='1.1' method='GET'></http></request>
-      <request><http url='/images/punkt.gif' version='1.1' method='GET'></http></request>
-      <request><http url='/images/sale.gif' version='1.1' method='GET'></http></request>
-
-      <thinktime random='true' value='6'/>
-
-      <request><http url='/overview/6120/6930' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6120/7020' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6120/7110' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6120/7200' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/6210/6930' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6210/7020' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/6210/7110' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6210/7200' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/6300/6930' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6300/7020' version='1.1' method='GET'></http></request>
-
-
-      <transaction name='overview_6300_7110'>	
-	<request><http url='/overview/6300/7110' version='1.1' method='GET'></http></request>
-      </transaction>
-      <request><http url='/overview/6300/7200' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6390/6930' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6390/7020' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/6390/7110' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6390/7200' version='1.1' method='GET'></http></request>
-
-      <thinktime random='true' value='3'/>
-
-      <request><http url='/poi-image/agroforestry/1/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/poi-image/agroforestry/2/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/poi-image/agroforestry/3/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/172468/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/172442/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/172497/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/poi-image/agroforestry/4/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/172488/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/poi-image/agroforestry/5/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/poi-image/agroforestry/6/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/2435348/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/2435374/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/poi-image/agroforestry/1' version='1.1' method='GET'></http></request>
-      <request><http url='/image/172442' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/poi-image/agroforestry/2' version='1.1' method='GET'></http></request>
-      <request><http url='/image/172468' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/poi-image/agroforestry/6' version='1.1' method='GET'></http></request>
-      <request><http url='/image/2435374' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/poi-image/agroforestry/5' version='1.1' method='GET'></http></request>
-      <request><http url='/image/2435348' version='1.1' method='GET'></http></request>
-
-      <thinktime random='true' value='1'/>
-
-      <request><http url='/overview/5400/8280' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/5400/8370' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/5400/8460' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/5400/8550' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/5490/8280' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/5490/8370' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/5490/8460' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/5490/8550' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/5580/8280' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/5580/8370' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/5580/8460' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/5580/8550' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/5670/8280' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/5670/8370' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/5670/8460' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/5670/8550' version='1.1' method='GET'></http></request>
-
-      <thinktime random='true' value='2'/>
-
-      <request><http url='/poi-image/amphibians/1/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/poi-image/amphibians/2/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/poi-image/amphibians/3/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/2463444/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/2463467/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/poi-image/amphibians/4/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/poi-image/amphibians/5/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/2463456/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/2463508/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/poi-image/amphibians/6/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/2463483/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/2463520/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-
-
-      <transaction name='poi_image_amphibians_5'>
-	<request><http url='/poi-image/amphibians/5' version='1.1' method='GET'></http></request>
-      </transaction>
-      <request><http url='/image/2463508' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/poi-image/amphibians/3' version='1.1' method='GET'></http></request>
-      <request><http url='/image/2463467' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/poi-image/amphibians/1' version='1.1' method='GET'></http></request>
-      <request><http url='/image/2463444' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/image/545876' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/4770/8100' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/4770/8190' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/4770/8280' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/4770/8370' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/4860/8100' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/4860/8190' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/4860/8280' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/4860/8370' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/4950/8190' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/4950/8100' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/4950/8280' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/4950/8370' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/5040/8100' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/5040/8190' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/5040/8280' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/5040/8370' version='1.1' method='GET'></http></request>
-
-      <thinktime random='true' value='2'/>
-
-      <request><http url='/poi-image/fireprotection/1/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/poi-image/fireprotection/2/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/116975/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/poi-image/fireprotection/3/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/poi-image/fireprotection/4/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/116966/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/116957/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/116948/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/poi-image/fireprotection/5/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/poi-image/fireprotection/6/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/116939/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-      <request><http url='/image/2418751/thumbnail,,55,55' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/poi-image/fireprotection/2' version='1.1' method='GET'></http></request>
-      <request><http url='/image/116966' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/poi-image/fireprotection/6' version='1.1' method='GET'></http></request>
-      <request><http url='/image/2418751' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/poi-image/fireprotection/4' version='1.1' method='GET'></http></request>
-      <request><http url='/image/116948' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/poi-image/fireprotection/1' version='1.1' method='GET'></http></request>
-      <request><http url='/image/116975' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/6480/6120/background/areas/contracts' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6480/6210/background/areas/contracts' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6480/6300/background/areas/contracts' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6480/6390/background/areas/contracts' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/6570/6210/background/areas/contracts' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6570/6300/background/areas/contracts' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6570/6120/background/areas/contracts' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6570/6390/background/areas/contracts' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/6660/6120/background/areas/contracts' version='1.1' method='GET'></http></request>
-
-      <thinktime random='true' value='1'/>
-
-      <request><http url='/overview/6660/6210/background/areas/contracts' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6660/6300/background/areas/contracts' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6660/6390/background/areas/contracts' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/6750/6120/background/areas/contracts' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/6750/6210/background/areas/contracts' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/overview/6750/6300/background/areas/contracts' version='1.1' method='GET'></http></request>
-      <request><http url='/overview/6750/6390/background/areas/contracts' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/m2-javascript/6619/6213' version='1.1' method='GET'></http></request>
-      <request><http url='/contract-image/3022835/ffff00' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/m2-javascript/6611/6220' version='1.1' method='GET'></http></request>
-      <request><http url='/contract-image/3024093/ffff00' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/m2-javascript/6627/6221' version='1.1' method='GET'></http></request>
-      <request><http url='/contract-image/3024109/ffff00' version='1.1' method='GET'></http></request>
-
-      <thinktime random='true' value='1'/>
-
-      <request><http url='/m2-javascript/6609/6206' version='1.1' method='GET'></http></request>
-      <request><http url='/contract-image/3020038/ffff00' version='1.1' method='GET'></http></request>
-      <request><http url='/m2-javascript/6616/6208' version='1.1' method='GET'></http></request>
-      <request><http url='/contract-image/3020046/ffff00' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/m2-javascript/6630/6208' version='1.1' method='GET'></http></request>
-      <request><http url='/contract-image/3020060/ffff00' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/m2-javascript/6609/6211' version='1.1' method='GET'></http></request>
-      <request><http url='/contract-image/3022823/ffff00' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/m2-javascript/6601/6221' version='1.1' method='GET'></http></request>
-      <request><http url='/contract-image/3024083/ffff00' version='1.1' method='GET'></http></request>
-
-      <thinktime random='true' value='1'/>
-
-      <request><http url='/m2-javascript/6609/6225' version='1.1' method='GET'></http></request>
-      <request><http url='/contract-image/3026757/ffff00' version='1.1' method='GET'></http></request>
-      <request><http url='/m2-javascript/6621/6225' version='1.1' method='GET'></http></request>
-      <request><http url='/contract-image/3026773/ffff00' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/m2-javascript/6626/6220' version='1.1' method='GET'></http></request>
-
-
-      <request><http url='/m2-javascript/6627/6225' version='1.1' method='GET'></http></request>
-      <request><http url='/contract-image/3026777/ffff00' version='1.1' method='GET'></http></request>
-    </session>
-
-    <session name='buy-sqm' probability='35'  type='ts_http'>
-      <request><http url='/' version='1.1' method='GET'></http></request>
-      <request><http url='/index' version='1.1' method='GET'></http></request>
-      <request><http url='/en/index' version='1.1' method='GET'></http></request>
-
-      <thinktime random='true' value='7'/>
-
+    <session name='sat-app' probability='7'  type='ts_http'>
       <request><http url='/' version='1.1' method='GET'></http></request>
       <request><http url='/index' version='1.1' method='GET'></http></request>
       <request><http url='/en/index' version='1.1' method='GET'></http></request>
@@ -398,49 +125,339 @@
       <request><http url='/images/satellite_ganzneu2.gif' version='1.1' method='GET'></http></request>
       <request><http url='/images/bg_content_right.gif' version='1.1' method='GET'></http></request>
 
-      <thinktime random='true' value='7'/>
+      <thinktime random='true' value='4'/>
 
-      <request><http url='/de/index' version='1.1' method='GET'></http></request>
-
-      <thinktime random='true' value='3'/>
-
-      <request><http url='/de/bestellung' version='1.1' method='GET'></http></request>
-      <request><http url='/images/step1.gif' version='1.1' method='GET'></http></request>
-
-      <thinktime random='true' value='7'/>
-      <transaction name='buy_sqm'>	      
-	<request>
-	  <!-- 	<dyn_variable name="contract_id"  -->
-	  <!--                       regexp='input +value="([0-9]+)" +name="contract-id" +type="hidden"'/> -->
-	  <dyn_variable name="contract_id" regexp='contract-id=\([0-9]*\)'></dyn_variable>
-	  <http url='/de/buy-sqm'
-		version='1.1'
-		contents='numsqm=1&amp;numsqm1=&amp;disclaimer_read=1&amp;action=%C3%9Cberweisen'
-		content_type='application/x-www-form-urlencoded' method='POST'></http>
-	</request>
-	<request><http url='/images/step3.gif' version='1.1' method='GET'></http></request>
-      </transaction>
-      
-      <thinktime random='true' value='7'/>
-
-      <request><http url='/admin' version='1.1' method='GET'></http></request>
-      <request><http url='/login' version='1.1' method='GET'></http></request>
-      <request><http url='/static/cms.css' version='1.1' method='GET'></http></request>
-      <request><http url='/images/bos-logo.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/en/idea' version='1.1' method='GET'></http></request>
+      <request><http url='/images/pfeil_back.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/images/projekt_pic_headline1b.jpg' version='1.1' method='GET'></http></request>
+      <request><http url='/images/projekt_pic_headline1c.gif' version='1.1' method='GET'></http></request>
 
       <thinktime random='true' value='4'/>
 
-      <transaction name='admin_login_pay_contract'>	      
-	<request><http url='/login' version='1.1'  contents='__username=kilian&amp;__password=emusik&amp;action=login' content_type='application/x-www-form-urlencoded' method='POST'></http></request>
-	<request><http url='/admin' version='1.1' method='GET'></http></request>
-	<request><http url='/static/cms.js' version='1.1' method='GET'></http></request>
-	<request><http url='/static/tiny_mce/tiny_mce.js' version='1.1' method='GET'></http></request>
-	
-	<request subst="true">
-	  <http url='/pay-contract?contract-id=%%_contract_id%%&amp;name=TestSponsor' version='1.1' method='GET'></http>
-	</request>
-      </transaction>
-    </session>
+      <request><http url='/en/bestellung' version='1.1' method='GET'></http></request>
+      <request><http url='/static/bos_en.js' version='1.1' method='GET'></http></request>
+      <request><http url='/images/step1.gif' version='1.1' method='GET'></http></request>
 
+      <thinktime random='true' value='3'/>
+
+      <request><http url='/infosystem' version='1.1' method='GET'></http></request>
+      <request><http url='/infosystem/de/satellitenkarte.htm' version='1.1' method='GET'></http></request>
+      <request><http url='/infosystem/satellitenkarte_style.css' version='1.1' method='GET'></http></request>
+      <request><http url='/infosystem/de/messages.js' version='1.1' method='GET'></http></request>
+      <request><http url='/infosystem/MochiKit.js' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='2'/>
+
+      <request><http url='/infosystem/javascript.js' version='1.1' method='GET'></http></request>
+      <request><http url='/infosystem/bilder/head.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/infosystem/bilder/spacer.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/infosystem/bilder/uebersichtskarte_klein.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/sponsor-login' version='1.1' method='GET'></http></request>
+      <request><http url='/infosystem/bilder/karte_uebersicht.jpg' version='1.1' method='GET'></http></request>
+      <request><http url='/infosystem/bilder/uebersicht_info1.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/m2-javascript/' version='1.1' method='GET'></http></request>
+      <request><http url='/infosystem/bilder/lupe.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-javascript' version='1.1' method='GET'></http></request>
+      <request><http url='/infosystem/bilder/uebersicht_info2.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/images/palme.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/images/punkt.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/images/sale.gif' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='4'/>
+
+      <request><http url='/overview/6120/6930' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6120/7020' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6120/7110' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6120/7200' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6210/6930' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6210/7020' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6210/7110' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6210/7200' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6300/6930' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6300/7020' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6300/7110' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6300/7200' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6390/6930' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6390/7020' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6390/7110' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6390/7200' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/agroforestry/1/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/agroforestry/3/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/agroforestry/2/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/172442/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/agroforestry/4/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/agroforestry/5/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/172497/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/agroforestry/6/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/172468/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2435348/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/172488/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2435374/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='3'/>
+
+      <request><http url='/poi-image/agroforestry/1' version='1.1' method='GET'></http></request>
+      <request><http url='/image/172442' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='2'/>
+
+      <request><http url='/poi-image/agroforestry/5' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2435348' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='4'/>
+
+      <request><http url='/overview/5400/8280' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5400/8370' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5400/8460' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5400/8550' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5490/8280' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5490/8370' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5490/8460' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5490/8550' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5580/8280' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5580/8370' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5580/8460' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5580/8550' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5670/8280' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5670/8370' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5670/8460' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5670/8550' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/amphibians/1/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/amphibians/2/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2463444/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/amphibians/3/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2463456/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2463467/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/amphibians/4/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/amphibians/5/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/amphibians/6/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2463483/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2463508/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2463520/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5850/6840' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5850/6930' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5850/7020' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5850/7110' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5940/6840' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5940/6930' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5940/7020' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5940/7110' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6030/6840' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6030/6930' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6030/7020' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6030/7110' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6120/6840' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/arboretum/1/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/arboretum/2/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/464128/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/464137/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/arboretum/3/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/arboretum/4/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/arboretum/5/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/464147/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/arboretum/6/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/500539/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/500550/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/508066/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='2'/>
+
+      <request><http url='/overview/7470/4590' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/7470/4680' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/7470/4770' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/7470/4860' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/7560/4590' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/7560/4680' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/7560/4770' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/7560/4860' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/7650/4590' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/7650/4680' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/7650/4770' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/7650/4860' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/7740/4590' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/7740/4680' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/7740/4770' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/7740/4860' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/biodiversity/1/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/biodiversity/2/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/biodiversity/3/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/biodiversity/5/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/biodiversity/4/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2093327/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2093342/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2093355/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2093388/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2093375/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/biodiversity/6/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2093411/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='1'/>
+
+      <request><http url='/poi-image/biodiversity/1' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2093327' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='2'/>
+
+      <request><http url='/poi-image/biodiversity/3' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2093355' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='4'/>
+
+      <request><http url='/poi-image/biodiversity/6' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2093411' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='6'/>
+
+      <request><http url='/image/545876' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/4770/8100' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/4770/8190' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/4770/8280' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/4770/8370' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/4860/8100' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/4860/8190' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/4860/8280' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/4860/8370' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/4950/8100' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/4950/8190' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/4950/8280' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/4950/8370' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5040/8100' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5040/8190' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5040/8280' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/5040/8370' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/fireprotection/1/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/fireprotection/2/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/fireprotection/3/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/116975/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/fireprotection/4/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/116966/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/116957/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/116948/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/fireprotection/5/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-image/fireprotection/6/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/116939/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2418751/thumbnail,,55,55' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='3'/>
+
+      <request><http url='/poi-image/fireprotection/6' version='1.1' method='GET'></http></request>
+      <request><http url='/image/2418751' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='7'/>
+
+      <request><http url='/overview/6480/6120/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6480/6210/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6480/6300/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6480/6390/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6120/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6210/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6300/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6390/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6120/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6210/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6300/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6390/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6120/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6210/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6300/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6390/background/areas/contracts' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='7'/>
+
+      <request><http url='/overview/6480/6120/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6480/6210/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6480/6300/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6480/6390/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6120/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6210/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6300/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6390/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6120/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6210/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6300/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6390/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6120/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6210/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6300/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6390/areas/contracts' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='5'/>
+
+      <request><http url='/overview/6480/6120/background/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6480/6210/background/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6480/6300/background/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6480/6390/background/contracts' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='1'/>
+
+      <request><http url='/overview/6570/6120/background/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6210/background/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6300/background/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6390/background/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6120/background/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6210/background/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6300/background/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6390/background/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6120/background/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6210/background/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6300/background/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6390/background/contracts' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='5'/>
+
+      <request><http url='/overview/6480/6120/background' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6480/6210/background' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6480/6300/background' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6480/6390/background' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6120/background' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6210/background' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6300/background' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6390/background' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6120/background' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6210/background' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6300/background' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6390/background' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6120/background' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6210/background' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6300/background' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6390/background' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='6'/>
+
+      <request><http url='/m2-javascript/6610/6232' version='1.1' method='GET'></http></request>
+      <request><http url='/contract-image/3028251/ffff00' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='2'/>
+
+      <request><http url='/m2-javascript/6621/6227' version='1.1' method='GET'></http></request>
+      <request><http url='/contract-image/3026073/ffff00' version='1.1' method='GET'></http></request>
+      <request><http url='/m2-javascript/6625/6222' version='1.1' method='GET'></http></request>
+      <request><http url='/contract-image/3024105/ffff00' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='1'/>
+
+      <request><http url='/m2-javascript/6635/6228' version='1.1' method='GET'></http></request>
+      <request><http url='/contract-image/3026085/ffff00' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='2'/>
+
+      <request><http url='/m2-javascript/6627/6237' version='1.1' method='GET'></http></request>
+      <request><http url='/contract-image/3028768/ffff00' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='3'/>
+
+      <request><http url='/m2-javascript/6662/6226' version='1.1' method='GET'></http></request>
+      <request><http url='/contract-image/3026801/ffff00' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='1'/>
+
+      <request><http url='/m2-javascript/6663/6228' version='1.1' method='GET'></http></request>
+      <request><http url='/contract-image/3026095/ffff00' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='2'/>
+
+      <request><http url='/m2-javascript/6662/6236' version='1.1' method='GET'></http></request>
+      <request><http url='/contract-image/3028792/ffff00' version='1.1' method='GET'></http></request>
+    </session>
   </sessions>
 </tsung>
