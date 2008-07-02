@@ -3,8 +3,7 @@
 (use-package :regexp)
 
 (assert (probe-file (first ext:*args*)) nil
-        "Usage: log.lisp <access.log>")
-
+        "Usage: squid-access-log2csv <access.log>")
 
 (defvar *uri-hash* (make-hash-table :test #'equal))
 (defvar *action/codes* nil)
