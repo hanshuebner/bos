@@ -47,13 +47,13 @@
            *uri-hash*)
   (setf lists (sort lists #'>
                     :key (lambda (uri) (cdr (assoc :total (cdr uri))))))  
-  (format t "uri,TOTAL,~{~A~^,~}~%" *action/codes*)
+  (format t "\"uri\";\"TOTAL\";~{\"~A\"~^;~}~%" *action/codes*)
   (dolist (list lists)
     (destructuring-bind (uri . alist)
         list
-      (format t "\"~A\"," uri)
-      (format t "~A," (cdr (assoc :total alist)))
-      (format t "~{~D~^,~}~%"
+      (format t "\"~A\";" uri)
+      (format t "\"~A\";" (cdr (assoc :total alist)))
+      (format t "~{\"~D\"~^;~}~%"
               (mapcar (lambda (action/code)
                         (or (cdr (assoc action/code alist))
                             0))
