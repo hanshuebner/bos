@@ -459,5 +459,111 @@
       <request><http url='/m2-javascript/6662/6236' version='1.1' method='GET'></http></request>
       <request><http url='/contract-image/3028792/ffff00' version='1.1' method='GET'></http></request>
     </session>
+
+
+    <session name='buy-sqm' probability='3'  type='ts_http'>
+      <request><http url='/' version='1.1' method='GET'></http></request>
+      <request><http url='/index' version='1.1' method='GET'></http></request>
+      <request><http url='/en/index' version='1.1' method='GET'></http></request>
+      <request><http url='/static/toplevel_style.css' version='1.1' method='GET'></http></request>
+      <request><http url='/static/content_style.css' version='1.1' method='GET'></http></request>
+      <request><http url='/static/bos.js' version='1.1' method='GET'></http></request>
+      <request><http url='/favicon.ico' version='1.1' method='GET'></http></request>
+      <request><http url='/images/header_ganzneu.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/images/pfeil_link_on.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/images/spenden.jpg' version='1.1' method='GET'></http></request>
+      <request><http url='/images/trans.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/infosystem/bilder/submit.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/images/start_pic_headline1.jpg' version='1.1' method='GET'></http></request>
+      <request><http url='/images/start_pic_headline2b.jpg' version='1.1' method='GET'></http></request>
+      <request><http url='/images/start_pic_headline3.jpg' version='1.1' method='GET'></http></request>
+      <request><http url='/images/satellite_ganzneu2.gif' version='1.1' method='GET'></http></request>
+      <request><http url='/images/bg_content_right.gif' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='7'/>
+
+      <request><http url='/de/index' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='3'/>
+
+      <request><http url='/de/bestellung' version='1.1' method='GET'></http></request>
+      <request><http url='/images/step1.gif' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='7'/>
+      
+      <transaction name='buy_sqm'>	      
+	<request>
+	  <!-- 	<dyn_variable name="contract_id"  -->
+	  <!--                       regexp='input +value="([0-9]+)" +name="contract-id" +type="hidden"'/> -->
+	  <dyn_variable name="contract_id" regexp='contract-id=\([0-9]*\)'></dyn_variable>
+	  <dyn_variable name="sponsor_id" regexp='sponsor-id=\([0-9]*\)'></dyn_variable>
+	  <dyn_variable name="master_code" regexp='master-code=\([0-9]*\)'></dyn_variable>
+	  <http url='/de/buy-sqm'
+		version='1.1'
+		contents='numsqm=1&amp;numsqm1=&amp;disclaimer_read=1&amp;action=%C3%9Cberweisen'
+		content_type='application/x-www-form-urlencoded' method='POST'></http>
+	</request>
+	<request><http url='/images/step3.gif' version='1.1' method='GET'></http></request>
+      </transaction>
+      <!-- https://select.worldpay.com -->
+      
+      <thinktime random='false' value='10'/>
+      
+      <request subst="true">
+	<http url='/handle-sale?transStatus=P&amp;name=TestSponsor&amp;address=abc&amp;instId=103530&amp;cartId=%%_contract_id%%&amp;amount=3&amp;currency=EUR&amp;lang=de&amp;desc=3%20qm%20Regenwald%20in%20Samboja%20Lestari&amp;MC_sponsorid=%%_sponsor_id%%&amp;MC_password=%%_master_code%%&amp;MC_donationcert-yearly=0&amp;MC_gift=0&amp;testMode=100'
+	      version='1.1' method='GET'></http>
+      </request>
+      
+      <thinktime random='true' value='5'/>
+
+      <request subst="true">
+	<http url='/de/versand_quittung' version='1.1'
+	      contents='sponsor-id=%%_sponsor_id%%&amp;master-code=%%_master_code%%&amp;contract-id=%%_contract_id%%&amp;email=&amp;next-step-name=weiter&amp;name=TestSponsor&amp;want-print=no&amp;address=TestSponsor%0D%0Aabc%0D%0A&amp;Button=speichern+und+weiter'
+	      content_type='application/x-www-form-urlencoded'
+	      method='POST'></http>
+      </request>
+
+      <thinktime random='true' value='2'/>
+
+      <request subst="true">
+	<http url='/de/generate-cert' version='1.1'
+	      contents='sponsor-id=%%_sponsor_id%%&amp;__sponsorid=%%_sponsor_id%%&amp;__password=%%_master_code%%&amp;contract-id=%%_contract_id%%&amp;want-print=no&amp;name=TestSponsor&amp;address=TestSponsor%0D%0Aabc%0D%0A&amp;email=&amp;gift=&amp;Button=weiter'
+	      content_type='application/x-www-form-urlencoded'
+	      method='POST'></http>
+      </request>
+      <request subst="true"><http url='/de/profil_setup?name=TestSponsor&amp;email=&amp;sponsor-id=%%_sponsor_id%%' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='13'/>
+
+      <request><http url='/infosystem' version='1.1' method='GET'></http></request>
+      <request><http url='/infosystem/de/satellitenkarte.htm' version='1.1' if_modified_since='Fri, 20 Jun 2008 15:07:34 GMT' method='GET'></http></request>
+      <request subst="true"><http url='/de/save-initial-profile' version='1.1'  contents='sponsor-id=%%_sponsor_id%%&amp;password=123&amp;password1=123&amp;name=TestSponsor&amp;email=ttt%40test.com&amp;Button=speichern+und+zu+den+Quadratmetern' content_type='application/x-www-form-urlencoded' method='POST'></http></request>
+      <request><http url='/sponsor-login' version='1.1' method='GET'></http></request>
+      <request><http url='/m2-javascript/' version='1.1' method='GET'></http></request>
+      <request><http url='/poi-javascript' version='1.1' method='GET'></http></request>
+
+      <thinktime random='true' value='6'/>
+
+      <request><http url='/overview/6480/6030/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6480/6120/background/areas/contracts' version='1.1' if_modified_since='Tue, 01 Jul 2008 16:16:00 GMT' method='GET'></http></request>
+      <request><http url='/overview/6480/6210/background/areas/contracts' version='1.1' if_modified_since='Tue, 01 Jul 2008 16:16:00 GMT' method='GET'></http></request>
+      <request><http url='/overview/6480/6300/background/areas/contracts' version='1.1' if_modified_since='Tue, 01 Jul 2008 16:16:00 GMT' method='GET'></http></request>
+      <request><http url='/overview/6570/6030/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6570/6120/background/areas/contracts' version='1.1' if_modified_since='Tue, 01 Jul 2008 16:16:00 GMT' method='GET'></http></request>
+      <request><http url='/overview/6570/6210/background/areas/contracts' version='1.1' if_modified_since='Tue, 01 Jul 2008 16:16:01 GMT' method='GET'></http></request>
+      <request><http url='/overview/6570/6300/background/areas/contracts' version='1.1' if_modified_since='Tue, 01 Jul 2008 16:16:00 GMT' method='GET'></http></request>
+      <request><http url='/overview/6660/6030/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6660/6120/background/areas/contracts' version='1.1' if_modified_since='Tue, 01 Jul 2008 16:16:00 GMT' method='GET'></http></request>
+      <request><http url='/overview/6660/6210/background/areas/contracts' version='1.1' if_modified_since='Tue, 01 Jul 2008 16:16:00 GMT' method='GET'></http></request>
+      <request><http url='/overview/6660/6300/background/areas/contracts' version='1.1' if_modified_since='Tue, 01 Jul 2008 16:16:00 GMT' method='GET'></http></request>
+      <request><http url='/overview/6750/6030/background/areas/contracts' version='1.1' method='GET'></http></request>
+      <request><http url='/overview/6750/6120/background/areas/contracts' version='1.1' if_modified_since='Tue, 01 Jul 2008 16:16:00 GMT' method='GET'></http></request>
+      <request><http url='/overview/6750/6210/background/areas/contracts' version='1.1' if_modified_since='Tue, 01 Jul 2008 16:16:01 GMT' method='GET'></http></request>
+      <request><http url='/overview/6750/6300/background/areas/contracts' version='1.1' if_modified_since='Tue, 01 Jul 2008 16:16:00 GMT' method='GET'></http></request>
+      <request subst="true"><http url='/contract-image/%%_contract_id%%/ff0000' version='1.1' method='GET'></http></request>
+    </session>
+
   </sessions>
 </tsung>
+
+
