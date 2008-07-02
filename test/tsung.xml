@@ -23,8 +23,33 @@
        duration -->
 
   <load>
-    <arrivalphase phase="1" duration="30" unit="second">
-      <users interarrival="0.6" unit="second" maxnumber="500"></users>
+    <arrivalphase phase="1" duration="10" unit="minute">
+      <users interarrival="2" unit="second" maxnumber="500"></users>
+    </arrivalphase>
+
+
+    <arrivalphase phase="2" duration="5" unit="minute">
+      <users interarrival="0.5" unit="second" maxnumber="500"></users>
+    </arrivalphase>
+
+
+    <arrivalphase phase="3" duration="2" unit="minute">
+      <users interarrival="0.1" unit="second" maxnumber="500"></users>
+    </arrivalphase>
+
+
+    <arrivalphase phase="4" duration="10" unit="minute">
+      <users interarrival="2" unit="second" maxnumber="500"></users>
+    </arrivalphase>
+
+
+    <arrivalphase phase="5" duration="5" unit="minute">
+      <users interarrival="0.1" unit="second" maxnumber="500"></users>
+    </arrivalphase>
+
+
+    <arrivalphase phase="6" duration="10" unit="minute">
+      <users interarrival="1" unit="second" maxnumber="500"></users>
     </arrivalphase>
   </load>
 
@@ -36,7 +61,7 @@
   </options>
 
   <!-- start a session for a http user. the probability is the
-       frequency of this type os session. The sum of all session's
+       frequency of this type of session. The sum of all session's
        probabilities must be 100 -->
 
   <sessions>
@@ -495,12 +520,12 @@
 	<request>
 	  <!-- 	<dyn_variable name="contract_id"  -->
 	  <!--                       regexp='input +value="([0-9]+)" +name="contract-id" +type="hidden"'/> -->
-	  <dyn_variable name="contract_id" regexp='contract-id=\([0-9]*\)'></dyn_variable>
-	  <dyn_variable name="sponsor_id" regexp='sponsor-id=\([0-9]*\)'></dyn_variable>
-	  <dyn_variable name="master_code" regexp='master-code=\([0-9]*\)'></dyn_variable>
+	  <dyn_variable name="contract_id" regexp='cartId=\([0-9]*\)'></dyn_variable>
+	  <dyn_variable name="sponsor_id" regexp='MC_sponsorid=\([0-9]*\)'></dyn_variable>
+	  <dyn_variable name="master_code" regexp='MC_password=\([0-9]*\)'></dyn_variable>
 	  <http url='/de/buy-sqm'
 		version='1.1'
-		contents='numsqm=1&amp;numsqm1=&amp;disclaimer_read=1&amp;action=%C3%9Cberweisen'
+		contents='numsqm=1&amp;numsqm1=&amp;disclaimer_read=1'
 		content_type='application/x-www-form-urlencoded' method='POST'></http>
 	</request>
 	<request><http url='/images/step3.gif' version='1.1' method='GET'></http></request>
