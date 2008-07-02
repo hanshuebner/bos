@@ -8,6 +8,7 @@
   xmlns:bknr="http://bknr.net"
   xmlns:bos="http://headcraft.de/bos"
   >
+  <bos:set-cachable/>
 	<!-- container content_main -->
 	<div id="content_main">
 		<div id="textbox_content_bigger">
