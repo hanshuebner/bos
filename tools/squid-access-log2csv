@@ -1,0 +1,57 @@
+#!/usr/local/bin/clisp -C
+
+(use-package :regexp)
+
+(assert (probe-file (first ext:*args*)) nil
+        "Usage: log.lisp <access.log>")
+
+
+(defvar *uri-hash* (make-hash-table :test #'equal))
+(defvar *action/codes* nil)
+
+(defun action/code-count (uri action/code)
+  (or (cdr (assoc action/code (gethash uri *uri-hash*)))
+      0))
+
+(defun (setf action/code-count) (count uri action/code)
+  (let ((cons (assoc action/code (gethash uri *uri-hash*))))
+    (if cons
+        (rplacd cons count)
+        (push (cons action/code count)
+              (gethash uri *uri-hash*)))))
+
+(with-open-file (in (first ext:*args*))
+  (with-loop-split (list in " \\+")
+    (when (= 10 (length list))
+      (destructuring-bind (timestamp elapsed client action/code
+                                     size method uri ident
+                                     hierarchy/from content)
+          list
+        (declare (ignore timestamp elapsed client
+                         size method ident
+                         hierarchy/from content))
+        (let ((action/code (intern action/code)))
+          (pushnew action/code *action/codes*)
+          (incf (action/code-count uri action/code))
+          (incf (action/code-count uri :total)))))))
+
+
+
+(let (lists)
+  (maphash (lambda (key value)
+             (push (cons key value) lists))
+           *uri-hash*)
+  (setf lists (sort lists #'>
+                    :key (lambda (uri) (cdr (assoc :total (cdr uri))))))  
+  (format t "uri,TOTAL,~{~A~^,~}~%" *action/codes*)
+  (dolist (list lists)
+    (destructuring-bind (uri . alist)
+        list
+      (format t "\"~A\"," uri)
+      (format t "~A," (cdr (assoc :total alist)))
+      (format t "~{~D~^,~}~%"
+              (mapcar (lambda (action/code)
+                        (or (cdr (assoc action/code alist))
+                            0))
+                      *action/codes*)))))
+
