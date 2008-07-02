@@ -36,6 +36,7 @@
   (emit-tag-children))
 
 (define-bknr-tag generate-cert ()
+  (ensure-bknr-session)
   (with-template-vars (gift email name address want-print)
     (let ((contract (find-store-object (parse-integer (get-template-var :contract-id)))))
       (when (equal want-print "no")
