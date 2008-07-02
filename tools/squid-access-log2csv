@@ -19,20 +19,23 @@
         (push (cons action/code count)
               (gethash uri *uri-hash*)))))
 
-(with-open-file (in (first ext:*args*))
-  (with-loop-split (list in " \\+")
-    (when (= 10 (length list))
-      (destructuring-bind (timestamp elapsed client action/code
-                                     size method uri ident
-                                     hierarchy/from content)
-          list
-        (declare (ignore timestamp elapsed client
-                         size method ident
-                         hierarchy/from content))
-        (let ((action/code (intern action/code)))
-          (pushnew action/code *action/codes*)
-          (incf (action/code-count uri action/code))
-          (incf (action/code-count uri :total)))))))
+(let ((line-count 0))
+  (with-open-file (in (first ext:*args*))
+    (with-loop-split (list in " \\+")
+      (when (= 10 (length list))
+        (format *standard-error* "Reading log line ~D...~C"
+                (incf line-count) #\Return)
+        (destructuring-bind (timestamp elapsed client action/code
+                                       size method uri ident
+                                       hierarchy/from content)
+            list
+          (declare (ignore timestamp elapsed client
+                           size method ident
+                           hierarchy/from content))
+          (let ((action/code (intern action/code)))
+            (pushnew action/code *action/codes*)
+            (incf (action/code-count uri action/code))
+            (incf (action/code-count uri :total))))))))
 
 
 
