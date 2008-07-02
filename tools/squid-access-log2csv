@@ -23,9 +23,10 @@
   (with-open-file (in (first ext:*args*))
     (with-loop-split (list in " \\+")
       (when (= 10 (length list))
-        (when (zerop (mod line-count 10000))
+        (incf line-count)
+	(when (zerop (mod line-count 1000))
           (format *error-output* "Reading log line ~D...~C"
-                  (incf line-count) #\Return))
+                  line-count #\Return))
         (destructuring-bind (timestamp elapsed client action/code
                                        size method uri ident
                                        hierarchy/from content)
