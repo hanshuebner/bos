@@ -18,24 +18,28 @@
     `(let (,@(iter
 	      (for id-var in id-vars)
 	      (for store-object-var in store-object-vars)
-	      (collect `(,id-var (store-object-id ,store-object-var)))))
+	      (collect `(,id-var (when (and ,store-object-var
+                                            (not (object-destroyed-p ,store-object-var)))
+                                   (store-object-id ,store-object-var))))))
        (%reopen-store :snapshot ,snapshot)
        (setf ,@(iter
 		(for id-var in id-vars)
 		(for store-object-var in store-object-vars)
 		(collect store-object-var)
-		(collect `(find-store-object ,id-var)))))))
+		(collect `(when ,id-var (find-store-object ,id-var))))))))
 
 (defmacro %with-store-reopenings ((&key snapshot bypass)
 				  (&rest store-object-vars) &body body)
-  `(progn
-     ,@(if bypass
-	   body
-	   (iter
-	     (for form in body)
-	     (unless (first-time-p)
-	       (collect `(reopen-store (:snapshot ,snapshot) ,@store-object-vars)))
-	     (collect form)))))
+  `(let ((snapshot ,snapshot)
+         (bypass ,bypass))
+     (if bypass
+         (progn ,@body)
+         (progn
+           ,@(iter
+              (for form in body)
+              (unless (first-time-p)
+                (collect `(reopen-store (:snapshot ,snapshot) ,@store-object-vars)))
+              (collect form))))))
 
 (defmacro with-store-reopenings ((&rest store-object-vars) &body body)
   `(%with-store-reopenings (:snapshot snapshot :bypass bypass)
