@@ -3,9 +3,6 @@
 (defclass sat-node (node-extension)
   ((image :accessor image :initarg :image)))
 
-(defmethod delete-node-extension :before ((obj sat-node))
-  (delete-object (image obj)))
-
 (defpersistent-class sat-layer ()
   ((name :reader name :initarg :name
          :index-type unique-index
@@ -18,10 +15,22 @@
     (format stream "name: ~s" (name obj))))
 
 (defmethod destroy-object :before ((obj sat-layer))
-  ;; (dolist (top-level-node (sat-layer-top-level-nodes obj))
-  ;;     (delete-node-extension top-level-node))
+  (when (boundp '*quad-tree*)
+    ;; when the transaction log is being loaded, *quad-tree* is still
+    ;; unbound, because it is only initialized, when the entire store
+    ;; has been loaded -- an example for the fact that the quad-tree
+    ;; should have been implemented as a proper store index
+    (assert (null (sat-layer-top-level-nodes obj)) nil
+            "Please invoke (remove-sat-layer-from-quad-tree (find-store-object ~D)) before deleting ~s."
+            (store-object-id obj) obj))
   (dolist (sat-image (class-instances 'sat-image))
-    (delete-object sat-image)))
+    (when (eq obj (layer sat-image))
+      (delete-object sat-image))))
+
+(defun remove-sat-layer-from-quad-tree (sat-layer)
+  (let ((nodes (collect-nodes (constantly t) (first (sat-layer-top-level-nodes sat-layer)))))
+    (mapc #'delete-node-extension nodes)
+    (values)))
 
 (defun sat-layer-top-level-nodes (sat-layer)
   (check-type sat-layer sat-layer)
@@ -160,7 +169,7 @@
     (let* ((name (name layer))
            (nodes (remove-if-not #'pw-ph-large-enough (layer-quad-nodes)))
            (max-scaling (max-scaling nodes)))
-      (format t "; creating ~a at depth ~a~%" name start-depth)
+      (format t "; creating ~a at depth ~a~%" name start-depth) ;
       (dolist (node nodes layer)
         (make-sat-image-tile image geo-box (quad-node node)
                              (tile-geo-box node) name max-scaling))
