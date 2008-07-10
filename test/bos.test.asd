@@ -14,4 +14,5 @@
                         :depends-on ("suites" "fixtures")
                         :components
                         ((:file "drakma-requests")
-                         (:file "quad-tree")))))
+                         (:file "quad-tree")
+                         (:file "sat-tree")))))

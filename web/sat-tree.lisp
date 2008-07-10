@@ -18,8 +18,10 @@
     (format stream "name: ~s" (name obj))))
 
 (defmethod destroy-object :before ((obj sat-layer))
-  (dolist (top-level-node (sat-layer-top-level-nodes obj))
-    (delete-node-extension top-level-node)))
+  ;; (dolist (top-level-node (sat-layer-top-level-nodes obj))
+  ;;     (delete-node-extension top-level-node))
+  (dolist (sat-image (class-instances 'sat-image))
+    (delete-object sat-image)))
 
 (defun sat-layer-top-level-nodes (sat-layer)
   (check-type sat-layer sat-layer)
