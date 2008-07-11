@@ -216,10 +216,11 @@ links are created."))
                       (geo-box-middle-m2coord subbox)
                     (setf (cl-gd:raw-pixel)
                           (let* ((m2 (ignore-errors (get-m2 m2x m2y)))
+                                 (%contract (m2-contract m2))
                                  (contract (and m2
-                                                (m2-contract m2)
-                                                (contract-paidp (m2-contract m2))
-                                                (m2-contract m2))))
+                                                %contract
+                                                (contract-paidp %contract)
+                                                %contract)))
                             (if contract
                                 (destructuring-bind (r g b)
                                     (contract-color contract)
