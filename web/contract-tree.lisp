@@ -9,7 +9,7 @@
    (image-req-count :initform 0 :accessor image-req-count)))
 
 (defvar *contract-tree* nil)
-(defparameter *contract-tree-images-size* 256)
+(defparameter *contract-tree-images-size* 128) ; was 256
 
 ;;; XXX soll spaeter von was anderem abhaengen
 (defmethod leaf-node-p ((node contract-node))
@@ -202,7 +202,7 @@ links are created."))
     (handle-if-node-modified
       (incf (image-req-count node))
       (let ((box (geo-box node))
-            (image-size (progn *contract-tree-images-size* 128)))        
+            (image-size *contract-tree-images-size*))        
         (cl-gd:with-image (cl-gd:*default-image* image-size image-size t)
           (setf (cl-gd:save-alpha-p) t
                 (cl-gd:alpha-blending-p) nil)
