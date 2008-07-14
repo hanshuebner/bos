@@ -188,7 +188,8 @@
   (when (find local-draw-order (class-instances 'sat-layer) :key #'local-draw-order)
     (cerror "create the new layer anyway" "There is already a sat-layer with the same local-draw-order '~A'." local-draw-order))
   (let ((layer (make-object 'sat-layer :name name :geo-box geo-box :local-draw-order local-draw-order)))
-    (make-sat-image-tiles-for-depth image geo-box layer start-depth)))
+    (make-sat-image-tiles-for-depth image geo-box layer start-depth)
+    layer))
 
 ;; (with-store-image (image (first (class-instances 'store-image)))
 ;;   (make-sat-layer image
