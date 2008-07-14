@@ -3,11 +3,22 @@
 ;;; contract-node
 (defclass contract-node (node-extension)
   ((name :allocation :class :initform 'contract-node)
-   (timestamp :accessor timestamp :initform (get-universal-time))
+   (timestamp :accessor timestamp)
    (placemark-contracts :initform nil :accessor placemark-contracts)
    (image :initform nil :accessor image)
    (kml-req-count :initform 0 :accessor kml-req-count)
    (image-req-count :initform 0 :accessor image-req-count)))
+
+(defun contract-node-find-corresponding-store-image (node)  
+  (first (get-keyword-store-images (contract-node-keyword node))))
+
+(defmethod initialize-instance :after ((node contract-node) &key args)
+  (declare (ignore args))
+  (let ((image (contract-node-find-corresponding-store-image node)))
+    (if (and image (probe-file (blob-pathname image)))
+        (setf (image node) image
+              (timestamp node) (blob-timestamp image))
+        (setf (timestamp node) (get-universal-time)))))
 
 (defvar *contract-tree* nil)
 (defparameter *contract-tree-images-size* 128) ; was 256
@@ -199,8 +210,17 @@ links are created."))
 ;; contract-images are stored as store-images. The image slot of
 ;; contract-node points to the current store-image.
 
-(defun contract-node-store-image-name (node)
-  (format nil "contract-node~{~D~}" (node-path node)))
+(defun contract-node-keyword (node)
+  "Used to relate NODE to its store-image."
+  (intern (format nil "CONTRACT-NODE~{~D~}" (node-path node)) #.(find-package "KEYWORD")))
+
+(defun contract-node-store-image-name (node old-store-image)
+  "Used only as a placeholder for store-image-name that always
+has to be unique."
+  (let ((next-internal-id (if old-store-image
+                              (store-object-id old-store-image)
+                              0)))
+    (format nil "contract-node~{~d~}_~D" (node-path node) next-internal-id)))
 
 (defun contract-node-update-image (node)
   (labels ((find-contract-color (contract)
@@ -226,15 +246,21 @@ links are created."))
                           (if (and contract (contract-paidp contract))
                               (find-contract-color contract)
                               transparent))))))))
-        (let* ((image-name (contract-node-store-image-name node))
-               (old-store-image (store-image-with-name image-name)))
-          (when old-store-image (delete-object old-store-image))
-          (setf (image node)
-		(make-store-image :name image-name
-				  :type :png)))))))
+        (let* ((keyword (contract-node-keyword node))
+               (old-store-image (contract-node-find-corresponding-store-image node))
+               (new-store-image (make-store-image :name (contract-node-store-image-name node old-store-image)
+                                                  :type :png
+                                                  :keywords (list keyword))))                    
+          ;; activate new-store-image
+          (setf (image node) new-store-image)
+          ;; delete the old one
+          (when old-store-image
+            (delete-file (blob-pathname old-store-image))
+            (delete-object old-store-image)))))))
 
 (defun contract-node-update-image-if-needed (node)
   (when (or (null (image node))
+            (not (probe-file (blob-pathname (image node))))
             (> (timestamp node) (blob-timestamp (image node))))
     (contract-node-update-image node)))
 
@@ -263,10 +289,9 @@ links are created."))
   (dolist (contract (class-instances 'contract))
     (when (contract-published-p contract)
       (insert-contract *contract-tree* contract)))
-  (format t "~&rendering contract-tree images...")
+  (format t "~&rendering contract-tree images if needed...")
   (map-nodes #'contract-node-update-image-if-needed *contract-tree*)
-  (format t "done.~%")
-  (bknr.datastore::delete-orphaned-blob-files nil)
+  (format t "done.~%")  
   (geometry:register-rect-subscriber geometry:*rect-publisher* *contract-tree*
                                      (list 0 0 +width+ +width+)
                                      #'contract-tree-changed))
