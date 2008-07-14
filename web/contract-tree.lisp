@@ -242,14 +242,16 @@ links are created."))
 (defclass contract-tree-image-handler (page-handler)
   ())
 
-(defmethod handle ((handler contract-tree-image-handler))
+(defmethod handle ((handler contract-tree-image-handler))  
   (with-query-params (path)
     (let* ((path (parse-path path))
-           (node (find-node-with-path *contract-tree* path))
-           (image (image node)))      
+	   (node (find-node-with-path *contract-tree* path))
+	   (image (image node)))      
       (hunchentoot:handle-if-modified-since (blob-timestamp image))
       (with-store-image* (image)
-        (emit-image-to-browser cl-gd:*default-image* :png :date (blob-timestamp image))))))
+	(emit-image-to-browser cl-gd:*default-image* :png
+			       :date (blob-timestamp image)
+			       :max-age 600)))))
 
 ;;; make-contract-tree-from-m2
 (defun make-contract-tree-from-m2 ()  
