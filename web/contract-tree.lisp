@@ -229,8 +229,9 @@ links are created."))
         (let* ((image-name (contract-node-store-image-name node))
                (old-store-image (store-image-with-name image-name)))
           (when old-store-image (delete-object old-store-image))
-          (make-store-image :name image-name
-                            :type :png))))))
+          (setf (image node)
+		(make-store-image :name image-name
+				  :type :png)))))))
 
 (defun contract-node-update-image-if-needed (node)
   (when (or (null (image node))
@@ -245,10 +246,10 @@ links are created."))
   (with-query-params (path)
     (let* ((path (parse-path path))
            (node (find-node-with-path *contract-tree* path))
-           (image (image node)))
-      (hunchentoot:handle-if-modified-since (timestamp image))
+           (image (image node)))      
+      (hunchentoot:handle-if-modified-since (blob-timestamp image))
       (with-store-image* (image)
-        (emit-image-to-browser cl-gd:*default-image* :png :date (timestamp image))))))
+        (emit-image-to-browser cl-gd:*default-image* :png :date (blob-timestamp image))))))
 
 ;;; make-contract-tree-from-m2
 (defun make-contract-tree-from-m2 ()  
