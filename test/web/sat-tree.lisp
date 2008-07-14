@@ -6,7 +6,7 @@
     (cl-gd:with-image (image 1000 1000)
       (with-store-reopenings ()
         (bos.web::make-sat-layer image geo-box :test 0)
-        (progn
-          (bos.web::remove-sat-layer-from-quad-tree (find-store-object 1))
-          (delete-object (first (class-instances 'bos.web::sat-layer))))
+        (let ((sat-layer (first (class-instances 'bos.web::sat-layer))))
+          (bos.web::remove-sat-layer-from-quad-tree sat-layer)
+          (delete-object sat-layer))
         (pass)))))
