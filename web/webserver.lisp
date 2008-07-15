@@ -238,6 +238,7 @@ language preference weights."
 					("/cancel-contract" cancel-contract-handler)
 					("/statistics" statistics-handler)
 					("/rss" rss-handler)
+                                        ("/handler-statistics" bknr.web::handler-statistics-handler)
                                         ("/favicon.ico"
                                          file-handler
                                          :destination ,(merge-pathnames #p"static/favicon.ico" website-directory)
