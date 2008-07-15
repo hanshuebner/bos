@@ -28,3 +28,7 @@ All square meters will have yellow color, the background will be transparent."
 	    (cl-gd:do-pixels-in-row (x)
 	      (setf (cl-gd:raw-pixel) (aref work-array x y)))))
 	(emit-image-to-browser cl-gd:*default-image* :png :cache-sticky t))))
+
+(defmethod handle-object ((handler contract-image-handler) (contract null))
+  (error "no contract found"))
+
