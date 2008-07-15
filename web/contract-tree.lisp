@@ -9,6 +9,9 @@
    (kml-req-count :initform 0 :accessor kml-req-count)
    (image-req-count :initform 0 :accessor image-req-count)))
 
+(defun contract-node-set-timestamp-now (node)
+  (setf (timestamp node) (get-universal-time)))
+
 (defun contract-node-find-corresponding-store-image (node)  
   (first (get-keyword-store-images (contract-node-keyword node))))
 
@@ -18,7 +21,7 @@
     (if (and image (probe-file (blob-pathname image)))
         (setf (image node) image
               (timestamp node) (blob-timestamp image))
-        (setf (timestamp node) (get-universal-time)))))
+        (contract-node-set-timestamp-now node))))
 
 (defvar *contract-tree* nil)
 (defparameter *contract-tree-images-size* 128) ; was 256
@@ -75,8 +78,7 @@ with its center placemark."
 (defun insert-contract (contract-tree contract)
   (let ((geo-box (contract-geo-box contract))
         (geo-center (contract-geo-center contract)))
-    (ensure-intersecting-children contract-tree geo-box
-                                  (lambda (node) (setf (timestamp node) (get-universal-time))))
+    (ensure-intersecting-children contract-tree geo-box #'contract-node-set-timestamp-now)
     (let ((placemark-node (find-node-if (lambda (node) (contract-placemark-at-node-p node contract))
                                         contract-tree
                                         :prune-test (lambda (node)
@@ -92,8 +94,7 @@ with its center placemark."
       (setf (placemark-contracts node)
             (delete contract (placemark-contracts node)))
       ;; mark intersecting children as dirty
-      (ensure-intersecting-children contract-tree geo-box
-                                    (lambda (node) (setf (timestamp node) (get-universal-time)))))))
+      (ensure-intersecting-children contract-tree geo-box #'contract-node-set-timestamp-now))))
 
 (defun contract-tree-changed (contract-tree contract &key type)
   (case type
@@ -232,7 +233,6 @@ has to be unique."
       (cl-gd:with-image (cl-gd:*default-image* image-size image-size t)
         (setf (cl-gd:save-alpha-p) t
               (cl-gd:alpha-blending-p) nil)
-        ;; (cl-gd:draw-rectangle* 0 0 127 127 :filled nil :color (cl-gd:find-color 255 0 0))
         (let ((transparent (cl-gd:find-color 255 255 255 :alpha 127))
               (subbox (make-geo-box 0d0 0d0 0d0 0d0)))
           (cl-gd:do-rows (y)
