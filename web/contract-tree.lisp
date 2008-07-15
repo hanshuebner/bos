@@ -9,8 +9,12 @@
    (kml-req-count :initform 0 :accessor kml-req-count)
    (image-req-count :initform 0 :accessor image-req-count)))
 
-(defun contract-node-set-timestamp-now (node)
-  (setf (timestamp node) (get-universal-time)))
+(defun contract-node-invalidate-timestamp (node)
+  (let ((image (contract-node-find-corresponding-store-image node)))
+    (setf (timestamp node)
+	  (if (and image (probe-file (blob-pathname image)))
+	      (1+ (blob-timestamp image))
+	      (get-universal-time)))))
 
 (defun contract-node-timestamp-updater (contract)
   (lambda (node) (setf (timestamp node)
@@ -102,7 +106,7 @@ with its center placemark."
       (setf (placemark-contracts node)
             (delete contract (placemark-contracts node)))
       ;; mark intersecting children as dirty
-      (ensure-intersecting-children contract-tree geo-box #'contract-node-set-timestamp-now))))
+      (ensure-intersecting-children contract-tree geo-box #'contract-node-invalidate-timestamp))))
 
 (defun contract-tree-changed (contract-tree contract &key type)
   (case type
