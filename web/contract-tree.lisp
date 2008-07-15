@@ -11,10 +11,8 @@
 
 (defun contract-node-invalidate-timestamp (node)
   (let ((image (contract-node-find-corresponding-store-image node)))
-    (setf (timestamp node)
-	  (if (and image (probe-file (blob-pathname image)))
-	      (1+ (blob-timestamp image))
-	      (get-universal-time)))))
+    (when (and image (probe-file (blob-pathname image)))
+      (setf (timestamp node) (1+ (blob-timestamp image))))))
 
 (defun contract-node-timestamp-updater (contract)
   (lambda (node) (setf (timestamp node)
