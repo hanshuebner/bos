@@ -576,22 +576,26 @@
   ())
 
 (defmethod handle ((handler poi-kml-all-handler))
-  (with-query-params ((lang "en"))  
-    (with-xml-response ()
-      ;; (sax:processing-instruction cxml::*sink* "xml-stylesheet" "href=\"/static/tri.xsl\" type=\"text/xsl\"")
-      (with-namespace (nil "http://earth.google.com/kml/2.1")
-        (with-element "kml"
-          (with-element "Document"
-            (with-element "Style"
-              (attribute "id" "poiPlacemarkIcon")
-              (with-element "IconStyle"
-                ;; (with-element "color" (text "ffffffff"))
-                (with-element "scale" (text "0.8"))
-                (with-element "Icon"
-                  (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
-            (kml-region (make-rectangle2 (list 0 0 +width+ +width+)) '(:min 600 :max -1))
-            (mapc #'(lambda (poi) (write-poi-kml poi lang))
-                  (remove-if-not #'(lambda (poi) (and (poi-area poi) (poi-published poi)))
-                                 (class-instances 'poi)))))))))
+  (let* ((relevant-pois (remove-if-not #'(lambda (poi) (and (poi-area poi) (poi-published poi)))
+				       (class-instances 'poi)))
+	 (pois-last-change (reduce #'max relevant-pois :key (lambda (poi) (store-object-last-change poi 1)))))
+    (hunchentoot:handle-if-modified-since pois-last-change)
+    (setf (hunchentoot:header-out :last-modified)
+	  (hunchentoot:rfc-1123-date pois-last-change))
+    (with-query-params ((lang "en"))
+      (with-xml-response ()
+	;; (sax:processing-instruction cxml::*sink* "xml-stylesheet" "href=\"/static/tri.xsl\" type=\"text/xsl\"")
+	(with-namespace (nil "http://earth.google.com/kml/2.1")
+	  (with-element "kml"
+	    (with-element "Document"
+	      (with-element "Style"
+		(attribute "id" "poiPlacemarkIcon")
+		(with-element "IconStyle"
+		  ;; (with-element "color" (text "ffffffff"))
+		  (with-element "scale" (text "0.8"))
+		  (with-element "Icon"
+		    (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
+	      (kml-region (make-rectangle2 (list 0 0 +width+ +width+)) '(:min 600 :max -1))
+	      (mapc #'(lambda (poi) (write-poi-kml poi lang)) relevant-pois))))))))
 
 
