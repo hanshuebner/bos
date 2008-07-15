@@ -3,7 +3,7 @@
 ;;; contract-node
 (defclass contract-node (node-extension)
   ((name :allocation :class :initform 'contract-node)
-   (timestamp :accessor timestamp)
+   (timestamp :accessor timestamp :initform 0) ; timestamp initially "very old"
    (placemark-contracts :initform nil :accessor placemark-contracts)
    (image :initform nil :accessor image)
    (kml-req-count :initform 0 :accessor kml-req-count)
@@ -12,16 +12,22 @@
 (defun contract-node-set-timestamp-now (node)
   (setf (timestamp node) (get-universal-time)))
 
+(defun contract-node-timestamp-updater (contract)
+  (lambda (node) (setf (timestamp node)
+		       (max (timestamp node) (contract-date contract)))))
+
 (defun contract-node-find-corresponding-store-image (node)  
-  (first (get-keyword-store-images (contract-node-keyword node))))
+  (let ((store-images (get-keyword-store-images (contract-node-keyword node))))
+    (when (< 1 (length store-images))
+      (warn "~D store-images for ~S" (length store-images) node))
+    (first store-images)))
 
 (defmethod initialize-instance :after ((node contract-node) &key args)
   (declare (ignore args))
   (let ((image (contract-node-find-corresponding-store-image node)))
-    (if (and image (probe-file (blob-pathname image)))
-        (setf (image node) image
-              (timestamp node) (blob-timestamp image))
-        (contract-node-set-timestamp-now node))))
+    (when (and image (probe-file (blob-pathname image)))
+      (setf (image node) image
+	    (timestamp node) (blob-timestamp image)))))
 
 (defvar *contract-tree* nil)
 (defparameter *contract-tree-images-size* 128) ; was 256
@@ -78,11 +84,13 @@ with its center placemark."
 (defun insert-contract (contract-tree contract)
   (let ((geo-box (contract-geo-box contract))
         (geo-center (contract-geo-center contract)))
-    (ensure-intersecting-children contract-tree geo-box #'contract-node-set-timestamp-now)
-    (let ((placemark-node (find-node-if (lambda (node) (contract-placemark-at-node-p node contract))
-                                        contract-tree
-                                        :prune-test (lambda (node)
-                                                      (not (geo-point-in-box-p (geo-box node) geo-center))))))
+    (ensure-intersecting-children contract-tree geo-box
+				  (contract-node-timestamp-updater contract))
+    (let ((placemark-node (find-node-if
+			   (lambda (node) (contract-placemark-at-node-p node contract))
+			   contract-tree
+			   :prune-test (lambda (node)
+					 (not (geo-point-in-box-p (geo-box node) geo-center))))))
       (assert placemark-node)
       (push contract (placemark-contracts placemark-node)))))
 
@@ -289,9 +297,9 @@ has to be unique."
   (dolist (contract (class-instances 'contract))
     (when (contract-published-p contract)
       (insert-contract *contract-tree* contract)))
-  (format t "~&rendering contract-tree images if needed...")
+  (format t "~&rendering contract-tree images if needed...") (force-output)
   (map-nodes #'contract-node-update-image-if-needed *contract-tree*)
-  (format t "done.~%")  
+  (format t "done.~%") (force-output)  
   (geometry:register-rect-subscriber geometry:*rect-publisher* *contract-tree*
                                      (list 0 0 +width+ +width+)
                                      #'contract-tree-changed))
