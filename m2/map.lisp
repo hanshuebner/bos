@@ -79,11 +79,12 @@ to determine the intensity of the returned RGB value."
     (setf (ldb (byte 8 0) pixel-rgb-value) blue)
     pixel-rgb-value))
 
-(defstruct (allocation-cache (:conc-name ac-))
+;;; allocation-area-inclusion-cache
+(defstruct (allocation-area-inclusion-cache (:conc-name ac-))
   x y width height array areas)
 
-(defvar *allocation-cache* nil
-  "allocation-cache struct indicating whether a certain square meter is inside of an allocation area")
+(defvar *allocation-area-inclusion-cache* nil
+  "allocation-area-inclusion-cache struct indicating whether a certain square meter is inside of an allocation area")
 
 (defun point-in-any-allocation-area-p% (x-coord y-coord)
   (find-if #'(lambda (allocation-area)
@@ -92,13 +93,13 @@ to determine the intensity of the returned RGB value."
 		    (point-in-polygon-p x-coord y-coord (allocation-area-vertices allocation-area))))
 	   (store-objects-with-class 'allocation-area)))
 
-(defun initialize-allocation-cache ()
+(defun initialize-allocation-area-inclusion-cache ()
   (destructuring-bind (x y width height) (allocation-areas-bounding-box)
-    (setf *allocation-cache*
-          (make-allocation-cache :x x :y y :width width :height height
+    (setf *allocation-area-inclusion-cache*
+          (make-allocation-area-inclusion-cache :x x :y y :width width :height height
                                  :array (make-array (list width height) :element-type '(unsigned-byte 1))
                                  :areas (class-instances 'allocation-area))))
-  (dolist (area (ac-areas *allocation-cache*))
+  (dolist (area (ac-areas *allocation-area-inclusion-cache*))
     (destructuring-bind (top-left-x top-left-y width height) (allocation-area-bounding-box2 area)
       (dotimes (x width)
         (dotimes (y height)
@@ -106,26 +107,26 @@ to determine the intensity of the returned RGB value."
                 (y-coord (+ y top-left-y)))
             (when (and (point-in-polygon-p x-coord y-coord (allocation-area-bounding-box area))
                        (point-in-polygon-p x-coord y-coord (allocation-area-vertices area)))
-              (setf (aref (ac-array *allocation-cache*)
-                          (- x-coord (ac-x *allocation-cache*))
-                          (- y-coord (ac-y *allocation-cache*)))
+              (setf (aref (ac-array *allocation-area-inclusion-cache*)
+                          (- x-coord (ac-x *allocation-area-inclusion-cache*))
+                          (- y-coord (ac-y *allocation-area-inclusion-cache*)))
                     1))))))))
 
-(defvar *allocation-cache-lock* (bt:make-lock "Area Cache Lock"))
+(defvar *allocation-area-inclusion-cache-lock* (bt:make-lock "Area Cache Lock"))
 
-(defun validate-allocation-cache ()
-  (bt:with-lock-held (*allocation-cache-lock*)
-    (unless (and *allocation-cache*
+(defun validate-allocation-area-inclusion-cache ()
+  (bt:with-lock-held (*allocation-area-inclusion-cache-lock*)
+    (unless (and *allocation-area-inclusion-cache*
                  (equal (class-instances 'allocation-area)
-                        (ac-areas *allocation-cache*)))
-      (initialize-allocation-cache))))
+                        (ac-areas *allocation-area-inclusion-cache*)))
+      (initialize-allocation-area-inclusion-cache))))
 
 (defun point-in-any-allocation-area-p (x-coord y-coord)
-  (and (< -1 (- x-coord (ac-x *allocation-cache*)) (ac-width *allocation-cache*))
-       (< -1 (- y-coord (ac-y *allocation-cache*)) (ac-height *allocation-cache*))
-       (plusp (aref (ac-array *allocation-cache*)
-                    (- x-coord (ac-x *allocation-cache*))
-                    (- y-coord (ac-y *allocation-cache*))))))
+  (and (< -1 (- x-coord (ac-x *allocation-area-inclusion-cache*)) (ac-width *allocation-area-inclusion-cache*))
+       (< -1 (- y-coord (ac-y *allocation-area-inclusion-cache*)) (ac-height *allocation-area-inclusion-cache*))
+       (plusp (aref (ac-array *allocation-area-inclusion-cache*)
+                    (- x-coord (ac-x *allocation-area-inclusion-cache*))
+                    (- y-coord (ac-y *allocation-area-inclusion-cache*))))))
   
 (defclass image-tile (tile)
   ((original-image :documentation "Original satellite image"
@@ -152,7 +153,7 @@ to determine the intensity of the returned RGB value."
       (copy-image original-image *default-image* 0 0 0 0 (image-width) (image-height)))))
 
 (defmethod image-tile-process ((tile image-tile) (operation (eql :areas)))
-  (validate-allocation-cache)
+  (validate-allocation-area-inclusion-cache)
   (do-rows (y)
     (do-pixels-in-row (x)
       (when (point-in-any-allocation-area-p (tile-absolute-x tile x)
