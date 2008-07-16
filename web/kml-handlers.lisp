@@ -129,7 +129,11 @@
   ())
 
 (defmethod handle ((handler country-stats-handler))
-  (handle-every-n-seconds (60)
+  (let* ((paid-contracts (remove-if-not #'contract-paidp (class-instances 'contract)))
+         (timestamp (reduce #'max paid-contracts :key (lambda (contract) (store-object-last-change contract 0)))))
+    (hunchentoot:handle-if-modified-since timestamp)  
+    (setf (hunchentoot:header-out :last-modified)
+          (hunchentoot:rfc-1123-date timestamp))
     (with-xml-response (:content-type #+nil "text/xml" "application/vnd.google-earth.kml+xml; charset=utf-8"
                                       :root-element "kml")      
       (with-query-params ((lang "en"))
@@ -148,7 +152,7 @@
               (with-element "Icon"
                 ;; (with-element "href" (text "http://maps.google.com/mapfiles/kml/pal3/icon23.png"))
                 (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))          
-          (dolist (country-contracts (sort (group-on (all-contracts)
+          (dolist (country-contracts (sort (group-on paid-contracts
                                                      :test #'equal
                                                      :key (lambda (contract)
                                                             (string-upcase (sponsor-country (contract-sponsor contract)))))
