@@ -23,33 +23,12 @@
        duration -->
 
   <load>
-    <arrivalphase phase="1" duration="7" unit="minute">
+    <arrivalphase phase="1" duration="30" unit="second">
       <users interarrival="2" unit="second" maxnumber="500"></users>
     </arrivalphase>
-
-
-    <arrivalphase phase="2" duration="5" unit="minute">
-      <users interarrival="0.5" unit="second" maxnumber="500"></users>
-    </arrivalphase>
-
-
-    <arrivalphase phase="3" duration="2" unit="minute">
+    
+    <arrivalphase phase="2" duration="2" unit="minute">
       <users interarrival="0.1" unit="second" maxnumber="500"></users>
-    </arrivalphase>
-
-
-    <arrivalphase phase="4" duration="10" unit="minute">
-      <users interarrival="2" unit="second" maxnumber="500"></users>
-    </arrivalphase>
-
-
-    <arrivalphase phase="5" duration="5" unit="minute">
-      <users interarrival="0.1" unit="second" maxnumber="500"></users>
-    </arrivalphase>
-
-
-    <arrivalphase phase="6" duration="10" unit="minute">
-      <users interarrival="1" unit="second" maxnumber="500"></users>
     </arrivalphase>
   </load>
 
