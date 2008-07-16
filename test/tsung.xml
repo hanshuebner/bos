@@ -837,8 +837,7 @@
       <request><http url='/contract-tree-kml?path=1232&amp;lang=de' version='1.1' method='GET'></http></request>
       <request><http url='/image-tree-kml/2982650' version='1.1' method='GET'></http></request>
       <request><http url='/image-tree-kml/2982778' version='1.1' method='GET'></http></request>
-      <request><http url='/image-tree-kml/2982768' version='1.1' method='GET'></http></request>
-      <request><http url='/contract-tree-kml?path=3012&amp;lang=de' version='1.1' method='GET'></http></request>
+      <request><http url='/image-tree-kml/2982768' version='1.1' method='GET'></http></request>     
       <request><http url='/image-tree-kml/2984042' version='1.1' method='GET'></http></request>
       <request><http url='/contract-tree-kml?path=3003&amp;lang=de' version='1.1' method='GET'></http></request>
       <request><http url='/image-tree-kml/2983924' version='1.1' method='GET'></http></request>
@@ -932,8 +931,6 @@
       <request><http url='/image/2984042' version='1.1' method='GET'></http></request>
 
 
-      <request><http url='/contract-tree-kml?path=30120&amp;lang=de' version='1.1' method='GET'></http></request>
-      <request><http url='/contract-tree-image?path=3012' version='1.1' method='GET'></http></request>
       <request><http url='/contract-tree-kml?path=30031&amp;lang=de' version='1.1' method='GET'></http></request>
       <request><http url='/contract-tree-image?path=3003' version='1.1' method='GET'></http></request>
       <request><http url='/image-tree-kml/2983922' version='1.1' method='GET'></http></request>
@@ -1078,7 +1075,6 @@
 
 
       <request><http url='/image/2984038' version='1.1' method='GET'></http></request>
-      <request><http url='/contract-tree-image?path=30120' version='1.1' method='GET'></http></request>
       <request><http url='/contract-tree-image?path=30031' version='1.1' method='GET'></http></request>
       <request><http url='/image/2983922' version='1.1' method='GET'></http></request>
 
