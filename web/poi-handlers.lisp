@@ -383,7 +383,8 @@
   (error "poi not found"))
 
 (defmethod handle-object ((handler poi-image-handler) poi)
-  (destructuring-bind (poi-name image-index-string &rest imageproc-arguments) (multiple-value-list (parse-handler-url handler))
+  (destructuring-bind (poi-name image-index-string &rest imageproc-arguments)
+      (multiple-value-list (parse-handler-url handler))
     (declare (ignore poi-name))
     (let ((image-index (1- (parse-integer image-index-string))))
       (if (and (not (minusp image-index))
