@@ -268,11 +268,25 @@ has to be unique."
             (delete-file (blob-pathname old-store-image))
             (delete-object old-store-image)))))))
 
+(defun contract-node-update-image-needed-p (node)
+  (or (null (image node))
+      (> (timestamp node) (blob-timestamp (image node)))))
+
 (defun contract-node-update-image-if-needed (node)
-  (when (or (null (image node))
-            (not (probe-file (blob-pathname (image node))))
-            (> (timestamp node) (blob-timestamp (image node))))
+  (when (contract-node-update-image-needed-p node)
     (contract-node-update-image node)))
+
+(defun contract-tree-update-images-if-needed ()
+  ;; I did not see an easy way to avoid that
+  ;; CONTRACT-NODE-UPDATE-IMAGE-NEEDED-P is called twice for every
+  ;; node. Once inside CONTRACT-NODE-UPDATE-IMAGE-IF-NEEDED and once
+  ;; for the prune-test.
+  
+  ;; Let's hope we are lucky and there is nothing to do by inspecting
+  ;; *contract-tree* at first only once.
+  (when (contract-node-update-image-needed-p *contract-tree*)
+    (map-nodes #'contract-node-update-image-if-needed *contract-tree*
+               :prune-test (lambda (node) (not (contract-node-update-image-needed-p node))))))
 
 ;;; image handler
 (defclass contract-tree-image-handler (page-handler)
@@ -300,7 +314,7 @@ has to be unique."
     (when (contract-published-p contract)
       (insert-contract *contract-tree* contract)))
   (format t "~&rendering contract-tree images if needed...") (force-output)
-  (map-nodes #'contract-node-update-image-if-needed *contract-tree*)
+  (contract-tree-update-images-if-needed)
   (format t "done.~%") (force-output)  
   (geometry:register-rect-subscriber geometry:*rect-publisher* *contract-tree*
                                      (list 0 0 +width+ +width+)
