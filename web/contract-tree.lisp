@@ -306,6 +306,7 @@ has to be unique."
 ;; contract-tree image update daemon
 (defvar *contract-tree-image-update-daemon* nil)
 (defvar *contract-tree-image-update-daemon-halt*)
+(defvar *start-contract-tree-image-update-daemon* t)
 
 (defun contract-tree-image-update-daemon-loop ()
   (loop (when *contract-tree-image-update-daemon-halt* (return))
@@ -322,10 +323,18 @@ has to be unique."
     (bt:make-thread #'contract-tree-image-update-daemon-loop
                     :name "contract-tree-image-update-daemon")))
 
-(defun stop-contract-tree-image-update-daemon ()
+(defun stop-contract-tree-image-update-daemon (&key wait)
   (when (contract-tree-image-update-daemon-running-p)
     (setq *contract-tree-image-update-daemon-halt* t)
-    (warn "contract-tree-image-update-daemon will stop soon")))
+    (warn "contract-tree-image-update-daemon will stop soon")
+    (when wait
+      (loop repeat 20
+         do (progn (sleep 1)
+                   (when (not (contract-tree-image-update-daemon-running-p))
+                     (return))))
+      (if (contract-tree-image-update-daemon-running-p)
+          (error "Failed to stop contract-tree-image-update-daemon")
+          (warn "contract-tree-image-update-daemon stopped")))))
 
 ;;; make-contract-tree-from-m2
 (defun make-contract-tree-from-m2 ()  
@@ -338,7 +347,8 @@ has to be unique."
     (when (contract-published-p contract)
       (insert-contract *contract-tree* contract)))
   (format t "~&rendering contract-tree images if needed...") (force-output)
-  (start-contract-tree-image-update-daemon)
+  (when *start-contract-tree-image-update-daemon*
+    (start-contract-tree-image-update-daemon))
   (format t "done.~%") (force-output)  
   (geometry:register-rect-subscriber geometry:*rect-publisher* *contract-tree*
                                      (list 0 0 +width+ +width+)
