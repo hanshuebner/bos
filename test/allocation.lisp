@@ -208,3 +208,7 @@
   (make-allocation-rectangle 0 0 8 8)
   (finishes (delete-object (make-contract (make-sponsor :login "test-sponsor") 1 :paidp nil))))
 
+(test validate-allocation-cache
+  (with-fixture initial-bos-store ()
+    (let ((area1 (make-allocation-rectangle 0 0 8 8)))
+      (finishes (bos.m2::validate-allocation-cache)))))
