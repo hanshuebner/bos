@@ -305,9 +305,12 @@ has to be unique."
 
 ;; contract-tree image update daemon
 (defvar *contract-tree-image-update-daemon* nil)
+(defvar *contract-tree-image-update-daemon-halt*)
 
 (defun contract-tree-image-update-daemon-loop ()
-  (loop (contract-tree-update-images-if-needed) (sleep 10)))
+  (loop (when *contract-tree-image-update-daemon-halt* (return))
+     (contract-tree-update-images-if-needed)
+     (sleep 10)))
 
 (defun contract-tree-image-update-daemon-running-p ()
   (and *contract-tree-image-update-daemon*
@@ -315,12 +318,14 @@ has to be unique."
 
 (defun start-contract-tree-image-update-daemon ()
   (unless (contract-tree-image-update-daemon-running-p)
-    (bt:make-thread #'contract-tree-image-update-daemon-loop :name "contract-tree-image-update-daemon")))
+    (setq *contract-tree-image-update-daemon-halt* nil)
+    (bt:make-thread #'contract-tree-image-update-daemon-loop
+                    :name "contract-tree-image-update-daemon")))
 
 (defun stop-contract-tree-image-update-daemon ()
-  (when *contract-tree-image-update-daemon*
-    (bt:destroy-thread *contract-tree-image-update-daemon*)
-    (setq *contract-tree-image-update-daemon* nil)))
+  (when (contract-tree-image-update-daemon-running-p)
+    (setq *contract-tree-image-update-daemon-halt* t)
+    (warn "contract-tree-image-update-daemon will stop soon")))
 
 ;;; make-contract-tree-from-m2
 (defun make-contract-tree-from-m2 ()  
