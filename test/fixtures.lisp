@@ -56,8 +56,9 @@
                            :website-url bos.m2::*website-url*)
            (make-user "anonymous")      ; needed for web tests
            (&body))
-      (close-store)
-      (cl-fad:delete-directory-and-files store-path))))
+      (close-store)      
+      ;; (cl-fad:delete-directory-and-files store-path) ; fails on ccl
+      (asdf:run-shell-command "rm -r '~A'" store-path))))
 
 (defmacro store-test (name &body body)
   `(progn
