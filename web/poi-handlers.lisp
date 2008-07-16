@@ -359,16 +359,21 @@
 	  (length (contract-m2s contract))))
 
 (defmethod handle ((handler poi-javascript-handler))
-  (with-http-response (:content-type "text/html; charset=UTF-8")
-    (setf (hunchentoot:header-out :cache-control) "no-cache")
-    (setf (hunchentoot:header-out :pragma) "no-cache")
-    (setf (hunchentoot:header-out :expires) "-1")
-    (with-http-body ()
-      (html
-       ((:script :language "JavaScript")
-        (:princ (make-poi-javascript (or (hunchentoot:session-value :language) *default-language*)))
-        (:princ "parent.poi_fertig(pois, anzahlSponsoren, anzahlVerkauft);")
-        (:princ (format nil "parent.last_sponsors([~{~A~^,~%~}]);" (mapcar #'contract-js (last-paid-contracts)))))))))
+  (let* ((last-paid-contracts (last-paid-contracts))
+         (timestamp (max (reduce #'max (class-instances 'poi)
+                                 :key (lambda (poi) (store-object-last-change poi 1)))
+                         (reduce #'max last-paid-contracts
+                                 :key (lambda (contract) (store-object-last-change contract 0))))))
+    (hunchentoot:handle-if-modified-since timestamp)  
+    (setf (hunchentoot:header-out :last-modified)
+          (hunchentoot:rfc-1123-date timestamp))
+    (with-http-response (:content-type "text/html; charset=UTF-8")    
+      (with-http-body ()
+        (html
+         ((:script :language "JavaScript")
+          (:princ (make-poi-javascript (or (hunchentoot:session-value :language) *default-language*)))
+          (:princ "parent.poi_fertig(pois, anzahlSponsoren, anzahlVerkauft);")
+          (:princ (format nil "parent.last_sponsors([~{~A~^,~%~}]);" (mapcar #'contract-js last-paid-contracts)))))))))
 
 (defclass poi-image-handler (object-handler)
   ()
