@@ -303,6 +303,25 @@ has to be unique."
 			       :date (blob-timestamp image)
 			       :max-age 600)))))
 
+;; contract-tree image update daemon
+(defvar *contract-tree-image-update-daemon* nil)
+
+(defun contract-tree-image-update-daemon-loop ()
+  (loop (contract-tree-update-images-if-needed) (sleep 10)))
+
+(defun contract-tree-image-update-daemon-running-p ()
+  (and *contract-tree-image-update-daemon*
+       (bt:thread-alive-p *contract-tree-image-update-daemon*)))
+
+(defun start-contract-tree-image-update-daemon ()
+  (unless (contract-tree-image-update-daemon-running-p)
+    (bt:make-thread #'contract-tree-image-update-daemon-loop :name "contract-tree-image-update-daemon")))
+
+(defun stop-contract-tree-image-update-daemon ()
+  (when *contract-tree-image-update-daemon*
+    (bt:destroy-thread *contract-tree-image-update-daemon*)
+    (setq *contract-tree-image-update-daemon* nil)))
+
 ;;; make-contract-tree-from-m2
 (defun make-contract-tree-from-m2 ()  
   (setq *contract-tree* (make-instance 'contract-node
@@ -314,7 +333,7 @@ has to be unique."
     (when (contract-published-p contract)
       (insert-contract *contract-tree* contract)))
   (format t "~&rendering contract-tree images if needed...") (force-output)
-  (contract-tree-update-images-if-needed)
+  (start-contract-tree-image-update-daemon)
   (format t "done.~%") (force-output)  
   (geometry:register-rect-subscriber geometry:*rect-publisher* *contract-tree*
                                      (list 0 0 +width+ +width+)
