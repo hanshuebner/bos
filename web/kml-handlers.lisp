@@ -129,8 +129,11 @@
   ())
 
 (defmethod handle ((handler country-stats-handler))
-  (let* ((paid-contracts (remove-if-not #'contract-paidp (class-instances 'contract)))
-         (timestamp (reduce #'max paid-contracts :key (lambda (contract) (store-object-last-change contract 0)))))
+  (let* ((contracts (class-instances 'contract))
+         (timestamp (reduce #'max contracts :key (lambda (contract)
+                                                   (if (contract-paidp contract)
+                                                       (store-object-last-change contract 0)
+                                                       0)))))
     (hunchentoot:handle-if-modified-since timestamp)  
     (setf (hunchentoot:header-out :last-modified)
           (hunchentoot:rfc-1123-date timestamp))
@@ -152,7 +155,7 @@
               (with-element "Icon"
                 ;; (with-element "href" (text "http://maps.google.com/mapfiles/kml/pal3/icon23.png"))
                 (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))          
-          (dolist (country-contracts (sort (group-on paid-contracts
+          (dolist (country-contracts (sort (group-on (remove-if-not #'contract-paidp contracts)
                                                      :test #'equal
                                                      :key (lambda (contract)
                                                             (string-upcase (sponsor-country (contract-sponsor contract)))))
