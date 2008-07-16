@@ -562,9 +562,13 @@
 
 
 (defmethod handle-object ((handler poi-xml-handler) poi)
-  (with-query-params ((lang "en"))
-    (with-xml-response (:xsl-stylesheet-name "/static/poi.xsl")
-      (write-poi-xml poi lang))))
+  (let ((timestamp (store-object-last-change poi 1)))
+    (hunchentoot:handle-if-modified-since timestamp)  
+    (setf (hunchentoot:header-out :last-modified)
+          (hunchentoot:rfc-1123-date timestamp))
+    (with-query-params ((lang "en"))
+      (with-xml-response (:xsl-stylesheet-name "/static/poi.xsl")
+        (write-poi-xml poi lang)))))
 
 (defclass poi-kml-handler (object-handler)
   ()
