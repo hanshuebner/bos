@@ -32,7 +32,7 @@
 	       (:file "contract-handlers" :depends-on ("web-utils"))
 	       (:file "contract-image-handler" :depends-on ("web-utils"))
 	       (:file "reports-xml-handler" :depends-on ("boi-handlers"))
-	       (:file "image-tree" :depends-on ("packages"))
+	       (:file "kml-utils" :depends-on ("packages"))
                (:file "quad-tree" :depends-on ("packages"))
                (:file "contract-tree" :depends-on ("quad-tree"))
                (:file "sat-tree" :depends-on ("quad-tree" "contract-tree"))
