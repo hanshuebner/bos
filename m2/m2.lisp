@@ -591,7 +591,7 @@ neighbours."
 (defstruct contract-stats
   (sold-m2s 0)
   (paying-sponsors 0)
-  (country-sponsors (make-hash-table :test #'equal))
+  (country-sponsors (make-hash-table))
   (last-contracts (make-list +last-contracts-cache-size+)))
 
 (defun initialize-contract-stats ()
@@ -603,8 +603,7 @@ neighbours."
   (let* ((area (contract-area contract))
 	 (sponsor (contract-sponsor contract))
 	 (new-sponsor-p (alexandria:length= 1 (sponsor-contracts sponsor)))
-         (%country (sponsor-country sponsor))
-	 (country (and %country (string-upcase %country))))
+         (country (sponsor-country sponsor)))
     (with-slots (sold-m2s paying-sponsors country-sponsors last-contracts)
         *contract-stats*
       ;; sold-m2s
@@ -631,6 +630,7 @@ neighbours."
   (contract-stats-paying-sponsors *contract-stats*))
 
 (defun contract-stats-for-country (country)
+  (assert (keywordp country))
   (let ((stat (gethash country (contract-stats-country-sponsors *contract-stats*))))
     (if stat
 	(values (country-stat-paying-sponsors stat)
@@ -643,16 +643,12 @@ neighbours."
 		   (object-destroyed-p contract)))
 	     (contract-stats-last-contracts *contract-stats*)))
 
-(defun invoke-with-countries (function as-keyword)
-  (alexandria:maphash-keys
-   (if as-keyword
-       (lambda (country) (funcall function (make-keyword-from-string country)))
-       function)
-   (contract-stats-country-sponsors *contract-stats*)))
+(defun invoke-with-countries (function)
+  (alexandria:maphash-keys function (contract-stats-country-sponsors *contract-stats*)))
 
-(defmacro do-countries ((country &key as-keyword) &body body)
+(defmacro do-sponsor-countries ((country) &body body)
   (check-type country symbol)
-  `(invoke-with-countries (lambda (,country) ,@body) ,as-keyword))
+  `(invoke-with-countries (lambda (,country) ,@body)))
 
 (register-store-transient-init-function 'initialize-contract-stats)
 

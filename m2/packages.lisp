@@ -170,7 +170,7 @@
 	   #:number-of-paying-sponsors
 	   #:contract-stats-for-country
 	   #:last-paid-contracts
-           #:do-countries
+           #:do-sponsor-countries
 	   	   	   
 	   #:make-m2-javascript
            #:recolorize-contracts

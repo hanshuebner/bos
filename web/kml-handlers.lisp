@@ -154,18 +154,14 @@
             (with-element "IconStyle"
               (with-element "Icon"
                 ;; (with-element "href" (text "http://maps.google.com/mapfiles/kml/pal3/icon23.png"))
-                (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))          
-          (dolist (country-contracts (sort (group-on (remove-if-not #'contract-paidp contracts)
-                                                     :test #'equal
-                                                     :key (lambda (contract)
-                                                            (string-upcase (sponsor-country (contract-sponsor contract)))))
-                                           #'> :key (lambda (entry) (length (cdr entry)))))
-            (let ((coords (cdr (assoc (make-keyword-from-string (car country-contracts)) *country-coords*))))
+                (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))                    
+          (do-sponsor-countries (country)
+            (let ((coords (cdr (assoc country *country-coords*))))
               (when coords
                 (destructuring-bind (lon lat)
                     coords
-                  (let* ((contracts (cdr country-contracts))
-                         (number-contracts (length contracts)))
+                  (multiple-value-bind (number-of-paying-sponsors number-of-sold-m2s)
+                      (contract-stats-for-country country)
                     (with-element "Placemark"
                       ;; (with-element "name" (text (format nil "~a ~a" (car country-contracts) (length (cdr country-contracts)))))
                       (with-element "styleUrl" (text "#countryStatsStyle"))
@@ -174,13 +170,13 @@
                                              <tr><td>~A:</td><td>~D m²</td></tr></tbody></table>"                                      
                                       (dictionary-entry "BOS says thank you to all sponsors!" lang)
                                       (dictionary-entry
-                                       (second (assoc (make-keyword-from-string (car country-contracts)) *country-english-names*)) lang)
-                                      number-contracts
-                                      (if (= 1 number-contracts)
+                                       (second (assoc country *country-english-names*)) lang)
+                                      number-of-paying-sponsors
+                                      (if (= 1 number-of-paying-sponsors)
                                           (dictionary-entry "sponsor" lang)
                                           (dictionary-entry "sponsors" lang))
                                       (dictionary-entry "total contribution" lang)
-                                      (reduce #'+ contracts :key #'contract-area))))
+                                      number-of-sold-m2s)))
                       (with-element "Point"
                         (with-element "coordinates"
                           (text (format nil "~,20F,~,20F,0" lat lon)))))))))))))))
