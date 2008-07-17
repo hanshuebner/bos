@@ -306,7 +306,6 @@ has to be unique."
 ;; contract-tree image update daemon
 (defvar *contract-tree-image-update-daemon* nil)
 (defvar *contract-tree-image-update-daemon-halt*)
-(defvar *start-contract-tree-image-update-daemon* t)
 
 (defun contract-tree-image-update-daemon-loop ()
   (loop (when *contract-tree-image-update-daemon-halt* (return))
@@ -346,9 +345,7 @@ has to be unique."
   (dolist (contract (class-instances 'contract))
     (when (contract-published-p contract)
       (insert-contract *contract-tree* contract)))
-  (format t "~&rendering contract-tree images if needed...") (force-output)
-  (when *start-contract-tree-image-update-daemon*
-    (start-contract-tree-image-update-daemon))
+  (format t "~&rendering contract-tree images if needed...") (force-output)  
   (format t "done.~%") (force-output)  
   (geometry:register-rect-subscriber geometry:*rect-publisher* *contract-tree*
                                      (list 0 0 +width+ +width+)

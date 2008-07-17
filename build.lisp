@@ -69,7 +69,8 @@
                                          (swank:create-server :port ~D :dont-close t))" swank-port)))
   ;; start the bos server  
   (apply #'bos.m2::reinit (read-configuration "m2.rc"))
-  (apply #'bos.web::init (read-configuration "web.rc"))  
+  (apply #'bos.web::init (read-configuration "web.rc"))
+  (bos.web::start-contract-tree-image-update-daemon)
   (bknr.cron::start-cron))
 
 (defun start-cert-daemon ()

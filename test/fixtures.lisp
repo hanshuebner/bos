@@ -5,9 +5,8 @@
   (when snapshot
     (format t "~&;; ++ taking snapshot~%")
     (snapshot))
-  (let ((bos.web::*start-contract-tree-image-update-daemon* nil))
-    (bos.m2::reinit :directory (bknr.datastore::store-directory *store*)
-                    :website-url bos.m2::*website-url*))
+  (bos.m2::reinit :directory (bknr.datastore::store-directory *store*)
+                  :website-url bos.m2::*website-url*)
   (format t "~&;; ++ reopen-store done~%"))
 
 (defmacro reopen-store ((&key snapshot) &rest store-object-vars)
@@ -51,7 +50,7 @@
   (let ((store-path (parse-namestring
                      (format nil "/tmp/test-store-~D.tmp/" (get-universal-time)))))
     (unwind-protect
-         (let ((bos.web::*start-contract-tree-image-update-daemon* nil))
+         (progn
            (bos.m2::reinit :delete t
                            :directory store-path
                            :website-url bos.m2::*website-url*)
