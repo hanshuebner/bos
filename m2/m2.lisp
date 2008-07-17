@@ -295,7 +295,7 @@
 (deftransaction contract-set-paidp (contract newval)
   (setf (contract-paidp contract) newval)
   (publish-contract-change contract)
-  (add-contract-to-cache contract)
+  (add-to-last-contracts-cache contract)
   (bknr.rss::add-item "news" contract))
 
 (defmethod contract-price ((contract contract))
@@ -591,7 +591,7 @@ neighbours."
 					 0 +last-contracts-cache-size+)))
   (remove-if #'object-destroyed-p *last-contracts-cache*))
 
-(defun add-contract-to-cache (contract)
+(defun add-to-last-contracts-cache (contract)
   (last-paid-contracts) ; force cache initialization, should really be done by a eval-when
   (push contract *last-contracts-cache*)
   (setf (cdr (nthcdr (1- +last-contracts-cache-size+) *last-contracts-cache*)) nil))
