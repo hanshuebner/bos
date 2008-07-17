@@ -52,9 +52,6 @@
           (when (sponsor-info-text sponsor)
             (text (sponsor-info-text sponsor))))))))
 
-(defun image-tree-root-id ()
-  (store-object-id (first (class-instances 'image-tree))))
-
 (defclass kml-root-handler (object-handler)
   ((timestamp :accessor timestamp :initform (get-universal-time))))
 
@@ -85,14 +82,7 @@
             (with-element "altitude" (text "0"))
             (with-element "range" (text "1134.262777389377"))
             (with-element "tilt" (text "0"))
-            (with-element "heading" (text "1.391362238653075")))
-          (let ((image-tree (find-store-object (image-tree-root-id))))
-            (assert (and image-tree (typep image-tree 'image-tree)) nil
-                    "(find-store-object (image-tree-root-id)) gives ~s" image-tree)
-            (kml-network-link (format nil "http://~a/image-tree-kml/~d" (website-host) (image-tree-root-id))
-                              :rect (make-rectangle2 (geo-location image-tree))
-                              :lod `(:min ,(lod-min image-tree) :max ,(lod-max image-tree))
-                              :name "old-image-tree"))
+            (with-element "heading" (text "1.391362238653075")))          
           (dolist (sat-layer (class-instances 'sat-layer))
             (kml-network-link (format nil "http://~a/sat-root-kml?name=~A" (website-host) (name sat-layer))
                               :rect (geo-box-rectangle *m2-geo-box*)
