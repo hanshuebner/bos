@@ -165,8 +165,13 @@
 	   #:contract-pdf-pathname
 	   #:contract-pdf-url
 	   #:contract-download-only-p
-	   #:make-m2-javascript
+	   ;; contract-stats
+	   #:number-of-sold-sqm
+	   #:paying-sponsors
+	   #:contract-stats-for-country
 	   #:last-paid-contracts
+	   	   	   
+	   #:make-m2-javascript
            #:recolorize-contracts
            #:contracts-well-colored-p
            #:contract-published-p

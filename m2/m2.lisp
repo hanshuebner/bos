@@ -295,7 +295,7 @@
 (deftransaction contract-set-paidp (contract newval)
   (setf (contract-paidp contract) newval)
   (publish-contract-change contract)
-  (add-to-last-contracts-cache contract)
+  (add-to-contract-stats contract)
   (bknr.rss::add-item "news" contract))
 
 (defmethod contract-price ((contract contract))
@@ -580,27 +580,66 @@ neighbours."
   ;; use only CONTRACT-PAIDP, but mean CONTRACT-PUBLISHED-P
   (contract-paidp contract))
 
-(defvar *last-contracts-cache* nil)
+;;; contract-stats
 (defconstant +last-contracts-cache-size+ 20)
+(defvar *contract-stats*)
 
-(defun last-paid-contracts ()
-  (unless *last-contracts-cache*
-    (setf *last-contracts-cache* (subseq (append (sort (remove-if-not #'contract-paidp (class-instances 'contract))
-						       #'> :key #'contract-date)
-						 (make-list +last-contracts-cache-size+))
-					 0 +last-contracts-cache-size+)))
-  (remove-if #'object-destroyed-p *last-contracts-cache*))
+(defstruct country-stat
+  (sold-m2s 0)
+  (paying-sponsors 0))
 
-(defun add-to-last-contracts-cache (contract)
-  (last-paid-contracts) ; force cache initialization, should really be done by a eval-when
-  (push contract *last-contracts-cache*)
-  (setf (cdr (nthcdr (1- +last-contracts-cache-size+) *last-contracts-cache*)) nil))
+(defstruct contract-stats
+  (sold-m2s 0)
+  (paying-sponsors 0)
+  (country-sponsors (make-hash-table :test #'equal))
+  (last-contracts (make-list +last-contracts-cache-size+)))
+
+(defun initialize-contract-stats ()
+  (setq *contract-stats* (make-contract-stats))
+  (dolist (contract (class-instances 'contract))
+    (add-to-contract-stats contract)))
+
+(defun add-to-contract-stats (contract)
+  (let* ((area (contract-area contract))
+	 (sponsor (contract-sponsor contract))
+	 (new-sponsor-p (alexandria:length= 1 (sponsor-contracts sponsor)))
+	 (country (string-upcase (sponsor-country sponsor))))
+    (with-slots (sold-m2s paying-sponsors country-sponsors last-contracts)
+	*contract-stats*
+      ;; sold-m2s
+      (incf sold-m2s area)
+      ;; paying-sponsors
+      (when new-sponsor-p
+	(incf paying-sponsors))
+      ;; country-sponsors
+      (let ((country-stat (gethash country country-sponsors (make-country-stat))))
+	(when new-sponsor-p
+	  (incf (country-stat-paying-sponsors country-stat)))
+	(incf (country-stat-sold-m2s country-stat) area))
+      ;; last-contracts
+      (setf last-contracts (nbutlast last-contracts))
+      (push contract last-contracts))))
 
 (defun number-of-sold-sqm ()
-  (let ((retval 0))
-    (dolist (contract (remove-if-not #'contract-paidp (class-instances 'contract)))
-      (incf retval (length (contract-m2s contract))))
-    retval))
+  (contract-stats-sold-m2s *contract-stats*))
+
+(defun paying-sponsors ()
+  (contract-stats-paying-sponsors *contract-stats*))
+
+(defun contract-stats-for-country (country)
+  (let ((stat (gethash country (contract-stats-country-sponsors *contract-stats*))))
+    (if stat
+	(values (country-stat-paying-sponsors stat)
+		(country-stat-sold-m2s stat))
+	(values 0 0))))
+
+(defun last-paid-contracts ()  
+  (remove-if (lambda (contract)
+	       (or (null contract)
+		   (object-destroyed-p contract)))
+	     (contract-stats-last-contracts *contract-stats*)))
+
+(register-store-transient-init-function 'initialize-contract-stats)
 
 (defun string-safe (string)
   (if string
