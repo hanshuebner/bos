@@ -161,7 +161,7 @@
   "Return a unique number to use when generating a sponsor.
   Uniqueness is guaranteed only across the running time of the process."
   (bknr.datastore::mp-with-lock-held (*sponsor-counter-lock*)
-                                     (incf *sponsor-counter*)))
+    (incf *sponsor-counter*)))
 
 (defun make-sponsor (&rest initargs &key login &allow-other-keys)
   (apply #'make-object 'sponsor
