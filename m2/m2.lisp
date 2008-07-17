@@ -625,7 +625,7 @@ neighbours."
 (defun number-of-sold-sqm ()
   (contract-stats-sold-m2s *contract-stats*))
 
-(defun paying-sponsors ()
+(defun number-of-paying-sponsors ()
   (contract-stats-paying-sponsors *contract-stats*))
 
 (defun contract-stats-for-country (country)
