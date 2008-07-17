@@ -127,9 +127,8 @@
 (defun make-poi-javascript (language)
   "Erzeugt das POI-Javascript für das Infosystem"
   (with-output-to-string (*standard-output*)
-    (format t "var anzahlSponsoren = ~D;~%" (count-if (lambda (sponsor) (some #'contract-paidp (sponsor-contracts sponsor)))
-						      (class-instances 'sponsor)))
-    (format t "var anzahlVerkauft = ~D;~%" (bos.m2::number-of-sold-sqm))
+    (format t "var anzahlSponsoren = ~D;~%" (number-of-paying-sponsors))
+    (format t "var anzahlVerkauft = ~D;~%" (number-of-sold-sqm))
     (format t "var pois = new Array;~%")
     (dolist (poi (sort (remove-if #'(lambda (poi) (or (not (poi-complete poi language))
 						      (not (poi-published poi))))

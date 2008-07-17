@@ -167,7 +167,7 @@
 	   #:contract-download-only-p
 	   ;; contract-stats
 	   #:number-of-sold-sqm
-	   #:paying-sponsors
+	   #:number-of-paying-sponsors
 	   #:contract-stats-for-country
 	   #:last-paid-contracts
 	   	   	   
