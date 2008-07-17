@@ -612,7 +612,9 @@ neighbours."
       (when new-sponsor-p
 	(incf paying-sponsors))
       ;; country-sponsors
-      (let ((country-stat (gethash country country-sponsors (make-country-stat))))
+      (let ((country-stat (gethash country country-sponsors)))
+	(unless country-stat
+	  (setq country-stat (setf (gethash country country-sponsors) (make-country-stat))))
 	(when new-sponsor-p
 	  (incf (country-stat-paying-sponsors country-stat)))
 	(incf (country-stat-sold-m2s country-stat) area))
