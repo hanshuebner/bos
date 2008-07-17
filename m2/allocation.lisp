@@ -164,12 +164,11 @@
 (defmethod allocation-area-bounding-box ((allocation-area allocation-area))
   (with-slots (left top width height bounding-box) allocation-area
     (unless (slot-boundp allocation-area 'bounding-box)
-      (with-transaction ("setf allocation-area bounding-box")
-	(setf bounding-box (coerce (list (cons left top)
-					 (cons (+ left width) top)
-					 (cons (+ left width) (+ top height))
-					 (cons left (+ top height)))
-				   'vector))))
+      (setf bounding-box (coerce (list (cons left top)
+				       (cons (+ left width) top)
+				       (cons (+ left width) (+ top height))
+				       (cons left (+ top height)))
+				 'vector)))
     bounding-box))
 
 (defmethod allocation-area-bounding-box2 ((allocation-area allocation-area))
