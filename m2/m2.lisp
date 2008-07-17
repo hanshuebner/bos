@@ -603,21 +603,23 @@ neighbours."
   (let* ((area (contract-area contract))
 	 (sponsor (contract-sponsor contract))
 	 (new-sponsor-p (alexandria:length= 1 (sponsor-contracts sponsor)))
-	 (country (string-upcase (sponsor-country sponsor))))
+         (%country (sponsor-country sponsor))
+	 (country (and %country (string-upcase %country))))
     (with-slots (sold-m2s paying-sponsors country-sponsors last-contracts)
-	*contract-stats*
+        *contract-stats*
       ;; sold-m2s
       (incf sold-m2s area)
       ;; paying-sponsors
       (when new-sponsor-p
-	(incf paying-sponsors))
+        (incf paying-sponsors))
       ;; country-sponsors
-      (let ((country-stat (gethash country country-sponsors)))
-	(unless country-stat
-	  (setq country-stat (setf (gethash country country-sponsors) (make-country-stat))))
-	(when new-sponsor-p
-	  (incf (country-stat-paying-sponsors country-stat)))
-	(incf (country-stat-sold-m2s country-stat) area))
+      (when country
+        (let ((country-stat (gethash country country-sponsors)))
+          (unless country-stat
+            (setq country-stat (setf (gethash country country-sponsors) (make-country-stat))))
+          (when new-sponsor-p
+            (incf (country-stat-paying-sponsors country-stat)))
+          (incf (country-stat-sold-m2s country-stat) area)))
       ;; last-contracts
       (setf last-contracts (nbutlast last-contracts))
       (push contract last-contracts))))
@@ -640,6 +642,17 @@ neighbours."
 	       (or (null contract)
 		   (object-destroyed-p contract)))
 	     (contract-stats-last-contracts *contract-stats*)))
+
+(defun invoke-with-countries (function as-keyword)
+  (alexandria:maphash-keys
+   (if as-keyword
+       (lambda (country) (funcall function (make-keyword-from-string country)))
+       function)
+   (contract-stats-country-sponsors *contract-stats*)))
+
+(defmacro do-countries ((country &key as-keyword) &body body)
+  (check-type country symbol)
+  `(invoke-with-countries (lambda (,country) ,@body) ,as-keyword))
 
 (register-store-transient-init-function 'initialize-contract-stats)
 
