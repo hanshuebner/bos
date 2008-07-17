@@ -58,7 +58,10 @@
                 (pdf:line-to x y)
                 (pdf:close-fill-and-stroke)))))))
 
-    (with-open-file (f (contract-m2-pdf-pathname contract :print print) :direction :output :if-exists :supersede)
+    (with-open-file (f (contract-m2-pdf-pathname contract :print print)
+                       :direction :output
+                       :if-exists :supersede
+                       :external-format :iso-8859-1)
       ;; cl-pdf does not really handle non-ascii characters in a very
       ;; usable manner.  In order to avoid having to deal with
       ;; embedding fonts and encoding, just work around the issue:

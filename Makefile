@@ -2,7 +2,7 @@ all: bos.core
 .PHONY: all
 
 bos.core: build.lisp
-	sbcl --load build.lisp --eval '(sb-ext:save-lisp-and-die "bos.core")'
+	env LANG=en_US.UTF-8 sbcl --load build.lisp --eval '(sb-ext:save-lisp-and-die "bos.core")'
 
 # various cleaning stuff
 .PHONY: cleancore

@@ -1,19 +1,13 @@
 (in-package :bos.m2.cert-generator)
 
-(defun run-tool (program &optional program-args &rest args)
-  (let* ((process (apply #'run-program program program-args :search t :output :stream args))
-         (error-message (unless (zerop (process-exit-code process))
-                          (with-output-to-string (*standard-output*)
-                            (with-open-stream (output-stream (process-output process))
-                              (princ (read-line output-stream nil)))))))
-    (process-close process)
-    (unless (zerop (process-exit-code process))
-      (error "Error executing ~A - Exit code ~D~%Error message: ~A"
-             (format nil "\"~A~{ ~A~}\"" program program-args) (process-exit-code process) error-message))))
+(defun run-tool (program &rest args)
+  (let ((asdf::*verbose-out* t))
+    (apply #'asdf:run-shell-command "~S ~{~S ~}" program args)))
 
 (defun fill-form (fdf-pathname pdf-pathname m2-pdf-pathname output-pathname)
   (handler-case
-      (with-temporary-file (temporary-pdf-pathname :defaults #P"/tmp/.pdf")
+      (with-temporary-file (temporary-pdf-pathname :defaults (make-pathname :directory '(:absolute "tmp")
+                                                                            :type "pdf"))
         (cond
           ((namestring pdf-pathname)
            (run-tool "pdftk" (list (namestring pdf-pathname)
@@ -42,7 +36,7 @@
                                                                                    country))
                                                       template-pathname))
                 (m2-pdf-pathname (merge-pathnames
-                                  (make-pathname :name (format nil "~A-m2s" id))
+                                  (make-pathname :name (format nil "~A-m2s" id) :type "pdf")
                                   fdf-pathname))
 		(output-pathname (merge-pathnames (make-pathname :name id :type "pdf") fdf-pathname)))
 	    (fill-form fdf-pathname
