@@ -260,7 +260,8 @@ is decremented."
 (defmethod bknr.datastore::restore-subsystem
     (store (subsystem allocation-cache-subsystem) &key until)
   (declare (ignore until))
-  (rebuild-cache))
+  (rebuild-cache)
+  (bos.m2::invoke-store-transient-init-functions))
 
 (defmethod bknr.datastore::snapshot-subsystem (store (subsystem allocation-cache-subsystem))
   )

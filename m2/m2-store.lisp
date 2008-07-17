@@ -64,8 +64,6 @@ have been called."
             *store-transient-init-constraints*
             new-store-transient-init-constraints))))
 
-(defmethod bknr.datastore::restore-store :after ((store m2-store) &key until)
-  (declare (ignore store until))
+(defun invoke-store-transient-init-functions ()
   (dolist (function-name *store-transient-init-functions*)
     (funcall function-name)))
-
