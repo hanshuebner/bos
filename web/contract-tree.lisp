@@ -20,9 +20,17 @@
 
 (defun contract-node-find-corresponding-store-image (node)  
   (let ((store-images (get-keyword-store-images (contract-node-keyword node))))
-    (when (< 1 (length store-images))
-      (warn "~D store-images for ~S" (length store-images) node))
-    (first store-images)))
+    (if (alexandria:length= 1 store-images)	
+	;; good, there is only one
+	(first store-images)
+	;; We will just return NIL, if we cannot find one.
+        ;; If there are too many, we will return the newest one and delete the rest.
+	(progn
+	  (warn "~D store-images for ~S" (length store-images) node)
+	  (let ((store-images-newest-first
+		 (sort (copy-list store-images) #'> :key #'blob-timestamp)))
+	    (mapc #'delete-object (rest store-images-newest-first))
+	    (first store-images-newest-first))))))
 
 (defmethod initialize-instance :after ((node contract-node) &key args)
   (declare (ignore args))
@@ -34,9 +42,8 @@
 (defvar *contract-tree* nil)
 (defparameter *contract-tree-images-size* 128) ; was 256
 
-;;; XXX soll spaeter von was anderem abhaengen
 (defmethod leaf-node-p ((node contract-node))
-  (= 9 (depth node)))
+  (= 10 (depth node)))
 
 (defun contract-geo-box (contract)
   (destructuring-bind (x y width height)
@@ -296,7 +303,8 @@ has to be unique."
   (with-query-params (path)
     (let* ((path (parse-path path))
 	   (node (find-node-with-path *contract-tree* path))
-	   (image (image node)))      
+	   (image (image node)))
+      (assert image nil "contract-tree node ~{~D~} does not have an image" path)
       (hunchentoot:handle-if-modified-since (blob-timestamp image))
       (with-store-image* (image)
 	(emit-image-to-browser cl-gd:*default-image* :png
