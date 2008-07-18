@@ -1,3 +1,4 @@
+
 (in-package :bos.m2)
 
 ;;; 
@@ -392,49 +393,55 @@
     (let* ((m2s (contract-m2s contract))
            (area (length m2s))
            (scaler (ceiling area 1000.0))
-           (bounding-box (contract-bounding-box contract)))
-      (geometry:with-rectangle bounding-box
-        (declare (ignore width height))
-        (labels ( ;; to-orig
-                 (distance-to-orig (d)
-                   (when-scaling-needed d
-                                        (round (* d scaler))))
-                 (x-coordinate-to-orig (x)
-                   (when-scaling-needed x
-                                        (+ left (round (* (- x left) scaler)))))
-                 (y-coordinate-to-orig (y)
-                   (when-scaling-needed y
-                                        (+ top (round (* (- y top) scaler)))))
-                 (rectangle-to-orig (r)
-                   (when-scaling-needed r
-                                        (geometry:with-rectangle r
-                                          (list (x-coordinate-to-orig left)
-                                                (y-coordinate-to-orig top)
-                                                (distance-to-orig width)
-                                                (distance-to-orig height)))))
-                 ;; from-orig
-                 (distance-from-orig (d)
-                   (when-scaling-needed d
-                                        (floor d scaler)))
-                 (x-coordinate-from-orig (x)
-                   (when-scaling-needed x
-                                        (+ left (floor (- x left) scaler))))
-                 (y-coordinate-from-orig (y)
-                   (when-scaling-needed y
-                                        (+ top (floor (- y top) scaler))))
-                 (rectangle-from-orig (r)
-                   (when-scaling-needed r
-                                        (geometry:with-rectangle r
-                                          (list (x-coordinate-from-orig left)
-                                                (y-coordinate-from-orig top)
-                                                (distance-from-orig width)
-                                                (distance-from-orig height))))))
-          (rectangle-to-orig
-           (screamer-user:largest-rectangle
-            (rectangle-from-orig bounding-box)
-            (lambda (x y)
-              (let ((m2 (get-m2 (x-coordinate-to-orig x) (y-coordinate-to-orig y))))
-                (and m2 (eql contract (m2-contract m2))))))))))))
+           (bounding-box (contract-bounding-box contract))
+	   (bounding-width (third bounding-box))
+	   (bounding-height (fourth bounding-box)))
+      (if (= area (* bounding-width bounding-height))
+	  ;; no need to run screamer here, since we already know the
+	  ;; answer
+	  bounding-box
+	  (geometry:with-rectangle bounding-box
+	    (declare (ignore width height))
+	    (labels ( ;; to-orig
+		     (distance-to-orig (d)
+		       (when-scaling-needed d
+					    (round (* d scaler))))
+		     (x-coordinate-to-orig (x)
+		       (when-scaling-needed x
+					    (+ left (round (* (- x left) scaler)))))
+		     (y-coordinate-to-orig (y)
+		       (when-scaling-needed y
+					    (+ top (round (* (- y top) scaler)))))
+		     (rectangle-to-orig (r)
+		       (when-scaling-needed r
+					    (geometry:with-rectangle r
+					      (list (x-coordinate-to-orig left)
+						    (y-coordinate-to-orig top)
+						    (distance-to-orig width)
+						    (distance-to-orig height)))))
+		     ;; from-orig
+		     (distance-from-orig (d)
+		       (when-scaling-needed d
+					    (floor d scaler)))
+		     (x-coordinate-from-orig (x)
+		       (when-scaling-needed x
+					    (+ left (floor (- x left) scaler))))
+		     (y-coordinate-from-orig (y)
+		       (when-scaling-needed y
+					    (+ top (floor (- y top) scaler))))
+		     (rectangle-from-orig (r)
+		       (when-scaling-needed r
+					    (geometry:with-rectangle r
+					      (list (x-coordinate-from-orig left)
+						    (y-coordinate-from-orig top)
+						    (distance-from-orig width)
+						    (distance-from-orig height))))))
+	      (rectangle-to-orig
+	       (screamer-user:largest-rectangle
+		(rectangle-from-orig bounding-box)
+		(lambda (x y)
+		  (let ((m2 (get-m2 (x-coordinate-to-orig x) (y-coordinate-to-orig y))))
+		    (and m2 (eql contract (m2-contract m2)))))))))))))
 
 (defun contract-neighbours (contract)
   "Return all contracts that have an adjacent m2 to one of CONTRACT's m2s.
