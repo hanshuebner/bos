@@ -5,9 +5,7 @@
   ((name :allocation :class :initform 'contract-node)
    (timestamp :accessor timestamp :initform 0) ; timestamp initially "very old"
    (placemark-contracts :initform nil :accessor placemark-contracts)
-   (image :initform nil :accessor image)
-   (kml-req-count :initform 0 :accessor kml-req-count)
-   (image-req-count :initform 0 :accessor image-req-count)))
+   (image :initform nil :accessor image)))
 
 (defun contract-node-invalidate-timestamp (node)
   (let ((image (contract-node-find-corresponding-store-image node)))
@@ -155,8 +153,7 @@ links are created."))
                                     :root-element "kml")
     (with-query-params ((lang "en") (path)
                         (rmcpath) (rmcid))
-      (handle-if-node-modified
-        (incf (kml-req-count node))
+      (handle-if-node-modified     
         (setf (hunchentoot:header-out :last-modified)
               (hunchentoot:rfc-1123-date (timestamp node)))
         (let* ((lod (node-lod node))
