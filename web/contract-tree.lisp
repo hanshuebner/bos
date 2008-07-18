@@ -241,7 +241,9 @@ has to be unique."
   (labels ((find-contract-color (contract)
              (destructuring-bind (r g b)
                  (contract-color contract)
-               (cl-gd:find-color r g b :alpha 40))))
+               (cl-gd:find-color r g b :alpha (if (node-has-children-p node)
+						  40
+						  0)))))
     (let ((box (geo-box node))
           (image-size *contract-tree-images-size*))
       ;; (warn "will update image for ~a" node)
