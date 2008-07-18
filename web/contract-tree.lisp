@@ -296,6 +296,9 @@ has to be unique."
     (map-nodes #'contract-node-update-image-if-needed *contract-tree*
                :prune-test (lambda (node) (not (contract-node-update-image-needed-p node))))))
 
+(defun contract-tree-force-update-images ()
+  (map-nodes #'contract-node-update-image *contract-tree*))
+
 ;;; image handler
 (defclass contract-tree-image-handler (page-handler)
   ())
@@ -328,8 +331,9 @@ has to be unique."
 (defun start-contract-tree-image-update-daemon ()
   (unless (contract-tree-image-update-daemon-running-p)
     (setq *contract-tree-image-update-daemon-halt* nil)
-    (bt:make-thread #'contract-tree-image-update-daemon-loop
-                    :name "contract-tree-image-update-daemon")))
+    (setq *contract-tree-image-update-daemon*
+	  (bt:make-thread #'contract-tree-image-update-daemon-loop
+			  :name "contract-tree-image-update-daemon"))))
 
 (defun stop-contract-tree-image-update-daemon (&key wait)
   (when (contract-tree-image-update-daemon-running-p)
