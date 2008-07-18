@@ -247,6 +247,7 @@ has to be unique."
                (cl-gd:find-color r g b :alpha 40))))
     (let ((box (geo-box node))
           (image-size *contract-tree-images-size*))
+      ;; (warn "will update image for ~a" node)
       (cl-gd:with-image (cl-gd:*default-image* image-size image-size t)
         (setf (cl-gd:save-alpha-p) t
               (cl-gd:alpha-blending-p) nil)
