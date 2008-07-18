@@ -267,11 +267,20 @@
 ;;                   (puri:render-uri href out))))
 ;;     (kml-link string)))
 
+
+(defun kml-hide-children-style ()
+  (with-element "Style"
+    (with-element "ListStyle"
+      (with-element "listItemType" (text "checkHideChildren"))
+      (with-element "bgColor" (text "00ffffff")))))
+
 (defun kml-network-link (href &key rect lod name http-query
-                         fly-to-view)
+                         fly-to-view hide-children)
   (with-element "NetworkLink"
     (when name (with-element "name" (text name)))
     (when rect (kml-region rect lod))
+    (when hide-children
+      (kml-hide-children-style))
     (when fly-to-view (with-element "flyToView" (text "1")))
     (kml-link href)))
 
