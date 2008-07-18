@@ -66,4 +66,6 @@ have been called."
 
 (defun invoke-store-transient-init-functions ()
   (dolist (function-name *store-transient-init-functions*)
-    (funcall function-name)))
+    (with-simple-restart (skip-init-function "Skip transient-init-function ~A"
+                                             function-name)
+      (funcall function-name))))
