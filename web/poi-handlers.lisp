@@ -528,6 +528,7 @@
                       (attribute "align" "center")
                       (with-element "a"
                         (attribute "href" (poi-xml-path))
+			(attribute "target" "POI-micro-site")
                         (text (dictionary-entry "learn more" language)))))
                   (with-element "tr"
                     (with-element "td"
