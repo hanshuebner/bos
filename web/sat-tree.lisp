@@ -7,6 +7,7 @@
   ((name :reader name :initarg :name
          :index-type unique-index
          :index-reader find-sat-layer)
+   (year :accessor year :initarg :year :initform 2000)
    (geo-box :reader geo-box :initarg :geo-box)
    (local-draw-order :reader local-draw-order :initarg :local-draw-order)))
 

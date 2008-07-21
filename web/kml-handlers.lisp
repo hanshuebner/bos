@@ -89,7 +89,8 @@
 	    (with-element "Style"
 	      (with-element "ListStyle"
 		(with-element "listItemType" (text "radioFolder"))))	    	    
-	    (dolist (sat-layer (class-instances 'sat-layer))
+	    (dolist (sat-layer (sort (copy-list (class-instances 'sat-layer))
+				     #'< :key #'year))
 	      (kml-network-link (format nil "http://~a/sat-root-kml?name=~A" (website-host) (name sat-layer))
 				:rect (geo-box-rectangle *m2-geo-box*)
 				:lod '(:min 0 :max -1)
