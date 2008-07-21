@@ -19,6 +19,10 @@ cleanall: cleancore cleanfasl
 .PHONY: clean
 clean: cleancore
 
+.PHONY: start
+start: bos.core
+	sbcl --core bos.core --eval '(start)'
+
 # TAGS
 TAGS:
 	find . -name '*.lisp' | xargs etags -a
