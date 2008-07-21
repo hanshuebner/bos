@@ -13,7 +13,8 @@
 	       (:file "tiled-index" :depends-on ("config"))
 	       (:file "mail-generator" :depends-on ("config"))
 	       (:file "make-certificate" :depends-on ("config"))
-	       (:file "m2-store" :depends-on ("packages" "utils"))
+	       (:file "initialization-subsystem" :depends-on ("packages"))
+               (:file "m2-store" :depends-on ("packages" "utils"))
                (:file "m2" :depends-on ("tiled-index"
 					"utils"
 					"make-certificate"

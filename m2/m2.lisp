@@ -706,7 +706,8 @@ neighbours."
 		 :subsystems (list (make-instance 'store-object-subsystem)
 				   (make-instance 'blob-subsystem
 						  :n-blobs-per-directory 1000)
-				   (make-instance 'bos.m2.allocation-cache:allocation-cache-subsystem)))
+				   (make-instance 'bos.m2.allocation-cache:allocation-cache-subsystem)
+                                   (make-instance 'initialization-subsystem)))
   (format t "~&; Startup der Quadratmeterdatenbank done.~%")
   (force-output))
 
