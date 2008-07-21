@@ -257,8 +257,8 @@ is decremented."
 (defclass allocation-cache-subsystem ()
   ())
 
-(defmethod bknr.datastore::restore-subsystem
-    (store (subsystem allocation-cache-subsystem) &key until)
+(defmethod bknr.datastore::restore-subsystem (store (subsystem allocation-cache-subsystem)
+                                              &key until)
   (declare (ignore until))
   (rebuild-cache)
   (bos.m2::invoke-store-transient-init-functions))
