@@ -84,7 +84,7 @@
             (with-element "tilt" (text "0"))
             (with-element "heading" (text "1.391362238653075")))          
           (with-element "Folder"
-	    (attribute "name" "Sat-Images")
+	    (attribute "name" (dictionary-entry "Sat-Images" lang))
 	    (attribute "open" "1")
 	    (with-element "Style"
 	      (with-element "ListStyle"

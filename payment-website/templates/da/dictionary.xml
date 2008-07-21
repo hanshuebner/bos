@@ -7,6 +7,9 @@
   
   <!--  kml-root  -->
   <entry><key>Squaremetre Area</key><value></value></entry>
+  <entry><key>Sat-Images</key><value>Satellitenbilder</value></entry>  
+  <entry><key>sat-old</key><value>Satellitenbild von 2000</value></entry>
+  <entry><key>sat-2002</key><value>Satellitenbild von 2002</value></entry>
   <entry><key>sat-2007</key><value>Satellitenbild von 2007</value></entry>
   <entry><key>POIs</key><value>Points of Interest</value></entry>  
 
