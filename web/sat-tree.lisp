@@ -80,7 +80,7 @@
 (defun quad-tree-insert-sat-images ()
   (mapc #'quad-tree-insert-sat-image (class-instances 'sat-image)))
 
-(register-store-transient-init-function 'quad-tree-insert-sat-images
+(register-transient-init-function 'quad-tree-insert-sat-images
                                         'make-quad-tree)
 
 (defmethod name ((obj sat-image))

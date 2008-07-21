@@ -657,7 +657,7 @@ neighbours."
   (check-type country symbol)
   `(invoke-with-countries (lambda (,country) ,@body)))
 
-(register-store-transient-init-function 'initialize-contract-stats)
+(register-transient-init-function 'initialize-contract-stats)
 
 (defun string-safe (string)
   (if string

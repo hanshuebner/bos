@@ -409,5 +409,5 @@ If PRUNE-TEST returns true, the given node will not be visited."
   (+ local-draw-order
      (* (depth node) +max-num-of-local-draw-order-levels+)))
 
-(register-store-transient-init-function 'make-quad-tree)
+(register-transient-init-function 'make-quad-tree)
 

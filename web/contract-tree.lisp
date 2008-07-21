@@ -363,7 +363,7 @@ has to be unique."
                                      (list 0 0 +width+ +width+)
                                      #'contract-tree-changed))
 
-(register-store-transient-init-function 'make-contract-tree-from-m2
+(register-transient-init-function 'make-contract-tree-from-m2
                                         'make-quad-tree
                                         'geometry:make-rect-publisher)
 

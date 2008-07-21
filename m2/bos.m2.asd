@@ -15,7 +15,8 @@
 	       (:file "make-certificate" :depends-on ("config"))
 	       (:file "initialization-subsystem" :depends-on ("packages"))
                (:file "m2-store" :depends-on ("packages" "utils"))
-               (:file "m2" :depends-on ("tiled-index"
+               (:file "m2" :depends-on ("initialization-subsystem"
+                                        "tiled-index"
 					"utils"
 					"make-certificate"
 					"mail-generator"

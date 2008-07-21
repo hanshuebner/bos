@@ -78,7 +78,7 @@
   (:shadowing-import-from :cl-interpol #:quote-meta-chars)
   (:export #:m2-store
            #:*m2-store*
-           #:register-store-transient-init-function
+           #:register-transient-init-function
 
            #:get-tile
            #:ensure-tile
