@@ -199,6 +199,7 @@ language preference weights."
 		 :handler-definitions `(("/edit-poi" edit-poi-handler)
 					("/edit-poi-image" edit-poi-image-handler)
 					("/edit-sponsor" edit-sponsor-handler)
+                                        ("/kml-upload" kml-upload-handler)
                                         ("/kml-root" kml-root-handler)                                
                                         ("/country-stats" country-stats-handler)
                                         ("/contract-tree-kml" contract-tree-kml-handler)
@@ -255,7 +256,8 @@ language preference weights."
 		 :admin-navigation '(("user" . "user/")
 				     ("languages" . "languages")
 				     ("allocation area" . "allocation-area/")
-				     ("allocation cache" . "allocation-cache"))
+				     ("allocation cache" . "allocation-cache")
+                                     ("kml-upload" . "kml-upload"))
 		 :authorizer (make-instance 'bos-authorizer)
 		 :site-logo-url "/images/bos-logo.gif"
 		 :style-sheet-urls '("/static/cms.css")

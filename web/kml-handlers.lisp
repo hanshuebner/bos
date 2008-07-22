@@ -1,6 +1,64 @@
 ;;; -*- coding: utf-8 -*-
 (in-package :bos.web)
 
+(defpersistent-class kml-root-data ()
+  ((language :initarg :language :reader language :type string
+             :index-type string-unique-index
+             :index-reader kml-root-data-with-language)
+   (kml-string :accessor kml-string)))
+
+(defun ensure-kml-root-data-for-language (language)
+  (or (kml-root-data-with-language language)
+      (make-object 'kml-root-data :language language)))
+
+(defun kml-root-data-validate-file-upload (file-upload)
+  (cxml:parse-file (upload-pathname file-upload)
+                   (cxml-dom:make-dom-builder)))
+
+(defclass kml-upload-handler (admin-only-handler form-handler)
+  ())
+
+(defmethod handle-form ((handler kml-upload-handler) action)
+  (dolist (language (class-instances 'website-language))
+    (ensure-kml-root-data-for-language (website-language-code language)))
+  (labels ((xml-parse-error-context (xml-parse-error)
+             (ppcre:register-groups-bind (line column)
+                 ("Line +(\\d+).*column +(\\d+)"
+                  (princ-to-string xml-parse-error))
+               (when (and line column)
+                 (values (parse-integer line) (parse-integer column))))))
+    (with-bos-cms-page (:title "KML Upload")    
+      (html ((:form
+              :method "POST" :enctype "multipart/form-data")
+             (dolist (kml-root-data (class-instances 'kml-root-data))
+               (let ((language (language kml-root-data)))
+                 (html (:h2 (:princ language))
+                       (:p ((:input :type "file" :name language))
+                           " "
+                           (let ((file-upload (request-uploaded-file language)))
+                             (when file-upload
+                               (handler-case
+                                   (progn
+                                     (kml-root-data-validate-file-upload file-upload)                                     
+                                     (with-transaction ("update kml-string")
+                                       (setf (kml-string kml-root-data)
+                                             (arnesi:read-string-from-file (upload-pathname file-upload)
+                                                                           :external-format :utf-8)))
+                                     (html (:princ "updated successfully")))
+                                 (cxml:xml-parse-error (c)
+                                   (multiple-value-bind (line column)
+                                       (xml-parse-error-context c)
+                                     (print (list line column))
+                                     (html ((:span :class "error")
+                                            (:format "there was a xml parse error ~:[~;near line ~D, column ~D~]"
+                                                     (and line column)
+                                                     line column)))))))))
+                       ;; we want this after the processing
+                       (:p (:format "last-change: ~A"                                
+                                    (format-date-time (store-object-last-change kml-root-data 0)))))))
+             (submit-button "upload" "upload"))))))
+
+;;; kml-format utils
 (defun kml-format-points (points stream)
   (mapc #'(lambda (point) (kml-format-point point stream)) points))
 
