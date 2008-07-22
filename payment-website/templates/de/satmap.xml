@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<bknr:toplevel
+   template="toplevel_main"
+   title="REGENWALD für SAMBOJA LESTARI"
+   xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:bknr="http://bknr.net"
+   xmlns:bos="http://headcraft.de/bos"
+   >
+  <bos:set-cachable/>
+  <div id="content_main">
+    <div id="textbox_content_bigger">
+      <table border="0" cellpadding="0" cellspacing="0">
+
+	<tr>
+	  <td colspan="2">
+	    <span class="headline">
+	      Satellitenkarte
+	    </span>
+	  </td>
+	  <td align="center" valign="top">
+	    <img src="../images/pfeil_back.gif" width="10" height="9" alt="" />
+	    <a href="javascript:history.back()" class="titlegray">
+	      zurück
+	    </a>  
+	  </td>		
+	</tr>
+	<tr>
+	  <td height="6">
+	  </td>
+	</tr>        
+	<tr>
+	  <td colspan="3">
+	    Verschaffen Sie sich einen Überblick auf unserer
+            <a shape="rect" title="Satellitenkarte" class="titlegreen" href="javascript:window_infosys()">
+	      Satellitenkarte</a>.            
+	  </td>
+	</tr>
+        <!--         separator -->
+        <tr>
+	  <td height="12">
+	  </td>
+	</tr>                                
+        <!--         google earth -->
+        <tr>
+	  <td colspan="3">
+	    <span class="headline">
+	      Besuchen Sie Samboja Lestari in Google Earth
+	    </span>
+	  </td>
+	</tr>
+	<tr>
+	  <td height="6">
+	  </td>
+	</tr>        
+	<tr>
+	  <td colspan="3">
+	    Wenn die <a href='http://earth.google.de/' target='_blank' shape='rect' class='titlegreen'>Google Earth Software</a>
+            auf Ihrem Computer installiert ist, können Sie sich das Projektgebiet mit einer Auswahl verschiedener
+            Satelliten Bilder (aus dem Zeitraum 2000 - 2007) und vielen weiteren Informationen anschauen.                        
+	  </td>
+	</tr>
+	<tr>
+	  <td height="6">
+	  </td>
+	</tr>                
+	<tr>
+	  <td colspan="3">
+            Über diesen Link wird sich direkt Ihre Google Earth Applikation öffnen:            
+	  </td>
+	</tr>        
+	<tr>
+	  <td height="6">
+	  </td>
+	</tr>                
+	<tr>
+	  <td colspan="3">
+            <img alt="" height="9" width="10" src="/images/pfeil_link_on.gif"/>
+            <a shape="rect" class="more" href="/static/kml-root-de.kml">
+	      zu Google Earth
+	    </a>
+	  </td>
+	</tr>        
+      </table>	
+    </div>	
+  </div>
+</bknr:toplevel>
