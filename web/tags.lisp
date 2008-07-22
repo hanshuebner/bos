@@ -195,3 +195,7 @@ document.write(unescape('%3Cscript src=%22' + gaJsHost + 'google-analytics.com/g
 
 (define-bknr-tag set-cachable ()
   (setf (hunchentoot:header-out :cache-control) "max-age=300"))
+
+(define-bknr-tag maybe-redirect ()
+  (when (equal (hunchentoot:script-name*) "/")
+    (html (:head ((:meta :http-equiv "refresh" :content "0; url=/index"))))))

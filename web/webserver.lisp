@@ -23,35 +23,34 @@
 ;; and change the template name according to the outcome.
 
 (defmethod find-template-pathname ((handler worldpay-template-handler) template-name)
-  (cond
-    ((scan #?r"(^|.*/)handle-sale" template-name)
-     (with-query-params (cartId name address country transStatus lang MC_gift)
-       (unless (website-supports-language lang)
-	 (setf lang *default-language*))
-       (bos.m2::remember-worldpay-params cartId (all-request-params))
-       (let ((contract (get-contract (parse-integer cartId))))
-	 (sponsor-set-language (contract-sponsor contract) lang)
-	 (cond
-	   ((not (typep contract 'contract))
-	    (user-error "Error: Invalid transaction ID."))
-	   ((contract-paidp contract)
-	    (user-error "Error: Transaction already processed."))
-	   ((equal "C" transStatus)
-	    (setf template-name #?"/$(lang)/sponsor_canceled"))
-	   ((< (contract-price contract) *mail-certificate-threshold*)
-	    (setf template-name #?"/$(lang)/quittung"))
-	   (t
-	    (when (<= *mail-fiscal-certificate-threshold* (contract-price contract))
-	      (mail-fiscal-certificate-to-office contract name address country))
-	    (setf template-name (if (and MC_gift (equal MC_gift "1")) #?"/$(lang)/versand_geschenk" #?"/$(lang)/versand_info")))))))
-    ((and (not (scan "/" template-name))
-	  (not (probe-file (merge-pathnames (make-pathname :name template-name :type "xml")
-					    (bknr.web::template-expander-destination handler)))))
-     (setf template-name (format nil "~A/~A" (or (find-browser-prefered-language)
-						 *default-language*)
-				 (if (equal "" template-name)
-				     "index" template-name)))))
-  (call-next-method handler template-name))
+  (call-next-method handler
+                    (cond
+                      ((scan #?r"(^|.*/)handle-sale" template-name)
+                       (with-query-params (cartId name address country transStatus lang MC_gift)
+                         (unless (website-supports-language lang)
+                           (setf lang *default-language*))
+                         (bos.m2::remember-worldpay-params cartId (all-request-params))
+                         (let ((contract (get-contract (parse-integer cartId))))
+                           (sponsor-set-language (contract-sponsor contract) lang)
+                           (cond
+                             ((not (typep contract 'contract))
+                              (user-error "Error: Invalid transaction ID."))
+                             ((contract-paidp contract)
+                              (user-error "Error: Transaction already processed."))
+                             ((equal "C" transStatus)
+                              #?"/$(lang)/sponsor_canceled")
+                             ((< (contract-price contract) *mail-certificate-threshold*)
+                              #?"/$(lang)/quittung")
+                             (t
+                              (when (<= *mail-fiscal-certificate-threshold* (contract-price contract))
+                                (mail-fiscal-certificate-to-office contract name address country))
+                              (if (and MC_gift (equal MC_gift "1"))
+                                  #?"/$(lang)/versand_geschenk"
+                                  #?"/$(lang)/versand_info"))))))
+                      ((equal "" template-name)
+                       "de/index")
+                      (t
+                       template-name))))
 
 (defmethod initial-template-environment ((expander worldpay-template-handler))
   (append (list (cons :website-url *website-url*)
@@ -240,8 +239,6 @@ language preference weights."
                                          file-handler
                                          :destination ,(merge-pathnames #p"static/favicon.ico" website-directory)
                                          :content-type "image/x-icon")
-					("/" redirect-handler
-                                             :to "/index")
 					("/index" index-handler)
                                         user
                                         images
