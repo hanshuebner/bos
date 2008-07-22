@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml>
   <Document>
-    <name>BOS [da]</name>
+    <name>BOS</name>
+    <open>1</open>
     <LookAt>
       <longitude>116.988156014724</longitude>
       <latitude>-1.045791509671129</latitude>

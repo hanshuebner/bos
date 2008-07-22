@@ -66,7 +66,8 @@
             (hunchentoot:rfc-1123-date (timestamp handler)))
       (with-query-params ((lang "en"))
         (with-element "Document"
-          (with-element "name" (text (format nil "BOS [~A]" lang)))        
+          (with-element "name" (text "BOS"))
+          (with-element "open" (text "1"))
           (when contract
             (with-element "Style"
               (attribute "id" "contractPlacemarkIcon")
