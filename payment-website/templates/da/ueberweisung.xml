@@ -40,7 +40,7 @@
 						enctype="application/x-www-form-urlencoded"
 						name="mailtransfer"
 						id="mailtransfer"
-						onsubmit="YY_checkform('mailtransfer','vorname','#q','0','Anuller venligst dette felt \'Fornavn\'.','name','#q','0','Anuller venligst dette felt \'Efternavn\'.','strasse','#q','0','Anuller venligst dette felt \'Gade/Nr.\'.','plz','#q','0','Anuller venligst dette felt \'Postnummer\'.','ort','#q','0','Anuller venligst dette felt \'Kommune\'.');return document.MM_returnValue">
+						onsubmit="check_ueberweisung_da()">
 					<input type="hidden" name="country" value="DK" />
 					<input type="hidden" name="contract-id" value="$(contract-id)" />
 					<input type="hidden" name="sponsor-id" value="$(sponsor-id)" />
@@ -112,7 +112,7 @@ Jeg har besluttet mig for at overføre et bidrag på  $(amount) kroner til Sambo
 						</tr>
 						<tr>
 			                          	<td align="right" colspan="3">
-								<input type="submit" class="form_big" name="action" value="Oplysninger til BOS" />
+								<input type="submit" class="form_big" id="submit_button" name="action" value="Oplysninger til BOS" />
 							</td>
 						</tr>
 					</table>

@@ -96,6 +96,8 @@ function check_ueberweisung() {
 	alert("Den Geschenkservice können wir nur bei Online-Überweisungen anbieten");
 	return false;
     }
+
+    return true;
 }
 
 function check_online() {
@@ -223,4 +225,39 @@ function YY_checkform() { //v4.71
     }
     if (s!=''){alert('Die benötigten Informationen sind unvollständig oder fehlerhaft:\t\t\t\t\t\n\n'+s)}
     document.MM_returnValue = (s=='');
+}
+
+function check_ueberweisung_da()
+{
+    YY_checkform('mailtransfer',
+                 'vorname','#q','0','Anuller venligst dette felt \'Fornavn\'.',
+                 'name','#q','0','Anuller venligst dette felt \'Efternavn\'.',
+                 'strasse','#q','0','Anuller venligst dette felt \'Gade/Nr.\'.',
+                 'plz','#q','0','Anuller venligst dette felt \'Postnummer\'.',
+                 'ort','#q','0','Anuller venligst dette felt \'Kommune\'.');
+    document.getElementById('submit_button').disabled = true;
+    if (document.MM_returnValue) {
+        document.getElementById('submit_button').disabled = true;
+        document.getElementById('submit_button').value = "Data is being transmitted...";
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function check_ueberweisung_de()
+{
+    YY_checkform('mailtransfer',
+                 'vorname','#q','0','Bitte das Feld \'Vorname\' ausfuellen.',
+                 'name','#q','0','Bitte das Feld \'Name\' ausfuellen.',
+                 'strasse','#q','0','Bitte das Feld \'Strasse\' ausfuellen.',
+                 'plz','#q','0','Bitte das Feld \'PLZ\' ausfuellen.',
+                 'ort','#q','0','Bitte das Feld \'Ort\' ausfuellen.');
+    if (document.MM_returnValue) {
+        document.getElementById('submit_button').disabled = true;
+        document.getElementById('submit_button').value = "Daten werden verschickt...";
+        return true;
+    } else {
+        return false;
+    }
 }

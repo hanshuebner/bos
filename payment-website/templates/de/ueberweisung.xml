@@ -40,7 +40,7 @@
 						enctype="application/x-www-form-urlencoded"
 						name="mailtransfer"
 						id="mailtransfer"
-						onsubmit="YY_checkform('mailtransfer','vorname','#q','0','Bitte das Feld \'Vorname\' ausfuellen.','name','#q','0','Bitte das Feld \'Name\' ausfuellen.','strasse','#q','0','Bitte das Feld \'Strasse\' ausfuellen.','plz','#q','0','Bitte das Feld \'PLZ\' ausfuellen.','ort','#q','0','Bitte das Feld \'Ort\' ausfuellen.');return document.MM_returnValue">
+						onsubmit="return check_ueberweisung_de()">
 					<input type="hidden" name="contract-id" value="$(contract-id)" />
 					<input type="hidden" name="sponsor-id" value="$(sponsor-id)" />
 					<input type="hidden" name="amount" value="$(amount)" />
@@ -117,7 +117,7 @@ Ich habe mich dazu entschieden einen Betrag von $(amount) Euro auf das Spendenko
 						</tr>
 						<tr>
        <td align="right" colspan="3">
-								<input type="submit" class="form_big" name="action" value="Angaben an BOS mailen" />
+								<input type="submit" id="submit_button" class="form_big" name="action" value="Angaben an BOS mailen" />
 							</td>
 						</tr>
 					</table>
