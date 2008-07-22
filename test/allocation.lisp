@@ -76,8 +76,7 @@
 	     (sponsor (make-sponsor :login "test-sponsor"))
 	     (total-free (+ 64 64)))
 	(progn
-	  (iter (while (> total-free 20))
-		(bos.m2.allocation-cache:rebuild-cache)
+	  (iter (while (> total-free 20))		
 		(for size = (1+ (random 3)))		
 		(is (= total-free (+ (allocation-area-free-m2s area1)
 				     (allocation-area-free-m2s area2))))

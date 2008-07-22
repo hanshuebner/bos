@@ -289,7 +289,6 @@
   (:export #:find-exact-match
 	   #:add-area
 	   #:count-cache-entries
-	   #:pprint-cache
-	   #:rebuild-cache
+	   #:pprint-cache	 
 	   #:allocation-cache-subsystem))
 
