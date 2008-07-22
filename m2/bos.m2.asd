@@ -2,7 +2,7 @@
 
 (asdf:defsystem :bos.m2
   :depends-on (:bknr.datastore :bknr.modules :cl-smtp :cl-mime
-                               :iconv :kmrcl :iterate :arnesi
+                               :kmrcl :iterate :arnesi
                                :cl-pdf :screamer :cl-fad)
   :components ((:file "packages")
 	       (:file "geo-utm" :depends-on ("packages"))
