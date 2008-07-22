@@ -45,8 +45,8 @@
     (hunchentoot:stop-server *webserver*))
   (setf hunchentoot:*hunchentoot-default-external-format* (flex:make-external-format :utf-8 :eol-style :lf)
         hunchentoot:*rewrite-for-session-urls* nil)  
-  (setq *webserver* (hunchentoot:start-server :port *port* (not debug)
-					      :persistent-connections-p nil))
+  (setq *webserver* (hunchentoot:start-server :port *port* :threaded (not debug)
+					      :persistent-connections-p (not debug)))
   (if start-frontend
       (start-frontend :host host :backend-port port :port frontend-port)
       (warn "frontend not started - to achieve this specify :start-frontend t"))
