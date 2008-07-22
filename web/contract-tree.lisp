@@ -23,12 +23,10 @@
 	(first store-images)
 	;; We will just return NIL, if we cannot find one.
         ;; If there are too many, we will return the newest one and delete the rest.
-	(progn
-	  (warn "~D store-images for ~S" (length store-images) node)
-	  (let ((store-images-newest-first
-		 (sort (copy-list store-images) #'> :key #'blob-timestamp)))
-	    (mapc #'delete-object (rest store-images-newest-first))
-	    (first store-images-newest-first))))))
+	(let ((store-images-newest-first
+               (sort (copy-list store-images) #'> :key #'blob-timestamp)))
+          (mapc #'delete-object (rest store-images-newest-first))
+          (first store-images-newest-first)))))
 
 (defmethod initialize-instance :after ((node contract-node) &key args)
   (declare (ignore args))
