@@ -327,7 +327,7 @@ Amount: EUR~A.00
 						vorname name strasse plz ort email telefon
 						(if want-print "yes" "no")
 						(if donationcert-yearly "yes" "no")
-						*website-url* contract-id email))
+						*website-url* contract-id (or email "")))
 			(make-contract-xml-part contract-id (all-request-params))
 			(make-vcard-part contract-id (make-vcard :sponsor-id sponsor-id
 								 :note (format nil "Paid-by: Manual money transfer
