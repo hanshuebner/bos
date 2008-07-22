@@ -30,18 +30,13 @@
 	     (html "not logged in"))
 	 " - current content language is "
 	(cmslink "change-language"
-	  (:princ-safe (current-website-language))
+	  (:princ-safe (request-language))
 	  " ("
-	  (:princ-safe (language-name (current-website-language)))
+	  (:princ-safe (language-name (request-language)))
 	  ")"))))
 
 (defun language-name (language-short-name)
   (cadr (assoc language-short-name (website-languages) :test #'equal)))
-
-(defun current-website-language ()
-  (unless (hunchentoot:session-value :language)
-    (setf (hunchentoot:session-value :language) *default-language*))
-  (hunchentoot:session-value :language))
 
 (defun content-language-chooser ()
   (html
@@ -51,7 +46,7 @@
 	  do (labels ((show-language-link ()
 			(html (cmslink (format nil "~A?language=~A" (hunchentoot:request-uri*) language-symbol)
 				(:princ-safe language-name)))))
-	       (if (equal (hunchentoot:session-value :language) language-symbol)
+	       (if (equal (request-language) language-symbol)
 		   (html "[" (show-language-link) "]")
 		   (html (show-language-link)))
 	       (html " "))))))

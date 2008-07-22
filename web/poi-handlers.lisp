@@ -18,7 +18,7 @@
          (html (:h2 "Bad technical name")
                "Please use only alphanumerical characters, - and _ for technical POI names")))
       (t
-       (redirect (edit-object-url (make-poi (hunchentoot:session-value :language) name)))))))
+       (redirect (edit-object-url (make-poi (request-language) name)))))))
 
 (defclass edit-poi-handler (editor-only-handler edit-object-handler)
   ()
@@ -34,7 +34,7 @@
              do (html (:li (cmslink (edit-object-url poi)
                              (:princ-safe (poi-name poi))
                              " - "
-                             (:princ-safe (slot-string poi 'title (hunchentoot:session-value :language)))))))))
+                             (:princ-safe (slot-string poi 'title (request-language)))))))))
         (html (:h2 "No POIs created yet")))
     ((:form :method "post" :action "/make-poi")
      "Make new POI named "
@@ -52,7 +52,7 @@
 (defmethod handle-object-form ((handler edit-poi-handler)
                                action (poi poi))
   (with-query-params (language shift shift-by)
-    (unless language (setq language (hunchentoot:session-value :language)))
+    (unless language (setq language (request-language)))
     (when shift
       ;; change image order
       (setq shift (find-store-object (parse-integer shift)))
@@ -65,7 +65,6 @@
         (setf (nth old-position new-images) (nth (+ shift-by old-position) new-images))
         (setf (nth (+ shift-by old-position) new-images) tmp)
         (change-slot-values poi 'bos.m2::images new-images)))
-    (setf (hunchentoot:session-value :language) language)
     (with-bos-cms-page (:title "Edit POI")
       (content-language-chooser)
       (unless (poi-complete poi language)
@@ -169,7 +168,7 @@
 (defmethod handle-object-form ((handler edit-poi-handler)
                                (action (eql :save)) (poi poi))
   (with-query-params (published title subtitle description language x y icon movie)
-    (unless language (setq language (hunchentoot:session-value :language)))
+    (unless language (setq language (request-language)))
     (let ((args (list :title title
                       :published published
                       :subtitle subtitle
@@ -301,7 +300,7 @@
 
 (defmethod handle-object-form ((handler edit-poi-image-handler) action poi-image)
   (with-query-params (language poi)
-    (unless language (setq language (hunchentoot:session-value :language)))
+    (unless language (setq language (request-language)))
     (with-bos-cms-page (:title "Edit POI Image")
       (html
        (cmslink (edit-object-url (poi-image-poi poi-image)) "Back to POI")
@@ -331,7 +330,7 @@
 
 (defmethod handle-object-form ((handler edit-poi-image-handler) (action (eql :save)) poi-image)
   (with-query-params (title subtitle description language)
-    (unless language (setq language (hunchentoot:session-value :language)))
+    (unless language (setq language (request-language)))
     (update-poi-image poi-image language
                       :title title
                       :subtitle subtitle
@@ -371,7 +370,7 @@
       (with-http-body ()
         (html
          ((:script :language "JavaScript")
-          (:princ (make-poi-javascript (or (hunchentoot:session-value :language) *default-language*)))
+          (:princ (make-poi-javascript (request-language)))
           (:princ "parent.poi_fertig(pois, anzahlSponsoren, anzahlVerkauft);")
           (:princ (format nil "parent.last_sponsors([~{~A~^,~%~}]);" (mapcar #'contract-js last-paid-contracts)))))))))
 

@@ -15,10 +15,10 @@
 
 (define-bknr-tag language-chooser (name)
   (html ((:select :name name)
-	 (language-options-1 (current-website-language)))))
+	 (language-options-1 (request-language)))))
 
 (define-bknr-tag language-options ()
-  (language-options-1 (current-website-language)))
+  (language-options-1 (request-language)))
 
 (define-bknr-tag worldpay-receipt ()
   (emit-without-quoting "<WPDISPLAY ITEM=banner>"))
@@ -41,7 +41,7 @@
     (let ((contract (find-store-object (parse-integer (get-template-var :contract-id)))))
       (when (equal want-print "no")
 	(contract-set-download-only-p contract t))
-      (contract-issue-cert contract name :address address :language (hunchentoot:session-value :language))
+      (contract-issue-cert contract name :address address :language (request-language))
       (mail-worldpay-sponsor-data)
       (bknr.web::redirect-request :target (if gift "index"
 					      (format nil "profil_setup?name=~A&email=~A&sponsor-id=~A"
@@ -78,7 +78,7 @@
 	       (manual-transfer (or (scan #?r"rweisen" action)
 				    (scan #?r"rweisung" action)
 				    (scan #?r"verf" action)))
-	       (language (hunchentoot:session-value :language))
+	       (language (request-language))
 	       (sponsor (make-sponsor :language language))
 	       (contract (make-contract sponsor numsqm
 					:download-only download-only
@@ -133,7 +133,7 @@
 					    vorname name
 					    strasse
 					    plz ort)
-			   :language (hunchentoot:session-value :language))
+			   :language (request-language))
       (mail-manual-sponsor-data))))
 
 (define-bknr-tag when-certificate ()

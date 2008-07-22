@@ -6,18 +6,18 @@
   "news")
 
 (defmethod rss-item-published ((item news-item))
-  (format t "Language: ~A~%" (current-website-language))
+  (format t "Language: ~A~%" (request-language))
   t)
 
 (defmethod rss-item-title ((item news-item))
-  (news-item-title item (current-website-language)))
+  (news-item-title item (request-language)))
 
 (defmethod rss-item-description ((item news-item))
-  (news-item-text item (current-website-language)))
+  (news-item-text item (request-language)))
 
 (defmethod rss-item-link ((item news-item))
-  (format nil "http://createrainforest.org/~A/news-extern/~A" (current-website-language) (store-object-id item)))
+  (format nil "http://createrainforest.org/~A/news-extern/~A" (request-language) (store-object-id item)))
 
 (defmethod rss-item-guid ((item news-item))
-  (format nil "http://createrainforest.org/~A/news-extern/~A" (current-website-language) (store-object-id item)))
+  (format nil "http://createrainforest.org/~A/news-extern/~A" (request-language) (store-object-id item)))
 

@@ -41,12 +41,11 @@
 			    :worldpay-test-mode *worldpay-test-mode*)
   (format t "~&; Starting hunchentoot~@[ in debug mode~].~%" debug)
   (force-output)  
-  (setq hunchentoot:*catch-errors-p* (not debug))
   (when *webserver*
     (hunchentoot:stop-server *webserver*))
-  (setf *hunchentoot-default-external-format* (flex:make-external-format :utf-8 :eol-style :lf)
+  (setf hunchentoot:*hunchentoot-default-external-format* (flex:make-external-format :utf-8 :eol-style :lf)
         hunchentoot:*rewrite-for-session-urls* nil)  
-  (setq *webserver* (hunchentoot:start-server :port *port* #+not-yet :threaded #+not-yet (not debug)
+  (setq *webserver* (hunchentoot:start-server :port *port* (not debug)
 					      :persistent-connections-p nil))
   (if start-frontend
       (start-frontend :host host :backend-port port :port frontend-port)

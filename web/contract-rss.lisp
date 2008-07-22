@@ -7,7 +7,7 @@
   (contract-paidp contract))
 
 (defmethod rss-item-title ((contract contract))
-  (format nil (case (intern (bos.web::current-website-language))
+  (format nil (case (intern (bos.web::request-language))
 		(de "~A Quadratmeter wurden ~@[von ~A ~]gekauft")
 		(t "~A square meters bought~@[ by ~A~]"))
 	  (length (contract-m2s contract))
@@ -18,11 +18,11 @@
 
 (defmethod rss-item-link ((contract contract))
   #+(or)
-  (format nil "http://createrainforest.org/~A/news-extern/~A" (bos.web::current-website-language) (store-object-id item)))
+  (format nil "http://createrainforest.org/~A/news-extern/~A" (bos.web::request-language) (store-object-id item)))
 
 (defmethod rss-item-guid ((item contract))
   #+(or)
-  (format nil "http://createrainforest.org/~A/news-extern/~A" (bos.web::current-website-language) (store-object-id item)))
+  (format nil "http://createrainforest.org/~A/news-extern/~A" (bos.web::request-language) (store-object-id item)))
 
 (defmethod rss-item-pub-date ((contract contract))
   (contract-date contract))

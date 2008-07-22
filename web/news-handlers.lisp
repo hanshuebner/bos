@@ -10,7 +10,7 @@
   ())
 
 (defmethod handle-object-form ((handler edit-news-handler) action (news-item (eql nil)))
-  (let ((language (hunchentoot:session-value :language)))
+  (let ((language (request-language)))
     (with-bos-cms-page (:title "Edit news items")
       (content-language-chooser)
       (:h2 "Create new item")
@@ -33,7 +33,7 @@
   (redirect (format nil "/edit-news/~D" (store-object-id (make-news-item)))))
 
 (defmethod handle-object-form ((handler edit-news-handler) action news-item)
-  (let ((language (hunchentoot:session-value :language)))
+  (let ((language (request-language)))
     (with-bos-cms-page (:title "Edit news item")
       (content-language-chooser)
       ((:script :type "text/javascript")
@@ -49,7 +49,7 @@
 	 (:tr (:td (submit-button "save" "save") (submit-button "delete" "delete" :confirm "Really delete the news item?"))))))))
 
 (defmethod handle-object-form ((handler edit-news-handler) (action (eql :save)) news-item)
-  (let ((language (hunchentoot:session-value :language)))
+  (let ((language (request-language)))
     (with-query-params (title text)
       (update-news-item news-item language :title title :text text)
       (with-bos-cms-page (:title "News item updated")

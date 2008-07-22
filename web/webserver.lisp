@@ -112,7 +112,7 @@ language preference weights."
   (with-query-params (logout)
     (when logout
       (hunchentoot:remove-session hunchentoot:*session*)))
-  (let ((language (hunchentoot:session-value :language)))
+  (let ((language (request-language)))
     (redirect #?"/infosystem/$(language)/satellitenkarte.htm")))
 
 (defclass certificate-handler (object-handler)
@@ -178,17 +178,18 @@ language preference weights."
 	    (call-next-method)))
 	(call-next-method))))
 
-(defmethod authorize :after ((authorizer bos-authorizer))
-  (let ((new-language (or (language-from-url (hunchentoot:request-uri*))
-			  (query-param "language")))
-	(current-language (hunchentoot:session-value :language)))
-    (when (or (not current-language)
-	      (and new-language
-		   (not (equal new-language current-language))))
-      (setf (hunchentoot:session-value :language)
-	    (or new-language
-		(find-browser-prefered-language)
-		*default-language*)))))
+(defun request-language ()
+  (or (hunchentoot:aux-request-value :language)
+      *default-language*))
+
+(defmethod handle :before ((handler page-handler))
+  (setf (hunchentoot:aux-request-value :language)
+        (or (query-param "language")
+            (query-param "lang")
+            (language-from-url (hunchentoot:request-uri*))
+            (hunchentoot:session-value :language)
+            (find-browser-prefered-language)
+            *default-language*)))
 
 ;;; TODOreorg
 (defun publish-directory (&key prefix destination)
@@ -212,7 +213,7 @@ language preference weights."
                                         ("/kml-root" kml-root-handler)                                
                                         ("/country-stats" country-stats-handler)
                                         ("/contract-tree-kml" contract-tree-kml-handler)
-                                        ("/contract-tree-image" contract-tree-image-handler)                                                              
+                                        ("/contract-tree-image" contract-tree-image-handler)
 					("/contract-image" contract-image-handler)
 					("/contract" contract-handler)
                                         ("/sat-tree-kml" sat-tree-kml-handler)

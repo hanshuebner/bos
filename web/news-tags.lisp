@@ -7,7 +7,7 @@
 	do (html (:princ-safe line) :br)))
 
 (define-bknr-tag news-headlines (&key archive)
-  (let ((language (hunchentoot:session-value :language)))    
+  (let ((language (request-language)))    
     (let* ((now (get-universal-time))
 	   (news-items (if archive
                            (all-news-items language)
@@ -34,7 +34,7 @@
 
 (define-bknr-tag news-item ()
   (let ((news-item (find-store-object (parse-integer (nth-value 1 (parse-url)))))
-	(language (hunchentoot:session-value :language)))
+	(language (request-language)))
     (html ((:h1 :class "extra")
 	   (:princ-safe (format-date-time (news-item-time news-item) :show-time nil))
 	   ", "
