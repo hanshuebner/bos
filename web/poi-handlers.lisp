@@ -431,8 +431,10 @@
           (attribute "title" (poi-string 'title))
           (attribute "subtitle" (poi-string 'subtitle))
           (with-element "menu"
-            (with-element "entry" (attribute "title" "Impressum") (attribute "href" "/de/impressum"))
-            (with-element "entry" (attribute "title" "Spenden") (attribute "href" "/de/spenden")))
+            (with-element "entry" (attribute "title" "Impressum")
+                          (attribute "href" (format nil "/~A/impressum" language)))
+            (with-element "entry" (attribute "title" "Spenden")
+                          (attribute "href" (format nil "/~A/bestellung" language))))
           (with-element "description" (text (poi-string 'description)))
           (with-media ("image_gallery" "Bildergalerie")
             (mapc #'format-image images))
