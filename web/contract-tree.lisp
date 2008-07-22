@@ -298,6 +298,13 @@ has to be unique."
 (defun contract-tree-force-update-images ()
   (map-nodes #'contract-node-update-image *contract-tree*))
 
+(defun contract-tree-needs-update-p ()
+  (map-nodes (lambda (node) (when (contract-node-update-image-needed-p node)
+                              (return-from contract-tree-needs-update-p t)))
+             *contract-tree*             
+             :order :breadth-first)
+  nil)
+
 ;;; image handler
 (defclass contract-tree-image-handler (page-handler)
   ())
