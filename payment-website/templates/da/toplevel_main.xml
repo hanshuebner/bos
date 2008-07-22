@@ -44,7 +44,7 @@
 				</div>
 				<div>l</div>	
 				<div>
-					<a href="javascript:window_infosys()" class="menue" title="Move to satellite map.">
+					<a href="/da/satmap" class="menue" title="Move to satellite map.">
 						satellitkort
 					</a>
 				</div>
@@ -122,7 +122,7 @@
 							<td></td>
 							<td colspan="2">
 								<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt=""></img>
-								<a href="javascript:window_infosys()" class="content_black">
+								<a href="/da/satmap" class="content_black">
 									Det handler om m².<br></br><br></br>
 								</a>
 							</td>
@@ -130,7 +130,7 @@
 						</tr>		
 						<tr>
 							<td colspan="3" height="88">
-							<a href="javascript:window_infosys()">
+							<a href="/da/satmap">
 								<img src="/images/trans.gif" width="149" height="108" border="0" alt=""></img>
 							</a>
 							</td>

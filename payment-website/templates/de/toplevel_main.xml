@@ -54,7 +54,7 @@
 				</div>
 				<div>l</div>	
 				<div>
-					<a href="javascript:window_infosys()" class="menue"
+					<a href="/de/satmap" class="menue"
 							title="Satellitenkarte">
 						Satellitenkarte
 					</a>
@@ -135,7 +135,7 @@
 							<td></td>
 							<td colspan="2">
 								<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
-								<a href="javascript:window_infosys()"
+								<a href="/de/satmap"
 										class="content_black">
 									Es dreht sich um m².
 								</a>
@@ -144,7 +144,7 @@
 						</tr>		
 						<tr>
 							<td colspan="3" height="88">
-							<a href="javascript:window_infosys()">
+							<a href="/de/satmap">
 								<img src="/images/trans.gif" width="149" height="108" border="0" alt="" />
 							</a>
 							</td>

@@ -54,7 +54,7 @@
 			</div>
 			<div>l</div>	
 			<div>
-				<a href="javascript:window_infosys()" class="menue"
+				<a href="/de/satmap" class="menue"
 						title="Satellitenkarte">
 					Satellitenkarte
 				</a>
