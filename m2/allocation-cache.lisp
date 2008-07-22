@@ -232,7 +232,8 @@ is decremented."
 	  (format t "~5D~10T~5D~%" size count))))))
 
 (defun rebuild-cache ()
-  ""
+  (assert (in-transaction-p) nil
+          "rebuild-cache may only be called in a transaction context")
   (unless *allocation-cache*
     (setq *allocation-cache* (make-allocation-cache)))
   (clear-cache)
