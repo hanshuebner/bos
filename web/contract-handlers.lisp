@@ -33,3 +33,4 @@
      #+(or)
      (:tr (:td "cert issued?")
 	  (:td (:princ-safe (if (contract-cert-issued contract) "yes" "no")))))))
+

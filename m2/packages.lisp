@@ -161,6 +161,7 @@
 	   #:contract-set-download-only-p
 	   #:contract-price
 	   #:contract-issue-cert
+           #:contract-certificates-generated-p
 	   #:contract-worldpay-trans-id
 	   #:contract-pdf-pathname
 	   #:contract-pdf-url

@@ -122,7 +122,17 @@ language preference weights."
 (defmethod handle-object ((handler certificate-handler) contract)
   (unless contract
     (setf contract (find-if #'contract-pdf-pathname (sponsor-contracts (bknr.web:bknr-session-user)))))
-  (redirect (format nil "/certificates/~D.pdf" (store-object-id contract))))
+  (if (contract-certificates-generated-p contract)
+      (redirect (format nil "/certificates/~D.pdf" (store-object-id contract)))
+      (with-http-response (:content-type "text/html; charset=UTF-8")
+        (with-http-body ()
+          (html
+           (:html
+            (:head
+             (:title "Waiting for certificate generation...")
+             ((:meta :http-equiv "Refresh" :content (format nil "3; ~A" (hunchentoot:script-name*)))))
+            (:body
+             "Please wait, certificate is being generated")))))))
 
 (defclass statistics-handler (editor-only-handler prefix-handler)
   ())

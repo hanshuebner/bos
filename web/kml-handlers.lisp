@@ -138,7 +138,7 @@
     (hunchentoot:handle-if-modified-since timestamp)  
     (setf (hunchentoot:header-out :last-modified)
           (hunchentoot:rfc-1123-date timestamp))
-    (with-xml-response (:content-type #+nil "text/xml" "application/vnd.google-earth.kml+xml; charset=utf-8"
+    (with-xml-response (:content-type "application/vnd.google-earth.kml+xml; charset=utf-8"
                                       :root-element "kml")      
       (with-query-params ((lang "en"))
         (with-element "Document"

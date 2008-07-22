@@ -342,15 +342,6 @@
     (delete-file (contract-pdf-pathname contract))
     (delete-file (contract-pdf-pathname contract :print t))))
 
-(defun wait-for-certificates (contract)
-  "Wait until the PDF generating process has generated the certificates"
-  (dotimes (i 10)
-    (when (contract-certificates-generated-p contract)
-      (return))
-    (sleep 1))
-  (unless (contract-certificates-generated-p contract)
-    (error "Cannot generate certificate")))
-
 (defmethod contract-issue-cert ((contract contract) name &key address language)
   (when (contract-cert-issued contract)
     (warn "re-issuing cert for ~A" contract))
@@ -358,7 +349,6 @@
   (make-certificate contract name :address address :language language)
   (unless (contract-download-only-p contract)
     (make-certificate contract name :address address :language language :print t))
-  (wait-for-certificates contract)
   (change-slot-values contract 'cert-issued t))
 
 (defmethod contract-image-tiles ((contract contract))
