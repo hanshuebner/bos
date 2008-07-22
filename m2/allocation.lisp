@@ -220,13 +220,13 @@ anymore."
 (deftransaction activate-allocation-area (area)
   (warn "activating ~S" area)
   (setf (slot-value area 'active-p) t)
-  (bos.m2.allocation-cache:rebuild-cache)
+  (bos.m2.allocation-cache::rebuild-cache)
   area)
 
 (deftransaction deactivate-allocation-area (area)
   (warn "deactivating ~S" area)
   (setf (slot-value area 'active-p) nil)
-  (bos.m2.allocation-cache:rebuild-cache)
+  (bos.m2.allocation-cache::rebuild-cache)
   area)
 
 ;;; FIXME can be optimized
