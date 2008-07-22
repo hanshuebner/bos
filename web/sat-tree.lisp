@@ -185,7 +185,8 @@
   (assert (geo-box-encloses-p *m2-geo-box* geo-box))
   (check-type start-depth (integer 0))
   (check-type local-draw-order (integer 0))
-  (assert (< local-draw-order +max-num-of-local-draw-order-levels+))
+  ;; highest local-draw-order is reserved for the contract-tree
+  (assert (< local-draw-order (1- +max-num-of-local-draw-order-levels+)))
   (when (find local-draw-order (class-instances 'sat-layer) :key #'local-draw-order)
     (cerror "create the new layer anyway" "There is already a sat-layer with the same local-draw-order '~A'." local-draw-order))
   (let ((layer (make-object 'sat-layer :name name :geo-box geo-box :local-draw-order local-draw-order)))
