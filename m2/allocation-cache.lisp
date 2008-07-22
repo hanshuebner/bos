@@ -232,6 +232,7 @@ is decremented."
 	  (format t "~5D~10T~5D~%" size count))))))
 
 (defun rebuild-cache ()
+  ""
   (unless *allocation-cache*
     (setq *allocation-cache* (make-allocation-cache)))
   (clear-cache)
