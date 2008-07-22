@@ -11,7 +11,7 @@
 		<title>Regnskov i SAMBOJA LESTARI - Infosystem</title>
 	</head>
 
-<body>
+<body bos:lang="$(language)">
 <div id="header_infosystem">
 </div>
 <div id="content_infosystem">

@@ -54,7 +54,8 @@
   (call-next-method handler template-name))
 
 (defmethod initial-template-environment ((expander worldpay-template-handler))
-  (append (list (cons :website-url *website-url*))
+  (append (list (cons :website-url *website-url*)
+                (cons :language (request-language)))
 	  (call-next-method)))
 
 (define-persistent-class website-language ()
@@ -103,17 +104,6 @@ language preference weights."
   (redirect (format nil "/~A/index" (or (find-browser-prefered-language)
 					*default-language*))
 	    :code hunchentoot:+http-moved-permanently+))
-
-(defclass infosystem-handler (page-handler)
-  ())
-
-(defmethod handle ((handler infosystem-handler))
-  ;; XXX hier logout-parameter implementieren
-  (with-query-params (logout)
-    (when logout
-      (hunchentoot:remove-session hunchentoot:*session*)))
-  (let ((language (request-language)))
-    (redirect #?"/infosystem/$(language)/satellitenkarte.htm")))
 
 (defclass certificate-handler (object-handler)
   ()
@@ -182,7 +172,7 @@ language preference weights."
   (or (hunchentoot:aux-request-value :language)
       *default-language*))
 
-(defmethod handle :before ((handler page-handler))
+(defmethod handle :before ((handler page-handler)) 
   (setf (hunchentoot:aux-request-value :language)
         (or (query-param "language")
             (query-param "lang")
@@ -238,7 +228,6 @@ language preference weights."
 					("/cert-regen" cert-regen-handler)
 					("/admin" admin-handler)
 					("/languages" languages-handler)
-					("/infosystem" infosystem-handler)
 					("/overview" image-tile-handler)
 					("/enlarge-overview" enlarge-tile-handler)
 					("/create-contract" create-contract-handler)

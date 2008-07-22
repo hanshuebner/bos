@@ -13,7 +13,7 @@
 		</script> 
 		<title>Ringschema</title>
 	</head>
-	<body>
+	<body bos:lang="$(language)">
 		<div id="content_extra">
 			<h1 class="ringschema">Ringschema</h1>
 			<img src="/images/ring_detail.jpg" />

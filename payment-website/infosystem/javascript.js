@@ -158,7 +158,7 @@ function poi_laden() {
 
     dbg("<br/> -> lade POI");
     poicomplete = false;
-    window.frames['data'].window.location.replace(http_pfad + "/poi-javascript");
+    window.frames['data'].window.location.replace(http_pfad + "/poi-javascript?lang=" + document.language);
     poi_warten(); // starten der Wartenfunktion
 
     return true;

@@ -15,7 +15,7 @@
 		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
                 <title>$(title)</title>
 	</head>
-<body>
+<body bos:lang="$(language)">
 
 	<!-- header and menu_top -->
 	<div id="header">

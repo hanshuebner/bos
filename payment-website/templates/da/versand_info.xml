@@ -10,7 +10,7 @@
              <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8" />-->
 		<title>Regnskov i SAMBOJA LESTARI</title>
 	</head>
-	<body>
+	<body bos:lang="$(language)">
 	
 		<!-- header and menu_top -->
 		<div id="header">
