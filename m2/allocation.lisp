@@ -342,32 +342,35 @@ allocatable square meter."
     (labels ((allocatable-p (x y)
                (and (in-polygon-p x y (allocation-area-vertices area))
                     (not (m2-contract (ensure-m2 x y))))))
-      (loop
-         (let ((x (+ area-left (random area-width)))
-               (y (+ area-top (random area-height))))
-           (when (allocatable-p x y)
-             (let ((result (try-allocation n x y #'allocatable-p)))
-               (when result
-                 (assert (alexandria:setp result :test #'equal))
-                 (assert (= n (length result)))
-                 (return (mapcar (lambda (x-y)
-                                   (destructuring-bind (x y)
-                                       x-y
-                                     (ensure-m2 x y)))
-                                 result))))))))))
+      (dotimes (i 10)
+        (let ((x (+ area-left (random area-width)))
+              (y (+ area-top (random area-height))))
+          (when (allocatable-p x y)
+            (let ((result (try-allocation n x y #'allocatable-p)))
+              (when result
+                (assert (alexandria:setp result :test #'equal))
+                (assert (= n (length result)))
+                (decf (allocation-area-free-m2s area) n)
+                (return-from allocate-in-area
+                  (mapcar (lambda (x-y)
+                            (destructuring-bind (x y)
+                                x-y
+                              (ensure-m2 x y)))
+                          result))))))))))
 
 (defun allocate-m2s-for-sale (n)
-  "The main entry point to the allocation machinery.  Will return
-   a list of N m2 instances or NIL if the requested amount cannot
-   be allocated.  Returned m2s will not be allocated
-   again (i.e. there are marked as in use) by the allocation
-   algorithm, but see RETURN-CONTRACT-M2S."
+  "The main entry point to the allocation machinery. Will return a
+   list of N m2 instances or NIL if the requested amount cannot be
+   allocated."
   (dolist (area (active-allocation-areas))
     (let ((m2s (allocate-in-area area n)))
-      (when m2s (return-from allocate-m2s-for-sale m2s))))
+      (when m2s        
+        (return-from allocate-m2s-for-sale m2s))))
   (dolist (area (inactive-nonempty-allocation-areas))
     (let ((m2s (allocate-in-area area n)))
-      (when m2s (return-from allocate-m2s-for-sale m2s)))))
+      (when m2s
+        (activate-allocation-area area)
+        (return-from allocate-m2s-for-sale m2s)))))
 
 (defgeneric return-contract-m2s (m2s)
   (:documentation "Mark the given square meters as free, so that

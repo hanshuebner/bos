@@ -238,8 +238,7 @@
           (m2-counts '(12 43 29 3)))
       (declare (ignore area))
       (dolist (m2-count m2-counts)
-        (let ((contract (make-contract sponsor m2-count)))
-          (print (list 'make-contract-returned contract))))
+        (make-contract sponsor m2-count))
       ;; This following check reported:
       ;; WARNING: #<CONTRACT ID: 32131, unpaid> has m2s that are not
       ;; connected
