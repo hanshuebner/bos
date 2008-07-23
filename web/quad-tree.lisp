@@ -118,29 +118,6 @@
 (defvar *m2-geo-box* (make-geo-box 116.92538417241805d0 -0.9942953097298868d0
                                    117.02245623511905d0 -1.0920067364569994d0))
 
-;;; simple queue
-(defun make-queue ()
-  (cons nil nil))
-
-(defun queue-empty-p (queue)
-  (null (car queue)))
-
-(defun enqueue (x queue)
-  (if (null (car queue))
-      (setf (cdr queue) (setf (car queue) (list x)))
-    (setf (cdr (cdr queue)) (list x)
-          (cdr queue) (cdr (cdr queue))))
-  (caar queue))
-
-(defun dequeue (queue)
-  (pop (car queue)))
-
-(defun queue-elements (queue)
-  (car queue))
-
-(defun peek-queue (queue)
-  (caar queue))
-
 ;;; quad-node
 (defclass quad-node ()
   ((geo-box :reader geo-box :initarg :geo-box :type geo-box)

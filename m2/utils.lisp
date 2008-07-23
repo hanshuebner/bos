@@ -55,3 +55,27 @@
                 (let ((obj (funcall tie-breaker free-objs result)))
                   (setf free-objs (remove obj free-objs))
                   (next-result obj))))))))
+
+;;; simple queue
+(defun make-queue ()
+  (cons nil nil))
+
+(defun queue-empty-p (queue)
+  (null (car queue)))
+
+(defun enqueue (x queue)
+  (if (null (car queue))
+      (setf (cdr queue) (setf (car queue) (list x)))
+    (setf (cdr (cdr queue)) (list x)
+          (cdr queue) (cdr (cdr queue))))
+  (caar queue))
+
+(defun dequeue (queue)
+  (pop (car queue)))
+
+(defun queue-elements (queue)
+  (car queue))
+
+(defun peek-queue (queue)
+  (caar queue))
+

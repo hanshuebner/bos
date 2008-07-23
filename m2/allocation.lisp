@@ -299,13 +299,13 @@ allocatable square meter."
   (unless (funcall pred start-x start-y)
     (error "sqm ~A/~A not allocatable" start-x start-y))
   (let* ((allocated (make-hash-table :test #'equal))
-         (border-queue (bos.web::make-queue))
+         (border-queue (make-queue))
          connected)
     (labels
-        ((enqueue (x y)
+        ((enqueue* (x y)
            (let ((key (list x y)))
              (setf (gethash key allocated) t)
-             (bos.web::enqueue key border-queue)))
+             (enqueue key border-queue)))
          (try-get (&rest key)           
            (and (not (gethash key allocated))
                 (apply pred key)
@@ -315,20 +315,20 @@ allocatable square meter."
                (try-get x (1+ y))
                (try-get (1- x) y)
                (try-get x (1- y)))))
-      (enqueue start-x start-y)
+      (enqueue* start-x start-y)
       (dotimes (i (1- n)
-                (append connected (bos.web::queue-elements border-queue)))
+                (append connected (queue-elements border-queue)))
         (tagbody
          retry
-           (destructuring-bind (x y) (bos.web::peek-queue border-queue)
+           (destructuring-bind (x y) (peek-queue border-queue)
              (let ((next (get-next-neighbor x y)))
                (cond
                  (next
-                  (apply #'enqueue next))
-                 ((bos.web::queue-empty-p border-queue)
+                  (apply #'enqueue* next))
+                 ((queue-empty-p border-queue)
                   (return nil))
                  (t
-                  (push (bos.web::dequeue border-queue) connected)
+                  (push (dequeue border-queue) connected)
                   (go retry))))))))))
 
 (defun allocate-in-area (area n)

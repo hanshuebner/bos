@@ -260,6 +260,13 @@
 	   #:mail-print-pdf
 
 	   #:*cert-download-directory*
+
+           #:make-queue
+           #:queue-empty-p
+           #:enqueue
+           #:dequeue
+           #:queue-elements
+           #:peek-queue           
            ))
 
 (defpackage :bos.m2.cert-generator
