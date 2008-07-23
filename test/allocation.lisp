@@ -211,3 +211,23 @@
   (with-fixture initial-bos-store ()
     (let ((area1 (make-allocation-rectangle 0 0 8 8)))
       (finishes (bos.m2::validate-allocation-area-inclusion-cache)))))
+
+(test allocation.disconnected-m2s.1
+  (with-fixture initial-bos-store (:delete-store t)
+    (let ((area (make-allocation-area #((7193 . 5195) (7351 . 5193) (7340 . 5377) (7185 . 5390) (7174 . 5385)
+                                        (7166 . 5387) (7156 . 5381) (7150 . 5379) (7143 . 5374) (7136 . 5368)
+                                        (7135 . 5364) (7135 . 5359) (7140 . 5347) (7145 . 5342) (7148 . 5329)
+                                        (7156 . 5329) (7157 . 5334) (7166 . 5331) (7170 . 5329) (7171 . 5327)
+                                        (7174 . 5316) (7184 . 5306) (7185 . 5291) (7196 . 5286) (7197 . 5287)
+                                        (7200 . 5287) (7201 . 5284) (7203 . 5275) (7201 . 5264) (7191 . 5249)
+                                        (7203 . 5237) (7199 . 5235) (7195 . 5233) (7198 . 5222) (7202 . 5219)
+                                        (7202 . 5214) (7204 . 5205) (7195 . 5197))))
+          (sponsor (make-sponsor :login "test-sponsor"))
+          (m2-counts '(12 43 29 3)))
+      (dolist (m2-count m2-counts)
+        (let ((contract (make-contract sponsor m2-count)))
+          (print (list 'make-contract-returned contract))))
+      ;; This following check reported:
+      ;; WARNING: #<CONTRACT ID: 32131, unpaid> has m2s that are not
+      ;; connected
+      (is (bos.m2::consistent-p)))))
