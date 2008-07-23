@@ -291,47 +291,43 @@ not be returned by this function"
     consistent-p))
 
 ;;; allocation
-(defun try-allocation (n x y pred)
+(defun try-allocation (n start-x start-y pred)
   "Try to find N free square meters that are adjacent and that begin
 at X and Y.  PRED is a predicate function of two arguments that
 returns a true value if the arguments specify the coordinates of an
 allocatable square meter."
-  (unless (funcall pred x y)
+  (unless (funcall pred start-x start-y)
     (error "sqm ~A/~A not allocatable" x y))
   (let* ((allocated (make-hash-table :test #'equal))
-         (initial-key (list x y))
          (border-queue (bos.web::make-queue))
          connected)
-    (setf (gethash initial-key allocated) t)
     (labels
-        ((try-get (&rest key)           
-           (when (and (not (gethash key allocated))
-                      (apply pred key))             
-             (setf key (copy-list key))
+        ((enqueue (x y)
+           (let ((key (list x y)))
              (setf (gethash key allocated) t)
-             (bos.web::enqueue key border-queue)
-             key))
+             (bos.web::enqueue key border-queue)))
+         (try-get (&rest key)           
+           (and (not (gethash key allocated))
+                (apply pred key)))
          (get-next-neighbor (x y)
-           "Return the next neighbor of M2 that can be allocated or NIL if none of the neighbor can be allocated."
            (or (try-get (1+ x) y)
                (try-get x (1+ y))
                (try-get (1- x) y)
                (try-get x (1- y)))))
+      (enqueue start-x start-y)
       (dotimes (i (1- n)
-                (append #+nil(list initial-key)
-                        connected
-                        (bos.web::queue-elements border-queue)))
+                (append connected (bos.web::queue-elements border-queue)))
         (tagbody
          retry
-           (let ((next (get-next-neighbor x y)))
-             (unless next
+           (destructuring-bind (x y) (bos.web::peek-queue border-queue)
+             (let ((next (get-next-neighbor x y)))
                (cond
+                 (next
+                  (apply #'enqueue next))
                  ((bos.web::queue-empty-p border-queue)
                   (return nil))
                  (t
-                  (push (list x y) connected)
-                  (multiple-value-setq (x y)
-                    (values-list (bos.web::dequeue border-queue)))
+                  (push (bos.web::dequeue border-queue) connected)
                   (go retry))))))))))
 
 (defun allocate-in-area (area n)
