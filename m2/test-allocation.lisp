@@ -37,3 +37,26 @@ allocatable square meter."
                   (multiple-value-setq (x y)
                     (values-list (bos.web::dequeue border-queue)))
                   (go retry))))))))))
+
+(defun try-alloc (n)
+  (let* ((area (first (remove-if-not #'allocation-area-active-p (class-instances 'allocation-area))))
+         (area-left (allocation-area-left area))
+         (area-top (allocation-area-top area))
+         (area-width (allocation-area-width area))
+         (area-height (allocation-area-height area))
+         (area-right (+ area-left area-width))
+         (area-bottom (+ area-top area-height)))
+    (labels ((allocatable-p (x y)
+               (and (<= area-left x area-right)
+                    (<= area-top y area-bottom)
+                    (not (m2-contract (ensure-m2 x y))))))
+      (loop
+           (let ((x (+ area-left (random area-width)))
+                 (y (+ area-top (random area-height))))
+             (unless (m2-contract (ensure-m2 x y))
+               (let ((result (try-allocation n x y #'allocatable-p)))
+                 (when result
+                   (return result)))))))))
+        
+
+
