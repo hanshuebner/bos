@@ -561,22 +561,23 @@ not be returned by this function"
 			(let ((m2 (find-next-m2)))
 			  (cond
 			    ((null m2)
-			     (return nil))
-			    ((not (in-polygon-p (m2-x m2) (m2-y m2) vertices))
-			     (when (and (stripe-dissection-p (m2-x m2) stripe)
-					(or result new-seen))
-			       ;; Wenn wir hier weitermachen und das Polygon
-			       ;; nicht konvex ist, ist das Ergebnis nicht
-			       ;; zusammenhaengend.  Also aufgeben und in der
-			       ;; rechten Haelfe des Stripes weitermachen.
-			       (setf x new-x
-				     y new-y
-				     seen (append new-seen (reverse result)))
-			       (let ((right (split-stripe-vertically stripe)))
-				 (return-from find-free-m2s/stripe
-				   (if right
-				       (find-free-m2s/stripe n right)
-				       nil)))))
+			     (return nil))                                                                                     
+			    ((or (not (m2s-connected-p result))
+                                 (and (not (in-polygon-p (m2-x m2) (m2-y m2) vertices))
+                                      (stripe-dissection-p (m2-x m2) stripe)
+                                      (or result new-seen)))			    
+                             ;; Wenn wir hier weitermachen und das Polygon
+                             ;; nicht konvex ist, ist das Ergebnis nicht
+                             ;; zusammenhaengend.  Also aufgeben und in der
+                             ;; rechten Haelfe des Stripes weitermachen.
+                             (setf x new-x
+                                   y new-y
+                                   seen (append new-seen (reverse result)))
+                             (let ((right (split-stripe-vertically stripe)))
+                               (return-from find-free-m2s/stripe
+                                 (if right
+                                     (find-free-m2s/stripe n right)
+                                     nil))))
 			    ((null (m2-contract m2))
 			     (return m2))))))))
         (dotimes (dummy n
@@ -585,8 +586,10 @@ not be returned by this function"
                           y new-y
                           seen new-seen)
                     (when result
+                      (assert (= (length result) n))
 		      (with-slots (area) stripe
-			(decf (allocation-area-free-m2s area) n)
+                        (print (list '********** 'will-decrease-count-by n))                        
+                        (decf (allocation-area-free-m2s area) n)
 			(when (null (allocation-area-free-m2s area))
 			  (deactivate-allocation-area area))))
 		    result))
