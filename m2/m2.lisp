@@ -111,6 +111,21 @@
 		(geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ x) (- +nw-utm-y+ y) +utm-zone+ t)))
 	    polygon)))
 
+(defun m2s-connected-p (m2s)
+  "Is this region of m2 objects geographically connected? We do
+  not care about associated contracts or anything else."
+  (labels ((m2-neighbours (m2)
+             (let ((x (m2-x m2))
+                   (y (m2-y m2)))
+               (delete-if (lambda (m2) (not (member m2 m2s)))
+                          (list (get-m2 (1- x) y)
+                                (get-m2 (1+ x) y)
+                                (get-m2 x      (1- y))
+                                (get-m2 x      (1+ y)))))))
+    (geometry:nodes-connected-p m2s
+                                #'m2-neighbours
+                                #'eq)))
+
 ;;;; SPONSOR
 
 ;;; Exportierte Funktionen:
