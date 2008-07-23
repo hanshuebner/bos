@@ -320,16 +320,16 @@ allocatable square meter."
                 (append connected (queue-elements border-queue)))
         (tagbody
          retry
-           (destructuring-bind (x y) (peek-queue border-queue)
-             (let ((next (get-next-neighbor x y)))
-               (cond
-                 (next
-                  (apply #'enqueue* next))
-                 ((queue-empty-p border-queue)
-                  (return nil))
-                 (t
-                  (push (dequeue border-queue) connected)
-                  (go retry))))))))))
+           (if (queue-empty-p border-queue)
+               (return nil)
+               (destructuring-bind (x y) (peek-queue border-queue)
+                 (let ((next (get-next-neighbor x y)))
+                   (cond
+                     (next
+                      (apply #'enqueue* next))                     
+                     (t
+                      (push (dequeue border-queue) connected)
+                      (go retry)))))))))))
 
 (defun allocate-in-area (area n)
   (let* ((area-left (allocation-area-left area))
@@ -344,7 +344,7 @@ allocatable square meter."
                     (not (m2-contract (ensure-m2 x y))))))
       (dotimes (i 10)
         (let ((x (+ area-left (random area-width)))
-              (y (+ area-top (random area-height))))
+              (y (+ area-top (random area-height))))          
           (when (allocatable-p x y)
             (let ((result (try-allocation n x y #'allocatable-p)))
               (when result
@@ -363,38 +363,23 @@ allocatable square meter."
    list of N m2 instances or NIL if the requested amount cannot be
    allocated."
   (dolist (area (active-allocation-areas))
-    (let ((m2s (allocate-in-area area n)))
-      (when m2s        
-        (return-from allocate-m2s-for-sale m2s))))
+    (when (<= n (allocation-area-free-m2s area))
+      (let ((m2s (allocate-in-area area n)))
+        (when m2s        
+          (return-from allocate-m2s-for-sale m2s)))))
   (dolist (area (inactive-nonempty-allocation-areas))
-    (let ((m2s (allocate-in-area area n)))
-      (when m2s
-        (activate-allocation-area area)
-        (return-from allocate-m2s-for-sale m2s)))))
+    (when (<= n (allocation-area-free-m2s area))
+      (let ((m2s (allocate-in-area area n)))
+        (when m2s
+          (activate-allocation-area area)
+          (return-from allocate-m2s-for-sale m2s))))))
 
 (defgeneric return-contract-m2s (m2s)
   (:documentation "Mark the given square meters as free, so that
     they can be re-allocated."))
 
 (defmethod return-contract-m2s (m2s)  
-  (when m2s
-    (loop for m2 in m2s
-       for allocation-area = (m2-allocation-area m2)
-       when allocation-area
-       do (return-m2 allocation-area))
-    (multiple-value-bind (left top width height)
-        (compute-bounding-box
-         (mapcar (lambda (m2) (cons (m2-x m2) (m2-y m2))) m2s))
-      (incf width)
-      (incf height)
-      (dolist (area (all-allocation-areas))
-        (let ((vertices (allocation-area-vertices area)))
-          (when (every (lambda (m2)
-                         (in-polygon-p (m2-x m2) (m2-y m2) vertices))
-                       m2s)
-            (make-stripe area left top width height))))))
-  t)
-
-
-
-
+  (loop for m2 in m2s
+     for allocation-area = (m2-allocation-area m2)
+     when allocation-area
+     do (incf (allocation-area-free-m2s allocation-area))))

@@ -90,6 +90,9 @@
 		(decf total-free size)))))))
 
 (test allocation-area.auto-activation.2
+  (skip "the new allocation alogorithm produces more fragmentation, so
+         this test does not work anymore as precisely as before")
+  #+nil
   (with-fixture initial-bos-store ()
     (let* ((area1 (make-allocation-rectangle 0 0 8 8))
            (area2 (make-allocation-rectangle 10 10 8 8))
@@ -186,17 +189,13 @@
 (test allocation-area.delete
   (with-fixture initial-bos-store ()
     (let ((area (make-allocation-rectangle 0 0 10 10))
-          (sponsor (make-sponsor :login "testuser"))
-          stripes)
+          (sponsor (make-sponsor :login "testuser")))
       (make-contract sponsor 10)
       (make-contract sponsor 1)
       (make-contract sponsor 10)
-      (make-contract sponsor 3)     
-      (setq stripes (bos.m2::allocation-area-stripes area))
-      (is (not (null stripes)))
+      (make-contract sponsor 3)           
       (delete-object area)            
-      (is (object-destroyed-p area))
-      (is (every #'object-destroyed-p stripes))
+      (is (object-destroyed-p area))      
       (finishes (snapshot)))))
 
 (store-test contract-tree.1
