@@ -293,7 +293,12 @@
 	:bos.m2	
 	:bos.m2.config	
 	:iterate
-	:arnesi)
+        :arnesi)
+  (:shadowing-import-from :bos.m2
+                          #:enqueue
+                          #:dequeue
+                          #:peek-queue
+                          #:queue-empty-p)
   (:export #:find-exact-match
 	   #:add-area
 	   #:count-cache-entries
