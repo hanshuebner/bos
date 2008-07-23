@@ -34,3 +34,14 @@
      (:tr (:td "cert issued?")
 	  (:td (:princ-safe (if (contract-cert-issued contract) "yes" "no")))))))
 
+(defclass cert-issued-handler (object-handler)
+  ()
+  (:default-initargs :class 'contract))
+
+(defmethod handle-object ((handler cert-issued-handler) contract)
+  (with-http-response (:content-type "text/html; charset=UTF-8")
+    (with-http-body ()
+      (:princ (if (and (contract-certificates-generated-p contract)
+                       (not (contract-tree-needs-update-p)))
+                  "READY"
+                  "PROCESSING")))))

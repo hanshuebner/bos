@@ -226,6 +226,7 @@ language preference weights."
 					("/allocation-cache" allocation-cache-handler)
 					("/certificate" certificate-handler)
 					("/cert-regen" cert-regen-handler)
+                                        ("/cert-issued" cert-issued-handler)
 					("/admin" admin-handler)
 					("/languages" languages-handler)
 					("/overview" image-tile-handler)
