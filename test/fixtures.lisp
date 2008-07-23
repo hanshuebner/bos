@@ -46,7 +46,7 @@
        (,@store-object-vars)
      ,@body))
 
-(def-fixture initial-bos-store ()  
+(def-fixture initial-bos-store (&key (delete-store t))  
   (let ((store-path (parse-namestring
                      (format nil "/tmp/test-store-~D.tmp/" (get-universal-time)))))
     (unwind-protect
@@ -58,7 +58,9 @@
            (&body))
       (close-store)      
       ;; (cl-fad:delete-directory-and-files store-path) ; fails on ccl
-      (asdf:run-shell-command "rm -r '~A'" store-path))))
+      (if delete-store
+          (asdf:run-shell-command "rm -r '~A'" store-path)
+          (warn "not deleting store at ~A" store-path)))))
 
 (defmacro store-test (name &body body)
   `(progn
