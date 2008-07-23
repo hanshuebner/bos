@@ -213,7 +213,7 @@
       (finishes (bos.m2::validate-allocation-area-inclusion-cache)))))
 
 (test allocation.disconnected-m2s.1
-  (with-fixture initial-bos-store (:delete-store t)
+  (with-fixture initial-bos-store ()
     (let ((area (make-allocation-area #((7193 . 5195) (7351 . 5193) (7340 . 5377) (7185 . 5390) (7174 . 5385)
                                         (7166 . 5387) (7156 . 5381) (7150 . 5379) (7143 . 5374) (7136 . 5368)
                                         (7135 . 5364) (7135 . 5359) (7140 . 5347) (7145 . 5342) (7148 . 5329)
