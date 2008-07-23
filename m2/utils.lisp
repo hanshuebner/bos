@@ -66,8 +66,8 @@
 (defun enqueue (x queue)
   (if (null (car queue))
       (setf (cdr queue) (setf (car queue) (list x)))
-    (setf (cdr (cdr queue)) (list x)
-          (cdr queue) (cdr (cdr queue))))
+      (setf (cdr (cdr queue)) (list x)
+            (cdr queue) (cdr (cdr queue))))
   (caar queue))
 
 (defun dequeue (queue)

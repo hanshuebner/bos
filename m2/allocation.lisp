@@ -369,8 +369,11 @@ allocatable square meter."
     (let ((m2s (allocate-in-area area n)))
       (when m2s (return-from allocate-m2s-for-sale m2s)))))
 
-(defun return-contract-m2s (m2s)
-  "Mark the given square meters as free, so that they can be re-allocated."
+(defgeneric return-contract-m2s (m2s)
+  (:documentation "Mark the given square meters as free, so that
+    they can be re-allocated."))
+
+(defmethod return-contract-m2s (m2s)  
   (when m2s
     (loop for m2 in m2s
        for allocation-area = (m2-allocation-area m2)
