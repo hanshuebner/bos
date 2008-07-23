@@ -224,6 +224,7 @@
                                         (7202 . 5214) (7204 . 5205) (7195 . 5197))))
           (sponsor (make-sponsor :login "test-sponsor"))
           (m2-counts '(12 43 29 3)))
+      (declare (ignore area))
       (dolist (m2-count m2-counts)
         (let ((contract (make-contract sponsor m2-count)))
           (print (list 'make-contract-returned contract))))
@@ -231,3 +232,4 @@
       ;; WARNING: #<CONTRACT ID: 32131, unpaid> has m2s that are not
       ;; connected
       (is (bos.m2::consistent-p)))))
+
