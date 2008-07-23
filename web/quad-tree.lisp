@@ -130,10 +130,16 @@
       (setf (cdr queue) (setf (car queue) (list x)))
     (setf (cdr (cdr queue)) (list x)
           (cdr queue) (cdr (cdr queue))))
-  (car queue))
+  (caar queue))
 
 (defun dequeue (queue)
   (pop (car queue)))
+
+(defun queue-elements (queue)
+  (car queue))
+
+(defun peek-queue (queue)
+  (caar queue))
 
 ;;; quad-node
 (defclass quad-node ()

@@ -450,3 +450,15 @@ point belongs to the region or not."
       (traverse (list (first nodes)))
       (= (length nodes)
          (hash-table-count hash)))))
+
+(defun ascii-plot-points (objects &key key)
+  (fresh-line)
+  (let ((bbox (bounding-box objects :key key)))
+    (with-rectangle bbox
+      (loop for y from top below (+ top height)
+         do (loop for x from left below (+ left width)
+               if (member (list x y) objects :key key :test #'equal)
+               do (princ "x")
+               else do (princ "."))
+         do (terpri)))))
+
