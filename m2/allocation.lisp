@@ -296,9 +296,9 @@ at square meter M2.  PRED is a predicate function of one argument that
 returns a true value if the argument specifies an allocatable square
 meter."
   (when (funcall pred m2)
-    (let* ((allocated (make-hash-table :test #'eq))
-           (border-queue (make-queue))
-           completely-checked)
+    (let ((allocated (make-hash-table :test #'eq))
+          (border-queue (make-queue))
+          completely-checked)
       (labels
           ((to-border-queue (m2)
              (setf (gethash m2 allocated) t)
