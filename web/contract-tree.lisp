@@ -39,7 +39,7 @@
 (defparameter *contract-tree-images-size* 128) ; was 256
 
 (defmethod leaf-node-p ((node contract-node))
-  (= 10 (depth node)))
+  (= 9 (depth node)))
 
 (defun contract-geo-box (contract)
   (destructuring-bind (x y width height)
