@@ -190,7 +190,7 @@ links are created."))
                                                         :key #'contract-area)))
                    (when small-contracts
                      (with-element "Folder"
-                       (kml-region rect `(:min ,(* 6 (getf lod :min)) :max -1))
+                       (kml-region rect `(:min ,(* 3 (getf lod :min)) :max -1))
                        (dolist (c small-contracts)
                          (write-contract-placemark-kml c lang))))
                    (when big-contracts
