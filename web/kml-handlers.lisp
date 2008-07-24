@@ -55,8 +55,19 @@
                                                      line column)))))))))
                        ;; we want this after the processing
                        (:p (:format "last-change: ~A"                                
-                                    (format-date-time (store-object-last-change kml-root-data 0)))))))
+                                    (format-date-time (store-object-last-change kml-root-data 0)))
+                           (cmslink (format nil "/kml-upload?lang=~A&action=download" language)
+                             "download current version")))))
              (submit-button "upload" "upload"))))))
+
+(defmethod handle-form ((handler kml-upload-handler) (action (eql :download)))
+  (with-query-params (lang)
+    (setf (hunchentoot:header-out :content-type)
+          "application/binary"
+          (hunchentoot:header-out :content-disposition)
+          (format nil "attachment; filename=kml-root-~A.kml" lang))
+    (let ((kml-root-data (kml-root-data-with-language lang)))
+      (kml-string kml-root-data))))
 
 ;;; kml-format utils
 (defun kml-format-points (points stream)
