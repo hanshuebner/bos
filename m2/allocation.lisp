@@ -306,7 +306,7 @@ allocatable square meter."
            (try-get (x y)
              (let ((m2 (ensure-m2 x y)))
                (when (and (not (gethash m2 allocated))
-                          (apply pred m2))
+                          (funcall pred m2))
                  m2)))
            (get-next-neighbor (m2)
              (let ((x (m2-x m2))
