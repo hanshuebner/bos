@@ -350,7 +350,7 @@ allocatable square meter."
                (assert (alexandria:setp result :test #'equal))
                (assert (= n (length result)))
                (decf (allocation-area-free-m2s area) n)
-               (return (mapcar (alexandria:curry #'apply #'ensure-m2) result)))
+               (return result))
              (when (> (get-internal-real-time) deadline)
                (return nil)))))))
 
