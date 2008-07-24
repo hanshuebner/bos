@@ -200,6 +200,7 @@ language preference weights."
 					("/edit-poi-image" edit-poi-image-handler)
 					("/edit-sponsor" edit-sponsor-handler)
                                         ("/kml-upload" kml-upload-handler)
+                                        ("/kml-root-dynamic" kml-root-dynamic-handler)                                
                                         ("/kml-root" kml-root-handler)                                
                                         ("/country-stats" country-stats-handler)
                                         ("/contract-tree-kml" contract-tree-kml-handler)

@@ -121,7 +121,7 @@
           (when (sponsor-info-text sponsor)
             (text (sponsor-info-text sponsor))))))))
 
-(defclass kml-root-handler (object-handler)
+(defclass kml-root-dynamic-handler (object-handler)
   ((timestamp :accessor timestamp :initform (get-universal-time))))
 
 (defun write-root-kml (handler sponsor)
@@ -187,13 +187,13 @@
                             :name (dictionary-entry "Country-Stats" lang)
 			    :hide-children t))))))
 
-(defmethod handle-object ((handler kml-root-handler) (object sponsor))
+(defmethod handle-object ((handler kml-root-dynamic-handler) (object sponsor))
   (write-root-kml handler object))
 
-(defmethod handle-object ((handler kml-root-handler) (object contract))
+(defmethod handle-object ((handler kml-root-dynamic-handler) (object contract))
   (handle-object handler (contract-sponsor object)))
 
-(defmethod handle-object ((handler kml-root-handler) (object null))
+(defmethod handle-object ((handler kml-root-dynamic-handler) (object null))
   (write-root-kml handler nil))
 
 (defclass country-stats-handler (page-handler)
