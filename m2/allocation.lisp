@@ -323,12 +323,10 @@ meter."
              (if (queue-empty-p border-queue)
                  (return nil)
                  (let ((next (get-next-neighbor (peek-queue border-queue))))
-                   (cond
-                     (next
-                      (to-border-queue next))
-                     (t
-                      (push (dequeue border-queue) completely-checked)
-                      (go check-next)))))))))))
+                   (unless next
+                     (push (dequeue border-queue) completely-checked)
+                     (go check-next))
+                   (to-border-queue next)))))))))
 
 (defun allocate-in-area (area n)
   (let* ((area-left (allocation-area-left area))
