@@ -342,21 +342,25 @@ allocatable square meter."
     (labels ((allocatable-p (x y)
                (and (in-polygon-p x y (allocation-area-vertices area))
                     (not (m2-contract (ensure-m2 x y))))))
-      (dotimes (i 10)
-        (let ((x (+ area-left (random area-width)))
-              (y (+ area-top (random area-height))))          
-          (when (allocatable-p x y)
-            (let ((result (try-allocation n x y #'allocatable-p)))
-              (when result
-                (assert (alexandria:setp result :test #'equal))
-                (assert (= n (length result)))
-                (decf (allocation-area-free-m2s area) n)
-                (return-from allocate-in-area
-                  (mapcar (lambda (x-y)
-                            (destructuring-bind (x y)
-                                x-y
-                              (ensure-m2 x y)))
-                          result))))))))))
+      (loop with start-time = (get-internal-real-time)
+         do (let ((x (+ area-left (random area-width)))
+                  (y (+ area-top (random area-height))))          
+              (when (allocatable-p x y)
+                (let ((result (try-allocation n x y #'allocatable-p)))
+                  (when result
+                    (assert (alexandria:setp result :test #'equal))
+                    (assert (= n (length result)))
+                    (decf (allocation-area-free-m2s area) n)
+                    (return-from allocate-in-area
+                      (mapcar (lambda (x-y)
+                                (destructuring-bind (x y)
+                                    x-y
+                                  (ensure-m2 x y)))
+                              result))))))
+         when (> (- (get-internal-real-time) start-time)
+                 ;; give up after 10 ms
+                 (* (/ 10 1000) internal-time-units-per-second))
+         return nil))))
 
 (defun allocate-m2s-for-sale (n)
   "The main entry point to the allocation machinery. Will return a
