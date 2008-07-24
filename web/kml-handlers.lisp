@@ -1,6 +1,8 @@
 ;;; -*- coding: utf-8 -*-
 (in-package :bos.web)
 
+(enable-interpol-syntax)
+
 (defpersistent-class kml-root-data ()
   ((language :initarg :language :reader language :type string
              :index-type string-unique-index
@@ -69,6 +71,50 @@
     (let ((kml-root-data (kml-root-data-with-language lang)))
       (kml-string kml-root-data))))
 
+(defclass kml-root-handler (object-handler)
+  ())
+
+(defun replace-all-url-hosts (string new-host)
+  "Replaces all hostnames in STRING by NEW-HOST."
+  (ppcre:regex-replace-all #?r"((?:https?|ftp)://)\w+(?:\.\w+)*" string #?r"\1${new-host}"))
+
+(defun replace-lang-query-params (string new-lang)
+  (ppcre:regex-replace-all #?r"(?i)(lang=)[a-z]{2,2}" string #?r"\1${new-lang}"))
+
+(defun replace-personalized-contract-placeholder (string sponsor lang)
+  (if (null sponsor)
+      string
+      (let ((contract (first (sponsor-contracts sponsor))))
+        (ppcre:regex-replace #?r"<!-- +personalized +contract +placemark +-->"
+                             string
+                             (cxml:with-xml-output (cxml:make-string-sink :omit-xml-declaration-p t)
+                               (write-personalized-contract-placemark-kml contract lang))))))
+
+(defun serve-kml-root-data (&optional sponsor)  
+  (with-query-params ((lang "en"))
+    (let* ((kml-root-data (kml-root-data-with-language lang))
+           (last-modified (store-object-last-change kml-root-data 0)))
+      (hunchentoot:handle-if-modified-since last-modified )
+      (setf (hunchentoot:header-out :last-modified)
+            (hunchentoot:rfc-1123-date last-modified)
+            (hunchentoot:header-out :content-type)
+            "application/vnd.google-earth.kml+xml"
+            (hunchentoot:header-out :content-disposition)
+            (format nil "attachment; filename=kml-root-~A.kml" lang))
+      (let ((kml-string (kml-string kml-root-data)))
+        (setq kml-string (replace-all-url-hosts kml-string (website-host))
+              kml-string (replace-lang-query-params kml-string lang)
+              kml-string (replace-personalized-contract-placeholder kml-string sponsor lang))))))
+
+(defmethod handle-object ((handler kml-root-handler) (object sponsor))
+  (serve-kml-root-data object))
+
+(defmethod handle-object ((handler kml-root-handler) (object contract))
+  (serve-kml-root-data (contract-sponsor object)))
+
+(defmethod handle-object ((handler kml-root-handler) (object null))
+  (serve-kml-root-data))
+
 ;;; kml-format utils
 (defun kml-format-points (points stream)
   (mapc #'(lambda (point) (kml-format-point point stream)) points))
@@ -124,6 +170,16 @@
 (defclass kml-root-dynamic-handler (object-handler)
   ((timestamp :accessor timestamp :initform (get-universal-time))))
 
+(defun write-personalized-contract-placemark-kml (contract lang)
+  (with-element "Style"
+    (attribute "id" "contractPlacemarkIcon")
+    (with-element "IconStyle"
+      (with-element "color" (text "ff0000ff"))
+      (with-element "Icon"
+        ;; (with-element "href" (text "http://maps.google.com/mapfiles/kml/pal3/icon23.png"))
+        (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
+  (write-contract-placemark-kml contract lang))
+
 (defun write-root-kml (handler sponsor)
   (let ((*print-case* :downcase)
         (contract (when sponsor (first (sponsor-contracts sponsor)))))
@@ -138,14 +194,7 @@
           (with-element "name" (text "BOS"))
           (with-element "open" (text "1"))
           (when contract
-            (with-element "Style"
-              (attribute "id" "contractPlacemarkIcon")
-              (with-element "IconStyle"
-                (with-element "color" (text "ff0000ff"))
-                (with-element "Icon"
-                  ;; (with-element "href" (text "http://maps.google.com/mapfiles/kml/pal3/icon23.png"))
-                  (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
-            (write-contract-placemark-kml contract lang))
+            (write-personalized-contract-placemark-kml contract lang))
           (with-element "LookAt"
             (with-element "longitude" (text "116.988156014724"))
             (with-element "latitude" (text "-1.045791509671129"))
