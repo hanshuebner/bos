@@ -251,6 +251,7 @@
 	   #:news-item-title
 	   #:news-item-text
 
+           #:send-to-postmaster
 	   #:mail-fiscal-certificate-to-office
 	   #:mail-instructions-to-sponsor
 	   #:mail-info-request

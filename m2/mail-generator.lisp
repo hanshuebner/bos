@@ -2,6 +2,43 @@
 
 (enable-interpol-syntax)
 
+(defvar *postmaster-queue-lock* (bt:make-lock "Postmaster Queue Lock"))
+
+(defvar *postmaster-queue* (make-queue))
+
+(defvar *postmaster* nil)
+
+(defun postmaster-loop ()
+  (loop
+     (sleep 2)
+     (loop
+        (let ((entry (bt:with-lock-held (*postmaster-queue-lock*)
+                       (peek-queue *postmaster-queue*))))
+          (when (or (null entry)
+                    (not (contract-certificates-generated-p (second entry))))
+            (return)))
+        (let ((entry (bt:with-lock-held (*postmaster-queue-lock*)
+                       (dequeue *postmaster-queue*))))
+          (handler-case
+              (destructuring-bind (function contract args) entry
+                (apply function contract args))
+            (error (e)
+              (warn "; could not send mail ~S: ~A" entry e)))))))
+       
+(defun postmaster-running-p ()
+  (and *postmaster*
+       (bt:thread-alive-p *postmaster*)))
+
+(defun start-postmaster ()
+  (unless (postmaster-running-p)
+    (setq *postmaster*
+	  (bt:make-thread #'postmaster-loop
+			  :name "postmaster"))))
+
+(defun send-to-postmaster (function contract &rest args)
+  (bt:with-lock-held (*postmaster-queue-lock*)
+    (enqueue (list function contract args) *postmaster-queue*)))
+
 (defvar *country->office-email* '(("DK" . "bosdanmark.regnskov@gmail.com")
 				  ("SE" . "bosdanmark.regnskov@gmail.com")))
 
@@ -251,9 +288,9 @@ worldpay), return the common XML element name"
   (ignore-errors
     (delete-file (contract-pdf-pathname contract :print t))))
 
-(defun mail-backoffice-sponsor-data (contract)
-  (with-query-params (numsqm country email name address date language)
-    (let ((parts (list (make-html-part (format nil "
+(defun mail-backoffice-sponsor-data (contract numsqm country email name address language request-params)
+  (let* ((contract-id (store-object-id contract))
+         (parts (list (make-html-part (format nil "
 <html>
  <body>
   <h1>Manually entered sponsor data:</h1>
@@ -268,36 +305,35 @@ worldpay), return the common XML element name"
   </table>
  </body>
 </html>"
-					       (store-object-id contract)
-					       numsqm
-					       name
-					       address
-					       email
-					       country
-					       language))
-		       (make-contract-xml-part (store-object-id contract) (all-request-params))
-		       (make-vcard-part (store-object-id contract)
-					(make-vcard :sponsor-id (store-object-id (contract-sponsor contract))
-						    :note (format nil "Paid-by: Back office
+                                             contract-id
+                                             numsqm
+                                             name
+                                             address
+                                             email
+                                             country
+                                             language))
+                     (make-contract-xml-part (store-object-id contract) request-params)
+                     (make-vcard-part (store-object-id contract)
+                                      (make-vcard :sponsor-id (store-object-id (contract-sponsor contract))
+                                                  :note (format nil "Paid-by: Back office
 Contract ID: ~A
 Sponsor ID: ~A
 Number of sqms: ~A
 Amount: EUR~A.00
 "
-								  (store-object-id contract)
-								  (store-object-id (contract-sponsor contract))
-								  numsqm
-								  (* 3 (parse-integer numsqm)))
-						    :name name
-						    :address address
-						    :email email)))))
-      (mail-contract-data contract "Manually entered sponsor" parts))))
+                                                                (store-object-id contract)
+                                                                (store-object-id (contract-sponsor contract))
+                                                                numsqm
+                                                                (* 3 (parse-integer numsqm)))
+                                                  :name name
+                                                  :address address
+                                                  :email email)))))
+    (mail-contract-data contract "Manually entered sponsor" parts)))
 
-(defun mail-manual-sponsor-data ()
-  (with-query-params (contract-id vorname name strasse plz ort email telefon want-print donationcert-yearly)
-    (let* ((contract (store-object-with-id (parse-integer contract-id)))
-	   (sponsor-id (store-object-id (contract-sponsor contract)))
-	   (parts (list (make-html-part (format nil "
+(defun mail-manual-sponsor-data (contract vorname name strasse plz ort email telefon want-print donationcert-yearly request-params)
+  (let* ((sponsor-id (store-object-id (contract-sponsor contract)))
+         (contract-id (store-object-id contract))
+         (parts (list (make-html-part (format nil "
 <html>
  <body>
    <h1>Sponsor data as entered by the sponsor:</h1>
@@ -320,35 +356,35 @@ Amount: EUR~A.00
  </body>
 </html>
 "
-						contract-id
-						(length (contract-m2s contract))
-						(* 3.0 (length (contract-m2s contract)))
-						vorname name strasse plz ort email telefon
-						(if want-print "yes" "no")
-						(if donationcert-yearly "yes" "no")
-						*website-url* contract-id (or email "")))
-			(make-contract-xml-part contract-id (all-request-params))
-			(make-vcard-part contract-id (make-vcard :sponsor-id sponsor-id
-								 :note (format nil "Paid-by: Manual money transfer
+                                              (store-object-id contract)
+                                              (length (contract-m2s contract))
+                                              (* 3.0 (length (contract-m2s contract)))
+                                              vorname name strasse plz ort email telefon
+                                              (if want-print "yes" "no")
+                                              (if donationcert-yearly "yes" "no")
+                                              *website-url* contract-id (or email "")))
+                      (make-contract-xml-part contract-id request-params)
+                      (make-vcard-part contract-id (make-vcard :sponsor-id sponsor-id
+                                                               :note (format nil "Paid-by: Manual money transfer
 Contract ID: ~A
 Sponsor ID: ~A
 Number of sqms: ~A
 Amount: EUR~A.00
 Donationcert yearly: ~A
 "
-									       contract-id
-									       sponsor-id
-									       (length (contract-m2s contract))
-									       (* 3 (length (contract-m2s contract)))
-									       (if donationcert-yearly "Yes" "No"))
-								 :vorname vorname
-								 :nachname name
-								 :strasse strasse
-								 :postcode plz
-								 :ort ort
-								 :email email
-								 :tel telefon)))))
-      (mail-contract-data contract "Ueberweisungsformular" parts))))
+                                                                             contract-id
+                                                                             sponsor-id
+                                                                             (length (contract-m2s contract))
+                                                                             (* 3 (length (contract-m2s contract)))
+                                                                             (if donationcert-yearly "Yes" "No"))
+                                                               :vorname vorname
+                                                               :nachname name
+                                                               :strasse strasse
+                                                               :postcode plz
+                                                               :ort ort
+                                                               :email email
+                                                               :tel telefon)))))
+    (mail-contract-data contract "Ueberweisungsformular" parts)))
 
 (defvar *worldpay-params-hash* (make-hash-table :test #'equal))
 
@@ -356,17 +392,16 @@ Donationcert yearly: ~A
   "Remember the parameters sent in a callback request from Worldpay so that they can be mailed to the BOS office later on"
   (setf (gethash contract-id *worldpay-params-hash*) params))
 
-(defun get-worldpay-params (contract-id)
+(defun get-worldpay-params (contract)
   (or (prog1
-	  (gethash contract-id *worldpay-params-hash*)
-	(remhash contract-id *worldpay-params-hash*))
-      (error "cannot find WorldPay callback params for contract ~A~%" contract-id)))
+	  (gethash contract *worldpay-params-hash*)
+	(remhash contract *worldpay-params-hash*))
+      (error "cannot find WorldPay callback params for contract ~A~%" contract)))
 
-(defun mail-worldpay-sponsor-data ()
-  (with-query-params (contract-id)
-    (let* ((contract (store-object-with-id (parse-integer contract-id)))
-	   (params (get-worldpay-params contract-id))
-	   (parts (list (make-html-part (format nil "
+(defun mail-worldpay-sponsor-data (contract)
+  (let* ((contract-id (store-object-id contract))
+         (params (get-worldpay-params contract))
+         (parts (list (make-html-part (format nil "
 <table border=\"1\">
  <tr>
   <th>Parameter</th>
@@ -375,10 +410,10 @@ Donationcert yearly: ~A
  ~{<tr><td>~A</td><td>~A</td></tr>~}
 </table>
 "
-						(apply #'append (mapcar #'(lambda (cons) (list (car cons) (cdr cons)))
-									(sort (copy-list params)
-									      #'string-lessp
-									      :key #'car)))))
-			(make-contract-xml-part contract-id params)
-			(make-vcard-part contract-id (worldpay-callback-params-to-vcard params)))))
-      (mail-contract-data contract "WorldPay" parts))))
+                                              (apply #'append (mapcar #'(lambda (cons) (list (car cons) (cdr cons)))
+                                                                      (sort (copy-list params)
+                                                                            #'string-lessp
+                                                                            :key #'car)))))
+                      (make-contract-xml-part contract-id params)
+                      (make-vcard-part contract-id (worldpay-callback-params-to-vcard params)))))
+    (mail-contract-data contract "WorldPay" parts)))

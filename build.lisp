@@ -71,6 +71,7 @@
   (apply #'bos.m2::reinit (read-configuration "m2.rc"))
   (apply #'bos.web::init (read-configuration "web.rc"))
   (bos.web::start-contract-tree-image-update-daemon)
+  (bos.m2::start-postmaster)
   (bknr.cron::start-cron))
 
 (defun start-cert-daemon ()

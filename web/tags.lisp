@@ -42,7 +42,7 @@
       (when (equal want-print "no")
 	(contract-set-download-only-p contract t))
       (contract-issue-cert contract name :address address :language (request-language))
-      (mail-worldpay-sponsor-data)
+      (send-to-postmaster #'mail-worldpay-sponsor-data contract)
       (bknr.web::redirect-request :target (if gift "index"
 					      (format nil "profil_setup?name=~A&email=~A&sponsor-id=~A"
 						      (encode-urlencoded name) (encode-urlencoded email)
@@ -122,7 +122,8 @@
 (define-bknr-tag mail-transfer ()
   (with-query-params (country
 		      contract-id 
-		      name vorname strasse plz ort)
+		      name vorname strasse plz ort telefon want-print
+                      email donationcert-yearly)
     (let* ((contract (store-object-with-id (parse-integer contract-id)))
 	   (download-only (< (contract-price contract) *mail-certificate-threshold*)))
       (with-transaction (:prepare-before-mail)
@@ -134,7 +135,9 @@
 					    strasse
 					    plz ort)
 			   :language (request-language))
-      (mail-manual-sponsor-data))))
+      (send-to-postmaster #'mail-manual-sponsor-data
+                          contract vorname name strasse plz ort email telefon want-print donationcert-yearly
+                          (all-request-params)))))
 
 (define-bknr-tag when-certificate ()
   (let ((sponsor (bknr-session-user)))

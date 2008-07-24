@@ -29,8 +29,8 @@
                        (with-query-params (cartId name address country transStatus lang MC_gift)
                          (unless (website-supports-language lang)
                            (setf lang *default-language*))
-                         (bos.m2::remember-worldpay-params cartId (all-request-params))
                          (let ((contract (get-contract (parse-integer cartId))))
+                           (bos.m2::remember-worldpay-params contract (all-request-params))
                            (sponsor-set-language (contract-sponsor contract) lang)
                            (cond
                              ((not (typep contract 'contract))

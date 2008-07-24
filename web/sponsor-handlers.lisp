@@ -114,7 +114,7 @@
 						   (user-login (bknr.web:bknr-session-user)))
 				    :date (date-to-universal date))))
       (contract-issue-cert contract name :address address :language language)
-      (mail-backoffice-sponsor-data contract)
+      (send-to-postmaster #'mail-backoffice-sponsor-data contract numsqm country email name address language (all-request-params))
       (redirect (format nil "/edit-sponsor/~D" (store-object-id sponsor))))))
 
 (defun contract-checkbox-name (contract)
