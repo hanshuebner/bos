@@ -342,7 +342,9 @@ allocatable square meter."
     (labels ((allocatable-p (x y)
                (and (in-polygon-p x y (allocation-area-vertices area))
                     (not (m2-contract (ensure-m2 x y))))))
-      (loop with start-time = (get-internal-real-time)
+      (loop with deadline = (+ (get-internal-real-time)
+                               ;; give up after 10 ms
+                               (* (/ 10 1000) internal-time-units-per-second)) 
          do (let ((x (+ area-left (random area-width)))
                   (y (+ area-top (random area-height))))          
               (when (allocatable-p x y)
@@ -357,9 +359,7 @@ allocatable square meter."
                                     x-y
                                   (ensure-m2 x y)))
                               result))))))
-         when (> (- (get-internal-real-time) start-time)
-                 ;; give up after 10 ms
-                 (* (/ 10 1000) internal-time-units-per-second))
+         when (> (get-internal-real-time) deadline)
          return nil))))
 
 (defun allocate-m2s-for-sale (n)
