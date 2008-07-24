@@ -292,9 +292,9 @@ not be returned by this function"
 
 (defun search-adjacent (n m2 pred)
   "Try to find N free square meters that are adjacent and that begin
-at square meter M2.  PRED is a predicate function of two arguments that
-returns a true value if the arguments specify the coordinates of an
-allocatable square meter."
+at square meter M2.  PRED is a predicate function of one argument that
+returns a true value if the argument specifies an allocatable square
+meter."
   (when (funcall pred m2)
     (let* ((allocated (make-hash-table :test #'eq))
            (border-queue (make-queue))
