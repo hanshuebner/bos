@@ -7,7 +7,7 @@
    (width :update)
    (height :update)
    (vertices :update)
-   (y :update)  
+   (y :update)
    (total-m2s :read)
    (free-m2s :update)
    (bounding-box :update :transient t))
@@ -45,7 +45,7 @@
 (defmethod notify-tiles ((allocation-area allocation-area))
   (mapc #'(lambda (tile) (image-tile-changed tile)) (allocation-area-tiles allocation-area)))
 
-(defmethod destroy-object :before ((allocation-area allocation-area))  
+(defmethod destroy-object :before ((allocation-area allocation-area))
   (notify-tiles allocation-area))
 
 (defmethod initialize-transient-instance :after ((allocation-area allocation-area))
@@ -119,7 +119,7 @@
 		  (when (point-in-polygon-p x y (allocation-area-vertices allocation-area))
 		    (error "new allocation area must not intersect with existing allocation area ~A"
                            allocation-area))))))
-  
+
   (make-allocation-area/unchecked vertices))
 
 (deftransaction make-allocation-area/unchecked (vertices)
@@ -132,8 +132,8 @@
                         :width width
                         :height height
                         :y top
-                        :active-p nil                      
-                        :vertices vertices)))      
+                        :active-p nil
+                        :vertices vertices)))
       result)))
 
 (defmethod allocation-area-bounding-box ((allocation-area allocation-area))
@@ -161,7 +161,7 @@
 (defun allocation-areas-plus-contracts-bounding-box ()
   "Returns the bounding-box as with ALLOCATION-AREAS-BOUNDING-BOX, but
 possibly augmented by any contracts that dont have an allocation-area
-anymore."  
+anymore."
   (geometry:with-bounding-box-collect (collect)
     (awhen (allocation-areas-bounding-box)
       (geometry:with-rectangle (it)
@@ -290,77 +290,69 @@ not be returned by this function"
       (setf consistent-p nil))
     consistent-p))
 
-;;; allocation
-(defun try-allocation (n start-x start-y pred)
+(defun search-adjacent (n m2 pred)
   "Try to find N free square meters that are adjacent and that begin
-at X and Y.  PRED is a predicate function of two arguments that
+at square meter M2.  PRED is a predicate function of two arguments that
 returns a true value if the arguments specify the coordinates of an
 allocatable square meter."
-  (unless (funcall pred start-x start-y)
-    (error "sqm ~A/~A not allocatable" start-x start-y))
-  (let* ((allocated (make-hash-table :test #'equal))
-         (border-queue (make-queue))
-         connected)
-    (labels
-        ((enqueue* (x y)
-           (let ((key (list x y)))
-             (setf (gethash key allocated) t)
-             (enqueue key border-queue)))
-         (try-get (&rest key)           
-           (and (not (gethash key allocated))
-                (apply pred key)
-                key))
-         (get-next-neighbor (x y)
-           (or (try-get (1+ x) y)
-               (try-get x (1+ y))
-               (try-get (1- x) y)
-               (try-get x (1- y)))))
-      (enqueue* start-x start-y)
-      (dotimes (i (1- n)
-                (append connected (queue-elements border-queue)))
-        (tagbody
-         retry
-           (if (queue-empty-p border-queue)
-               (return nil)
-               (destructuring-bind (x y) (peek-queue border-queue)
-                 (let ((next (get-next-neighbor x y)))
+  (when (funcall pred m2)
+    (let* ((allocated (make-hash-table :test #'eq))
+           (border-queue (make-queue))
+           completely-checked)
+      (labels
+          ((to-border-queue (m2)
+             (setf (gethash m2 allocated) t)
+             (enqueue m2 border-queue))
+           (try-get (x y)
+             (let ((m2 (ensure-m2 x y)))
+               (when (and (not (gethash m2 allocated))
+                          (apply pred m2))
+                 m2)))
+           (get-next-neighbor (m2)
+             (let ((x (m2-x m2))
+                   (y (m2-y m2)))
+               (or (try-get (1+ x) y)
+                   (try-get x (1+ y))
+                   (try-get (1- x) y)
+                   (try-get x (1- y))))))
+        (to-border-queue m2)
+        (dotimes (i (1- n)
+                  (nconc completely-checked (queue-elements border-queue)))
+          (tagbody
+           check-next
+             (if (queue-empty-p border-queue)
+                 (return nil)
+                 (let ((next (get-next-neighbor (peek-queue border-queue))))
                    (cond
                      (next
-                      (apply #'enqueue* next))                     
+                      (to-border-queue next))
                      (t
-                      (push (dequeue border-queue) connected)
-                      (go retry)))))))))))
+                      (push (dequeue border-queue) completely-checked)
+                      (go check-next)))))))))))
 
 (defun allocate-in-area (area n)
   (let* ((area-left (allocation-area-left area))
          (area-top (allocation-area-top area))
          (area-width (allocation-area-width area))
          (area-height (allocation-area-height area))
-         ;; (area-right (+ area-left area-width))
-         ;; (area-bottom (+ area-top area-height))
-         )
-    (labels ((allocatable-p (x y)
-               (and (in-polygon-p x y (allocation-area-vertices area))
-                    (not (m2-contract (ensure-m2 x y))))))
-      (loop with deadline = (+ (get-internal-real-time)
-                               ;; give up after 10 ms
-                               (* (/ 10 1000) internal-time-units-per-second)) 
-         do (let ((x (+ area-left (random area-width)))
-                  (y (+ area-top (random area-height))))          
-              (when (allocatable-p x y)
-                (let ((result (try-allocation n x y #'allocatable-p)))
-                  (when result
-                    (assert (alexandria:setp result :test #'equal))
-                    (assert (= n (length result)))
-                    (decf (allocation-area-free-m2s area) n)
-                    (return-from allocate-in-area
-                      (mapcar (lambda (x-y)
-                                (destructuring-bind (x y)
-                                    x-y
-                                  (ensure-m2 x y)))
-                              result))))))
-         when (> (get-internal-real-time) deadline)
-         return nil))))
+         (deadline (+ (get-internal-real-time)
+                      ;; give up after 10 ms
+                      (* (/ 10 1000) internal-time-units-per-second))))
+    (labels ((allocatable-p (m2)
+               (and (in-polygon-p (m2-x m2) (m2-y m2) (allocation-area-vertices area))
+                    (not (m2-contract m2)))))
+      (loop
+         (let* ((x (+ area-left (random area-width)))
+                (y (+ area-top (random area-height)))
+                (m2 (ensure-m2 x y))
+                (result (search-adjacent n m2 #'allocatable-p)))
+             (when result
+               (assert (alexandria:setp result :test #'equal))
+               (assert (= n (length result)))
+               (decf (allocation-area-free-m2s area) n)
+               (return (mapcar (alexandria:curry #'apply #'ensure-m2) result)))
+             (when (> (get-internal-real-time) deadline)
+               (return nil)))))))
 
 (defun allocate-m2s-for-sale (n)
   "The main entry point to the allocation machinery. Will return a
@@ -369,7 +361,7 @@ allocatable square meter."
   (dolist (area (active-allocation-areas))
     (when (<= n (allocation-area-free-m2s area))
       (let ((m2s (allocate-in-area area n)))
-        (when m2s        
+        (when m2s
           (return-from allocate-m2s-for-sale m2s)))))
   (dolist (area (inactive-nonempty-allocation-areas))
     (when (<= n (allocation-area-free-m2s area))
@@ -382,7 +374,7 @@ allocatable square meter."
   (:documentation "Mark the given square meters as free, so that
     they can be re-allocated."))
 
-(defmethod return-contract-m2s (m2s)  
+(defmethod return-contract-m2s (m2s)
   (loop for m2 in m2s
      for allocation-area = (m2-allocation-area m2)
      when allocation-area
