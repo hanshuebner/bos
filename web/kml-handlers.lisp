@@ -243,3 +243,15 @@
 
 
 
+(defclass look-at-allocation-area-handler (object-handler)
+  ())
+
+(defmethod handle-object ((handler look-at-allocation-area-handler)
+                          (area allocation-area))
+  (with-xml-response (:content-type "application/vnd.google-earth.kml+xml; charset=utf-8"
+                                    :root-element "kml")      
+    (with-element "Document"
+      (with-element "name" (text (format nil "allocation-area ~D" (store-object-id area))))
+      (kml-region (make-rectangle2 (allocation-area-bounding-box2 area))
+                  nil))))
+

@@ -208,6 +208,7 @@ language preference weights."
 					("/contract" contract-handler)
                                         ("/sat-tree-kml" sat-tree-kml-handler)
                                         ("/sat-root-kml" sat-root-kml-handler)                                        
+                                        ("/look-at-allocation-area" look-at-allocation-area-handler)
 					("/reports-xml" reports-xml-handler)
 					("/complete-transfer" complete-transfer-handler)
 					("/edit-news" edit-news-handler)

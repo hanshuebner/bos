@@ -15,16 +15,19 @@
 	   (:th "active?")
 	   (:th "total")
 	   (:th "free")
-	   (:th "%used"))
+	   (:th "%used")
+           (:th "Google Earth view"))
       (loop for allocation-area in (all-allocation-areas)
-	    do (html
-		(:tr
-		 (:td (cmslink (format nil "allocation-area/~D" (store-object-id allocation-area))
-			(:princ-safe (store-object-id allocation-area))))
-		 (:td (if (allocation-area-active-p allocation-area) (html "yes") (html "no")))
-		 (:td (:princ-safe (allocation-area-total-m2s allocation-area)))
-		 (:td (:princ-safe (allocation-area-free-m2s allocation-area)))
-		 (:td (:princ-safe (round (allocation-area-percent-used allocation-area))) "%")))))
+         do (html
+             (:tr
+              (:td (cmslink (format nil "allocation-area/~D" (store-object-id allocation-area))
+                     (:princ-safe (store-object-id allocation-area))))
+              (:td (if (allocation-area-active-p allocation-area) (html "yes") (html "no")))
+              (:td (:princ-safe (allocation-area-total-m2s allocation-area)))
+              (:td (:princ-safe (allocation-area-free-m2s allocation-area)))
+              (:td (:princ-safe (round (allocation-area-percent-used allocation-area))) "%")
+              (:td (cmslink (format nil "look-at-allocation-area/~D" (store-object-id allocation-area))
+                     "fly to view"))))))
      (:p (cmslink "create-allocation-area" "Create new allocation area")))))
 
 (defmethod handle-object-form ((handler allocation-area-handler) action allocation-area)
