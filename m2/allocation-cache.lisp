@@ -231,15 +231,17 @@ is decremented."
 	(unless (zerop count)
 	  (format t "~5D~10T~5D~%" size count))))))
 
-(defun rebuild-cache ()
-  (assert (in-transaction-p) nil
-          "rebuild-cache may only be called in a transaction context")
+(defun rebuild-allocation-cache ()  
+  (assert (or (in-transaction-p) (eql :snapshot (store-state *store*))) nil
+          "rebuild-allocation-cache may only be called in a transaction context")  
   (unless *allocation-cache*
     (setq *allocation-cache* (make-allocation-cache)))
   (clear-cache)
   (dolist (allocation-area (class-instances 'allocation-area))
     (when (allocation-area-active-p allocation-area)
       (add-area allocation-area))))
+
+(register-transient-init-function 'rebuild-allocation-cache)
 
 (defun suggest-free-region-size ()
   (iter
@@ -255,14 +257,3 @@ is decremented."
       (index-push (length m2s) (make-cache-entry :area allocation-area
                                                  :region m2s)))))
 
-;;; subsystem
-(defclass allocation-cache-subsystem ()
-  ())
-
-(defmethod bknr.datastore::restore-subsystem (store (subsystem allocation-cache-subsystem)
-                                              &key until)
-  (declare (ignore until))
-  (rebuild-cache))
-
-(defmethod bknr.datastore::snapshot-subsystem (store (subsystem allocation-cache-subsystem))
-  )

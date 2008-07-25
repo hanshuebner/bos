@@ -52,9 +52,11 @@ have been called."
 
 (defun invoke-transient-init-functions ()
   (dolist (function-name *transient-init-functions*)
+    (format t "~&initialization-subsystem is calling ~A..." function-name)
     (with-simple-restart (skip-init-function "Skip transient-init-function ~A"
                                              function-name)
-      (funcall function-name))))
+      (funcall function-name))
+    (format t "done~%")))
 
 ;;; initialization-subsystem
 (defclass initialization-subsystem ()

@@ -357,14 +357,12 @@ has to be unique."
                                        :name '*contract-tree*))
   (dolist (contract (class-instances 'contract))
     (when (contract-published-p contract)
-      (insert-contract *contract-tree* contract)))
-  (format t "~&rendering contract-tree images if needed...") (force-output)  
-  (format t "done.~%") (force-output)  
+      (insert-contract *contract-tree* contract)))    
   (geometry:register-rect-subscriber geometry:*rect-publisher* *contract-tree*
                                      (list 0 0 +width+ +width+)
                                      #'contract-tree-changed))
 
 (register-transient-init-function 'make-contract-tree-from-m2
-                                        'make-quad-tree
-                                        'geometry:make-rect-publisher)
+                                  'make-quad-tree
+                                  'geometry:make-rect-publisher)
 
