@@ -195,13 +195,13 @@ anymore."
 (deftransaction activate-allocation-area (area)
   (warn "activating ~S" area)
   (setf (slot-value area 'active-p) t)
-  (bos.m2.allocation-cache::rebuild-cache)
+  (bos.m2.allocation-cache::rebuild-allocation-cache)
   area)
 
 (deftransaction deactivate-allocation-area (area)
   (warn "deactivating ~S" area)
   (setf (slot-value area 'active-p) nil)
-  (bos.m2.allocation-cache::rebuild-cache)
+  (bos.m2.allocation-cache::rebuild-allocation-cache)
   area)
 
 ;;; FIXME can be optimized
@@ -358,17 +358,18 @@ meter."
   "The main entry point to the allocation machinery. Will return a
    list of N m2 instances or NIL if the requested amount cannot be
    allocated."
-  (dolist (area (active-allocation-areas))
-    (when (<= n (allocation-area-free-m2s area))
-      (let ((m2s (allocate-in-area area n)))
-        (when m2s
-          (return-from allocate-m2s-for-sale m2s)))))
-  (dolist (area (inactive-nonempty-allocation-areas))
-    (when (<= n (allocation-area-free-m2s area))
-      (let ((m2s (allocate-in-area area n)))
-        (when m2s
-          (activate-allocation-area area)
-          (return-from allocate-m2s-for-sale m2s))))))
+  (or (bos.m2.allocation-cache:find-exact-match n :remove t)
+      (dolist (area (active-allocation-areas))
+        (when (<= n (allocation-area-free-m2s area))
+          (let ((m2s (allocate-in-area area n)))
+            (when m2s
+              (return m2s)))))
+      (dolist (area (inactive-nonempty-allocation-areas))
+        (when (<= n (allocation-area-free-m2s area))
+          (let ((m2s (allocate-in-area area n)))
+            (when m2s
+              (activate-allocation-area area)
+              (return m2s)))))))
 
 (defgeneric return-contract-m2s (m2s)
   (:documentation "Mark the given square meters as free, so that
