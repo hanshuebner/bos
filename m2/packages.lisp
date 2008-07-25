@@ -272,8 +272,6 @@
 
 (defpackage :bos.m2.cert-generator
   (:use :cl
-	#+cmu :extensions
-	#+sbcl :sb-ext
 	:bos.m2.config
 	:bknr.utils
 	:cl-ppcre

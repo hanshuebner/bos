@@ -4,15 +4,12 @@
   (:nicknames :web :worldpay-test)
   (:use :cl
 	:date-calc
-	#+cmu :extensions
-	#+sbcl :sb-ext
 	:cl-user
 	:cl-interpol
 	:cl-ppcre
 	:xhtml-generator
 	:cxml
 	:puri
-	#+(or) :mime
         :bknr.web
 	:bknr.web.frontend
 	:bknr.datastore

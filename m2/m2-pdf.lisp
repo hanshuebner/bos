@@ -65,7 +65,7 @@
       ;; cl-pdf does not really handle non-ascii characters in a very
       ;; usable manner.  In order to avoid having to deal with
       ;; embedding fonts and encoding, just work around the issue:
-      (princ (remove #\Latin_Capital_Letter_A_With_Circumflex
+      (princ (remove (code-char 194)
                      (with-output-to-string (s)
                        (let ((pdf:*compress-streams* nil))
                          (pdf:write-document s))))

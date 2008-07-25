@@ -37,7 +37,9 @@
                (:file "contract-tree" :depends-on ("quad-tree"))
                (:file "sat-tree" :depends-on ("quad-tree" "contract-tree"))
                (:file "countries" :depends-on ("packages"))
+               (:file "website-language" :depends-on ("packages"))
                (:file "kml-handlers" :depends-on ("packages"
+                                                  "website-language"
                                                   "web-macros"
                                                   "countries"
                                                   "dictionary"))
@@ -52,6 +54,7 @@
 	       (:file "contract-rss" :depends-on ("web-utils"))
 	       (:file "webserver" :depends-on ("news-tags"
 					       "tags"
+                                               "website-language"
 					       "map-handlers"
 					       "map-browser-handler"
 					       "poi-handlers"
