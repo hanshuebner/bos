@@ -200,10 +200,6 @@
 	   #:allocation-area-percent-used
 	   #:left #:top #:width #:height #:active-p
 
-	   ;; bitmap routines for drawing of allocation areas
-	   #:make-vga-colors
-	   #:draw-contracts
-
 	   ;; pois
 	   #:*current-language*
 	   #:slot-string
