@@ -73,15 +73,6 @@
   ((poi :read)
    (url :update :initform nil)))
 
-(defmethod poi-movies :before ((poi poi))
-  "Lazily update the db schema. Method can be removed later."
-  (macrolet ((movie (tail) `(car ,tail)))
-    (mapl (lambda (tail)
-            (when (stringp (movie tail))
-              (setf (movie tail)
-                    (make-object 'poi-movie :poi poi :url (movie tail)))))
-          (slot-value poi 'movies))))
-
 ;;; poi
 (define-persistent-class poi ()
   ((name :read :index-type string-unique-index
@@ -97,6 +88,15 @@
    (panoramas :update :initform nil)
    (movies :update :initform nil)
    (published :update :initform nil)))
+
+(defmethod poi-movies :before ((poi poi))
+  "Lazily update the db schema. Method can be removed later."
+  (macrolet ((movie (tail) `(car ,tail)))
+    (mapl (lambda (tail)
+            (when (stringp (movie tail))
+              (setf (movie tail)
+                    (make-object 'poi-movie :poi poi :url (movie tail)))))
+          (slot-value poi 'movies))))
 
 (deftransaction make-poi (language name &key title description area)
   (let ((poi (make-object 'poi :name name :area area)))
