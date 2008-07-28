@@ -1,4 +1,3 @@
-
 (in-package :bos.web)
 
 (defun daily-cleanup ()
@@ -20,4 +19,3 @@
                                   :subject "(bos.m2::consistent-p) returned NIL"
                                   :text report))))
   (format t "; done~%"))
-

@@ -16,10 +16,10 @@
   (print-unreadable-object (object stream :type t :identity nil)
     (ignore-errors
       (with-slots (x y image) object
-	  (format stream "at (~D,~D) ~:[(no image)~;~A~]"
-		  (* x +m2tile-width+)
-		  (* y +m2tile-width+)
-		  image)))))
+        (format stream "at (~D,~D) ~:[(no image)~;~A~]"
+                (* x +m2tile-width+)
+                (* y +m2tile-width+)
+                image)))))
 
 (defun get-original-map-tile (x y)
   (original-map-tile-at (list (floor x +m2tile-width+) (floor y +m2tile-width+))))
@@ -97,8 +97,8 @@ to determine the intensity of the returned RGB value."
   (destructuring-bind (x y width height) (allocation-areas-bounding-box)
     (setf *allocation-area-inclusion-cache*
           (make-allocation-area-inclusion-cache :x x :y y :width width :height height
-                                 :array (make-array (list width height) :element-type '(unsigned-byte 1))
-                                 :areas (class-instances 'allocation-area))))
+                                                :array (make-array (list width height) :element-type '(unsigned-byte 1))
+                                                :areas (class-instances 'allocation-area))))
   (dolist (area (ac-areas *allocation-area-inclusion-cache*))
     (destructuring-bind (top-left-x top-left-y width height) (allocation-area-bounding-box2 area)
       (dotimes (x width)
@@ -127,7 +127,7 @@ to determine the intensity of the returned RGB value."
        (plusp (aref (ac-array *allocation-area-inclusion-cache*)
                     (- x-coord (ac-x *allocation-area-inclusion-cache*))
                     (- y-coord (ac-y *allocation-area-inclusion-cache*))))))
-  
+
 (defclass image-tile (tile)
   ((original-image :documentation "Original satellite image"
 		   :initform nil)
@@ -202,28 +202,28 @@ to determine the intensity of the returned RGB value."
 	  (bottom (+ top height)))
       (with-image (resulting-image width height t)
 	(loop with tile-top = (* +m2tile-width+ (floor top +m2tile-width+))
-	      for y from tile-top upto bottom by +m2tile-width+
-	      do (loop with tile-left = (* +m2tile-width+ (floor left +m2tile-width+))
-		       for x from tile-left upto right by +m2tile-width+
-		       for tile = (get-map-tile x y)
-		       do (if tile
-			      (progn
-				(copy-image (image-tile-image tile)
-					    resulting-image
-					    0 0
-					    (- x tile-left) (- y tile-top)
-					    +m2tile-width+ +m2tile-width+))
-			      (warn "tile at ~D/~D not found?" x y))))
+           for y from tile-top upto bottom by +m2tile-width+
+           do (loop with tile-left = (* +m2tile-width+ (floor left +m2tile-width+))
+                 for x from tile-left upto right by +m2tile-width+
+                 for tile = (get-map-tile x y)
+                 do (if tile
+                        (progn
+                          (copy-image (image-tile-image tile)
+                                      resulting-image
+                                      0 0
+                                      (- x tile-left) (- y tile-top)
+                                      +m2tile-width+ +m2tile-width+))
+                        (warn "tile at ~D/~D not found?" x y))))
 	(write-image-to-file image-pathname :image resulting-image :if-exists if-exists)
 	t))))
 
 ;;; Aufteilen der Karte in Kacheln:
 
-; (split-map +overview-tile-width+ "/home/bknr/tiles-2700/" "/home/bknr/tiles-90/")
+                                        ; (split-map +overview-tile-width+ "/home/bknr/tiles-2700/" "/home/bknr/tiles-90/")
 
 ;;; Laden den Kacheln als BLOBs in die Datenbank:
 
-; (import-tiles "/data/overview/")
+                                        ; (import-tiles "/data/overview/")
 
 (defun namstring (x)
   ;; XXX geht nicht, liefert sogar mit :FOR-INPUT NIL staendig NIL zurueck.

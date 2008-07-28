@@ -5,8 +5,8 @@
 
 (defpersistent-class sat-layer ()
   ((name :reader name :initarg :name
-         :index-type unique-index
-         :index-reader find-sat-layer)
+                               :index-type unique-index
+                               :index-reader find-sat-layer)
    (year :accessor year :initarg :year :initform 2000)
    (geo-box :reader geo-box :initarg :geo-box)
    (local-draw-order :reader local-draw-order :initarg :local-draw-order)))
@@ -39,17 +39,17 @@
         top-level-depth
         (state 'no-layer-node))
     (block collect
-      (map-nodes (lambda (n)                   
+      (map-nodes (lambda (n)
                    (let ((layer-node (find-if (lambda (e) (and (eql (name e) (name sat-layer))
                                                                (typep e 'sat-node)))
-                                              (extensions n))))                     
+                                              (extensions n))))
                      (ecase state
                        (no-layer-node
                         (when layer-node
-                          (push layer-node nodes)                          
+                          (push layer-node nodes)
                           (setq state 'got-top-level-layer-node)
                           (setq top-level-depth (depth n))))
-                       (got-top-level-layer-node                        
+                       (got-top-level-layer-node
                         (if (and layer-node (= (depth n) top-level-depth))
                             (push layer-node nodes)
                             (return-from collect))))))
@@ -59,7 +59,7 @@
     (nreverse nodes)))
 
 (defpersistent-class sat-image (store-image)
-  ((layer :reader layer :initarg :layer)      
+  ((layer :reader layer :initarg :layer)
    (path :reader path :initarg :path)
    (image-geo-box :accessor image-geo-box
                   :initarg :image-geo-box
@@ -81,7 +81,7 @@
   (mapc #'quad-tree-insert-sat-image (class-instances 'sat-image)))
 
 (register-transient-init-function 'quad-tree-insert-sat-images
-                                        'make-quad-tree)
+                                  'make-quad-tree)
 
 (defmethod name ((obj sat-image))
   (name (layer obj)))
@@ -142,8 +142,8 @@
                            :name (format nil "~A-~{~D~}" name path)
                            :type :jpg
                            :initargs `(:path ,path
-                                             :layer ,(find-sat-layer name)
-                                             :image-geo-box ,rounded-geo-box)))))))
+                                       :layer ,(find-sat-layer name)
+                                       :image-geo-box ,rounded-geo-box)))))))
 
 (defun make-sat-image-tiles-for-depth (image geo-box layer start-depth)
   (labels ((layer-quad-nodes ()
@@ -166,7 +166,7 @@
            (max-scaling (nodes)
              (reduce #'max nodes
                      :key (lambda (node)
-                            (sat-image-tile-properties image geo-box (tile-geo-box node))))))    
+                            (sat-image-tile-properties image geo-box (tile-geo-box node))))))
     (let* ((name (name layer))
            (nodes (remove-if-not #'pw-ph-large-enough (layer-quad-nodes)))
            (max-scaling (max-scaling nodes)))
@@ -260,4 +260,3 @@
                                         (website-host) (name layer) (node-path node))
                                 :rect (geo-box-rectangle (geo-box node))
                                 :lod (node-lod node)))))))))
-

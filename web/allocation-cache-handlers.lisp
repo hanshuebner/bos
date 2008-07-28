@@ -11,4 +11,3 @@
      (:pre (:princ
 	    (with-output-to-string (*standard-output*)
 	      (bos.m2.allocation-cache:pprint-cache)))))))
-

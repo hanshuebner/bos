@@ -146,27 +146,27 @@
 (defun copy-file (source target &key (overwrite t))
   (let ((buffer (make-array 4096 :element-type '(unsigned-byte 8)))
 	(read-count 0))
-    (with-open-file (in source :direction :input 
+    (with-open-file (in source :direction :input
 			:element-type '(unsigned-byte 8))
-      (with-open-file (out target :direction :output 
-			   :element-type '(unsigned-byte 8)
-			   :if-exists (if overwrite :overwrite :error) :if-does-not-exist :create)
+      (with-open-file (out target :direction :output
+                                             :element-type '(unsigned-byte 8)
+                                             :if-exists (if overwrite :overwrite :error) :if-does-not-exist :create)
 	(loop
-	 (setf read-count (read-sequence buffer in))
-	 (write-sequence buffer out :end read-count)
-	 (when (< read-count 4096) (return)))))))
+           (setf read-count (read-sequence buffer in))
+           (write-sequence buffer out :end read-count)
+           (when (< read-count 4096) (return)))))))
 
 (defun copy-stream (in out &optional (element-type '(unsigned-byte 8)))
   "Copy everything from in to out"
   (let* ((buffer-size 4096)
 	 (buffer (make-array buffer-size :element-type element-type)))
     (labels ((read-chunks ()
-			  (let ((size (read-sequence buffer in)))
-			    (if (< size buffer-size)
-				(write-sequence buffer out :start 0 :end size)
-			      (progn
-				(write-sequence buffer out)
-				(read-chunks))))))
+               (let ((size (read-sequence buffer in)))
+                 (if (< size buffer-size)
+                     (write-sequence buffer out :start 0 :end size)
+                     (progn
+                       (write-sequence buffer out)
+                       (read-chunks))))))
       (read-chunks))))
 
 
@@ -203,25 +203,25 @@
 
 (defun find-neighbourhood (elt list depth &key (test #'eql))
   (loop for rest on list
-	with seen = list and i = 0
-	when (funcall test elt (car rest))
-	do (return (subseq seen 0 (+ 1 depth i)))
-	do (if (>= i depth) (setf seen (cdr seen)) (incf i))))
-       
+     with seen = list and i = 0
+     when (funcall test elt (car rest))
+     do (return (subseq seen 0 (+ 1 depth i)))
+     do (if (>= i depth) (setf seen (cdr seen)) (incf i))))
+
 (defun assoc-to-keywords (args)
   (loop for (key . value) in args
-	nconc (list (make-keyword-from-string key) value)))
+     nconc (list (make-keyword-from-string key) value)))
 
 (defun group-by (list num)
   (loop for group on list by #'(lambda (seq) (subseq seq num))
-	collect (subseq group 0 num)))
+     collect (subseq group 0 num)))
 
 (defun group-on (list &key (test #'eql) (key #'identity))
   (let ((hash (make-hash-table :test test)))
     (dolist (el list)
       (push el (gethash (funcall key el) hash)))
     (loop for key being the hash-key of hash using (hash-value val)
-	  collect (cons key val))))
+       collect (cons key val))))
 
 (defun flatten (list)
   (if (null list)
@@ -232,13 +232,13 @@
 
 (defun count-multiple (objects &rest keys)
   (let ((hash-tables (loop for i from 1 to (length keys)
-			   collect (make-hash-table :test #'equal)))
+                        collect (make-hash-table :test #'equal)))
 	(sum 0))
     (dolist (object objects)
       (incf sum)
       (loop for key in keys
-	    for i from 0
-	    do (incf-hash (funcall key object) (nth i hash-tables))))
+         for i from 0
+         do (incf-hash (funcall key object) (nth i hash-tables))))
     (apply #'values sum hash-tables)))
 
 (defun rotate (list)
@@ -253,7 +253,7 @@
 
 (defun genlist (from to)
   (loop for i from from to to
-	collect i))
+     collect i))
 
 (defun shift-until (list num &key (test #'>=))
   (do* ((l list (cdr l))
@@ -265,7 +265,7 @@
 ;;; hash table
 (defun hash-to-list (hash &key (key #'cdr) (compare #'>) num)
   (let ((results (sort (loop for key being the hash-key of hash using (hash-value val)
-			     collect (cons key val))
+                          collect (cons key val))
 		       compare :key key)))
     (if num
 	(subseq results 0 num)
@@ -273,11 +273,11 @@
 
 (defun hash-values (hash)
   (loop for value being the hash-values of hash
-	collect value))
+     collect value))
 
 (defun hash-keys (hash)
   (loop for key being the hash-keys of hash
-	collect key))
+     collect key))
 
 (defun incf-hash (key hash &optional (delta 1))
   (if (gethash key hash)
@@ -340,61 +340,61 @@ it is assumed that the string specifies the MIME type."
           (index 0))
       (declare (fixnum length index))
       (loop
-       (unless (< index length) (return nil))
-	   (let* ((char (char string index))
-		  (code (char-code char)))
-	     (restart-case
-		 (handler-bind
-		     ((error #'(lambda (c)
-				 (if ignore-errors
-				     (invoke-restart 'ignore-byte)
-				     (error c)))))
-		   (cond
-		     ((< code #x80) ; ASCII
-		      (write-char char stream)
-		      (incf index 1))
-		     ((< code #xC0) 
-		      
-		      ;; We are in the middle of a multi-byte sequence!
-		      ;; This should never happen, so we raise an error.
-		      (error "Encountered illegal multi-byte sequence."))
-		     ((< code #xC4)
-		      ;; Two byte sequence in Latin-1 range
-		      (unless (< (1+ index) length)
-			(error "Encountered incomplete two-byte sequence."))
-		      (let* ((char2 (char string (1+ index)))
-			     (code2 (char-code char2)))
-			(unless (and (logbitp 7 code2) (not (logbitp 6 code2)))
-			  (error "Second byte in sequence is not a continuation."))
-			(let* ((upper-bits (ldb (byte 2 0) code))
-			       (lower-bits (ldb (byte 6 0) code2))
-			       (new-code (dpb upper-bits (byte 2 6) lower-bits)))
-			  (write-char (code-char new-code) stream)))
-		      (incf index 2))
-		     ((>= code #xFE)
-		      ;; Ignore stray byte-order markers
-		      (incf index 1))
-		     (t
-		      (error (format nil "Multi-byte sequence ~d (~d) outside Latin-1 range."
-				     code char)))))
-	       (ignore-byte ()
-		 :report "Ignore byte"
-		 (incf index 1))
-	       (ignore-n-bytes (n)
-		 :report "Ignore some bytes"
-		 :interactive (lambda () (format t "Enter a new value: ")
-				      (multiple-value-list (eval (read))))
-		 (incf index n))
-	       (write-another-char (b)
-		 :report "Write a new char"
-		 :interactive (lambda () (format t "Enter a new char: ")
-				      (multiple-value-list (eval (read))))
-		 (write-char b stream)
-		 (incf index 1))
-	       (write-char ()
-		 :report "Write byte to latin-1 string"
-		 (write-char char stream)
-		 (incf index 1))))))))
+         (unless (< index length) (return nil))
+         (let* ((char (char string index))
+                (code (char-code char)))
+           (restart-case
+               (handler-bind
+                   ((error #'(lambda (c)
+                               (if ignore-errors
+                                   (invoke-restart 'ignore-byte)
+                                   (error c)))))
+                 (cond
+                   ((< code #x80)       ; ASCII
+                    (write-char char stream)
+                    (incf index 1))
+                   ((< code #xC0)
+
+                    ;; We are in the middle of a multi-byte sequence!
+                    ;; This should never happen, so we raise an error.
+                    (error "Encountered illegal multi-byte sequence."))
+                   ((< code #xC4)
+                    ;; Two byte sequence in Latin-1 range
+                    (unless (< (1+ index) length)
+                      (error "Encountered incomplete two-byte sequence."))
+                    (let* ((char2 (char string (1+ index)))
+                           (code2 (char-code char2)))
+                      (unless (and (logbitp 7 code2) (not (logbitp 6 code2)))
+                        (error "Second byte in sequence is not a continuation."))
+                      (let* ((upper-bits (ldb (byte 2 0) code))
+                             (lower-bits (ldb (byte 6 0) code2))
+                             (new-code (dpb upper-bits (byte 2 6) lower-bits)))
+                        (write-char (code-char new-code) stream)))
+                    (incf index 2))
+                   ((>= code #xFE)
+                    ;; Ignore stray byte-order markers
+                    (incf index 1))
+                   (t
+                    (error (format nil "Multi-byte sequence ~d (~d) outside Latin-1 range."
+                                   code char)))))
+             (ignore-byte ()
+               :report "Ignore byte"
+               (incf index 1))
+             (ignore-n-bytes (n)
+               :report "Ignore some bytes"
+               :interactive (lambda () (format t "Enter a new value: ")
+                                    (multiple-value-list (eval (read))))
+               (incf index n))
+             (write-another-char (b)
+               :report "Write a new char"
+               :interactive (lambda () (format t "Enter a new char: ")
+                                    (multiple-value-list (eval (read))))
+               (write-char b stream)
+               (incf index 1))
+             (write-char ()
+               :report "Write byte to latin-1 string"
+               (write-char char stream)
+               (incf index 1))))))))
 
 ;;; stirng functions
 (defun find-matching-strings (regexp strings &key case-sensitive)
@@ -413,30 +413,29 @@ it is assumed that the string specifies the MIME type."
   (let ((string (make-extendable-string)))
     (handler-case
         (loop with tok-length = (length token)
-              with state = 0
-              initially (vector-push-extend (read-char stream) string) ;; skip first char
-              for c = (read-char stream)
-              while (< state tok-length)
-              do (let ((match (char= c (aref token state))))
-                   (cond
-                     ((and (> state 0) (not match))
-                      (unread-char c stream)
-                      (setf state 0))
-                     (t
-                      (if match (incf state))
-                      (vector-push-extend c string))))
-              finally (progn
-                        (file-position stream (- (file-position stream) tok-length))
-                        (adjust-array string (- (length string) tok-length) :fill-pointer t)
-                        (return (values string t))))
+           with state = 0
+           initially (vector-push-extend (read-char stream) string) ;; skip first char
+           for c = (read-char stream)
+           while (< state tok-length)
+           do (let ((match (char= c (aref token state))))
+                (cond
+                  ((and (> state 0) (not match))
+                   (unread-char c stream)
+                   (setf state 0))
+                  (t
+                   (if match (incf state))
+                   (vector-push-extend c string))))
+           finally (progn
+                     (file-position stream (- (file-position stream) tok-length))
+                     (adjust-array string (- (length string) tok-length) :fill-pointer t)
+                     (return (values string t))))
       (end-of-file () (values (if (> (length string) 0) string nil)
                               nil)))))
 
 (defun read-file (stream)
   "Reads entire contents of stream into a string."
   (loop with result = (make-extendable-string)
-        for c = (read-char stream nil)
-        while c
-        do (vector-push-extend c result)
-        finally (return result)))
-
+     for c = (read-char stream nil)
+     while c
+     do (vector-push-extend c result)
+     finally (return result)))

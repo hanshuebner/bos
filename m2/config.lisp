@@ -31,24 +31,24 @@
 
 (defparameter *pdf-base-directory* (merge-pathnames #p"certs/" (user-homedir-pathname)))
 (defparameter *cert-mail-directory* (merge-pathnames "mail-spool/" *pdf-base-directory*)
-	      "Verzeichnis für per Post zu versendende Urkunden-FDF-Dateien")
+  "Verzeichnis für per Post zu versendende Urkunden-FDF-Dateien")
 (defparameter *cert-download-directory* (merge-pathnames "download-spool/" *pdf-base-directory*)
-	      "Verzeichnis für Urkunden-FDF-Dateien, aus denen
+  "Verzeichnis für Urkunden-FDF-Dateien, aus denen
 Download-Urkunden erzeugt werden sollen")
 (defparameter *receipt-mail-directory* (merge-pathnames "receipt-mail-spool/" *pdf-base-directory*)
-	      "Verzeichnis für per Post zu versendende Urkunden-FDF-Dateien")
+  "Verzeichnis für per Post zu versendende Urkunden-FDF-Dateien")
 (defparameter *receipt-download-directory* (merge-pathnames "receipt-download-spool/" *pdf-base-directory*)
-	      "Verzeichnis für Urkunden-FDF-Dateien, aus denen
+  "Verzeichnis für Urkunden-FDF-Dateien, aus denen
 Download-Urkunden erzeugt werden sollen")
 
 (defparameter *cert-mail-template* (merge-pathnames #p"urkunde-print.pdf"
-						   *pdf-base-directory*))
+                                                    *pdf-base-directory*))
 (defparameter *cert-download-template* (merge-pathnames #p"urkunde-download.pdf"
-						       *pdf-base-directory*))
+                                                        *pdf-base-directory*))
 (defparameter *receipt-mail-template* (merge-pathnames #p"spendenbescheinigung-print.pdf"
 						       *pdf-base-directory*))
 (defparameter *receipt-download-template* (merge-pathnames #p"spendenbescheinigung-download.pdf"
-						       *pdf-base-directory*))
+                                                           *pdf-base-directory*))
 (defparameter *cert-daemon-poll-seconds* 2
   "Wartezeit zwischen zwei Directory-Scans des Urkunden-Daemons")
 
@@ -73,4 +73,3 @@ Download-Urkunden erzeugt werden sollen")
 
 ;; Einschalten des Mail-Versands (normalerweise aus)
 (defvar *enable-mails* nil)
-

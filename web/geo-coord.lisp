@@ -1,4 +1,3 @@
-
 (cl-interpol:enable-interpol-syntax)
 
 (defun get-geo-coord (pathname)

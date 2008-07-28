@@ -5,8 +5,8 @@
 
 (defpersistent-class kml-root-data ()
   ((language :initarg :language :reader language :type string
-             :index-type string-unique-index
-             :index-reader kml-root-data-with-language)
+                                                 :index-type string-unique-index
+                                                 :index-reader kml-root-data-with-language)
    (kml-string :accessor kml-string)))
 
 (defun ensure-kml-root-data-for-language (language)
@@ -29,7 +29,7 @@
                   (princ-to-string xml-parse-error))
                (when (and line column)
                  (values (parse-integer line) (parse-integer column))))))
-    (with-bos-cms-page (:title "KML Upload")    
+    (with-bos-cms-page (:title "KML Upload")
       (html ((:form
               :method "POST" :enctype "multipart/form-data")
              (dolist (kml-root-data (class-instances 'kml-root-data))
@@ -41,7 +41,7 @@
                              (when file-upload
                                (handler-case
                                    (progn
-                                     (kml-root-data-validate-file-upload file-upload)                                     
+                                     (kml-root-data-validate-file-upload file-upload)
                                      (with-transaction ("update kml-string")
                                        (setf (kml-string kml-root-data)
                                              (arnesi:read-string-from-file (upload-pathname file-upload)
@@ -56,7 +56,7 @@
                                                      (and line column)
                                                      line column)))))))))
                        ;; we want this after the processing
-                       (:p (:format "last-change: ~A"                                
+                       (:p (:format "last-change: ~A"
                                     (format-date-time (store-object-last-change kml-root-data 0)))
                            (cmslink (format nil "/kml-upload?lang=~A&action=download" language)
                              "download current version")))))
@@ -90,7 +90,7 @@
                              (cxml:with-xml-output (cxml:make-string-sink :omit-xml-declaration-p t)
                                (write-personalized-contract-placemark-kml contract lang))))))
 
-(defun serve-kml-root-data (&optional sponsor)  
+(defun serve-kml-root-data (&optional sponsor)
   (with-query-params ((lang "en"))
     (let* ((kml-root-data (kml-root-data-with-language lang))
            (last-modified (store-object-last-change kml-root-data 0)))
@@ -130,7 +130,7 @@
 (defun kml-format-color (color &optional (opacity 255))
   (format nil "~2,'0X~{~2,'0X~}" opacity (reverse color)))
 
-(defun contract-description (contract language)  
+(defun contract-description (contract language)
   (let* ((sponsor (contract-sponsor contract))
 	 (name (user-full-name sponsor)))
     (flet ((donor-id () (dictionary-entry "Donor ID:" language))
@@ -140,7 +140,7 @@
            (since () (dictionary-entry "since:" language)))
       (with-xml-output (cxml:make-string-sink)
         (with-element "div"
-          (with-element "table"          
+          (with-element "table"
             (with-element "tr"
               (with-element "td" (text (donor-id)))
               (with-element "td" (text (princ-to-string (store-object-id sponsor)))))
@@ -201,13 +201,13 @@
             (with-element "altitude" (text "0"))
             (with-element "range" (text "1134.262777389377"))
             (with-element "tilt" (text "0"))
-            (with-element "heading" (text "1.391362238653075")))          
+            (with-element "heading" (text "1.391362238653075")))
           (with-element "Folder"
 	    (attribute "name" (dictionary-entry "Sat-Images" lang))
 	    (attribute "open" "1")
 	    (with-element "Style"
 	      (with-element "ListStyle"
-		(with-element "listItemType" (text "radioFolder"))))	    	    
+		(with-element "listItemType" (text "radioFolder"))))
 	    (dolist (sat-layer (sort (copy-list (class-instances 'sat-layer))
 				     #'< :key #'year))
 	      (kml-network-link (format nil "http://~a/sat-root-kml?name=~A" (website-host) (name sat-layer))
@@ -221,7 +221,7 @@
                                  (path (node-path node))
                                  (contract-id (store-object-id contract)))
                             (format nil "http://~a/contract-tree-kml?rmcid=~D&rmcpath=~{~D~}&lang=~A"
-                                    (website-host) contract-id path lang)))))            
+                                    (website-host) contract-id path lang)))))
             (kml-network-link href
                               :rect (geo-box-rectangle (geo-box *contract-tree*))
                               :lod (node-lod *contract-tree*)
@@ -254,11 +254,11 @@
                                                    (if (contract-paidp contract)
                                                        (store-object-last-change contract 0)
                                                        0)))))
-    (hunchentoot:handle-if-modified-since timestamp)  
+    (hunchentoot:handle-if-modified-since timestamp)
     (setf (hunchentoot:header-out :last-modified)
           (hunchentoot:rfc-1123-date timestamp))
     (with-xml-response (:content-type "application/vnd.google-earth.kml+xml; charset=utf-8"
-                                      :root-element "kml")      
+                                      :root-element "kml")
       (with-query-params ((lang "en"))
         (with-element "Document"
           (with-element "name" (text "Country-Stats"))
@@ -274,7 +274,7 @@
             (with-element "IconStyle"
               (with-element "Icon"
                 ;; (with-element "href" (text "http://maps.google.com/mapfiles/kml/pal3/icon23.png"))
-                (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))                    
+                (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
           (do-sponsor-countries (country)
             (let ((coords (cdr (assoc country *country-coords*))))
               (when coords
@@ -287,7 +287,7 @@
                       (with-element "styleUrl" (text "#countryStatsStyle"))
                       (with-element "description"
                         (text (format nil "<p>~A</p><table><tbody><tr><td>~A:</td><td>~D ~A</td></tr>
-                                             <tr><td>~A:</td><td>~D m²</td></tr></tbody></table>"                                      
+                                             <tr><td>~A:</td><td>~D m²</td></tr></tbody></table>"
                                       (dictionary-entry "BOS says thank you to all sponsors!" lang)
                                       (dictionary-entry
                                        (second (assoc country *country-english-names*)) lang)
@@ -309,9 +309,8 @@
 (defmethod handle-object ((handler look-at-allocation-area-handler)
                           (area allocation-area))
   (with-xml-response (:content-type "application/vnd.google-earth.kml+xml; charset=utf-8"
-                                    :root-element "kml")      
+                                    :root-element "kml")
     (with-element "Document"
       (with-element "name" (text (format nil "allocation-area ~D" (store-object-id area))))
       (kml-region (make-rectangle2 (allocation-area-bounding-box2 area))
                   nil))))
-

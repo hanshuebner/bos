@@ -5,8 +5,8 @@
     (dolist (part (nreverse (cl-ppcre:split ", "
                                             (with-output-to-string (s)
                                               (apply #'geometry:format-lon-lat s coord)))))
-        (pdf:draw-left-text x y part font 8 300)
-        (incf y 10))))
+      (pdf:draw-left-text x y part font 8 300)
+      (incf y 10))))
 
 (defun make-m2-pdf (contract &key print)
   (pdf:with-document ()

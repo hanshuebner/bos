@@ -34,13 +34,13 @@
         (rplacd cons value)
         (push (cons key value) *dictionary-keys*))))
 
-(defun %dictionary-entry (key language)  
+(defun %dictionary-entry (key language)
   (let ((language (dictionary-language language)))
     (load-dictionary-if-needed language)
     (or (cdr (assoc language (gethash key *dictionary*)))
         key)))
 
-(defun (setf %dictionary-entry) (value key language)  
+(defun (setf %dictionary-entry) (value key language)
   (let* ((language (dictionary-language language))
          (it (assoc language (gethash key *dictionary*))))
     (if it
@@ -51,7 +51,7 @@
   (flet ((pathname-equal (a b)
            (equal (namestring a) (namestring b))))
     (when (constantp key)
-      (check-type key string)  
+      (check-type key string)
       (when *compile-file-pathname*
         (pushnew *compile-file-pathname* (dictionary-key-occurences key)
                  :test #'pathname-equal)))
@@ -59,7 +59,7 @@
 
 (defun dictionary-clear-entries-by-language (language)
   (declare (dictionary-language language))
-  (maphash (lambda (key value)             
+  (maphash (lambda (key value)
              ;; (setf gethash) with key explicitly allowed by ANSI CL
              (setf (gethash key *dictionary*)
                    (remove language value :key #'car)))
@@ -90,13 +90,13 @@
   (declare (dictionary-language language))
   (labels ((trim-whitespace (string)
              (string-trim '(#\space #\newline #\tab) string))
-           (load-language (language xml-path)             
+           (load-language (language xml-path)
              (handler-case
                  (let ((xmls (cxml:parse-file xml-path (cxml-xmls:make-xmls-builder))))
                    (assert (equal "dictionary" (cxml-xmls:node-name xmls)) nil
                            "root element should be \"dictionary\"")
                    (dolist (element (cxml-xmls:node-children xmls))
-                     (when (consp element)                       
+                     (when (consp element)
                        (assert (equal "entry" (cxml-xmls:node-name element)) nil
                                "expected element \"entry\"")
                        (let ((key-value (remove-if #'atom (cxml-xmls:node-children element))))
@@ -110,18 +110,18 @@
                              (let ((key (trim-whitespace key))
                                    (value (trim-whitespace value)))
                                (assert (stringp key))
-                               (assert (stringp value))                          
+                               (assert (stringp value))
                                (unless (zerop (length value))
                                  (setf (%dictionary-entry key language) value)))))))))
                (error (c)
                  (error "Error while loading ~a:~%~a"
-                        (enough-namestring xml-path (dictionary-directory)) c)))))    
+                        (enough-namestring xml-path (dictionary-directory)) c)))))
     (dictionary-clear-entries-by-language language)
-    (load-language language xml-path)    
+    (load-language language xml-path)
     (setf (dictionary-last-read language) (get-universal-time))
     *dictionary*))
 
-(defun load-dictionary-if-needed (language)  
+(defun load-dictionary-if-needed (language)
   (declare (dictionary-language language))
   (let ((xml-path (dictionary-xml-path language)))
     (when (> (file-write-date xml-path)
@@ -130,10 +130,9 @@
 
 (defun dictionary-write-template (&optional (stream *standard-output*))
   (cxml:with-xml-output (make-character-stream-sink stream :canonical nil :indentation 2)
-    (with-element "dictionary"       
+    (with-element "dictionary"
       (loop for (key . paths) in (sort (copy-list *dictionary-keys*) #'string< :key #'car)
-         do (cxml:comment (format nil " in ~A ~{~%~8T~A  ~}" (first paths) (rest paths)))      
+         do (cxml:comment (format nil " in ~A ~{~%~8T~A  ~}" (first paths) (rest paths)))
          do (with-element "entry"
               (with-element "key" (text key))
               (with-element "value" (text "")))))))
-

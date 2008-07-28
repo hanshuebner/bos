@@ -103,7 +103,7 @@
                        (height (- north south)))
                    (values (+ west (/ width 2))
                            (- north (/ height 2))))))
-             (geo-box-middle-utm (box)               
+             (geo-box-middle-utm (box)
                (multiple-value-bind (lon lat)
                    (geo-box-middle box)
                  (geo-utm:lon-lat-to-utm-x-y* lon lat float-pair))))
@@ -149,7 +149,7 @@
      (name :reader name :initarg :name :initform nil))))
 
 (defmethod (setf %base-node) :before (base-node (node node-extension))
-  (assert (not (member node (%extensions base-node) :test #'equal-extension-type)) nil         
+  (assert (not (member node (%extensions base-node) :test #'equal-extension-type)) nil
           "Cannot add ~s to extensions of ~s.~
          ~%An extension of same class and name already exists." node base-node))
 
@@ -158,7 +158,7 @@
 
 (defmethod shared-initialize :after ((obj node-extension) slot-names
                                      &key base-node parent-node index
-                                     &allow-other-keys)     
+                                     &allow-other-keys)
   (flet ((xor (a b)
            (or (and (not a) b)
                (and a (not b)))))
@@ -180,7 +180,7 @@
   (print-unreadable-object (node stream :type t :identity t)
     (format stream "name: ~s path: ~s" (name node) (node-path node))))
 
-(defmethod delete-node-extension ((node node-extension))  
+(defmethod delete-node-extension ((node node-extension))
   (setf (%extensions (base-node node))
         (delete node (%extensions (base-node node)))))
 
@@ -201,7 +201,7 @@
                    (east geo-box-east))
       (geo-box node)
     (let ((middle-north (- north (/ (- north south) 2d0)))
-          (middle-west (+ west (/ (- east west) 2d0))))      
+          (middle-west (+ west (/ (- east west) 2d0))))
       (ecase index
         (0 (make-geo-box   west         north         middle-west  middle-north))
         (1 (make-geo-box   middle-west  north         east         middle-north))
@@ -227,7 +227,7 @@ returns indices of those children that would intersect with GEO-BOX."
   (:method (new-value (node quad-node) index)
     (setf (aref (children node) index) new-value))
   (:method (child (node node-extension) index)
-    (let ((base-child (child (base-node node) index)))      
+    (let ((base-child (child (base-node node) index)))
       (pushnew child (%extensions base-child ))
       child)))
 
@@ -332,7 +332,7 @@ If PRUNE-TEST returns true, the given node will not be visited."
                           (enqueue node nodes)
                           nodes))))
 
-(defun map-nodes (function node &key (prune-test (constantly nil)) (order :depth-first))  
+(defun map-nodes (function node &key (prune-test (constantly nil)) (order :depth-first))
   (check-type order (member :depth-first :breadth-first))
   (let ((mapper (case order
                   (:depth-first #'map-nodes-depth-first)
@@ -393,4 +393,3 @@ If PRUNE-TEST returns true, the given node will not be visited."
      (* (depth node) +max-num-of-local-draw-order-levels+)))
 
 (register-transient-init-function 'make-quad-tree)
-

@@ -1,5 +1,4 @@
-
-; please don't read this code, it is not pretty
+                                        ; please don't read this code, it is not pretty
 
 (in-package :bos.web)
 
@@ -88,7 +87,7 @@ function updateCoords() {
         var new_y = document.mapnavigator.ycoord.value;
         document.location.href = '/map-browser/' + new_x + '/' + new_y;
 
- 	return false;
+	return false;
 }
 "
 		 ))
@@ -108,18 +107,18 @@ function updateCoords() {
 				     :style #?"position:absolute; left:$(point-x)px; top:$(point-y)px")
 			       ((:img :src "/images/map-cursor.png" :width 5 :height 5)))))
 		      (loop for y from 0 upto 270 by 90
-			    for tile-index-y from 0 by 1
-			    for map-y = (+ (tile-nw-y start-tile) y)
-			    for screen-y = y
-			    do (loop for x from 0 upto 270 by 90
-				     for map-x = (+ (tile-nw-x start-tile) x)
-				     for tile-index-x from 0 by 1
-				     for screen-x = (+ x 380)
-				     do (html ((:div :id #?"tile-$(tile-index-x)-$(tile-index-y)"
-						     :style #?"position:absolute; left:$(screen-x)px; top:$(screen-y)px;")
-					       ((:img :width "90" :height "90"
-						      :border "0"
-						      :src #?"/overview/$(map-x)/$(map-y)"))))))
+                         for tile-index-y from 0 by 1
+                         for map-y = (+ (tile-nw-y start-tile) y)
+                         for screen-y = y
+                         do (loop for x from 0 upto 270 by 90
+                               for map-x = (+ (tile-nw-x start-tile) x)
+                               for tile-index-x from 0 by 1
+                               for screen-x = (+ x 380)
+                               do (html ((:div :id #?"tile-$(tile-index-x)-$(tile-index-y)"
+                                               :style #?"position:absolute; left:$(screen-x)px; top:$(screen-y)px;")
+                                         ((:img :width "90" :height "90"
+                                                            :border "0"
+                                                            :src #?"/overview/$(map-x)/$(map-y)"))))))
 		      ((:div :id "overlay"
 			     :style #?"position:absolute; left:380px; top:0px; width:360px; height:360px;")
 		       ((:a :href #?"/map-browser/$(point-x)/$(point-y)")

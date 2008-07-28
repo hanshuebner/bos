@@ -136,14 +136,14 @@
       (return-from index-remove nil))
     (unless (eq object
 		(object-at index
-		     (slot-value object x-slot-name)
-		     (slot-value object y-slot-name)))
+                           (slot-value object x-slot-name)
+                           (slot-value object y-slot-name)))
       (error "while removing object ~A from ~A - unexpected object ~A in index, can't remove object"
 	     object
 	     index
 	     (object-at index
-		     (slot-value object x-slot-name)
-		     (slot-value object y-slot-name))))
+                        (slot-value object x-slot-name)
+                        (slot-value object y-slot-name))))
     (setf (object-at index
 		     (slot-value object x-slot-name)
 		     (slot-value object y-slot-name))
@@ -161,8 +161,8 @@
 (defmethod index-clear ((index tiled-index))
   (with-slots (width height tile-size) index
     (setf (slot-value index 'tiles) (make-array (list (floor width tile-size)
-							 (floor height tile-size))
-						   :initial-element nil))))
+                                                      (floor height tile-size))
+                                                :initial-element nil))))
 
 (defmethod index-reinitialize ((new-index tiled-index) (old-index tiled-index))
   (unless (every #'(lambda (slot-name) (equal (slot-value old-index slot-name)

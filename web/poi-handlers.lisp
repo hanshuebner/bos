@@ -127,7 +127,7 @@
               (unless (eql 6 (length (poi-images poi)))
                 (html
                  :br
-                 (cmslink (format nil "edit-poi-image/?poi=~A" (store-object-id poi)) "[new]")))))        
+                 (cmslink (format nil "edit-poi-image/?poi=~A" (store-object-id poi)) "[new]")))))
         (:tr (:td "airal view"
                   ((:input :id "airal-id" :type "hidden" :name "airal-id")))
              (:td (:table (dolist (airal (poi-airals poi))

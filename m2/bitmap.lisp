@@ -67,23 +67,23 @@
 		   (aref work-array x y)
 		   nil)))
 	(loop for contract in contracts
-	      do (when (or (not seen)
-			   (not (gethash contract seen)))
-		   (when seen (setf (gethash contract seen) t))
-		   (let ((free (copy-seq (cdr (coerce colors 'list)))))
-		     (dolist (m2 (contract-m2s contract))
-		       (flet ((doit (x y)
-				(let ((c (get-pixel x y)))
-				  (when c
-				    (setf free (delete c free))))))
-			 (doit (+ (m2-x m2)  0) (+ (m2-y m2) -1))
-			 (doit (+ (m2-x m2) -1) (+ (m2-y m2)  0))
-			 (doit (+ (m2-x m2) +1) (+ (m2-y m2)  0))
-			 (doit (+ (m2-x m2)  0) (+ (m2-y m2) +1))))
-		     (let ((color (or (car free)
-				      (elt colors (1+ (random 15))))))
-		       (dolist (m2 (contract-m2s contract))
-			 (set-pixel (m2-x m2) (m2-y m2) color)))))))
+           do (when (or (not seen)
+                        (not (gethash contract seen)))
+                (when seen (setf (gethash contract seen) t))
+                (let ((free (copy-seq (cdr (coerce colors 'list)))))
+                  (dolist (m2 (contract-m2s contract))
+                    (flet ((doit (x y)
+                             (let ((c (get-pixel x y)))
+                               (when c
+                                 (setf free (delete c free))))))
+                      (doit (+ (m2-x m2)  0) (+ (m2-y m2) -1))
+                      (doit (+ (m2-x m2) -1) (+ (m2-y m2)  0))
+                      (doit (+ (m2-x m2) +1) (+ (m2-y m2)  0))
+                      (doit (+ (m2-x m2)  0) (+ (m2-y m2) +1))))
+                  (let ((color (or (car free)
+                                   (elt colors (1+ (random 15))))))
+                    (dolist (m2 (contract-m2s contract))
+                      (set-pixel (m2-x m2) (m2-y m2) color)))))))
       (cl-gd:do-rows (y)
 	(cl-gd:do-pixels-in-row (x)
 	  (setf (cl-gd:raw-pixel) (aref work-array x y)))))))
@@ -126,13 +126,13 @@
     (draw-stripes))
   (if step
       (loop for i from 0 to (ceiling (length (all-contracts)) step)
-            do
-            (let ((filename
-                   (merge-pathnames (format nil "test-~3,'0D.png" i)
-                                    directory)))
-              (print filename)
-              (force-output)
-              (write-allocation-bitmap filename (* i step))))
+         do
+         (let ((filename
+                (merge-pathnames (format nil "test-~3,'0D.png" i)
+                                 directory)))
+           (print filename)
+           (force-output)
+           (write-allocation-bitmap filename (* i step))))
       (write-allocation-bitmap
        (merge-pathnames "test.png" directory))))
 
@@ -140,7 +140,7 @@
 
 (defun test-allocation
     (&key (initial-random-state *initial-random-state*)
-          (limit nil))
+     (limit nil))
   (let ((*random-state* (make-random-state initial-random-state)))
     (when *bitmap*
       (free-allocation-bitmap))
@@ -153,7 +153,7 @@
       (flet ((make-one-contract ()
                (let* ((limit 0.0001)
                       (n (max 1 (round (/ 0.5 (+ (random (- 1.0 limit)) limit))))))
-        
+
                  (format t " ~D" n)
                  (force-output)
                  (make-contract u n))))
@@ -161,7 +161,7 @@
             (dotimes (x limit)
               (make-one-contract))
             (loop
-              (make-one-contract)))))))
+               (make-one-contract)))))))
 
 #+(or)
 (progn

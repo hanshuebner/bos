@@ -1,4 +1,3 @@
-
 (in-package :bos.web)
 
 (enable-interpol-syntax)
@@ -17,8 +16,8 @@
 
 (defun language-from-url (path)
   (register-groups-bind (language) (#?r"^/(..)/" path)
-			(when (website-supports-language language)
-			  language)))
+    (when (website-supports-language language)
+      language)))
 
 (defun find-browser-prefered-language ()
   "Determine the language prefered by the user, as determined by the Accept-Language header
@@ -37,7 +36,7 @@ language preference weights."
       (when (website-supports-language language)
 	(return-from find-browser-prefered-language language))
       (register-groups-bind (language variant) (#?r"^(.*)-(.*)$" language)
-			    (declare (ignore variant))
-			    (when (website-supports-language language)
-			      (return-from find-browser-prefered-language language)))))
+        (declare (ignore variant))
+        (when (website-supports-language language)
+          (return-from find-browser-prefered-language language)))))
   nil)

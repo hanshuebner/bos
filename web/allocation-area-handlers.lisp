@@ -1,4 +1,3 @@
-
 (in-package :bos.web)
 
 (enable-interpol-syntax)
@@ -74,12 +73,12 @@
        (:h2 "Allocation Graphics")
        ((:table :cellspacing "0" :cellpadding "0" :border "0")
 	(loop for y from (floor top 90) below (ceiling (+ top height) 90)
-	      do (html (:tr
-			(loop for x from (floor left 90) below (ceiling (+ left width) 90)
-			      for tile-x = (* 90 x)
-			      for tile-y = (* 90 y)
-			      do (html (:td ((:a :href #?"/enlarge-overview/$(tile-x)/$(tile-y)")
-					     ((:img :width "90" :height "90" :border "0" :src #?"/overview/$(tile-x)/$(tile-y)"))))))))))))))
+           do (html (:tr
+                     (loop for x from (floor left 90) below (ceiling (+ left width) 90)
+                        for tile-x = (* 90 x)
+                        for tile-y = (* 90 y)
+                        do (html (:td ((:a :href #?"/enlarge-overview/$(tile-x)/$(tile-y)")
+                                       ((:img :width "90" :height "90" :border "0" :src #?"/overview/$(tile-x)/$(tile-y)"))))))))))))))
 
 (defmethod handle-object-form ((handler allocation-area-handler) (action (eql :delete)) allocation-area)
   (delete-object allocation-area)
@@ -108,36 +107,36 @@
 						      (- (cdr point) top)))
 			      (coerce (allocation-area-vertices allocation-area) 'list))))
 	(loop with dest-y = 0
-	      for y = (+ top dest-y)
-	      for tile-y = (* 90 (floor y 90))
-	      until (> tile-y (+ top height))
-	      for copy-height = (cond
-				  ((< tile-y top)
-				   (+ 90 (- tile-y top)))
-				  ((> (+ tile-y 90) (+ top height))
-				   (- (+ tile-y 90) (+ top height)))
-				  (t
-				   90))
-	      for source-y = (if (< tile-y top) (- 90 copy-height) 0)
-	      do (loop with dest-x = 0
-		       for x = (+ left dest-x)
-		       for tile-x = (* 90 (floor x 90))
-		       until (> tile-x (+ left width))
-		       for copy-width = (cond
-					  ((< tile-x left)
-					   (+ 90 (- tile-x left)))
-					  ((> (+ tile-x 90) (+ left width))
-					   (- (+ tile-x 90) (+ left width)))
-					  (t
-					   90))
-		       for source-x = (if (< tile-x left) (- 90 copy-width) 0)
-		       do (cl-gd:copy-image (image-tile-image (get-map-tile x y))
-					    cl-gd:*default-image*
-					    source-x source-y
-					    dest-x dest-y
-					    copy-width copy-height)
-		       do (incf dest-x copy-width))
-	      do (incf dest-y copy-height))
+           for y = (+ top dest-y)
+           for tile-y = (* 90 (floor y 90))
+           until (> tile-y (+ top height))
+           for copy-height = (cond
+                               ((< tile-y top)
+                                (+ 90 (- tile-y top)))
+                               ((> (+ tile-y 90) (+ top height))
+                                (- (+ tile-y 90) (+ top height)))
+                               (t
+                                90))
+           for source-y = (if (< tile-y top) (- 90 copy-height) 0)
+           do (loop with dest-x = 0
+                 for x = (+ left dest-x)
+                 for tile-x = (* 90 (floor x 90))
+                 until (> tile-x (+ left width))
+                 for copy-width = (cond
+                                    ((< tile-x left)
+                                     (+ 90 (- tile-x left)))
+                                    ((> (+ tile-x 90) (+ left width))
+                                     (- (+ tile-x 90) (+ left width)))
+                                    (t
+                                     90))
+                 for source-x = (if (< tile-x left) (- 90 copy-width) 0)
+                 do (cl-gd:copy-image (image-tile-image (get-map-tile x y))
+                                      cl-gd:*default-image*
+                                      source-x source-y
+                                      dest-x dest-y
+                                      copy-width copy-height)
+                 do (incf dest-x copy-width))
+           do (incf dest-y copy-height))
 	(cl-gd:draw-polygon vertices :color (elt colors 1))
 	(emit-image-to-browser cl-gd:*default-image* :png)))))
 
@@ -150,8 +149,8 @@
       ((and x y left top)
        (destructuring-bind (x y left top) (mapcar #'parse-integer (list x y left top))
 	 (if (or (some (complement #'plusp) (list x y left top))
-		   (<= x left)
-		   (<= y top))
+                 (<= x left)
+                 (<= y top))
 	     (with-bos-cms-page (:title "Invalid area selected")
 	       (:h2 "Choose upper left corner first, then lower-right corner"))
 	     (redirect (format nil "/allocation-area/~D" (store-object-id
@@ -161,8 +160,8 @@
 			 x y
 			 (encode-urlencoded "Choose lower right point of allocation area")
 			 (encode-urlencoded (format nil "~A?left=~A&top=~A&"
-						   (hunchentoot:request-uri*)
-						   x y)))))
+                                                    (hunchentoot:request-uri*)
+                                                    x y)))))
       (t
        (with-bos-cms-page (:title "Create allocation area")
 	 ((:form :method "POST" :enctype "multipart/form-data"))
@@ -196,9 +195,9 @@
 	 (handler-case
 	     (let* ((vertices (polygon-from-text-file (upload-pathname uploaded-text-file)))
 		    (existing-area (find (coerce vertices 'list)
-						     (class-instances 'allocation-area)
-						     :key #'(lambda (area) (coerce (allocation-area-vertices area) 'list))
-						     :test #'equal)))
+                                         (class-instances 'allocation-area)
+                                         :key #'(lambda (area) (coerce (allocation-area-vertices area) 'list))
+                                         :test #'equal)))
 	       (if existing-area
 		   (html (:p (:h2 "Polygon already imported")
 			     "The polygon " (:princ-safe vertices) " has already been "
@@ -221,12 +220,12 @@
 (defun ensure-line (file regex &key skip)
   (handler-case
       (loop for line = (read-line file)
-	    when (scan regex line)
-	    do (return-from ensure-line)
-	    when (not skip)
-	    do (error "expected ~A but read ~A from file ~A" regex line file))
+         when (scan regex line)
+         do (return-from ensure-line)
+         when (not skip)
+         do (error "expected ~A but read ~A from file ~A" regex line file))
     (error (e)
-	(error "error ~A on file ~A while waiting for ~A" e file regex))))
+      (error "error ~A on file ~A while waiting for ~A" e file regex))))
 
 (defun ensure-float (x)
   (typecase x
@@ -280,12 +279,12 @@
       (ensure-line file #?r"^%%Note:" :skip t)
       (let (polygons)
 	(loop for polygon = (loop for line = (read-line file)
-				  until (scan #?r"^n" line)
-				  collect (parse-illustrator-point line))
-	      do (when (equal (first polygon)
-			      (first (last polygon)))
-		   (setf polygon (cdr polygon)))
-	      do (push (coerce polygon 'vector) polygons)
-	      until (equal #\% (peek-char nil file)))
+                               until (scan #?r"^n" line)
+                               collect (parse-illustrator-point line))
+           do (when (equal (first polygon)
+                           (first (last polygon)))
+                (setf polygon (cdr polygon)))
+           do (push (coerce polygon 'vector) polygons)
+           until (equal #\% (peek-char nil file)))
 	(ensure-line file #?r"^%%EOF" :skip t)
 	polygons))))

@@ -91,9 +91,9 @@
       (attribute "y" (write-to-string y))
       (with-element "polygon"
         (map nil
-            (lambda (vertex)
-              (export-point (car vertex) (cdr vertex)))
-            vertices))
+             (lambda (vertex)
+               (export-point (car vertex) (cdr vertex)))
+             vertices))
       (with-element "stripes"
         (map-sorted #'export-stripe #'stripe< stripes)))))
 
@@ -115,7 +115,7 @@
 
 (defun export-database (pathname
                         &key (indentation 2)
-                             (include-database-id *include-database-id*))
+                        (include-database-id *include-database-id*))
   (with-open-file (target-stream
                    pathname
                    :direction :output

@@ -29,7 +29,7 @@
 
 (deftransaction set-slot-string-values (object language &rest args)
   (loop for (slot-name value) on args by #'cddr
-	do (setf (slot-string object slot-name language) value)))
+     do (setf (slot-string object slot-name language) value)))
 
 ;; POI-Anwendungsklassen und Konstruktoren
 
@@ -69,8 +69,8 @@
 
 (define-persistent-class poi ()
   ((name :read :index-type string-unique-index
-	 :index-reader find-poi :index-values all-pois
-	 :documentation "Symbolischer Name")
+               :index-reader find-poi :index-values all-pois
+               :documentation "Symbolischer Name")
    (title :update :initform (make-string-hash-table) :documentation "Angezeigter Name")
    (subtitle :update :initform (make-string-hash-table) :documentation "Unterschrift")
    (description :update :initform (make-string-hash-table) :documentation "Beschreibungstext")
@@ -155,7 +155,7 @@ var poi = { symbol: ~S,
 	      (length (poi-images poi)))
       (format t "poi.thumbnail = ~D;~%" (length (poi-images poi)))
       (when (poi-airals poi)
-	
+
 	(format t "poi.luftbild = ~D;~%" (store-object-id (first (poi-airals poi)))))
       (when (poi-panoramas poi)
 	(format t "poi.panoramas = [ ~{~D~^, ~} ];~%" (mapcar #'store-object-id (poi-panoramas poi))))
@@ -178,5 +178,3 @@ var poi = { symbol: ~S,
 	(format t "poi['y'] = ~D;~%" y)
 	(format t "poi['thumbnail'] = 0;~%")
 	(format t "pois.push(poi);~%")))))
-
-

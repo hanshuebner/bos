@@ -1,4 +1,3 @@
-
 (in-package :bos.web)
 
 (enable-interpol-syntax)
@@ -40,13 +39,13 @@
        "tinyMCE.init({ mode : 'textareas', theme : 'advanced' });")
       ((:form :method "post")
        (:table
-	   (:tr (:td "title")
-		(:td (text-field "title"
-				 :value (news-item-title news-item language))))
-	 (:tr (:td "text")
-	      (:td (textarea-field "text"
-				   :value (news-item-text news-item language))))
-	 (:tr (:td (submit-button "save" "save") (submit-button "delete" "delete" :confirm "Really delete the news item?"))))))))
+        (:tr (:td "title")
+             (:td (text-field "title"
+                              :value (news-item-title news-item language))))
+        (:tr (:td "text")
+             (:td (textarea-field "text"
+                                  :value (news-item-text news-item language))))
+        (:tr (:td (submit-button "save" "save") (submit-button "delete" "delete" :confirm "Really delete the news item?"))))))))
 
 (defmethod handle-object-form ((handler edit-news-handler) (action (eql :save)) news-item)
   (let ((language (request-language)))

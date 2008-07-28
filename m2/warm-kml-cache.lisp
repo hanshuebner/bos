@@ -38,7 +38,7 @@
            (if (equal (cxml-xmls:node-name node) name)
                node
                (some #'(lambda (child) (find-child name child)) (cxml-xmls:node-children node)))))
-       (lispify-region (node)    
+       (lispify-region (node)
          (assert (equal "Region" (cxml-xmls:node-name node)))
          (assert (equal "LatLonAltBox" (cxml-xmls:node-name (first (cxml-xmls:node-children node)))))
          (assert (equal "Lod" (cxml-xmls:node-name (second (cxml-xmls:node-children node)))))
@@ -61,7 +61,7 @@
            (destructuring-bind (parent-north parent-south parent-west parent-east) parent
              (destructuring-bind (region-north region-south region-west region-east) region
                (when (not (<= region-north parent-north))
-                 (format t "not (<= region-north parent-north)~%")) 
+                 (format t "not (<= region-north parent-north)~%"))
                (when (not (>= region-south parent-south))
                  (format t "not (>= region-south parent-south)~%"))
                (when (not (>= region-west parent-west))
@@ -78,10 +78,10 @@
        (analyze-children (node)
          (mapc #'analyze-node (cxml-xmls:node-children node)))
        (analyze-node (node &optional expected-region)
-         (when (listp node)         
+         (when (listp node)
            (when expected-region
              (assert (equal expected-region (lispify-region (find-child "Region" node)))))
-           ;; (print (cxml-xmls:node-name node))           
+           ;; (print (cxml-xmls:node-name node))
            (arnesi:switch ((cxml-xmls:node-name node) :test #'equal)
              ("NetworkLink"
               (let ((region (find-child "Region" node))
@@ -107,5 +107,3 @@
                                 :host host
                                 :path path))
     t))
-
-

@@ -320,4 +320,3 @@
         (when max-fade (with-element "maxFadeExtent" (integer-text max-fade)))))))
 
 ;; end kml utils
-

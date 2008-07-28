@@ -1,4 +1,3 @@
-
 (defpackage :bos.test
   (:use :cl
 	:fiveam
@@ -17,4 +16,3 @@
 	:bos.m2
 	:bos.m2.config
 	))
-

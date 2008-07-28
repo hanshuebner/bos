@@ -23,8 +23,8 @@
 		   (td-link-to    x     (- y 90) "o")
 		   (td-link-to (+ x 90) (- y 90) "or"))
 	      (:tr (td-link-to (- x 90)    y     "l")
-		   :td
-		   (td-link-to (+ x 90)    y     "r"))
+               :td
+               (td-link-to (+ x 90)    y     "r"))
 	      (:tr (td-link-to (- x 90) (+ y 90) "ul")
 		   (td-link-to    x     (+ y 90) "u")
 		   (td-link-to (+ x 90) (+ y 90) "ur"))))
@@ -114,4 +114,3 @@
 	  (:a ((:a :href (hunchentoot:request-uri*))
 	       ((:img :width "360" :ismap "ismap" :height "360" :border "0" :src (tile-url tile tile-x tile-y)))))
 	  (map-navigator tile-x tile-y "/enlarge-overview/")))))
-

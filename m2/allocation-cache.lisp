@@ -219,7 +219,7 @@ is decremented."
 	   (hits-perc (round (* 100.0 (/ (float hits) total))))
 	   (misses-perc (round (* 100.0 (/ (float misses) total)))))
       (format t "cache hits:~15T~5D~25T~3D%~%" hits hits-perc)
-      (format t "cache misses:~15T~5D~25T~3D%~3%" misses misses-perc)    
+      (format t "cache misses:~15T~5D~25T~3D%~3%" misses misses-perc)
       (format t "CACHE ENTRIES~2%")
       (format t "number of m2 not in cache: ~A~2%" (ignored-size *allocation-cache*))
       (format t "~5A~10T~A~%" "size" "count")
@@ -231,9 +231,9 @@ is decremented."
 	(unless (zerop count)
 	  (format t "~5D~10T~5D~%" size count))))))
 
-(defun rebuild-allocation-cache ()  
+(defun rebuild-allocation-cache ()
   (assert (or (in-transaction-p) (eql :snapshot (store-state *store*))) nil
-          "rebuild-allocation-cache may only be called in a transaction context")  
+          "rebuild-allocation-cache may only be called in a transaction context")
   (unless *allocation-cache*
     (setq *allocation-cache* (make-allocation-cache)))
   (clear-cache)
@@ -256,4 +256,3 @@ is decremented."
     (let ((allocation-area (bos.m2::m2-allocation-area (first m2s))))
       (index-push (length m2s) (make-cache-entry :area allocation-area
                                                  :region m2s)))))
-

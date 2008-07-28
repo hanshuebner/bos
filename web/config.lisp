@@ -32,4 +32,3 @@
 
 ;; Default language for the web site (note that it must be defined in the datastore, too)
 (defparameter *default-language* "de")
-

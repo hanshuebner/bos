@@ -21,5 +21,5 @@
 	:bknr.rss
         :bos.m2
 	:bos.m2.config)
-  (:shadowing-import-from :cl-interpol #:quote-meta-chars)    
+  (:shadowing-import-from :cl-interpol #:quote-meta-chars)
   (:export))

@@ -41,8 +41,8 @@
 		(output-pathname (merge-pathnames (make-pathname :name id :type "pdf") fdf-pathname)))
 	    (fill-form fdf-pathname
                        (if (probe-file language-specific-template-pathname)
-					language-specific-template-pathname
-					template-pathname)
+                           language-specific-template-pathname
+                           template-pathname)
                        m2-pdf-pathname
 		       output-pathname)))
       (error (e)

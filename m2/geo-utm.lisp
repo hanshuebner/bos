@@ -90,7 +90,7 @@
                       (alpha_ (* (/ (+ sm-a sm-b) 2.0)
                                  (+ (+ 1 (/ (expt n 2) 4)) (/ (expt n 4) 64))))
                       (y_ (/ y alpha_))
-                      beta_ gamma_ delta_ epsilon_)        
+                      beta_ gamma_ delta_ epsilon_)
                  (setq beta_
                        (+
                         (+ (/ (* 3.0 n) 2.0) (/ (* (- 27.0) (expt n 3)) 32.0))
@@ -130,7 +130,7 @@
                       (l8coef (- (+ (- 1385.0 (* 3111.0 t2)) (* 543.0 (* t2 t2)))
                                  (* (* t2 t2) t2)))
                       (l4 (expt (abs l) 4))
-                      (l5 (* l l4))                      
+                      (l5 (* l l4))
                       (l6 (* l l5))
                       (l7 (* l l6))
                       (l8 (* l l7))
@@ -141,7 +141,7 @@
                       (expt-cos-phi-5 (* expt-cos-phi-4 cos-phi))
                       (expt-cos-phi-6 (* expt-cos-phi-5 cos-phi))
                       (expt-cos-phi-7 (* expt-cos-phi-6 cos-phi))
-                      (expt-cos-phi-8 (* expt-cos-phi-7 cos-phi)))            
+                      (expt-cos-phi-8 (* expt-cos-phi-7 cos-phi)))
                  (values
                   (+
                    (+
@@ -220,7 +220,7 @@
                          (* 720.0 (* tf4 tf2))))
                 (setq x8poly
                       (+ (+ (+ 1385.0 (* 3633.0 tf2)) (* 4095.0 tf4))
-                         (* 1575 (* tf4 tf2))))                
+                         (* 1575 (* tf4 tf2))))
                 (let* ((x4 (expt (abs x) 4))
                        (x5 (* x4 x))
                        (x6 (* x5 x))
@@ -245,7 +245,7 @@
         (declare ((double-float -180d0 180d0) lon)
                  ((double-float -90d0 90d0) lat)
                  (float-pair float-pair))
-        (let ((zone (+ (floor (+ lon 180.0) 6.0) 1)))            
+        (let ((zone (+ (floor (+ lon 180.0) 6.0) 1)))
           (multiple-value-bind (x y)
               (map-lat-lon-to-xy (deg-to-rad lat) (deg-to-rad lon) (utmcentral-meridian zone))
             (setq x (+ (* x utmscale-factor) 500000.0))
@@ -254,33 +254,32 @@
             (setf (aref float-pair 0) x
                   (aref float-pair 1) y)
             (values float-pair zone (minusp lat)))))
-            
+
       (defun utm-x-y-to-lon-lat* (x y zone southhemi-p float-pair)
         "Returns list (LON LAT)."
         (declare (double-float x y) (float-pair float-pair))
-        (let ((cmeridian (utmcentral-meridian zone)))                    
+        (let ((cmeridian (utmcentral-meridian zone)))
           (decf x 500000.0)
           (dividef x utmscale-factor)
           (if southhemi-p (decf y 1.e7) nil)
           (dividef y utmscale-factor)
           (multiple-value-bind (lat lon)
-              (map-xyto-lat-lon x y cmeridian)         
+              (map-xyto-lat-lon x y cmeridian)
             (setf (aref float-pair 0) (rad-to-deg lon)
                   (aref float-pair 1) (rad-to-deg lat))
             float-pair))))))
 
-(defun lon-lat-to-utm-x-y (lon lat)    
+(defun lon-lat-to-utm-x-y (lon lat)
   (multiple-value-bind (float-pair zone southhemi-p)
       (lon-lat-to-utm-x-y* (float lon 0d0) (float lat 0d0) (make-float-pair))
     (list (aref float-pair 0) (aref float-pair 1)
           zone southhemi-p)))
 
 (defun utm-x-y-to-lon-lat (x y zone southhemi-p)
-  "Returns list (LON LAT)."    
+  "Returns list (LON LAT)."
   (let ((lon-lat (utm-x-y-to-lon-lat* (float x 0d0) (float y 0d0)
                                       zone southhemi-p (make-float-pair))))
     (list (aref lon-lat 0) (aref lon-lat 1))))
 
-(eval-when (:compile-toplevel :load-toplevel :execute)  
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (setq *read-default-float-format* *initial-read-default-float-format*))
-

@@ -346,13 +346,13 @@ meter."
                 (y (+ area-top (random area-height)))
                 (m2 (ensure-m2 x y))
                 (result (search-adjacent n m2 #'allocatable-p)))
-             (when result
-               (assert (alexandria:setp result :test #'equal))
-               (assert (= n (length result)))
-               (decf (allocation-area-free-m2s area) n)
-               (return result))
-             (when (> (get-internal-real-time) deadline)
-               (return nil)))))))
+           (when result
+             (assert (alexandria:setp result :test #'equal))
+             (assert (= n (length result)))
+             (decf (allocation-area-free-m2s area) n)
+             (return result))
+           (when (> (get-internal-real-time) deadline)
+             (return nil)))))))
 
 (defun allocate-m2s-for-sale (n)
   "The main entry point to the allocation machinery. Will return a

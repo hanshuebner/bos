@@ -1,4 +1,3 @@
-
 (in-package :bos.web)
 
 (enable-interpol-syntax)
@@ -132,7 +131,7 @@
   (or (hunchentoot:aux-request-value :language)
       *default-language*))
 
-(defmethod handle :before ((handler page-handler)) 
+(defmethod handle :before ((handler page-handler))
   (setf (hunchentoot:aux-request-value :language)
         (or (query-param "language")
             (query-param "lang")
@@ -158,18 +157,18 @@
   (make-instance 'bos-website
 		 :name "create-rainforest.org CMS"
 		 :handler-definitions `(("/edit-poi-image" edit-poi-image-handler)
-                                        ("/edit-poi" edit-poi-handler)					
+                                        ("/edit-poi" edit-poi-handler)
 					("/edit-sponsor" edit-sponsor-handler)
                                         ("/kml-upload" kml-upload-handler)
-                                        ("/kml-root-dynamic" kml-root-dynamic-handler)                                
-                                        ("/kml-root" kml-root-handler)                                
+                                        ("/kml-root-dynamic" kml-root-dynamic-handler)
+                                        ("/kml-root" kml-root-handler)
                                         ("/country-stats" country-stats-handler)
                                         ("/contract-tree-kml" contract-tree-kml-handler)
                                         ("/contract-tree-image" contract-tree-image-handler)
 					("/contract-image" contract-image-handler)
 					("/contract" contract-handler)
                                         ("/sat-tree-kml" sat-tree-kml-handler)
-                                        ("/sat-root-kml" sat-root-kml-handler)                                        
+                                        ("/sat-root-kml" sat-root-kml-handler)
                                         ("/look-at-allocation-area" look-at-allocation-area-handler)
 					("/reports-xml" reports-xml-handler)
 					("/complete-transfer" complete-transfer-handler)
@@ -185,7 +184,7 @@
 					("/sponsor-login" sponsor-login-handler)
 					("/create-allocation-area" create-allocation-area-handler)
 					("/allocation-area-gfx" allocation-area-gfx-handler)
-                                        ("/allocation-area" allocation-area-handler)					
+                                        ("/allocation-area" allocation-area-handler)
 					("/allocation-cache" allocation-cache-handler)
 					("/certificate" certificate-handler)
 					("/cert-regen" cert-regen-handler)

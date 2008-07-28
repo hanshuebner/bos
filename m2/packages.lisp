@@ -14,7 +14,7 @@
            #:bounding-box
            #:with-bounding-box-collect
 	   #:find-boundary-point
-	   #:region-to-polygon           
+	   #:region-to-polygon
 	   #:format-lon-lat
            #:nodes-connected-p
            ;;
@@ -138,7 +138,7 @@
 	   #:editor-p
 
            #:contract
-           #:make-contract           
+           #:make-contract
 	   #:contract-p
            #:get-contract
            #:all-contracts
@@ -172,7 +172,7 @@
 	   #:contract-stats-for-country
 	   #:last-paid-contracts
            #:do-sponsor-countries
-	   	   	   
+
 	   #:make-m2-javascript
            #:recolorize-contracts
            #:contracts-well-colored-p
@@ -236,12 +236,12 @@
 	   #:make-poi
 	   #:update-poi
 	   #:find-poi
-	   
+
 	   #:poi-center-x
 	   #:poi-center-y
            #:poi-center-lon-lat
 	   #:make-poi-javascript
-           
+
 	   ;; news
 	   #:news-item
 	   #:make-news-item
@@ -267,7 +267,7 @@
            #:enqueue
            #:dequeue
            #:queue-elements
-           #:peek-queue           
+           #:peek-queue
            ))
 
 (defpackage :bos.m2.cert-generator
@@ -285,12 +285,12 @@
 	:geometry
 	:bknr.indices
 	:bknr.datastore
-	:bknr.user       
+	:bknr.user
 	:bknr.images
 	:bknr.statistics
 	:bknr.rss
-	:bos.m2	
-	:bos.m2.config	
+	:bos.m2
+	:bos.m2.config
 	:iterate
         :arnesi)
   (:shadowing-import-from :bos.m2
@@ -301,6 +301,5 @@
   (:export #:find-exact-match
 	   #:add-area
 	   #:count-cache-entries
-	   #:pprint-cache	 
+	   #:pprint-cache
 	   #:allocation-cache-subsystem))
-

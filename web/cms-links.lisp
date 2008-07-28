@@ -1,4 +1,3 @@
-
 (in-package :bos.web)
 
 (enable-interpol-syntax)
@@ -44,4 +43,3 @@
   (html
    (cmslink (edit-object-url poi-image)
      (:princ (format nil "edit ~a" (store-object-id poi-image))))))
-

@@ -446,7 +446,7 @@ point belongs to the region or not."
                    (dolist (neighbour (funcall node-neighbours current))
                      (unless (visited-p neighbour)
                        (push neighbour stack)))
-                   (traverse stack)))))   
+                   (traverse stack)))))
       (traverse (list (first nodes)))
       (= (length nodes)
          (hash-table-count hash)))))
@@ -461,4 +461,3 @@ point belongs to the region or not."
                do (princ "x")
                else do (princ "."))
          do (terpri)))))
-

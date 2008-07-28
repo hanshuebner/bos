@@ -69,7 +69,7 @@
        (when x (assert (eql (parse-integer x) (m2-x m2))))
        (when y (assert (eql (parse-integer y) (m2-y m2))))
        (when utm-x (assert (= (read-from-string utm-x) (m2-utm-x m2))))
-        (when utm-y (assert (= (read-from-string utm-y) (m2-utm-y m2))))
+       (when utm-y (assert (= (read-from-string utm-y) (m2-utm-y m2))))
        (push m2 (importer-m2s handler))))
     ((string= qname "allocation-area")
      (setf (importer-area-active-p handler)

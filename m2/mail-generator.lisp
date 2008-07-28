@@ -24,7 +24,7 @@
                 (apply function contract args))
             (error (e)
               (warn "; could not send mail ~S: ~A" entry e)))))))
-       
+
 (defun postmaster-running-p ()
   (and *postmaster*
        (bt:thread-alive-p *postmaster*)))
@@ -69,7 +69,7 @@ Subject: ~A
                 (not more-headers)
                 text))
       (format t "Mail with subject ~S to ~A not sent~%" subject to)))
-  
+
 (defun mail-info-request (email country)
   (send-system-mail :subject "Mailing list request"
 		    :to (country->office-email country)
@@ -141,13 +141,13 @@ $(email)
      (REV ,(format-date-time (get-universal-time) :xml-style t))
      (FN ,(if name name (format nil "~A ~A" vorname nachname)))
      ,(when vorname
-	`(N ,nachname ,vorname nil nil nil))
+            `(N ,nachname ,vorname nil nil nil))
      ,(when address
-	`((ADR DOM HOME) nil nil ,address nil nil ,postcode ,country))
+            `((ADR DOM HOME) nil nil ,address nil nil ,postcode ,country))
      ,(when strasse
-	`((ADR DOM HOME) nil nil ,strasse ,ort nil ,postcode ,country))
+            `((ADR DOM HOME) nil nil ,strasse ,ort nil ,postcode ,country))
      ,(when tel
-	`((TEL WORK HOME) ,tel))
+            `((TEL WORK HOME) ,tel))
      ((EMAIL PREF INTERNET) ,email)
      ((URL WORK) ,(format nil "~A/edit-sponsor/~A" *website-url* sponsor-id))
      (NOTE ,note)
@@ -254,7 +254,7 @@ worldpay), return the common XML element name"
 		      :more-headers t
 		      :text (with-output-to-string (s)
 			      (format s "X-BOS-Sponsor-Country: ~A~%" (sponsor-country (contract-sponsor contract)))
-			      (print-mime s 
+			      (print-mime s
 					  (make-instance 'multipart-mime
 							 :subtype "mixed"
 							 :content parts)
@@ -272,7 +272,7 @@ worldpay), return the common XML element name"
    :more-headers t
    :text (with-output-to-string (s)
 	   (format s "X-BOS-Sponsor-Country: ~A~%" (sponsor-country (contract-sponsor contract)))
-	   (print-mime s 
+	   (print-mime s
 		       (make-instance
 			'multipart-mime
 			:subtype "mixed"
@@ -305,29 +305,29 @@ worldpay), return the common XML element name"
   </table>
  </body>
 </html>"
-                                             contract-id
-                                             numsqm
-                                             name
-                                             address
-                                             email
-                                             country
-                                             language))
-                     (make-contract-xml-part (store-object-id contract) request-params)
-                     (make-vcard-part (store-object-id contract)
-                                      (make-vcard :sponsor-id (store-object-id (contract-sponsor contract))
-                                                  :note (format nil "Paid-by: Back office
+                                              contract-id
+                                              numsqm
+                                              name
+                                              address
+                                              email
+                                              country
+                                              language))
+                      (make-contract-xml-part (store-object-id contract) request-params)
+                      (make-vcard-part (store-object-id contract)
+                                       (make-vcard :sponsor-id (store-object-id (contract-sponsor contract))
+                                                   :note (format nil "Paid-by: Back office
 Contract ID: ~A
 Sponsor ID: ~A
 Number of sqms: ~A
 Amount: EUR~A.00
 "
-                                                                (store-object-id contract)
-                                                                (store-object-id (contract-sponsor contract))
-                                                                numsqm
-                                                                (* 3 (parse-integer numsqm)))
-                                                  :name name
-                                                  :address address
-                                                  :email email)))))
+                                                                 (store-object-id contract)
+                                                                 (store-object-id (contract-sponsor contract))
+                                                                 numsqm
+                                                                 (* 3 (parse-integer numsqm)))
+                                                   :name name
+                                                   :address address
+                                                   :email email)))))
     (mail-contract-data contract "Manually entered sponsor" parts)))
 
 (defun mail-manual-sponsor-data (contract vorname name strasse plz ort email telefon want-print donationcert-yearly request-params)

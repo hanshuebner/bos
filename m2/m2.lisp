@@ -1,7 +1,6 @@
-
 (in-package :bos.m2)
 
-;;; 
+;;;
 (defun get-map-tile (x y)
   (get-tile (m2-store-tile-index *m2-store*) x y))
 
@@ -189,7 +188,7 @@
   (labels ((contract-points-to-sponsor (contract)
              (eq sponsor (contract-sponsor contract))))
     (let ((consistent t))
-      (unless (every #'contract-points-to-sponsor (sponsor-contracts sponsor))        
+      (unless (every #'contract-points-to-sponsor (sponsor-contracts sponsor))
         (let ((*print-length* 5))
           (warn "~s of ~s dont point to it by CONTRACT-SPONSOR~
                  ~%the wrongly pointed to objs with duplicates removed are: ~s"
@@ -301,7 +300,7 @@
       (unless (subtypep (type-of contract) 'contract)
 	(error "invalid contract id (wrong type) ~A" id)))))
 
-(defun publish-contract-change (contract &key type)    
+(defun publish-contract-change (contract &key type)
   (publish-rect-change *rect-publisher* (contract-bounding-box contract) contract :type type))
 
 (defmethod contract-is-expired ((contract contract))
@@ -378,7 +377,7 @@
     (dolist (m2 (contract-m2s contract))
       (collect (list (m2-x m2) (m2-y m2))))))
 
-(defun contracts-bounding-box (&optional (contracts (all-contracts)))  
+(defun contracts-bounding-box (&optional (contracts (all-contracts)))
   (geometry:with-bounding-box-collect (collect)
     (dolist (contract contracts)
       (dolist (m2 (contract-m2s contract))
@@ -460,7 +459,7 @@ Note that this function takes also diagonally connected m2s into account."
                  (pushnew (m2-contract m2) contracts)))))
       (dolist (m2 (contract-m2s contract) contracts)
         (let ((x (m2-x m2))
-              (y (m2-y m2)))        
+              (y (m2-y m2)))
           (push-neighbour (1- x) y)
           (push-neighbour x (1- y))
           (push-neighbour (1+ x) y)
@@ -569,7 +568,7 @@ neighbours."
                                          #'m2-neighbours
                                          #'eq)))
     (let ((consistent t))
-      (unless (every #'m2-points-to-contract (contract-m2s contract))        
+      (unless (every #'m2-points-to-contract (contract-m2s contract))
         (let ((*print-length* 5))
           (warn "~s of ~s dont point to it by M2-CONTRACT~
                  ~%either those m2s are free or point to another contract~
@@ -580,7 +579,7 @@ neighbours."
         (setq consistent nil))
       (when (null (contract-m2s contract))
         (warn "~s has no m2s" contract)
-        (setq consistent nil))      
+        (setq consistent nil))
       (when (not (contract-connected-p contract))
         (warn "~s has m2s that are not connected" contract)
         (setq consistent nil))
@@ -649,7 +648,7 @@ neighbours."
 		(country-stat-sold-m2s stat))
 	(values 0 0))))
 
-(defun last-paid-contracts ()  
+(defun last-paid-contracts ()
   (remove-if (lambda (contract)
 	       (or (null contract)
 		   (object-destroyed-p contract)))
@@ -695,7 +694,7 @@ neighbours."
   (format t "~&; Startup Quadratmeterdatenbank...~%")
   (force-output)
   (setf *enable-mails* enable-mails)
-  (setf *website-url* website-url)  
+  (setf *website-url* website-url)
   (unless directory
     (error ":DIRECTORY parameter not set in m2.rc"))
   (assert (and (null (pathname-name directory))
@@ -710,7 +709,7 @@ neighbours."
 		 :directory directory
 		 :subsystems (list (make-instance 'store-object-subsystem)
 				   (make-instance 'blob-subsystem
-						  :n-blobs-per-directory 1000)				   
+						  :n-blobs-per-directory 1000)
                                    (make-instance 'initialization-subsystem)))
   (format t "~&; Startup der Quadratmeterdatenbank done.~%")
   (force-output))
@@ -753,7 +752,7 @@ neighbours."
 			    right (max right x)
 			    top (min top y)
 			    bottom (max bottom y))))
-	       (values left top (- right left) (- bottom top)))))	      
+	       (values left top (- right left) (- bottom top)))))
     (multiple-value-bind (left top width height)
 	(compute-bounding-box m2s)
       (declare (ignore width height))
@@ -761,9 +760,9 @@ neighbours."
       (flet ((transform-x (x)
 	       (+ 30 (* 30 (- x left))))
 	     (transform-y (y)
-	       (+ 30 (* 30 (- y top)))))	
+	       (+ 30 (* 30 (- y top)))))
 	(ltk:with-ltk ()
-	  (let ((canvas (make-instance 'ltk:canvas :width 700 :height 700)))	  
+	  (let ((canvas (make-instance 'ltk:canvas :width 700 :height 700)))
 	    ;; draw m2s
 	    (loop for m2 in m2s
 	       for x = (transform-x (m2-x m2))
@@ -777,7 +776,7 @@ neighbours."
 				    (transform-x (first a)) (transform-y (second a))
 				    (transform-x (first b)) (transform-y (second b))))
 	    (let ((a (first points)))
-	      (ltk:create-text canvas (transform-x (first a)) (transform-y (second a)) "o")) 
+	      (ltk:create-text canvas (transform-x (first a)) (transform-y (second a)) "o"))
 	    (ltk:pack canvas)))))))
 
 #+ltk
@@ -795,7 +794,7 @@ neighbours."
 			    right (max right x)
 			    top (min top y)
 			    bottom (max bottom y))))
-	       (values left top (- right left) (- bottom top)))))	      
+	       (values left top (- right left) (- bottom top)))))
     (let* ((m2s (contract-m2s contract))
            (rectangle (contract-largest-rectangle contract))
            (center (geometry:rectangle-center rectangle)))
@@ -806,9 +805,9 @@ neighbours."
         (flet ((transform-x (x)
                  (+ 30 (* 30 (- x left))))
                (transform-y (y)
-                 (+ 30 (* 30 (- y top)))))	
+                 (+ 30 (* 30 (- y top)))))
           (ltk:with-ltk ()
-            (let ((canvas (make-instance 'ltk:canvas :width 700 :height 700)))	  
+            (let ((canvas (make-instance 'ltk:canvas :width 700 :height 700)))
               ;; draw m2s
               (loop for m2 in m2s
                  for x = (transform-x (m2-x m2))
@@ -823,4 +822,3 @@ neighbours."
                   (ltk:create-rectangle canvas (transform-x left) (transform-y top)
                                         (transform-x (+ left width)) (transform-y (+ top height)))))
               (ltk:pack canvas))))))))
-

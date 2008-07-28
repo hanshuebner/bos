@@ -72,7 +72,7 @@ extract the character starting at the given start position."
                  (six-bits (next-byte)))))))
 
 (defun utf-8-string-to-bytes (string)
-  (declare #.*optimize*)  
+  (declare #.*optimize*)
   (loop
      with buffer = (make-array (utf-8-string-length string)
 			       :element-type '(unsigned-byte 16))
@@ -90,4 +90,3 @@ extract the character starting at the given start position."
 	  (incf buffer-position 1)
 	  (incf string-position current-group))
      finally (return buffer)))
-

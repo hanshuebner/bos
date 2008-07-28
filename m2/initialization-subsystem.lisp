@@ -15,7 +15,7 @@ init-functions can be specified as DEPENDENCIES. The specified
 INIT-FUNCTION will only be called after all of its DEPENDENCIES
 have been called."
   (labels ((ignorant-tie-breaker (choices reverse-partial-solution)
-             (declare (ignore reverse-partial-solution))         
+             (declare (ignore reverse-partial-solution))
              ;; we dont care about making any particular choice here -
              ;; this would be different for computing the class
              ;; precedence list, for which the topological-sort used here
@@ -26,14 +26,14 @@ have been called."
                 collect (cons dependency init-function))))
     (check-type init-function symbol)
     (dolist (dependency dependencies)
-      (check-type dependency symbol))    
+      (check-type dependency symbol))
     (let (new-transient-init-functions
           new-transient-init-constraints)
       (let ((constraints (build-constraints))
             ;; dont know yet whether we have a circular dependency - so
             ;; we want to be able to abort without changes
             (*transient-init-functions* *transient-init-functions*)
-            (*transient-init-constraints* *transient-init-constraints*))      
+            (*transient-init-constraints* *transient-init-constraints*))
         (pushnew init-function *transient-init-functions*)
         (dolist (dependency dependencies)
           (pushnew dependency *transient-init-functions*))
@@ -73,4 +73,3 @@ have been called."
   ;; in the same initial state as if the store had been freshly
   ;; restored.
   (invoke-transient-init-functions))
-

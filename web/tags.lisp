@@ -9,9 +9,9 @@
 
 (defun language-options-1 (current-language)
   (loop for (language-symbol language-name) in (website-languages)
-	do (if (equal language-symbol current-language)
-	       (html ((:option :value (format nil "/~a/index" language-symbol) :selected "selected") " " (:princ language-name) " "))
-	       (html ((:option :value (format nil "/~a/index" language-symbol)) " " (:princ language-name) " ")))))
+     do (if (equal language-symbol current-language)
+            (html ((:option :value (format nil "/~a/index" language-symbol) :selected "selected") " " (:princ language-name) " "))
+            (html ((:option :value (format nil "/~a/index" language-symbol)) " " (:princ language-name) " ")))))
 
 (define-bknr-tag language-chooser (name)
   (html ((:select :name name)
@@ -121,7 +121,7 @@
 
 (define-bknr-tag mail-transfer ()
   (with-query-params (country
-		      contract-id 
+		      contract-id
 		      name vorname strasse plz ort telefon want-print
                       email donationcert-yearly)
     (let* ((contract (store-object-with-id (parse-integer contract-id)))
@@ -171,8 +171,8 @@
     (setf (get-template-var :country) (sponsor-country sponsor))
     (setf (get-template-var :infotext) (sponsor-info-text sponsor))
     (setf (get-template-var :name) (user-full-name sponsor))
-    (setf (get-template-var :sqm-x) (format nil "~,3f" (m2-utm-x (first (contract-m2s contract))))) 
-    (setf (get-template-var :sqm-y) (format nil "~,3f" (m2-utm-y (first (contract-m2s contract))))) 
+    (setf (get-template-var :sqm-x) (format nil "~,3f" (m2-utm-x (first (contract-m2s contract)))))
+    (setf (get-template-var :sqm-y) (format nil "~,3f" (m2-utm-y (first (contract-m2s contract)))))
     (setf (get-template-var :geo-coord) (destructuring-bind (left top . ignore)
                                             (contract-bounding-box contract)
                                           (declare (ignore ignore))
@@ -184,7 +184,7 @@
 		  (apply #'+ (mapcar #'(lambda (contract) (length (contract-m2s contract))) (sponsor-contracts sponsor))))))
   (emit-tag-children))
 
-(define-bknr-tag admin-login-page ()  
+(define-bknr-tag admin-login-page ()
   (if (editor-p (bknr-session-user))
       (html (:head ((:meta :http-equiv "refresh" :content "0; url=/admin"))))
       (emit-tag-children)))

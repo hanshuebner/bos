@@ -20,4 +20,3 @@
 
 (defmethod rss-item-guid ((item news-item))
   (format nil "http://createrainforest.org/~A/news-extern/~A" (request-language) (store-object-id item)))
-

@@ -1,4 +1,3 @@
-
 (in-package :bos.web)
 
 (enable-interpol-syntax)
@@ -29,11 +28,11 @@
 	     (html "logged in as " (html-link (bknr-session-user)))
 	     (html "not logged in"))
 	 " - current content language is "
-	(cmslink "change-language"
-	  (:princ-safe (request-language))
-	  " ("
-	  (:princ-safe (language-name (request-language)))
-	  ")"))))
+         (cmslink "change-language"
+           (:princ-safe (request-language))
+           " ("
+           (:princ-safe (language-name (request-language)))
+           ")"))))
 
 (defun language-name (language-short-name)
   (cadr (assoc language-short-name (website-languages) :test #'equal)))
@@ -57,6 +56,3 @@
   (let ((coord-string (caar (query-params))))
     (when (and coord-string (scan #?r"^\d*,\d*$" coord-string))
       (mapcar #'parse-integer (split "," coord-string)))))
-
-
-

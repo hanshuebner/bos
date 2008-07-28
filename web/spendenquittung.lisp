@@ -116,22 +116,22 @@ BOS Deutchland e.V.
   #+nil
   (let* ((mail-to-office (>= amount *mail-to-office-amount*))
 	 (mime (make-instance 'multipart-mime :type "multipart" :subtype "mixed"
-			      :content (list (make-instance 'mime :type "text" :subtype "plain"
-							    :content (format nil *mail-quittung-text-format* name))
-					     (make-instance 'mime :type "application" :subtype "pdf"
-							    :encoding "base64"
-							    :content (string-to-base64
-								      (typeset::spendenquittung :amount amount
-												:name name
-												:address address
-												:signature-field mail-to-office)))))))
+                                                                :content (list (make-instance 'mime :type "text" :subtype "plain"
+                                                                                                                 :content (format nil *mail-quittung-text-format* name))
+                                                                               (make-instance 'mime :type "application" :subtype "pdf"
+                                                                                                                        :encoding "base64"
+                                                                                                                        :content (string-to-base64
+                                                                                                                                  (typeset::spendenquittung :amount amount
+                                                                                                                                                            :name name
+                                                                                                                                                            :address address
+                                                                                                                                                            :signature-field mail-to-office)))))))
 
     (handler-case
 	(cl-smtp:with-smtp-mail (smtp "localhost" *mail-sender-address* email)
           (format smtp "From: ~a <~a>~%To: ~a <~a>~%Subject: Ihre Spendenbescheinigung für den Quadratmeterkauf~%"
                   *mail-sender-name* *mail-sender-address*
                   name email)
-		   (with-output-to-string (s)
-		     (print-mime s mime t nil)))
+          (with-output-to-string (s)
+            (print-mime s mime t nil)))
       (error (e)
 	(warn "ignored error ~a while sending mail" e)))))

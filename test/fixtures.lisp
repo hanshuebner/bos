@@ -43,10 +43,10 @@
 
 (defmacro with-store-reopenings ((&rest store-object-vars) &body body)
   `(%with-store-reopenings (:snapshot snapshot :bypass bypass)
-       (,@store-object-vars)
-     ,@body))
+                           (,@store-object-vars)
+                           ,@body))
 
-(def-fixture initial-bos-store (&key (delete-store t))  
+(def-fixture initial-bos-store (&key (delete-store t))
   (let ((store-path (parse-namestring
                      (format nil "/tmp/test-store-~D.tmp/" (get-universal-time)))))
     (unwind-protect
@@ -56,7 +56,7 @@
                            :website-url bos.m2::*website-url*)
            (make-user "anonymous")      ; needed for web tests
            (&body))
-      (close-store)      
+      (close-store)
       ;; (cl-fad:delete-directory-and-files store-path) ; fails on ccl
       (if delete-store
           (asdf:run-shell-command "rm -r '~A'" store-path)
@@ -72,9 +72,8 @@
 			     (intern (format nil "~a.~a" name (getf config :suffix)))
 			     name))
 	(collect `(test ,test-name
-		    (with-fixture initial-bos-store ()
-		      (let ((snapshot ,(getf config :snapshot))
-			    (bypass ,(getf config :bypass)))
-			(declare (ignorable snapshot bypass))
-			,@body)))))))
-
+                        (with-fixture initial-bos-store ()
+                                      (let ((snapshot ,(getf config :snapshot))
+                                            (bypass ,(getf config :bypass)))
+                                        (declare (ignorable snapshot bypass))
+                                        ,@body)))))))

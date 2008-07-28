@@ -16,9 +16,9 @@
   (lambda (node) (setf (timestamp node)
 		       (max (timestamp node) (contract-date contract)))))
 
-(defun contract-node-find-corresponding-store-image (node)  
+(defun contract-node-find-corresponding-store-image (node)
   (let ((store-images (get-keyword-store-images (contract-node-keyword node))))
-    (if (alexandria:length= 1 store-images)	
+    (if (alexandria:length= 1 store-images)
 	;; good, there is only one
 	(first store-images)
 	;; We will just return NIL, if we cannot find one.
@@ -135,7 +135,7 @@ links are created."))
       (when name (with-element "name" (text name)))
       (with-element "styleUrl" (text "#contractPlacemarkIcon"))
       (with-element "description" (cdata (contract-description c language)))
-      (with-element "Point"        
+      (with-element "Point"
         (with-element "coordinates"
           (destructuring-bind (x y)
               (contract-center c)
@@ -151,7 +151,7 @@ links are created."))
                                     :root-element "kml")
     (with-query-params ((lang "en") (path)
                         (rmcpath) (rmcid))
-      (handle-if-node-modified     
+      (handle-if-node-modified
         (setf (hunchentoot:header-out :last-modified)
               (hunchentoot:rfc-1123-date (timestamp node)))
         (let* ((lod (node-lod node))
@@ -265,7 +265,7 @@ has to be unique."
                (old-store-image (contract-node-find-corresponding-store-image node))
                (new-store-image (make-store-image :name (contract-node-store-image-name node old-store-image)
                                                   :type :png
-                                                  :keywords (list keyword))))                    
+                                                  :keywords (list keyword))))
           ;; activate new-store-image
           (setf (image node) new-store-image)
           ;; delete the old one
@@ -286,7 +286,7 @@ has to be unique."
   ;; CONTRACT-NODE-UPDATE-IMAGE-NEEDED-P is called twice for every
   ;; node. Once inside CONTRACT-NODE-UPDATE-IMAGE-IF-NEEDED and once
   ;; for the prune-test.
-  
+
   ;; Let's hope we are lucky and there is nothing to do by inspecting
   ;; *contract-tree* at first only once.
   (when (contract-node-update-image-needed-p *contract-tree*)
@@ -303,7 +303,7 @@ has to be unique."
 (defclass contract-tree-image-handler (page-handler)
   ())
 
-(defmethod handle ((handler contract-tree-image-handler))  
+(defmethod handle ((handler contract-tree-image-handler))
   (with-query-params (path)
     (let* ((path (parse-path path))
 	   (node (find-node-with-path *contract-tree* path))
@@ -349,7 +349,7 @@ has to be unique."
           (warn "contract-tree-image-update-daemon stopped")))))
 
 ;;; make-contract-tree-from-m2
-(defun make-contract-tree-from-m2 ()  
+(defun make-contract-tree-from-m2 ()
   (setq *contract-tree* (make-instance 'contract-node
                                        ;; we know that MAKE-QUAD-TREE
                                        ;; has already been called
@@ -357,7 +357,7 @@ has to be unique."
                                        :name '*contract-tree*))
   (dolist (contract (class-instances 'contract))
     (when (contract-published-p contract)
-      (insert-contract *contract-tree* contract)))    
+      (insert-contract *contract-tree* contract)))
   (geometry:register-rect-subscriber geometry:*rect-publisher* *contract-tree*
                                      (list 0 0 +width+ +width+)
                                      #'contract-tree-changed))
@@ -365,4 +365,3 @@ has to be unique."
 (register-transient-init-function 'make-contract-tree-from-m2
                                   'make-quad-tree
                                   'geometry:make-rect-publisher)
-

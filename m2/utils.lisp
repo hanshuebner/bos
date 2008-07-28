@@ -78,4 +78,3 @@
 
 (defun peek-queue (queue)
   (caar queue))
-

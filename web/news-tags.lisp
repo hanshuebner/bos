@@ -4,10 +4,10 @@
 
 (defun text-with-linebreaks (text)
   (loop for line in (split #?r"\r?\n" text)
-	do (html (:princ-safe line) :br)))
+     do (html (:princ-safe line) :br)))
 
 (define-bknr-tag news-headlines (&key archive)
-  (let ((language (request-language)))    
+  (let ((language (request-language)))
     (let* ((now (get-universal-time))
 	   (news-items (if archive
                            (all-news-items language)
@@ -22,8 +22,8 @@
 		 (html ((:a :href (format nil "javascript:window_news('/~a/news/~a')" language (store-object-id news-item))
 			    :class "more")
 			(:strong (:princ-safe (format-date-time (news-item-time news-item) :show-time nil))
-				 :br
-				 (:princ-safe (news-item-title news-item language)))))))
+                         :br
+                         (:princ-safe (news-item-title news-item language)))))))
 	(loop for news-item in news-items
            for index from 1
            do (if archive

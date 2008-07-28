@@ -17,7 +17,7 @@
 
 (defun init (&key
 	     (port 8080)
-	     (frontend-port 80) 
+	     (frontend-port 80)
 	     (website-directory *default-wd*)
 	     host
 	     (website-url (format nil "http://~A" host) website-url-given)
@@ -33,18 +33,18 @@
   (setf *website-url* website-url)
   (setf *website-directory* website-directory)
   (setf *worldpay-test-mode* worldpay-test-mode)
-  (setf *google-analytics-account* google-analytics-account)    
+  (setf *google-analytics-account* google-analytics-account)
   (format t "~&; Publishing BOS handlers.~%")
   (unpublish)
   (bos.web::publish-website :website-directory *website-directory*
 			    :website-url *website-url*
 			    :worldpay-test-mode *worldpay-test-mode*)
   (format t "~&; Starting hunchentoot~@[ in debug mode~].~%" debug)
-  (force-output)  
+  (force-output)
   (when *webserver*
     (hunchentoot:stop-server *webserver*))
   (setf hunchentoot:*hunchentoot-default-external-format* (flex:make-external-format :utf-8 :eol-style :lf)
-        hunchentoot:*rewrite-for-session-urls* nil)  
+        hunchentoot:*rewrite-for-session-urls* nil)
   (setq *webserver* (hunchentoot:start-server :port *port* :threaded (not debug)
 					      :persistent-connections-p (not debug)))
   (if start-frontend

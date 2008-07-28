@@ -36,4 +36,3 @@
       (remove-if-not (lambda (item) (news-item-published item language))
 		     (store-objects-with-class 'news-item))
       (sort (copy-list (store-objects-with-class 'news-item)) #'> :key #'news-item-time)))
-
