@@ -19,49 +19,36 @@
   :depends-on (:bknr.web :bknr.modules :bos.m2 :cxml)
 
   :components ((:file "packages")
-	       (:file "utf-8" :depends-on ("packages"))
-	       (:file "config" :depends-on ("packages"))
-               (:file "dictionary" :depends-on ("packages" #+nil "startup"))
-	       (:file "web-macros" :depends-on ("config"))
-	       (:file "web-utils" :depends-on ("web-macros"))
-	       (:file "cms-links" :depends-on ("web-utils"))
-	       (:file "map-handlers" :depends-on ("web-utils"))
-	       (:file "map-browser-handler" :depends-on ("web-utils"))
-	       (:file "poi-handlers" :depends-on ("web-utils" "dictionary"))
-	       (:file "boi-handlers" :depends-on ("web-utils"))
-	       (:file "contract-handlers" :depends-on ("web-utils"))
-	       (:file "contract-image-handler" :depends-on ("web-utils"))
-	       (:file "reports-xml-handler" :depends-on ("boi-handlers"))
-	       (:file "kml-utils" :depends-on ("packages"))
+               (:file "utf-8" :depends-on ("packages"))
+               (:file "config" :depends-on ("packages"))
+               (:file "dictionary" :depends-on ("packages" "startup"))
+               (:file "web-macros" :depends-on ("packages"))
+               (:file "web-utils" :depends-on ("packages"))
+               (:file "cms-links" :depends-on ("packages"))
+               (:file "map-handlers" :depends-on ("packages" "web-macros"))
+               (:file "map-browser-handler" :depends-on ("packages" "web-macros"))
+               (:file "poi-handlers" :depends-on ("dictionary" "packages" "web-macros"))
+               (:file "boi-handlers" :depends-on ("packages" "web-macros"))
+               (:file "contract-handlers" :depends-on ("packages" "web-macros"))
+               (:file "contract-image-handler" :depends-on ("packages"))
+               (:file "reports-xml-handler" :depends-on ("packages"))
+               (:file "kml-utils" :depends-on ("packages"))
                (:file "quad-tree" :depends-on ("packages"))
-               (:file "contract-tree" :depends-on ("quad-tree"))
-               (:file "sat-tree" :depends-on ("quad-tree" "contract-tree"))
+               (:file "contract-tree" :depends-on ("packages" "quad-tree"))
+               (:file "sat-tree" :depends-on ("packages" "quad-tree"))
                (:file "countries" :depends-on ("packages"))
                (:file "website-language" :depends-on ("packages"))
-               (:file "kml-handlers" :depends-on ("packages"
-                                                  "website-language"
-                                                  "web-macros"
-                                                  "countries"
-                                                  "dictionary"))
-	       (:file "sponsor-handlers" :depends-on ("web-utils"))
-	       (:file "news-handlers" :depends-on ("web-utils"))
-	       (:file "allocation-area-handlers" :depends-on ("web-utils"))
-	       (:file "allocation-cache-handlers" :depends-on ("web-utils"))
-	       (:file "languages-handler" :depends-on ("web-utils"))
-	       (:file "tags" :depends-on ("web-utils"))
-	       (:file "news-tags" :depends-on ("web-utils"))
-	       (:file "news-rss" :depends-on ("web-utils"))
-	       (:file "contract-rss" :depends-on ("web-utils"))
-	       (:file "webserver" :depends-on ("news-tags"
-					       "tags"
-                                               "website-language"
-					       "map-handlers"
-					       "map-browser-handler"
-					       "poi-handlers"
-					       "boi-handlers"
-					       "contract-handlers"
-					       "sponsor-handlers"
-					       "news-handlers"
-					       "allocation-area-handlers"))
-	       (:file "daily" :depends-on ("config" "webserver"))
-	       (:file "startup" :depends-on ("config" "webserver"))))
+               (:file "kml-handlers" :depends-on ("dictionary" "kml-utils" "packages"
+                                                               "web-macros" "countries"))
+               (:file "sponsor-handlers" :depends-on ("packages" "web-macros"))
+               (:file "news-handlers" :depends-on ("packages" "web-macros"))
+               (:file "allocation-area-handlers" :depends-on ("packages" "web-macros"))
+               (:file "allocation-cache-handlers" :depends-on ("packages" "web-macros"))
+               (:file "languages-handler" :depends-on ("packages" "web-macros"))
+               (:file "tags" :depends-on ("packages"))
+               (:file "news-tags" :depends-on ("packages"))
+               (:file "news-rss" :depends-on ("packages"))
+               (:file "contract-rss" :depends-on ("packages"))
+               (:file "webserver" :depends-on ("packages" "web-macros"))
+               (:file "daily" :depends-on ("packages"))
+               (:file "startup" :depends-on ("packages"))))

@@ -8,28 +8,24 @@
                                :cl-pdf :screamer :cl-fad)
   :components ((:file "packages")
                (:file "geo-utm" :depends-on ("packages"))
-               (:file "geometry" :depends-on ("packages" "m2-store"))               
+               (:file "geometry" :depends-on ("packages"))
                (:file "config" :depends-on ("packages"))
-               (:file "utils" :depends-on ("config"))
-               (:file "news" :depends-on ("poi"))
-               (:file "tiled-index" :depends-on ("config"))
-               (:file "mail-generator" :depends-on ("config"))
-               (:file "make-certificate" :depends-on ("config"))
+               (:file "utils" :depends-on ("packages"))
+               (:file "news" :depends-on ("packages" "poi"))
+               (:file "tiled-index" :depends-on ("packages"))
+               (:file "mail-generator" :depends-on ("packages"))
+               (:file "make-certificate" :depends-on ("packages"))
                (:file "initialization-subsystem" :depends-on ("packages"))
-               (:file "m2-store" :depends-on ("packages" "utils"))
-               (:file "m2" :depends-on ("initialization-subsystem"
-                                        "tiled-index"
-                                        "utils"
-                                        "make-certificate"
-                                        "mail-generator"
-                                        "geo-utm"
-                                        "geometry"))
-               (:file "m2-pdf" :depends-on ("m2"))
-               (:file "contract-expiry" :depends-on ("m2"))
-               (:file "allocation" :depends-on ("m2"))
-               (:file "allocation-cache" :depends-on ("packages" "geometry"))
-               (:file "poi" :depends-on ("utils" "allocation"))
-               (:file "import" :depends-on ("m2"))
-               (:file "map" :depends-on ("m2" "allocation" "geometry"))
-               (:file "export" :depends-on ("m2"))
-               (:file "cert-daemon" :depends-on ("config"))))
+               (:file "m2-store" :depends-on ("packages"))
+               (:file "m2" :depends-on ("config" "geometry" "initialization-subsystem"
+                                                 "packages" "tiled-index" "utils"))
+               (:file "m2-pdf" :depends-on ("packages"))
+               (:file "contract-expiry" :depends-on ("packages"))
+               (:file "allocation" :depends-on ("geometry" "packages"))
+               (:file "allocation-cache" :depends-on ("allocation" "initialization-subsystem"
+                                                                   "packages" "utils"))
+               (:file "poi" :depends-on ("packages"))
+               (:file "import" :depends-on ("packages"))
+               (:file "map" :depends-on ("config" "packages" "tiled-index"))
+               (:file "export" :depends-on ("packages"))
+               (:file "cert-daemon" :depends-on ("packages"))))
