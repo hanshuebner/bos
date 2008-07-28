@@ -29,15 +29,6 @@
 (defun area< (a b)
   (< (store-object-id a) (store-object-id b)))
 
-(defun stripe< (a b)
-  (let ((ha (stripe-height a))
-        (hb (stripe-height b)))
-    (or (< ha hb)
-        (and (eql ha hb)
-             (or (< (stripe-top a) (stripe-top b))
-                 (and (eql (stripe-top a) (stripe-top b))
-                      (< (stripe-left a) (stripe-left b))))))))
-
 (defun export-m2 (m2)
   (with-element "m2"
     (attribute "utm-x" (write-to-string (m2-utm-x m2)))
@@ -73,19 +64,8 @@
     (attribute "width" (write-to-string width))
     (attribute "height" (write-to-string height))))
 
-(defun export-stripe (stripe)
-  (with-slots (left top width height x y seen) stripe
-    (with-element "stripe"
-      (attribute "x" (write-to-string x))
-      (attribute "y" (write-to-string y))
-      (export-rectangle left top width height)
-      (when seen
-        (with-element "seen"
-          (dolist (m2 seen)
-            (export-point (m2-x m2) (m2-y m2))))))))
-
 (defun export-area (area)
-  (with-slots (left top width height active-p y vertices stripes) area
+  (with-slots (left top width height active-p y vertices) area
     (with-element "allocation-area"
       (attribute "active" (if active-p "yes" "no"))
       (attribute "y" (write-to-string y))
@@ -93,9 +73,7 @@
         (map nil
              (lambda (vertex)
                (export-point (car vertex) (cdr vertex)))
-             vertices))
-      (with-element "stripes"
-        (map-sorted #'export-stripe #'stripe< stripes)))))
+             vertices)))))
 
 (defun export-sponsor (sponsor)
   (with-element "sponsor"

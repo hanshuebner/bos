@@ -8,10 +8,7 @@
    (area-active-p :accessor importer-area-active-p)
    (area-y :accessor importer-area-y)
    (area-vertices :accessor importer-area-vertices)
-   (area :accessor importer-area)
-   (stripe :accessor importer-stripe)
-   (stripe-x :accessor importer-stripe-x)
-   (stripe-y :accessor importer-stripe-y)))
+   (area :accessor importer-area)))
 
 (defun import-database (pathname)
   (cxml:parse-file pathname (cxml:make-recoder (make-instance 'importer))))
@@ -79,43 +76,9 @@
      (setf (importer-area handler) nil)
      (setf (importer-area-vertices handler) nil))
     ((string= qname "point")
-     (if (importer-area handler)
-         (let ((stripe (importer-stripe handler)))
-           (change-slot-values
-            stripe
-            'seen
-            (append (stripe-seen stripe)
-                    (list
-                     (ensure-m2 (parse-integer (getattribute "x" attrs))
-                                (parse-integer (getattribute "y" attrs)))))))
-         (push (cons (parse-integer (getattribute "x" attrs))
-                     (parse-integer (getattribute "y" attrs)))
-               (importer-area-vertices handler))))
-    ((string= qname "stripes")
-     (let* ((*preallocate-stripes* nil)
-            (a (make-allocation-area
-                (coerce (reverse (importer-area-vertices handler)) 'vector))))
-       (change-slot-values
-        a
-        'y (importer-area-y handler)
-        'active-p (importer-area-active-p handler))
-       (setf (importer-area handler) a)))
-    ((string= qname "stripe")
-     (setf (importer-stripe-x handler)
-           (parse-integer (getattribute "x" attrs)))
-     (setf (importer-stripe-y handler)
-           (parse-integer (getattribute "y" attrs))))
-    ((string= qname "rectangle")
-     (setf (importer-stripe handler)
-           (make-stripe (importer-area handler)
-                        (parse-integer (getattribute "left" attrs))
-                        (parse-integer (getattribute "top" attrs))
-                        (parse-integer (getattribute "width" attrs))
-                        (parse-integer (getattribute "height" attrs))))
-     (change-slot-values
-      (importer-stripe handler)
-      'x (importer-stripe-x handler)
-      'y (importer-stripe-y handler)))))
+     (push (cons (parse-integer (getattribute "x" attrs))
+                 (parse-integer (getattribute "y" attrs)))
+           (importer-area-vertices handler)))))
 
 (defmethod sax:end-element ((handler importer) namespace-uri local-name qname)
   (declare (ignore namespace-uri local-name))

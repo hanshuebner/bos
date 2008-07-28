@@ -72,7 +72,7 @@
  ! Zustand der Vergabe werden anhand von internen (x,y) Koordinaten gefuehrt.
  -->
 <!ELEMENT allocation-areas (allocation-area*)>
-<!ELEMENT allocation-area (polygon,stripes?)>
+<!ELEMENT allocation-area (polygon)>
 <!ATTLIST allocation-area
   active		(yes|no) #REQUIRED
   y                     CDATA    #REQUIRED
@@ -104,14 +104,3 @@
   x			CDATA    #REQUIRED
   y			CDATA    #REQUIRED
   >
-
-<!--
- ! Vergaberechteck
- -->
-<!ELEMENT stripes (stripe*)>
-<!ELEMENT stripe (rectangle,seen?)>
-<!ATTLIST stripe
-  x			CDATA    #REQUIRED
-  y			CDATA    #REQUIRED
-  >
-<!ELEMENT seen (point*)>
