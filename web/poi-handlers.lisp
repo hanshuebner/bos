@@ -127,18 +127,21 @@
               (unless (eql 6 (length (poi-images poi)))
                 (html
                  :br
-                 (cmslink (format nil "edit-poi-image/?poi=~A" (store-object-id poi)) "[new]")))))
-        (:tr (:td "airal view")
-             (:td (if (poi-airals poi)
-                      (html ((:a :href (format nil "/image/~D" (store-object-id (first (poi-airals poi))))
-                                 :target "_new")
-                             ((:img :src (format nil "/image/~D" (store-object-id (first (poi-airals poi))))
-                                    :width "90" :height "90")))
-                            (submit-button "delete-airal" "delete-airal" :confirm "Really delete the airal image?"))
-                      (html "Upload new airal view"
-                            ((:input :type "file" :name "image-file"))
-                            :br
-                            (submit-button "upload-airal" "upload-airal")))))
+                 (cmslink (format nil "edit-poi-image/?poi=~A" (store-object-id poi)) "[new]")))))        
+        (:tr (:td "airal view"
+                  ((:input :id "airal-id" :type "hidden" :name "airal-id")))
+             (:td (:table (dolist (airal (poi-airals poi))
+                            (html (:tr (:td ((:a :href (format nil "/image/~D" (store-object-id airal))
+                                                 :target "_new")
+                                             ((:img :src (format nil "/image/~D" (store-object-id airal))
+                                                    :width "90" :height "90"))))
+                                       (:td (submit-button "delete-airal" "delete-airal"
+                                                           :formcheck #?"javascript:confirm_delete('airal-id', $((store-object-id airal)), 'Really delete the airal?')")))))
+                          (:tr ((:td :colspan "2")
+                                "Upload new airal view"
+                                ((:input :type "file" :name "image-file"))
+                                :br
+                                (submit-button "upload-airal" "upload-airal"))))))
         (:tr (:td "panorama view"
                   ((:input :id "panorama-id" :type "hidden" :name "panorama-id")))
              (:td (dolist (panorama (poi-panoramas poi))
@@ -197,7 +200,7 @@
         ((and (eql (cl-gd:image-width) *poi-image-width*)
               (eql (cl-gd:image-height) *poi-image-height*))
          (with-transaction ("set airals")
-           (setf (poi-airals poi) (print (list (import-image uploaded-file :class-name 'store-image)))))
+           (push (import-image uploaded-file :class-name 'store-image) (poi-airals poi)))
          (redirect (format nil "/edit-poi/~D"
                            (store-object-id poi))))
         (t
@@ -214,10 +217,11 @@
 (defmethod handle-object-form ((handler edit-poi-handler)
                                (action (eql :delete-airal))
                                (poi poi))
-  (let ((airals (poi-airals poi)))
-    (with-transaction ("setf poi-airals nil")
-      (setf (poi-airals poi) nil))
-    (mapc #'delete-object airals))
+  (with-query-params (airal-id)
+    (let ((airal (find-store-object (parse-integer airal-id))))
+      (with-transaction ("delete poi-airal")
+        (alexandria:deletef (poi-airals poi) airal))
+      (delete-object airal)))
   (redirect (format nil "/edit-poi/~D"
                     (store-object-id poi))))
 
