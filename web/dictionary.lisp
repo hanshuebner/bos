@@ -92,7 +92,7 @@
              (string-trim '(#\space #\newline #\tab) string))
            (load-language (language xml-path)
              (handler-case
-                 (let ((xmls (cxml:parse-file xml-path (cxml-xmls:make-xmls-builder))))
+                 (let ((xmls (cxml:parse-file (truename xml-path) (cxml-xmls:make-xmls-builder))))
                    (assert (equal "dictionary" (cxml-xmls:node-name xmls)) nil
                            "root element should be \"dictionary\"")
                    (dolist (element (cxml-xmls:node-children xmls))
