@@ -39,17 +39,19 @@
   (cadr (assoc language-short-name (website-languages) :test #'equal)))
 
 (defun content-language-chooser ()
+  "Note that in the current implementation other GET parameters than
+   language will be lost (not appended to script-name)."
   (html
    ((:p :class "languages")
     "Content languages: "
     (loop for (language-symbol language-name) in (website-languages)
-	  do (labels ((show-language-link ()
-			(html (cmslink (format nil "~A?language=~A" (hunchentoot:request-uri*) language-symbol)
-				(:princ-safe language-name)))))
-	       (if (equal (request-language) language-symbol)
-		   (html "[" (show-language-link) "]")
-		   (html (show-language-link)))
-	       (html " "))))))
+       do (labels ((show-language-link ()
+                     (html (cmslink (format nil "~A?language=~A" (hunchentoot:script-name*) language-symbol)
+                             (:princ-safe language-name)))))
+            (if (equal (request-language) language-symbol)
+                (html "[" (show-language-link) "]")
+                (html (show-language-link)))
+            (html " "))))))
 
 (defun decode-ismap-query-string ()
   (let ((coord-string (caar (query-params))))
