@@ -225,7 +225,7 @@
 		 :authorizer (make-instance 'bos-authorizer)
 		 :site-logo-url "/images/bos-logo.gif"
 		 :style-sheet-urls '("/static/cms.css")
-		 :javascript-urls '("/static/cms.js" "/static/tiny_mce/tiny_mce.js"))
+		 :javascript-urls '("/static/cms.js" "/static/tiny_mce/tiny_mce.js" "/static/MochiKit/MochiKit.js"))
 
   (publish-directory :prefix "/static/"
                      :destination (merge-pathnames "static/" website-directory))

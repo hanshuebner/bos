@@ -92,3 +92,9 @@ function parse_youtube_link (input)
         return true;
     }
 }
+
+function confirm_delete(field_name, value, confirm_string)
+{
+    $(field_name).value = value;
+    return confirm(confirm_string);
+}

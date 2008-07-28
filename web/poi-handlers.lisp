@@ -1,11 +1,10 @@
-
 (in-package :bos.web)
 
 (enable-interpol-syntax)
 
 (defclass make-poi-handler (page-handler)
   ())
-  
+
 (defmethod handle ((handler make-poi-handler))
   (with-query-params (name)
     (cond
@@ -64,7 +63,8 @@
                      (< -1 (+ shift-by old-position) (length new-images))))
         (setf (nth old-position new-images) (nth (+ shift-by old-position) new-images))
         (setf (nth (+ shift-by old-position) new-images) tmp)
-        (change-slot-values poi 'bos.m2::images new-images)))
+        (with-transaction ("setf poi-images")
+          (setf (poi-images poi) new-images))))
     (with-bos-cms-page (:title "Edit POI")
       (content-language-chooser)
       (unless (poi-complete poi language)
@@ -111,19 +111,19 @@
                    for index from 1 by 1
                    do (html (:td ((:a :href (format nil "/edit-poi-image/~a?poi=~A" (store-object-id image) (store-object-id poi)))
                                   ((:img :border "0" :src (format nil "/image/~a/thumbnail,,55,55" (store-object-id image)))))
-                                 :br
-                                 (if (eql index 1)
-                                     (html ((:img :src "/images/trans.gif" :width "16")))
-                                     (html ((:a :href (format nil "/edit-poi/~A?shift=~A&shift-by=-1"
-                                                              (store-object-id poi)
-                                                              (store-object-id image)))
-                                            ((:img :border "0" :src "/images/pfeil-l.gif")))))
-                                 ((:img :src "/images/trans.gif" :width "23"))
-                                 (unless (eql index (length (poi-images poi)))
-                                   (html ((:a :href (format nil "/edit-poi/~A?shift=~A&shift-by=1"
-                                                            (store-object-id poi)
-                                                            (store-object-id image)))
-                                          ((:img :border "0" :src "/images/pfeil-r.gif"))))))))))
+                             :br
+                             (if (eql index 1)
+                                 (html ((:img :src "/images/trans.gif" :width "16")))
+                                 (html ((:a :href (format nil "/edit-poi/~A?shift=~A&shift-by=-1"
+                                                          (store-object-id poi)
+                                                          (store-object-id image)))
+                                        ((:img :border "0" :src "/images/pfeil-l.gif")))))
+                             ((:img :src "/images/trans.gif" :width "23"))
+                             (unless (eql index (length (poi-images poi)))
+                               (html ((:a :href (format nil "/edit-poi/~A?shift=~A&shift-by=1"
+                                                        (store-object-id poi)
+                                                        (store-object-id image)))
+                                      ((:img :border "0" :src "/images/pfeil-r.gif"))))))))))
               (unless (eql 6 (length (poi-images poi)))
                 (html
                  :br
@@ -139,12 +139,14 @@
                             ((:input :type "file" :name "image-file"))
                             :br
                             (submit-button "upload-airal" "upload-airal")))))
-        (:tr (:td "panorama view")
+        (:tr (:td "panorama view"
+                  ((:input :id "panorama-id" :type "hidden" :name "panorama-id")))
              (:td (dolist (panorama (poi-panoramas poi))
                     (html (:princ-safe (format-date-time (blob-timestamp panorama)))
                           ((:a :href (format nil "/image/~D" (store-object-id panorama)) :target "_new" :class "cmslink")
                            " view ")
-                          (submit-button "delete-panorama" "delete-panorama" :confirm "Really delete this panorama image?")
+                          (submit-button "delete-panorama" "delete-panorama"
+                                         :formcheck #?"javascript:confirm_delete('panorama-id', $((store-object-id panorama)), 'Really delete this panorama image?')")
                           :br))
                   (html "Upload new panorama view"
                         ((:input :type "file" :name "image-file"))
@@ -191,28 +193,30 @@
     (unless uploaded-file
       (error "no file uploaded in upload handler"))
     (with-image-from-upload* (uploaded-file)
-      (unless (and (eql (cl-gd:image-width) *poi-image-width*)
-                   (eql (cl-gd:image-height) *poi-image-height*))
-        (with-bos-cms-page (:title "Invalid image size")
-          (:h2 "Invalid image size")
-          (:p "The image needs to be "
-              (:princ-safe *poi-image-width*) " pixels wide and "
-              (:princ-safe *poi-image-height*) " pixels high.  Your uploaded image is "
-              (:princ-safe (cl-gd:image-width)) " pixels wide and "
-              (:princ-safe (cl-gd:image-height)) " pixels high.  Please use an image editor "
-              "to resize the image and upload it again.")
-          (:p (cmslink (edit-object-url poi) "Back to POI")))
-        (return-from handle-object-form t)))
-    (change-slot-values poi 'airals (list (import-image (upload-pathname uploaded-file)
-                                                        :class-name 'store-image))))
-  (redirect (format nil "/edit-poi/~D"
-                    (store-object-id poi))))
+      (cond
+        ((and (eql (cl-gd:image-width) *poi-image-width*)
+              (eql (cl-gd:image-height) *poi-image-height*))
+         (with-transaction ("set airals")
+           (setf (poi-airals poi) (print (list (import-image uploaded-file :class-name 'store-image)))))
+         (redirect (format nil "/edit-poi/~D"
+                           (store-object-id poi))))
+        (t
+         (with-bos-cms-page (:title "Invalid image size")
+           (:h2 "Invalid image size")
+           (:p "The image needs to be "
+               (:princ-safe *poi-image-width*) " pixels wide and "
+               (:princ-safe *poi-image-height*) " pixels high.  Your uploaded image is "
+               (:princ-safe (cl-gd:image-width)) " pixels wide and "
+               (:princ-safe (cl-gd:image-height)) " pixels high.  Please use an image editor "
+               "to resize the image and upload it again.")
+           (:p (cmslink (edit-object-url poi) "Back to POI"))))))))
 
 (defmethod handle-object-form ((handler edit-poi-handler)
                                (action (eql :delete-airal))
                                (poi poi))
   (let ((airals (poi-airals poi)))
-    (change-slot-values poi 'airals nil)
+    (with-transaction ("setf poi-airals nil")
+      (setf (poi-airals poi) nil))
     (mapc #'delete-object airals))
   (redirect (format nil "/edit-poi/~D"
                     (store-object-id poi))))
@@ -220,7 +224,8 @@
 (defmethod handle-object-form ((handler edit-poi-handler)
                                (action (eql :delete-movie))
                                (poi poi))
-  (change-slot-values poi 'movies nil)
+  (with-transaction ("setf poi-movies nil")
+    (setf (poi-movies poi) nil))
   (redirect (format nil "/edit-poi/~D" (store-object-id poi))))
 
 (defmethod handle-object-form ((handler edit-poi-handler)
@@ -229,12 +234,10 @@
   (let ((uploaded-file (request-uploaded-file "image-file")))
     (unless uploaded-file
       (error "no file uploaded in upload handler"))
-    (with-image-from-upload* (uploaded-file)
-                                        ; just open the image to make sure that gd can process it
-      )
-    (change-slot-values poi 'panoramas (cons (import-image (upload-pathname uploaded-file)
-                                                           :class-name 'store-image)
-                                             (poi-panoramas poi))))
+    ;; just open the image to make sure that gd can process it
+    (with-image-from-upload* (uploaded-file))
+    (with-transaction ("add poi-panorama")
+      (push (import-image uploaded-file :class-name 'store-image) (poi-panoramas poi))))
   (redirect (format nil "/edit-poi/~D"
                     (store-object-id poi))))
 
@@ -243,8 +246,9 @@
                                (poi poi))
   (with-query-params (panorama-id)
     (let ((panorama (find-store-object (parse-integer panorama-id))))
-      (change-slot-values poi 'panoramas (remove panorama (poi-panoramas poi)))
-      (mapc #'delete-object panorama)))
+      (with-transaction ("delete poi-panorama")
+        (alexandria:deletef (poi-panoramas poi) panorama))
+      (delete-object panorama)))
   (redirect (format nil "/edit-poi/~D"
                     (store-object-id poi))))
 
@@ -292,7 +296,7 @@
           (return-from handle-object-form t)))
       (if poi-image
           (blob-from-file poi-image uploaded-file)
-          (setq poi-image (import-image (upload-pathname uploaded-file)
+          (setq poi-image (import-image uploaded-file
                                         :class-name 'poi-image
                                         :initargs `(:poi ,poi))))
       (redirect (format nil "/edit-poi-image/~D?poi=~D"
@@ -314,8 +318,8 @@
                      (:td ((:img :src (format nil "/image/~A" (store-object-id poi-image))))))
                 (:tr (:td "upload new image")
                      (:td ((:input :type "file" :name "image-file"))
-                          :br
-                          (submit-button "upload" "upload")))
+                      :br
+                      (submit-button "upload" "upload")))
                 (:tr (:td "title")
                      (:td (text-field "title"
                                       :value (slot-string poi-image 'title language))))
@@ -364,10 +368,10 @@
                                  :key (lambda (poi) (store-object-last-change poi 1)))
                          (reduce #'max last-paid-contracts
                                  :key (lambda (contract) (store-object-last-change contract 0))))))
-    (hunchentoot:handle-if-modified-since timestamp)  
+    (hunchentoot:handle-if-modified-since timestamp)
     (setf (hunchentoot:header-out :last-modified)
           (hunchentoot:rfc-1123-date timestamp))
-    (with-http-response (:content-type "text/html; charset=UTF-8")    
+    (with-http-response (:content-type "text/html; charset=UTF-8")
       (with-http-body ()
         (html
          ((:script :language "JavaScript")
@@ -409,12 +413,12 @@
              (format-image (image)
                (with-element "image"
                  (attribute "id" (princ-to-string (store-object-id image)))
-                 (when (typep image 'poi-image)                   
+                 (when (typep image 'poi-image)
                    (attribute "title" (slot-string image 'title language))
-                   (attribute "subtitle" (slot-string image 'subtitle language))                   
+                   (attribute "subtitle" (slot-string image 'subtitle language))
                    (with-element "description" (text (slot-string image 'description language))))
                  (with-element "url" (text (format nil "http://createrainforest.org/image/~D"
-                                                   (store-object-id image))))                 
+                                                   (store-object-id image))))
                  (with-element "width" (text (princ-to-string (store-image-width image))))
                  (with-element "height" (text (princ-to-string (store-image-height image)))))))
       (with-accessors ((id store-object-id)
@@ -480,19 +484,19 @@
              ;; images
              (with-element "tr"
                (dolist (image images)
-                 (img-td image)))                    
+                 (img-td image)))
              ;; titles
              (with-element "tr"
                (dolist (image images)
                  (img-td-title image)))))
     (handler-case
         (with-xml-output (make-string-sink)
-          (with-element "html"    
+          (with-element "html"
             (with-element "head")
             (with-element "body"
               (with-element "table"
                 (attribute "cellspacing" "0") (attribute "width" "500") (attribute "cellpadding" "5") (attribute "border" "0")
-                (attribute "style" "background-color: rgb(186, 186, 186);")                
+                (attribute "style" "background-color: rgb(186, 186, 186);")
                 (with-element "tbody"
                   (with-element "tr"
                     (with-element "td"
@@ -566,7 +570,7 @@
 
 (defmethod handle-object ((handler poi-xml-handler) poi)
   (let ((timestamp (store-object-last-change poi 1)))
-    (hunchentoot:handle-if-modified-since timestamp)  
+    (hunchentoot:handle-if-modified-since timestamp)
     (setf (hunchentoot:header-out :last-modified)
           (hunchentoot:rfc-1123-date timestamp))
     (with-query-params ((lang "en"))
@@ -580,7 +584,7 @@
 
 (defmethod handle-object ((handler poi-kml-handler) poi)
   (with-query-params ((lang "en"))
-    (with-xml-response ()      
+    (with-xml-response ()
       (with-namespace (nil "http://earth.google.com/kml/2.1")
         (with-element "kml"
           (write-poi-kml poi lang))))))
@@ -610,5 +614,3 @@
                     (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
               (kml-region (make-rectangle2 (list 0 0 +width+ +width+)) '(:min 600 :max -1))
               (mapc #'(lambda (poi) (write-poi-kml poi lang)) relevant-pois))))))))
-
-
