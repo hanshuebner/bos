@@ -176,7 +176,7 @@ var poi = { symbol: ~S,
       (when (poi-panoramas poi)
 	(format t "poi.panoramas = [ ~{~D~^, ~} ];~%" (mapcar #'store-object-id (poi-panoramas poi))))
       (when (poi-movies poi)
-	(format t "poi.movies = [ ~{~S~^, ~} ];~%" (poi-movies poi)))
+	(format t "poi.movies = [ ~{~S~^, ~} ];~%" (mapcar #'poi-movie-url (poi-movies poi))))
       (loop for slot-name in '(title subtitle description)
 	 for javascript-name in '("imageueberschrift" "imageuntertitel" "imagetext")
 	 for slot-values = (mapcar (lambda (image)
