@@ -3,7 +3,6 @@
 // Allgemeine Initialisierungsfunktion fuer alle CMS-Seiten
 
 function init() {
-    update_movie_preview();
 }
 
 // Formularcheck für Sponsoren-Erzeugung
@@ -65,18 +64,6 @@ function statistic_selected ()
 
 function $(id) { return document.getElementById(id); }
 
-function update_movie_preview()
-{
-    if ($('movie') && $('movie_preview')) {
-	var url = $('movie').value;
-	if (url == "") {
-	    $('movie_preview').innerHTML = '';
-	} else {
-	    $('movie_preview').innerHTML = '<object width="360" height="340"> <param name="movie" value=" ' + url + '"> </param> <embed src=" ' + url + '" type="application/x-shockwave-flash" width="360" height="340"> </embed> </object>';
-	}
-    }
-}
-
 function parse_youtube_link (input)
 {
     var text = input.value;
@@ -88,7 +75,6 @@ function parse_youtube_link (input)
         input.value = "";
         return false;
     } else {
-        update_movie_preview();
         return true;
     }
 }
@@ -98,3 +84,4 @@ function confirm_delete(field_name, value, confirm_string)
     $(field_name).value = value;
     return confirm(confirm_string);
 }
+

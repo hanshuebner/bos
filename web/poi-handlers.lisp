@@ -154,20 +154,25 @@
                   (html "Upload new panorama view"
                         ((:input :type "file" :name "image-file"))
                         :br
-                        (submit-button "upload-panorama" "upload-panorama"))))
-        (:tr (:td "movie")
-             (:td (html "URL or 'embed' string: "
+                        (submit-button "upload-panorama" "upload-panorama"))))        
+        (:tr (:td "movies"
+                  ((:input :id "movie-id" :type "hidden" :name "movie-id")))
+             (:td (dolist (movie (poi-movies poi))
+                    (html (:princ-safe (format-date-time (store-object-last-change movie 0)))
+                          ((:a :href (format nil "/poi-movie/~D" (store-object-id movie)) :target "_new" :class "cmslink")
+                           " view ")
+                          (submit-button "delete-movie" "delete-movie"
+                                         :formcheck #?"javascript:confirm_delete('movie-id', $((store-object-id movie)), 'Really delete this movie?')")
+                          :br))
+                  (html "URL or 'embed' string: "
                         ((:input :type "text"
                                  :size "50"
-                                 :name "movie"
+                                 :name "movie-url"
                                  :id "movie"
-                                 :value (or (first (poi-movies poi)) "")
+                                 :value ""
                                  :onchange "parse_youtube_link(this)"))
-                        " "
-                        (when (poi-movies poi)
-                          (html :br (submit-button "delete-movie" "delete-movie" :confirm "Really delete the movie?")))
                         :br
-                        ((:div :id "movie_preview" :style "height: 340px; width: 360px;") ""))))
+                        (submit-button "add-movie" "add-movie"))))
         (:tr (:td (submit-button "save" "save")
                   (submit-button "delete" "delete" :confirm "Really delete the POI?"))))))))
 
@@ -225,12 +230,27 @@
   (redirect (format nil "/edit-poi/~D"
                     (store-object-id poi))))
 
+
+(defmethod handle-object-form ((handler edit-poi-handler)
+                               (action (eql :add-movie))
+                               (poi poi)) 
+  (with-query-params (movie-url)
+    (with-transaction ("add poi movie")
+      (push (make-object 'poi-movie :poi poi :url movie-url)
+            (poi-movies poi)))
+    (redirect (format nil "/edit-poi/~D" (store-object-id poi)))))
+
+
 (defmethod handle-object-form ((handler edit-poi-handler)
                                (action (eql :delete-movie))
                                (poi poi))
-  (with-transaction ("setf poi-movies nil")
-    (setf (poi-movies poi) nil))
-  (redirect (format nil "/edit-poi/~D" (store-object-id poi))))
+  (with-query-params (movie-id)
+    (let ((movie (find-store-object (parse-integer movie-id))))
+      (with-transaction ("delete poi-movie")
+        (alexandria:deletef (poi-movies poi) movie))
+      (delete-object movie)))
+  (redirect (format nil "/edit-poi/~D"
+                    (store-object-id poi))))
 
 (defmethod handle-object-form ((handler edit-poi-handler)
                                (action (eql :upload-panorama))
@@ -402,6 +422,22 @@
                             imageproc-arguments))
           (error "image index ~a out of bounds for poi ~a" image-index poi)))))
 
+(defclass poi-movie-handler (admin-only-handler object-handler)
+  ()
+  (:default-initargs :object-class 'poi-movie))
+
+(defmethod handle-object ((handler poi-movie-handler) (poi-movie (eql nil)))
+  (error "poi-movie not found"))
+
+(defmethod handle-object ((handler poi-movie-handler) poi-movie)
+  (with-bos-cms-page (:title "POI movie preview")
+    (:p (cmslink (edit-object-url (poi-movie-poi poi-movie)) "Back to POI"))
+    ((:object :width "425" :height "344")
+     ((:param :name "movie" :value (poi-movie-url poi-movie)))
+     ((:param :name "allowFullScreen" :value "true"))
+     ((:embed :src (poi-movie-url poi-movie) :type "application/x-shockwave-flash"
+                                             :allowFullScreen "true"
+                                             :width "425" :height "344")))))
 
 (defun write-poi-xml (poi language)
   "Writes the poi xml format for one specific language.  This is used
@@ -452,9 +488,9 @@
           (dolist (panorama panoramas)
             (with-media ("panorama" "Panorama" (store-image-name panorama))
               (format-image panorama)))
-          (dolist (url movies)
+          (dolist (movie movies)
             (with-media ("movie" "Video")
-              (with-element "url" (text url)))))))))
+              (with-element "url" (text (poi-movie-url movie))))))))))
 
 (defun poi-description-google-earth (poi language &key (image-width 120))
   (labels ((website-path (path &rest args)

@@ -175,6 +175,7 @@
 					("/edit-news" edit-news-handler)
 					("/make-poi" make-poi-handler)
 					("/poi-image" poi-image-handler)
+                                        ("/poi-movie" poi-movie-handler)
                                         ("/poi-xml" poi-xml-handler)
                                         ("/poi-kml-all" poi-kml-all-handler)
                                         ("/poi-kml" poi-kml-handler)

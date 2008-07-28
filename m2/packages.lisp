@@ -220,6 +220,9 @@
 	   #:panoramas
 	   #:poi-movies
 	   #:movies
+           #:poi-movie           
+           #:poi-movie-poi
+           #:poi-movie-url
 	   #:make-poi-image
 	   #:update-poi-image
 	   #:poi

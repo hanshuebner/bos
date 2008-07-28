@@ -31,8 +31,9 @@
   (loop for (slot-name value) on args by #'cddr
      do (setf (slot-string object slot-name language) value)))
 
-;; POI-Anwendungsklassen und Konstruktoren
+;;; POI-Anwendungsklassen und Konstruktoren
 
+;;; poi-image
 (define-persistent-class poi-image (store-image)
   ((poi :read)
    (title :update :initform (make-string-hash-table))
@@ -67,6 +68,21 @@
   (when description
     (setf (slot-string poi-image 'description language) description)))
 
+;;; poi-movie
+(define-persistent-class poi-movie ()
+  ((poi :read)
+   (url :update :initform nil)))
+
+(defmethod poi-movies :before ((poi poi))
+  "Lazily update the db schema. Method can be removed later."
+  (macrolet ((movie (tail) `(car ,tail)))
+    (mapl (lambda (tail)
+            (when (stringp (movie tail))
+              (setf (movie tail)
+                    (make-object 'poi-movie :poi poi :url (movie tail)))))
+          (slot-value poi 'movies))))
+
+;;; poi
 (define-persistent-class poi ()
   ((name :read :index-type string-unique-index
                :index-reader find-poi :index-values all-pois
