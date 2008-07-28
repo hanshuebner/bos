@@ -184,7 +184,6 @@
 					("/m2-javascript" m2-javascript-handler)
 					("/sponsor-login" sponsor-login-handler)
 					("/create-allocation-area" create-allocation-area-handler)
-					("/allocation-area-gfx" allocation-area-gfx-handler)
                                         ("/allocation-area" allocation-area-handler)
 					("/allocation-cache" allocation-cache-handler)
 					("/certificate" certificate-handler)

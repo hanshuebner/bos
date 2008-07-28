@@ -95,51 +95,6 @@
   (with-bos-cms-page (:title "Allocation area has been deactivated")
     (:h2 "The allocation area has been deactivated")))
 
-(defclass allocation-area-gfx-handler (editor-only-handler object-handler)
-  ())
-
-(defmethod handle-object ((handler allocation-area-gfx-handler) allocation-area)
-  (cl-gd:with-image* ((allocation-area-width allocation-area)
-		      (allocation-area-height allocation-area) t)
-    (with-slots (left top width height) allocation-area
-      (let ((colors (make-vga-colors))
-	    (vertices (mapcan #'(lambda (point) (list (- (car point) left)
-						      (- (cdr point) top)))
-			      (coerce (allocation-area-vertices allocation-area) 'list))))
-	(loop with dest-y = 0
-           for y = (+ top dest-y)
-           for tile-y = (* 90 (floor y 90))
-           until (> tile-y (+ top height))
-           for copy-height = (cond
-                               ((< tile-y top)
-                                (+ 90 (- tile-y top)))
-                               ((> (+ tile-y 90) (+ top height))
-                                (- (+ tile-y 90) (+ top height)))
-                               (t
-                                90))
-           for source-y = (if (< tile-y top) (- 90 copy-height) 0)
-           do (loop with dest-x = 0
-                 for x = (+ left dest-x)
-                 for tile-x = (* 90 (floor x 90))
-                 until (> tile-x (+ left width))
-                 for copy-width = (cond
-                                    ((< tile-x left)
-                                     (+ 90 (- tile-x left)))
-                                    ((> (+ tile-x 90) (+ left width))
-                                     (- (+ tile-x 90) (+ left width)))
-                                    (t
-                                     90))
-                 for source-x = (if (< tile-x left) (- 90 copy-width) 0)
-                 do (cl-gd:copy-image (image-tile-image (get-map-tile x y))
-                                      cl-gd:*default-image*
-                                      source-x source-y
-                                      dest-x dest-y
-                                      copy-width copy-height)
-                 do (incf dest-x copy-width))
-           do (incf dest-y copy-height))
-	(cl-gd:draw-polygon vertices :color (elt colors 1))
-	(emit-image-to-browser cl-gd:*default-image* :png)))))
-
 (defclass create-allocation-area-handler (admin-only-handler form-handler)
   ())
 
