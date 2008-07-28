@@ -359,6 +359,15 @@ If PRUNE-TEST returns true, the given node will not be visited."
                :order order)
     (nreverse nodes)))
 
+(defmethod node-path ((node node-extension))
+  (node-path (base-node node)))
+
+;;; *quad-tree*
+(defvar *quad-tree*)
+
+(defun make-quad-tree ()
+  (setq *quad-tree* (make-instance 'quad-node :geo-box *m2-geo-box*)))
+
 (defmethod node-path ((node quad-node))
   (let (prev-n path)
     (map-nodes (lambda (n)
@@ -371,15 +380,6 @@ If PRUNE-TEST returns true, the given node will not be visited."
                :prune-test (lambda (n) (not (geo-box-intersect-p (geo-box n)
                                                                  (geo-box node))))
                :order :depth-first)))
-
-(defmethod node-path ((node node-extension))
-  (node-path (base-node node)))
-
-;;; *quad-tree*
-(defvar *quad-tree*)
-
-(defun make-quad-tree ()
-  (setq *quad-tree* (make-instance 'quad-node :geo-box *m2-geo-box*)))
 
 (defun node-lod (node)
   (if (zerop (depth node))

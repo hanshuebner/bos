@@ -377,7 +377,7 @@
     (dolist (m2 (contract-m2s contract))
       (collect (list (m2-x m2) (m2-y m2))))))
 
-(defun contracts-bounding-box (&optional (contracts (all-contracts)))
+(defun contracts-bounding-box (&optional (contracts (class-instances 'contract)))
   (geometry:with-bounding-box-collect (collect)
     (dolist (contract contracts)
       (dolist (m2 (contract-m2s contract))

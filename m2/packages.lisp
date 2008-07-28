@@ -140,8 +140,7 @@
            #:contract
            #:make-contract
 	   #:contract-p
-           #:get-contract
-           #:all-contracts
+           #:get-contract         
            #:contract-sponsor
            #:contract-paidp
 	   #:contract-download-only
