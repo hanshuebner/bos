@@ -28,20 +28,20 @@
 (define-persistent-class poi-medium (textual-attributes-mixin)
   ((poi :read)))
 
-(deftransaction make-poi-medium (class-name &key language title subtitle description poi initargs)
+(deftransaction make-poi-medium (class-name &rest rest &key language title subtitle description poi initargs)
+  (declare (ignore poi initargs))
   (assert (if (or title subtitle description) language t) nil
           "language needs to be specified, if any of title, subtitle
            or description is given")
-  (let ((medium (apply #'make-object class-name :poi poi initargs)))
-    (update-textual-attributes medium language
-                               :title title
-                               :subtitle subtitle
-                               :description description)    
-    medium))
+  (apply #'make-object class-name rest))
 
 (defmethod initialize-persistent-instance :after ((poi-medium poi-medium) &key language title subtitle description poi)
-  (when (poi-medium-poi poi-medium)
-    (push poi-medium (poi-media (poi-medium-poi poi-medium)))))
+  (when poi
+    (push poi-medium (poi-media poi)))
+  (update-textual-attributes poi-medium language
+                             :title title
+                             :subtitle subtitle
+                             :description description))
 
 (defmethod print-object ((object poi-medium) stream)
   (print-unreadable-object (object stream :type t :identity nil)
@@ -56,6 +56,14 @@
 (define-persistent-class poi-image (store-image poi-medium)
   ())
 
+;;; poi-airal
+(define-persistent-class poi-airal (store-image poi-medium)
+  ())
+
+;;; poi-panorama
+(define-persistent-class poi-panorama (store-image poi-medium)
+  ())
+
 ;;; poi-movie
 (define-persistent-class poi-movie (poi-medium)
   ((url :update :initform nil)))
@@ -65,10 +73,10 @@
   ((name :read :index-type string-unique-index
                :index-reader find-poi :index-values all-pois
                :documentation "Symbolischer Name")
-   (published :update :initform nil :documentation "Wenn dieses Flag NIL ist, wird der POI in den UIs nicht angezeigt")   
+   (published :update :initform nil :documentation "Wenn dieses Flag NIL ist, wird der POI in den UIs nicht angezeigt")
    (area :update :initform nil :documentation "Polygon mit den POI-Koordinaten")
-   (icon :update :initform "palme" :documentation "Name des Icons")   
-   (media :update :initform nil)))
+   (icon :update :initform "palme" :documentation "Name des Icons")
+   (media :update :initform nil :documentation "Liste aller POI-Medien, wie POI-IMAGE, POI-AIRAL ...")))
 
 (deftransaction make-poi (language name &key title description area)
   (let ((poi (make-object 'poi :name name :area area)))
@@ -76,12 +84,18 @@
     (setf (slot-string poi 'description language) description)
     poi))
 
+(defmethod initialize-persistent-instance :after ((poi poi) &key language title subtitle description)
+  (update-textual-attributes poi language
+                             :title title
+                             :subtitle subtitle
+                             :description description))
+
 (defmethod destroy-object :before ((poi poi))
   (mapc #'delete-object (poi-media poi)))
 
 (defmethod poi-complete ((poi poi) language)
   (and (every #'(lambda (slot-name) (slot-string poi slot-name language nil)) '(title subtitle description))
-       (poi-area poi)       
+       (poi-area poi)
        (<= 6 (count-if (lambda (medium) (typep medium 'poi-image)) (poi-media poi)))
        t))
 
@@ -93,6 +107,16 @@
 
 (defun poi-center-lon-lat (poi)
   (geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ (poi-center-x poi)) (- +nw-utm-y+ (poi-center-y poi)) +utm-zone+ t))
+
+(macrolet ((define-poi-medium-reader (name)
+             (let ((type (find-symbol (subseq (symbol-name name) 0 (1- (length (symbol-name name)))))))
+               (assert type)
+               `(defun ,name (poi)
+                  (remove-if-not (lambda (medium) (typep medium ',type)) (poi-media poi))))))
+  (define-poi-medium-reader poi-images)
+  (define-poi-medium-reader poi-airals)
+  (define-poi-medium-reader poi-panoramas)
+  (define-poi-medium-reader poi-movies))
 
 (defun make-poi-javascript (language)
   "Erzeugt das POI-Javascript für das Infosystem"
@@ -148,3 +172,19 @@ var poi = { symbol: ~S,
         (format t "poi['y'] = ~D;~%" y)
         (format t "poi['thumbnail'] = 0;~%")
         (format t "pois.push(poi);~%")))))
+
+;;; poi schema evolution aids
+
+(define-modify-macro appendf (&rest args) append)
+
+(defmethod convert-slot-value-while-restoring ((poi poi) (slot-name (eql 'airals)) value)
+  (appendf (poi-media poi) (mapcar (lambda (obj) (change-class obj 'poi-airal :poi poi)) value)))
+
+(defmethod convert-slot-value-while-restoring ((poi poi) (slot-name (eql 'images)) value)
+  (appendf (poi-media poi) (mapcar (lambda (obj) (change-class obj 'poi-image :poi poi)) value)))
+
+(defmethod convert-slot-value-while-restoring ((poi poi) (slot-name (eql 'movies)) value)
+  (appendf (poi-media poi) (mapcar (lambda (url) (make-instance 'poi-movie :url url :poi poi)) value)))
+
+(defmethod convert-slot-value-while-restoring ((poi poi) (slot-name (eql 'panoramas)) value)
+  (appendf (poi-media poi) (mapcar (lambda (obj) (change-class obj 'poi-panorama :poi poi)) value)))

@@ -32,7 +32,7 @@
                                                        (or (not (contract-paidp contract))
                                                            (and *year*
                                                                 (not (eql *year* (contract-year contract))))))
-                                                     (class-instances 'contract))
+                                                     (all-contracts))
                                           #'< :key #'contract-date)))
         (setf name (intern (string-upcase name) :bos.web))
         (apply (or (gethash name *report-generators*)

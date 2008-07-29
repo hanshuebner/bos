@@ -83,7 +83,7 @@
                                 (with-transaction ()
                                   (iter
                                     (while (> size total-free))
-                                    (for contract = (first (class-instances 'contract)))
+                                    (for contract = (first (all-contracts)))
                                     (incf total-free (length (contract-m2s contract)))
                                     (destroy-object contract)))
                                 (finishes (make-contract sponsor size))

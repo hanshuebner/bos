@@ -249,7 +249,7 @@
   ())
 
 (defmethod handle ((handler country-stats-handler))
-  (let* ((contracts (class-instances 'contract))
+  (let* ((contracts (all-contracts))
          (timestamp (reduce #'max contracts :key (lambda (contract)
                                                    (if (contract-paidp contract)
                                                        (store-object-last-change contract 0)

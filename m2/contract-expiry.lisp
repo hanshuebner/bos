@@ -1,7 +1,7 @@
 (in-package :bos.m2)
 
 (defun delete-expired-contracts ()
-  (let ((unpaid-contracts (remove-if #'contract-paidp (class-instances 'contract)))
+  (let ((unpaid-contracts (remove-if #'contract-paidp (all-contracts)))
         deleting)
     (dolist (contract unpaid-contracts)
       (when (contract-is-expired contract)

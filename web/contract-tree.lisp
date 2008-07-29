@@ -355,7 +355,7 @@ has to be unique."
                                        ;; has already been called
                                        :base-node *quad-tree*
                                        :name '*contract-tree*))
-  (dolist (contract (class-instances 'contract))
+  (dolist (contract (all-contracts))
     (when (contract-published-p contract)
       (insert-contract *contract-tree* contract)))
   (geometry:register-rect-subscriber geometry:*rect-publisher* *contract-tree*

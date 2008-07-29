@@ -257,7 +257,9 @@
    (download-only :update)
    (cert-issued :read)
    (worldpay-trans-id :update :initform nil)
-   (expires :read :documentation "universal time which specifies the time the contract expires (is deleted) when it has not been paid for" :initform nil)
+   (expires :read :documentation "universal time which specifies the
+     time the contract expires (is deleted) when it has not been paid for"
+                  :initform nil)
    (largest-rectangle :update))
   (:default-initargs
       :m2s nil
@@ -379,7 +381,7 @@
 
 (defun all-contracts ()
   "Return list of all contracts in the system."
-  (class-instances 'all-contracts))
+  (class-instances 'contract))
 
 (defun contracts-bounding-box (&optional (contracts (all-contracts)))
   (geometry:with-bounding-box-collect (collect)

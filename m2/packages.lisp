@@ -139,6 +139,7 @@
 
            #:contract
            #:make-contract
+           #:all-contracts
            #:contract-p
            #:get-contract
            #:contract-sponsor
