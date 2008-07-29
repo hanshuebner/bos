@@ -49,11 +49,10 @@
 
 ;;; poi
 (define-persistent-class poi ()
-  ((published :update :initform nil)
-   (name :read :index-type string-unique-index
+  ((name :read :index-type string-unique-index
                :index-reader find-poi :index-values all-pois
                :documentation "Symbolischer Name")
-   (published :update :initform nil)
+   (published :update :initform nil :documentation "Wenn dieses Flag NIL ist, wird der POI in den UIs nicht angezeigt")
    (title :update :initform (make-string-hash-table) :documentation "Angezeigter Name")
    (subtitle :update :initform (make-string-hash-table) :documentation "Unterschrift")
    (description :update :initform (make-string-hash-table) :documentation "Beschreibungstext")
