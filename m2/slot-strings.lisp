@@ -17,7 +17,8 @@
 
 (defun set-slot-string (object slot-name language new-value)
   (unless (in-transaction-p)
-    (error "attempt to set string in multi-language string slot ~a of object ~a outside of transaction" slot-name object))
+    (error "attempt to set string in multi-language string slot ~a of ~
+            object ~a outside of transaction" slot-name object))
   (setf (gethash language (slot-value object slot-name)) new-value))
 
 (defsetf slot-string set-slot-string)

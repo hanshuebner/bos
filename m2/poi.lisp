@@ -7,67 +7,68 @@
 
 ;;; POI-Anwendungsklassen und Konstruktoren
 
-;;; poi-image
-(define-persistent-class poi-image (store-image)
-  ((poi :read)
-   (title :update :initform (make-string-hash-table))
-   (subtitle :update :initform (make-string-hash-table))
-   (description :update :initform (make-string-hash-table))))
+;;; textual-attributes-mixin
+(define-persistent-class textual-attributes-mixin ()
+  ((title :update :initform (make-string-hash-table)
+                  :documentation "Angezeigter Name")
+   (subtitle :update :initform (make-string-hash-table)
+                     :documentation "Unterschrift")
+   (description :update :initform (make-string-hash-table)
+                        :documentation "Beschreibungstext")))
 
-(defmethod print-object ((object poi-image) stream)
+(deftransaction update-textual-attributes (obj language &key title subtitle description)
+  (when title
+    (setf (slot-string obj 'title language) title))
+  (when subtitle
+    (setf (slot-string obj 'subtitle language) subtitle))
+  (when description
+    (setf (slot-string obj 'description language) description)))
+
+;;; poi-medium
+(define-persistent-class poi-medium (textual-attributes-mixin)
+  ((poi :read)))
+
+(deftransaction make-poi-medium (class-name &key language title subtitle description poi initargs)
+  (assert (if (or title subtitle description) language t) nil
+          "language needs to be specified, if any of title, subtitle
+           or description is given")
+  (let ((medium (apply #'make-object class-name :poi poi initargs)))
+    (update-textual-attributes medium language
+                               :title title
+                               :subtitle subtitle
+                               :description description)    
+    medium))
+
+(defmethod initialize-persistent-instance :after ((poi-medium poi-medium) &key language title subtitle description poi)
+  (when (poi-medium-poi poi-medium)
+    (push poi-medium (poi-media (poi-medium-poi poi-medium)))))
+
+(defmethod print-object ((object poi-medium) stream)
   (print-unreadable-object (object stream :type t :identity nil)
     (format stream "~D" (store-object-id object))))
 
-(deftransaction make-poi-image (language &key title subtitle description poi)
-  (let ((poi-image (make-object 'poi-image :poi poi)))
-    (setf (slot-string poi-image 'title language) title)
-    (setf (slot-string poi-image 'subtitle language) subtitle)
-    (setf (slot-string poi-image 'description language) description)
-    poi-image))
-
-(defmethod destroy-object :before ((poi-image poi-image))
-  (with-slots (poi) poi-image
+(defmethod destroy-object :before ((poi-medium poi-medium))
+  (with-slots (poi) poi-medium
     (when poi
-      (setf (poi-images poi) (remove poi-image (poi-images poi))))))
+      (setf (poi-media poi) (remove poi-medium (poi-media poi))))))
 
-(defmethod initialize-persistent-instance :after ((poi-image poi-image) &key)
-  (setf (poi-images (poi-image-poi poi-image)) (append (poi-images (poi-image-poi poi-image)) (list poi-image))))
-
-(deftransaction update-poi-image (poi-image language
-                                            &key title subtitle description)
-  (when title
-    (setf (slot-string poi-image 'title language) title))
-  (when subtitle
-    (setf (slot-string poi-image 'subtitle language) subtitle))
-  (when description
-    (setf (slot-string poi-image 'description language) description)))
+;;; poi-image
+(define-persistent-class poi-image (store-image poi-medium)
+  ())
 
 ;;; poi-movie
-(define-persistent-class poi-movie ()
-  ((poi :read)
-   (url :update :initform nil)))
+(define-persistent-class poi-movie (poi-medium)
+  ((url :update :initform nil)))
 
 ;;; poi
-(define-persistent-class poi ()
+(define-persistent-class poi (textual-attributes-mixin)
   ((name :read :index-type string-unique-index
                :index-reader find-poi :index-values all-pois
                :documentation "Symbolischer Name")
-   (published :update :initform nil :documentation "Wenn dieses Flag NIL ist, wird der POI in den UIs nicht angezeigt")
-   (title :update :initform (make-string-hash-table) :documentation "Angezeigter Name")
-   (subtitle :update :initform (make-string-hash-table) :documentation "Unterschrift")
-   (description :update :initform (make-string-hash-table) :documentation "Beschreibungstext")
+   (published :update :initform nil :documentation "Wenn dieses Flag NIL ist, wird der POI in den UIs nicht angezeigt")   
    (area :update :initform nil :documentation "Polygon mit den POI-Koordinaten")
    (icon :update :initform "palme" :documentation "Name des Icons")   
-   (medias :update :initform nil)))
-
-(defmethod poi-movies :before ((poi poi))
-  "Lazily update the db schema. Method can be removed later."
-  (macrolet ((movie (tail) `(car ,tail)))
-    (mapl (lambda (tail)
-            (when (stringp (movie tail))
-              (setf (movie tail)
-                    (make-object 'poi-movie :poi poi :url (movie tail)))))
-          (slot-value poi 'movies))))
+   (media :update :initform nil)))
 
 (deftransaction make-poi (language name &key title description area)
   (let ((poi (make-object 'poi :name name :area area)))
@@ -76,31 +77,13 @@
     poi))
 
 (defmethod destroy-object :before ((poi poi))
-  (mapc #'delete-object (poi-images poi)))
+  (mapc #'delete-object (poi-media poi)))
 
 (defmethod poi-complete ((poi poi) language)
   (and (every #'(lambda (slot-name) (slot-string poi slot-name language nil)) '(title subtitle description))
-       (poi-area poi)
-       (poi-images poi)
+       (poi-area poi)       
+       (<= 6 (count-if (lambda (medium) (typep medium 'poi-image)) (poi-media poi)))
        t))
-
-(defun update-poi (poi language &key title subtitle description area icon published (images :not-set) (movies :not-set))
-  (with-transaction ()
-    (setf (slot-value poi 'published) published)
-    (when title
-      (setf (slot-string poi 'title language) title))
-    (when subtitle
-      (setf (slot-string poi 'subtitle language) subtitle))
-    (when description
-      (setf (slot-string poi 'description language) description))
-    (when area
-      (setf (poi-area poi) area))
-    (when icon
-      (setf (poi-icon poi) icon))
-    (when (listp images)
-      (setf (poi-images poi) images))
-    (when (listp movies)
-      (setf (poi-movies poi) movies))))
 
 (defmethod poi-center-x ((poi poi))
   (first (poi-area poi)))
