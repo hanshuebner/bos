@@ -8,9 +8,9 @@
    (image :update :relaxed-object-reference t))
   (:default-initargs :image nil)
   (:class-indices (tile-index :index-type array-index
-			      :slots (x y)
-			      :index-reader original-map-tile-at
-			      :index-initargs (:dimensions (list (/ +width+ +m2tile-width+) (/ +width+ +m2tile-width+))))))
+                              :slots (x y)
+                              :index-reader original-map-tile-at
+                              :index-initargs (:dimensions (list (/ +width+ +m2tile-width+) (/ +width+ +m2tile-width+))))))
 
 (defmethod print-object ((object original-map-tile) stream)
   (print-unreadable-object (object stream :type t :identity nil)
@@ -27,13 +27,13 @@
 (defun get-original-image-at (x y)
   (let ((tile (get-original-map-tile x y)))
     (and tile
-	 (original-map-tile-image tile))))
+         (original-map-tile-image tile))))
 
 (defun ensure-original-map-tile (x y)
   (or (get-original-map-tile x y)
       (make-object 'original-map-tile
-		   :x (floor x +m2tile-width+)
-		   :y (floor y +m2tile-width+))))
+                   :x (floor x +m2tile-width+)
+                   :y (floor y +m2tile-width+))))
 
 ;;;; IMAGE-TILE
 ;;;;
@@ -68,12 +68,12 @@ PIXEL-RGB-VALUE is converted to grayscale, the grayscale level is used
 to determine the intensity of the returned RGB value."
   (declare (fixnum pixel-rgb-value))
   (let* ((red (ldb (byte 8 16) pixel-rgb-value))
-	 (green (ldb (byte 8 8) pixel-rgb-value))
-	 (blue (ldb (byte 8 0) pixel-rgb-value))
-	 (level (/ (+ (* 0.3 red) (* 0.59 green) (* 0.11 blue)) 255)))
+         (green (ldb (byte 8 8) pixel-rgb-value))
+         (blue (ldb (byte 8 0) pixel-rgb-value))
+         (level (/ (+ (* 0.3 red) (* 0.59 green) (* 0.11 blue)) 255)))
     (setq red (floor (* color-red level))
-	  green (floor (* color-green level))
-	  blue (floor (* color-blue level)))
+          green (floor (* color-green level))
+          blue (floor (* color-blue level)))
     (setf (ldb (byte 8 16) pixel-rgb-value) red)
     (setf (ldb (byte 8 8) pixel-rgb-value) green)
     (setf (ldb (byte 8 0) pixel-rgb-value) blue)
@@ -88,10 +88,10 @@ to determine the intensity of the returned RGB value."
 
 (defun point-in-any-allocation-area-p% (x-coord y-coord)
   (find-if #'(lambda (allocation-area)
-	       ;; first check whether point is in bounding box, then do full polygon check
-	       (and (point-in-polygon-p x-coord y-coord (allocation-area-bounding-box allocation-area))
-		    (point-in-polygon-p x-coord y-coord (allocation-area-vertices allocation-area))))
-	   (store-objects-with-class 'allocation-area)))
+               ;; first check whether point is in bounding box, then do full polygon check
+               (and (point-in-polygon-p x-coord y-coord (allocation-area-bounding-box allocation-area))
+                    (point-in-polygon-p x-coord y-coord (allocation-area-vertices allocation-area))))
+           (store-objects-with-class 'allocation-area)))
 
 (defun initialize-allocation-area-inclusion-cache ()
   (destructuring-bind (x y width height) (allocation-areas-bounding-box)
@@ -130,10 +130,10 @@ to determine the intensity of the returned RGB value."
 
 (defclass image-tile (tile)
   ((original-image :documentation "Original satellite image"
-		   :initform nil)
+                   :initform nil)
    (changed-time :initarg :changed-time
-		 :accessor image-tile-changed-time
-		 :documentation "Timestamp of last change in contracts pointing to this tile")
+                 :accessor image-tile-changed-time
+                 :documentation "Timestamp of last change in contracts pointing to this tile")
    (layers :initarg :layers :reader image-tile-layers))
   (:default-initargs :type :png :changed-time (get-universal-time) :layers '(background areas contracts palette)))
 
@@ -164,9 +164,9 @@ to determine the intensity of the returned RGB value."
   (do-rows (y)
     (do-pixels-in-row (x)
       (let* ((m2 (object-at tile (tile-absolute-x tile x) (tile-absolute-y tile y)))
-	     (contract (and m2 (m2-contract m2))))
-	(when (and contract (contract-paidp contract))
-	  (setf (raw-pixel) (apply #'colorize-pixel (raw-pixel) (contract-color contract))))))))
+             (contract (and m2 (m2-contract m2))))
+        (when (and contract (contract-paidp contract))
+          (setf (raw-pixel) (apply #'colorize-pixel (raw-pixel) (contract-color contract))))))))
 
 (defvar *tile-proc-statistics* (make-statistics-table))
 
@@ -180,8 +180,8 @@ to determine the intensity of the returned RGB value."
     (with-default-image (image)
       (fill-image 0 0 :color (find-color 255 255 255))
       (dolist (statement imageproc-statements)
-	(with-statistics-log (*tile-proc-statistics* (car statement))
-	  (apply #'image-tile-process tile statement))))
+        (with-statistics-log (*tile-proc-statistics* (car statement))
+          (apply #'image-tile-process tile statement))))
     image))
 
 (defgeneric generate-current-image (tile)
@@ -194,14 +194,14 @@ to determine the intensity of the returned RGB value."
 (defun image-from-tiles (image-pathname tiles &key if-exists)
   "Draw an image consisting of the given tiles on a new canvas which encloses all the tiles"
   (multiple-value-bind
-	(left top width height)
+        (left top width height)
       (compute-bounding-box (mapcan #'(lambda (tile) (list (cons (tile-nw-x tile) (tile-nw-y tile))
-							   (cons (+ +m2tile-width+ (tile-nw-x tile)) (+ +m2tile-width+ (tile-nw-y tile)))))
-				    tiles))
+                                                           (cons (+ +m2tile-width+ (tile-nw-x tile)) (+ +m2tile-width+ (tile-nw-y tile)))))
+                                    tiles))
     (let ((right (+ left width))
-	  (bottom (+ top height)))
+          (bottom (+ top height)))
       (with-image (resulting-image width height t)
-	(loop with tile-top = (* +m2tile-width+ (floor top +m2tile-width+))
+        (loop with tile-top = (* +m2tile-width+ (floor top +m2tile-width+))
            for y from tile-top upto bottom by +m2tile-width+
            do (loop with tile-left = (* +m2tile-width+ (floor left +m2tile-width+))
                  for x from tile-left upto right by +m2tile-width+
@@ -214,8 +214,8 @@ to determine the intensity of the returned RGB value."
                                       (- x tile-left) (- y tile-top)
                                       +m2tile-width+ +m2tile-width+))
                         (warn "tile at ~D/~D not found?" x y))))
-	(write-image-to-file image-pathname :image resulting-image :if-exists if-exists)
-	t))))
+        (write-image-to-file image-pathname :image resulting-image :if-exists if-exists)
+        t))))
 
 ;;; Aufteilen der Karte in Kacheln:
 
@@ -236,20 +236,20 @@ to determine the intensity of the returned RGB value."
       (print px)
       (let ((x (parse-integer (car (last (pathname-directory px)))))
             (i 0))
-	(dolist (image-pathname (directory px :all nil))
-	  (handler-case
-	      (let* ((y (parse-integer (pathname-name image-pathname)))
-		     (tile (ensure-original-map-tile x y)))
-		(when (zerop (mod i 100))
-		  (princ #\.))
-		(incf i)
-		(force-output)
-		(when (original-map-tile-image tile)
-		  (delete-object (original-map-tile-image tile)))
-		(change-slot-values tile 'image
-				    (import-image image-pathname :name (format nil "tile-~D-~D" x y))))
-	    (error (e)
-	      (warn "failed to import ~A: ~A" image-pathname e))))))))
+        (dolist (image-pathname (directory px :all nil))
+          (handler-case
+              (let* ((y (parse-integer (pathname-name image-pathname)))
+                     (tile (ensure-original-map-tile x y)))
+                (when (zerop (mod i 100))
+                  (princ #\.))
+                (incf i)
+                (force-output)
+                (when (original-map-tile-image tile)
+                  (delete-object (original-map-tile-image tile)))
+                (change-slot-values tile 'image
+                                    (import-image image-pathname :name (format nil "tile-~D-~D" x y))))
+            (error (e)
+              (warn "failed to import ~A: ~A" image-pathname e))))))))
 
 (defun split-map (width input-directory output-directory)
   (assert (zerop (mod 2700 width)))
@@ -280,9 +280,9 @@ to determine the intensity of the returned RGB value."
                  (map-x (+ (* i tile-width) offset-x))
                  (map-y (+ (* j tile-height) offset-y))
                  (out (merge-pathnames (make-pathname :directory (list :relative (write-to-string map-x))
-						      :name (write-to-string map-y)
-						      :type "png")
-				       directory)))
+                                                      :name (write-to-string map-y)
+                                                      :type "png")
+                                       directory)))
             (apply #'cl-gd:copy-image
                    full part x y 0 0 tile-width tile-height
                    (if (eql zoom 1)

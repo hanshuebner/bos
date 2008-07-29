@@ -5,10 +5,10 @@
 ;;; date format
 
 (defun format-date-time (&optional universal-time &key stream
-			 (show-year t) (show-month t)
-			 (show-date t) (show-time t) (show-weekday nil)
-			 (show-seconds t)
-			 vms-style)
+                         (show-year t) (show-month t)
+                         (show-date t) (show-time t) (show-weekday nil)
+                         (show-seconds t)
+                         vms-style)
   (or show-date show-time
       (warn "format-date-time: show-date and show-time are nil, nothing printed"))
   (multiple-value-bind (sec min hour day month year weekday)
@@ -19,29 +19,29 @@
       (setf weekday (nth weekday '("MON" "TUE" "WED" "THU" "FRI" "SA" "SO"))))
     (let ((s (if stream stream (make-string-output-stream))))
       (if vms-style
-	  (progn
-	    (when show-date
-	      (setf month (nth (- month 1) '("JAN" "FEB" "MAR" "APR" "MAY" "JUN" "JUL" "AUG" "SEP" "OCT" "NOV" "DEC")))
-	      (format s "~2,' d-~a-~d" day month year))
-	    (when (and show-date show-time)
-	      (princ #\Space s))
-	    (when show-time
-	      (format s "~2,' d:~2,'0d:~2,'0d" hour min sec)))
-	  (progn
-	    (when show-weekday
-	      (format s "~a " weekday))
-	    (when show-date
-	      (format s "~2,'0d." day))
-	    (when (or show-date show-month)
-	      (format s "~2,'0d." month))
-	    (when show-year
-	      (format s "~4,'0d" year))
-	    (when show-time
-	      (format s " ~2,'0d:~2,'0d" hour min))
-	    (when (and show-seconds show-time)
-	      (format s ":~2,'0d" sec))))
+          (progn
+            (when show-date
+              (setf month (nth (- month 1) '("JAN" "FEB" "MAR" "APR" "MAY" "JUN" "JUL" "AUG" "SEP" "OCT" "NOV" "DEC")))
+              (format s "~2,' d-~a-~d" day month year))
+            (when (and show-date show-time)
+              (princ #\Space s))
+            (when show-time
+              (format s "~2,' d:~2,'0d:~2,'0d" hour min sec)))
+          (progn
+            (when show-weekday
+              (format s "~a " weekday))
+            (when show-date
+              (format s "~2,'0d." day))
+            (when (or show-date show-month)
+              (format s "~2,'0d." month))
+            (when show-year
+              (format s "~4,'0d" year))
+            (when show-time
+              (format s " ~2,'0d:~2,'0d" hour min))
+            (when (and show-seconds show-time)
+              (format s ":~2,'0d" sec))))
       (unless stream
-	(get-output-stream-string s)))))
+        (get-output-stream-string s)))))
 
 (defun format-time-interval (seconds)
   (format nil "~d:~2,'0d" (floor (/ seconds 60)) (mod seconds 60)))
@@ -51,15 +51,15 @@
     ((> duration (* 24 3600)) (format nil "~ad" (round (/ duration (* 24 3600)))))
     ((> duration 3600)        (format nil "~dh" (round (/ duration 3600))))
     ((> duration 60)          (format nil "~am" (round (/ duration 60))))
-    (t	                      (format nil "~as" duration))))
+    (t                        (format nil "~as" duration))))
 
 (defun month-interval (month year)
   "Returns two values, the first and last second of the given month"
   (values
    (encode-universal-time 0 0 0 1 month year)
    (- (if (= 12 month)
-	  (encode-universal-time 0 0 0 1 1 (+ 1 year))
-	  (encode-universal-time 0 0 0 1 (+ 1 month) year))
+          (encode-universal-time 0 0 0 1 1 (+ 1 year))
+          (encode-universal-time 0 0 0 1 (+ 1 month) year))
       1)))
 
 (defun day-interval (day month year)
@@ -105,29 +105,29 @@
   (multiple-value-bind (second minute hour date month year)
       (decode-universal-time (get-universal-time) 0)
     (format nil
-	    "~d~2,'0d~2,'0dT~2,'0d~2,'0d~2,'0d"
-	    year month date hour minute second)))
+            "~d~2,'0d~2,'0dT~2,'0d~2,'0d~2,'0d"
+            year month date hour minute second)))
 
 (defun daytag ()
   (multiple-value-bind (second minute hour date month year)
       (decode-universal-time (get-universal-time) 0)
     (declare (ignore second minute hour))
     (format nil
-	    "~d~2,'0d~2,'0d"
-	    year month date)))
+            "~d~2,'0d~2,'0d"
+            year month date)))
 
 
 ;;; local hostname
 
 (defun hostname (&key (strip-domain t))
   (let ((hostname
-	 #+acl (sys:getenv "HOST")
-	 #+cmu (cdr (assoc :host ext:*environment-list*))))
+         #+acl (sys:getenv "HOST")
+         #+cmu (cdr (assoc :host ext:*environment-list*))))
     (unless hostname
       (error "HOST environment variable not set, can't continue"))
     (if strip-domain
-	(regex-replace "\\..*$" hostname "")
-	hostname)))
+        (regex-replace "\\..*$" hostname "")
+        hostname)))
 
 
 ;;; filesystem functions
@@ -137,21 +137,21 @@
 
 (defun subdir-p (subdir dir)
   (let ((subdir (probe-file subdir))
-	(dir (probe-file dir)))
+        (dir (probe-file dir)))
     (when (and subdir dir)
       (equal (subseq (pathname-directory subdir)
-		     0 (length (pathname-directory dir)))
-	     (pathname-directory dir)))))
+                     0 (length (pathname-directory dir)))
+             (pathname-directory dir)))))
 
 (defun copy-file (source target &key (overwrite t))
   (let ((buffer (make-array 4096 :element-type '(unsigned-byte 8)))
-	(read-count 0))
+        (read-count 0))
     (with-open-file (in source :direction :input
-			:element-type '(unsigned-byte 8))
+                        :element-type '(unsigned-byte 8))
       (with-open-file (out target :direction :output
                                              :element-type '(unsigned-byte 8)
                                              :if-exists (if overwrite :overwrite :error) :if-does-not-exist :create)
-	(loop
+        (loop
            (setf read-count (read-sequence buffer in))
            (write-sequence buffer out :end read-count)
            (when (< read-count 4096) (return)))))))
@@ -159,7 +159,7 @@
 (defun copy-stream (in out &optional (element-type '(unsigned-byte 8)))
   "Copy everything from in to out"
   (let* ((buffer-size 4096)
-	 (buffer (make-array buffer-size :element-type element-type)))
+         (buffer (make-array buffer-size :element-type element-type)))
     (labels ((read-chunks ()
                (let ((size (read-sequence buffer in)))
                  (if (< size buffer-size)
@@ -176,11 +176,11 @@
   (if (funcall test (first list) obj)
       (cdr list)
       (do ((l list (cdr l))
-	   (last nil l))
-	  ((null l) list)
-	(when (funcall test (car l) obj)
-	  (rplacd last (cdr l))
-	  (return list)))))
+           (last nil l))
+          ((null l) list)
+        (when (funcall test (car l) obj)
+          (rplacd last (cdr l))
+          (return list)))))
 
 (defun make-keyword-from-string (string)
   (if (keywordp string)
@@ -189,17 +189,17 @@
 
 (defun assoc-values (item alist &key (test #'equal))
   (mapcan #'(lambda (x) (and (funcall test item (car x))
-			     (list (cdr x))))
-	  alist))
+                             (list (cdr x))))
+          alist))
 
 (defun insert-at-index (idx l elt)
   (cond ((= idx 0)
-	 (cons elt l))
-	((= idx (1- (length l)))
-	 (append l (list elt)))
-	(t (append (subseq l 0 idx)
-		   (list elt)
-		   (subseq l idx)))))
+         (cons elt l))
+        ((= idx (1- (length l)))
+         (append l (list elt)))
+        (t (append (subseq l 0 idx)
+                   (list elt)
+                   (subseq l idx)))))
 
 (defun find-neighbourhood (elt list depth &key (test #'eql))
   (loop for rest on list
@@ -227,13 +227,13 @@
   (if (null list)
       (list)
       (if (atom (car list))
-	  (cons (car list) (flatten (cdr list)))
-	  (flatten (append (car list) (cdr list))))))
+          (cons (car list) (flatten (cdr list)))
+          (flatten (append (car list) (cdr list))))))
 
 (defun count-multiple (objects &rest keys)
   (let ((hash-tables (loop for i from 1 to (length keys)
                         collect (make-hash-table :test #'equal)))
-	(sum 0))
+        (sum 0))
     (dolist (object objects)
       (incf sum)
       (loop for key in keys
@@ -257,19 +257,19 @@
 
 (defun shift-until (list num &key (test #'>=))
   (do* ((l list (cdr l))
-	(smaller nil (cons i smaller))
-	(i (car l) (car l)))
+        (smaller nil (cons i smaller))
+        (i (car l) (car l)))
        ((funcall test i num)
-	(append l (nreverse smaller)))))
+        (append l (nreverse smaller)))))
 
 ;;; hash table
 (defun hash-to-list (hash &key (key #'cdr) (compare #'>) num)
   (let ((results (sort (loop for key being the hash-key of hash using (hash-value val)
                           collect (cons key val))
-		       compare :key key)))
+                       compare :key key)))
     (if num
-	(subseq results 0 num)
-	results)))
+        (subseq results 0 num)
+        results)))
 
 (defun hash-values (hash)
   (loop for value being the hash-values of hash
@@ -290,11 +290,11 @@
 (defun randomize-list (l)
   (let ((len (length l)))
     (flet ((randomize (l)
-	     (let ((x (random len))
-		   (mov (pop l)))
-	       (insert-at-index x l mov))))
+             (let ((x (random len))
+                   (mov (pop l)))
+               (insert-at-index x l mov))))
       (dotimes (x len)
-	(setf l (randomize l)))))
+        (setf l (randomize l)))))
   l)
 
 (defun random-elt (choices)
@@ -307,14 +307,14 @@
 #+(or)
 (defun md5-as-hexstring (input-string)
   (apply #'concatenate 'string (mapcar #'(lambda (c)
-					   (format nil "~2,'0X" c))
-				       (coerce (md5sum-sequence input-string) 'list))))
+                                           (format nil "~2,'0X" c))
+                                       (coerce (md5sum-sequence input-string) 'list))))
 
 ;;; content-types
 
 (defvar *content-types* '((:jpg . "image/jpeg")
-			  (:png . "image/png")
-			  (:gif . "image/gif")))
+                          (:png . "image/png")
+                          (:gif . "image/gif")))
 
 (defun pathname-type-symbol (pathname)
   (intern (string-upcase (pathname-type pathname)) 'keyword))
@@ -400,7 +400,7 @@ it is assumed that the string specifies the MIME type."
 (defun find-matching-strings (regexp strings &key case-sensitive)
   (let ((scanner (create-scanner regexp :case-insensitive-mode (not case-sensitive))))
     (remove-if-not #'(lambda (str)
-		       (scan scanner str)) strings)))
+                       (scan scanner str)) strings)))
 
 ;;; stream functions
 ;;; from macho (by Miles Egan)

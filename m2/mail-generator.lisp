@@ -32,15 +32,15 @@
 (defun start-postmaster ()
   (unless (postmaster-running-p)
     (setq *postmaster*
-	  (bt:make-thread #'postmaster-loop
-			  :name "postmaster"))))
+          (bt:make-thread #'postmaster-loop
+                          :name "postmaster"))))
 
 (defun send-to-postmaster (function contract &rest args)
   (bt:with-lock-held (*postmaster-queue-lock*)
     (enqueue (list function contract args) *postmaster-queue*)))
 
 (defvar *country->office-email* '(("DK" . "bosdanmark.regnskov@gmail.com")
-				  ("SE" . "bosdanmark.regnskov@gmail.com")))
+                                  ("SE" . "bosdanmark.regnskov@gmail.com")))
 
 (defun country->office-email (country)
   (or (cdr (assoc country *country->office-email* :test #'string-equal))
@@ -72,8 +72,8 @@ Subject: ~A
 
 (defun mail-info-request (email country)
   (send-system-mail :subject "Mailing list request"
-		    :to (country->office-email country)
-		    :text #?"Please enter into the mailing list:
+                    :to (country->office-email country)
+                    :text #?"Please enter into the mailing list:
 
 
 $(email)
@@ -85,56 +85,56 @@ $(email)
 (defun mail-template-directory (language)
   "Return the directory where the mail templates are stored"
   (merge-pathnames (make-pathname :directory `(:relative "templates" ,(string-downcase language)))
-		   (symbol-value (find-symbol "*WEBSITE-DIRECTORY*" "BOS.WEB"))))
+                   (symbol-value (find-symbol "*WEBSITE-DIRECTORY*" "BOS.WEB"))))
 
 (defun rest-of-file (file)
   (let ((result (make-array (- (file-length file)
-			       (file-position file))
-			    :element-type 'character)))
+                               (file-position file))
+                            :element-type 'character)))
     (read-sequence result file)
     result))
 
 (defun make-welcome-mail (sponsor)
   "Return a plist containing the :subject and :text options to generate an email with send-system-mail"
   (let ((vars (list :sponsor-id (sponsor-id sponsor)
-		    :master-code (sponsor-master-code sponsor))))
+                    :master-code (sponsor-master-code sponsor))))
     (labels
-	((get-var (var-name) (getf vars var-name)))
+        ((get-var (var-name) (getf vars var-name)))
       (with-open-file (template (merge-pathnames #p"welcome-email.template"
-						 (mail-template-directory (sponsor-language sponsor))))
-	(let ((subject (bknr.web:expand-variables (read-line template) #'get-var))
-	      (text (bknr.web:expand-variables (rest-of-file template) #'get-var)))
-	  (list :subject subject :text text))))))
+                                                 (mail-template-directory (sponsor-language sponsor))))
+        (let ((subject (bknr.web:expand-variables (read-line template) #'get-var))
+              (text (bknr.web:expand-variables (rest-of-file template) #'get-var)))
+          (list :subject subject :text text))))))
 
 (defun mail-instructions-to-sponsor (contract email)
   (apply #'send-system-mail
-	 :to email
-	 (make-welcome-mail (contract-sponsor contract))))
+         :to email
+         (make-welcome-mail (contract-sponsor contract))))
 
 (defun format-vcard (field-list)
   (with-output-to-string (s)
     (labels
-	((ensure-list (thing)
-	   (if (listp thing) thing (list thing)))
-	 (vcard-field (field-spec &rest values)
-	   (let* ((values (mapcar (lambda (value) (or value "")) (ensure-list values)))
-		  (encoded-values (mapcar (lambda (string) (cl-qprint:encode (or string "") :encode-newlines t)) values)))
-	     (format s "~{~A~^;~}:~{~@[~A~]~^;~}~%"
-		     (append (ensure-list field-spec)
-			     (unless (equal values encoded-values)
-			       '("CHARSET=ISO-8859-1" "ENCODING=QUOTED-PRINTABLE")))
-		     encoded-values))))
+        ((ensure-list (thing)
+           (if (listp thing) thing (list thing)))
+         (vcard-field (field-spec &rest values)
+           (let* ((values (mapcar (lambda (value) (or value "")) (ensure-list values)))
+                  (encoded-values (mapcar (lambda (string) (cl-qprint:encode (or string "") :encode-newlines t)) values)))
+             (format s "~{~A~^;~}:~{~@[~A~]~^;~}~%"
+                     (append (ensure-list field-spec)
+                             (unless (equal values encoded-values)
+                               '("CHARSET=ISO-8859-1" "ENCODING=QUOTED-PRINTABLE")))
+                     encoded-values))))
       (dolist (field field-list)
-	(when field
-	  (apply #'vcard-field field))))))
+        (when field
+          (apply #'vcard-field field))))))
 
 (defun make-vcard (&key sponsor-id
-		   note
-		   vorname nachname
-		   name
-		   address postcode country
-		   strasse ort
-		   email tel)
+                   note
+                   vorname nachname
+                   name
+                   address postcode country
+                   strasse ort
+                   email tel)
   (format-vcard
    `((BEGIN "VCARD")
      (VERSION "2.1")
@@ -155,10 +155,10 @@ $(email)
 
 (defun worldpay-callback-params-to-vcard (params)
   (labels ((param (name)
-	     (cdr (assoc name params :test #'string-equal))))
+             (cdr (assoc name params :test #'string-equal))))
     (let ((contract (store-object-with-id (parse-integer (param 'cartId)))))
       (make-vcard :sponsor-id (param 'MC_sponsorid)
-		  :note (format nil "Paid-by: Worldpay
+                  :note (format nil "Paid-by: Worldpay
 Contract ID: ~A
 Sponsor ID: ~A
 Number of sqms: ~A
@@ -168,28 +168,28 @@ WorldPay Transaction ID: ~A
 Donationcert yearly: ~A
 Gift: ~A
 "
-				(param 'cartId)
-				(store-object-id (contract-sponsor contract))
-				(length (contract-m2s contract))
-				(param 'authAmountString)
-				(param 'cardType)
-				(param 'transId)
-				(if (param 'MC_donationcert-yearly) "Yes" "No")
-				(if (param 'MC_gift) "Yes" "No"))
-		  :name (param 'name)
-		  :address (param 'address)
-		  :postcode (param 'postcode)
-		  :country (param 'country)
-		  :email (param 'email)
-		  :tel (param 'tel)))))
+                                (param 'cartId)
+                                (store-object-id (contract-sponsor contract))
+                                (length (contract-m2s contract))
+                                (param 'authAmountString)
+                                (param 'cardType)
+                                (param 'transId)
+                                (if (param 'MC_donationcert-yearly) "Yes" "No")
+                                (if (param 'MC_gift) "Yes" "No"))
+                  :name (param 'name)
+                  :address (param 'address)
+                  :postcode (param 'postcode)
+                  :country (param 'country)
+                  :email (param 'email)
+                  :tel (param 'tel)))))
 
 (defun make-html-part (string)
   (make-instance 'text-mime
-		 :type "text"
-		 :subtype "html"
-		 :charset "utf-8"
-		 :encoding :quoted-printable
-		 :content string))
+                 :type "text"
+                 :subtype "html"
+                 :charset "utf-8"
+                 :encoding :quoted-printable
+                 :content string))
 
 (defparameter *common-element-names*
   '(("MC_donationcert-yearly" . "donationcert-yearly")
@@ -207,58 +207,58 @@ worldpay), return the common XML element name"
 
 (defun make-contract-xml-part (id params)
   (make-instance 'text-mime
-		 :type "text"
-		 :subtype (format nil "xml; name=\"contract-~A.xml\"" id)
-		 :charset "utf-8"
-		 :encoding :quoted-printable
-		 :content (format nil "
+                 :type "text"
+                 :subtype (format nil "xml; name=\"contract-~A.xml\"" id)
+                 :charset "utf-8"
+                 :encoding :quoted-printable
+                 :content (format nil "
 <sponsor>
  <date>~A</date>
  ~{<~A>~A</~A>~}
 </sponsor>
 "
-				  (format-date-time (get-universal-time) :xml-style t)
-				  (apply #'append
-					 (mapcar #'(lambda (cons)
-						     (destructuring-bind (element-name . content) cons
-						       (setf element-name (lookup-element-name element-name))
-						       (list element-name
-							     (if (find #\Newline content)
-								 (format nil "<![CDATA[~A]]>" content)
-								 content)
-							     element-name)))
-						 params)))))
+                                  (format-date-time (get-universal-time) :xml-style t)
+                                  (apply #'append
+                                         (mapcar #'(lambda (cons)
+                                                     (destructuring-bind (element-name . content) cons
+                                                       (setf element-name (lookup-element-name element-name))
+                                                       (list element-name
+                                                             (if (find #\Newline content)
+                                                                 (format nil "<![CDATA[~A]]>" content)
+                                                                 content)
+                                                             element-name)))
+                                                 params)))))
 
 (defun make-vcard-part (id vcard)
   (make-instance 'text-mime
-		 :type "text"
-		 :subtype (format nil "x-vcard; name=\"contract-~A.vcf\"" id)
-		 :charset "utf-8"
-		 :content vcard))
+                 :type "text"
+                 :subtype (format nil "x-vcard; name=\"contract-~A.vcf\"" id)
+                 :charset "utf-8"
+                 :content vcard))
 
 (defun mail-contract-data (contract type mime-parts)
   (let ((parts mime-parts))
     (unless (contract-download-only-p contract)
       (setf parts (append parts
-			  (list (make-instance 'mime
-					       :type "application"
-					       :subtype (format nil "pdf; name=\"contract-~A.pdf\"" (store-object-id contract))
-					       :encoding :base64
-					       :content (file-contents (contract-pdf-pathname contract :print t)))))))
+                          (list (make-instance 'mime
+                                               :type "application"
+                                               :subtype (format nil "pdf; name=\"contract-~A.pdf\"" (store-object-id contract))
+                                               :encoding :base64
+                                               :content (file-contents (contract-pdf-pathname contract :print t)))))))
     (send-system-mail :to (contract-office-email contract)
-		      :subject (format nil "~A-Sponsor data - Sponsor-ID ~D Contract-ID ~D"
-				       type
-				       (store-object-id (contract-sponsor contract))
-				       (store-object-id contract))
-		      :content-type nil
-		      :more-headers t
-		      :text (with-output-to-string (s)
-			      (format s "X-BOS-Sponsor-Country: ~A~%" (sponsor-country (contract-sponsor contract)))
-			      (print-mime s
-					  (make-instance 'multipart-mime
-							 :subtype "mixed"
-							 :content parts)
-					  t t))))
+                      :subject (format nil "~A-Sponsor data - Sponsor-ID ~D Contract-ID ~D"
+                                       type
+                                       (store-object-id (contract-sponsor contract))
+                                       (store-object-id contract))
+                      :content-type nil
+                      :more-headers t
+                      :text (with-output-to-string (s)
+                              (format s "X-BOS-Sponsor-Country: ~A~%" (sponsor-country (contract-sponsor contract)))
+                              (print-mime s
+                                          (make-instance 'multipart-mime
+                                                         :subtype "mixed"
+                                                         :content parts)
+                                          t t))))
   (ignore-errors
     (delete-file (contract-pdf-pathname contract :print t))))
 
@@ -266,25 +266,25 @@ worldpay), return the common XML element name"
   (send-system-mail
    :to (contract-office-email contract)
    :subject (format nil "PDF certificate (regenerated) - Sponsor-ID ~D Contract-ID ~D"
-		    (store-object-id (contract-sponsor contract))
-		    (store-object-id contract))
+                    (store-object-id (contract-sponsor contract))
+                    (store-object-id contract))
    :content-type nil
    :more-headers t
    :text (with-output-to-string (s)
-	   (format s "X-BOS-Sponsor-Country: ~A~%" (sponsor-country (contract-sponsor contract)))
-	   (print-mime s
-		       (make-instance
-			'multipart-mime
-			:subtype "mixed"
-			:content (list
-				  (make-instance
-				   'mime
-				   :type "application"
-				   :subtype (format nil "pdf; name=\"contract-~A.pdf\""
-						    (store-object-id contract))
-				   :encoding :base64
-				   :content (file-contents (contract-pdf-pathname contract :print t)))))
-		       t t)))
+           (format s "X-BOS-Sponsor-Country: ~A~%" (sponsor-country (contract-sponsor contract)))
+           (print-mime s
+                       (make-instance
+                        'multipart-mime
+                        :subtype "mixed"
+                        :content (list
+                                  (make-instance
+                                   'mime
+                                   :type "application"
+                                   :subtype (format nil "pdf; name=\"contract-~A.pdf\""
+                                                    (store-object-id contract))
+                                   :encoding :base64
+                                   :content (file-contents (contract-pdf-pathname contract :print t)))))
+                       t t)))
   (ignore-errors
     (delete-file (contract-pdf-pathname contract :print t))))
 
@@ -394,8 +394,8 @@ Donationcert yearly: ~A
 
 (defun get-worldpay-params (contract)
   (or (prog1
-	  (gethash contract *worldpay-params-hash*)
-	(remhash contract *worldpay-params-hash*))
+          (gethash contract *worldpay-params-hash*)
+        (remhash contract *worldpay-params-hash*))
       (error "cannot find WorldPay callback params for contract ~A~%" contract)))
 
 (defun mail-worldpay-sponsor-data (contract)

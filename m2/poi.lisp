@@ -60,7 +60,7 @@
   (setf (poi-images (poi-image-poi poi-image)) (append (poi-images (poi-image-poi poi-image)) (list poi-image))))
 
 (deftransaction update-poi-image (poi-image language
-					    &key title subtitle description)
+                                            &key title subtitle description)
   (when title
     (setf (slot-string poi-image 'title language) title))
   (when subtitle
@@ -147,9 +147,9 @@
     (format t "var anzahlVerkauft = ~D;~%" (number-of-sold-sqm))
     (format t "var pois = new Array;~%")
     (dolist (poi (sort (remove-if #'(lambda (poi) (or (not (poi-complete poi language))
-						      (not (poi-published poi))))
-				  (store-objects-with-class 'poi))
-		       #'(lambda (poi-1 poi-2) (string-lessp (slot-string poi-1 'title language) (slot-string poi-2 'title language)))))
+                                                      (not (poi-published poi))))
+                                  (store-objects-with-class 'poi))
+                       #'(lambda (poi-1 poi-2) (string-lessp (slot-string poi-1 'title language) (slot-string poi-2 'title language)))))
       (format t "
 var poi = { symbol: ~S,
             icon: ~S,
@@ -161,36 +161,36 @@ var poi = { symbol: ~S,
             thumbnail: ~D
 };
 "
-	      (poi-name poi)
-	      (poi-icon poi)
-	      (slot-string poi 'title language)
-	      (slot-string poi 'subtitle language)
-	      (escape-nl (slot-string poi 'description language))
-	      (poi-center-x poi)
-	      (poi-center-y poi)
-	      (length (poi-images poi)))
+              (poi-name poi)
+              (poi-icon poi)
+              (slot-string poi 'title language)
+              (slot-string poi 'subtitle language)
+              (escape-nl (slot-string poi 'description language))
+              (poi-center-x poi)
+              (poi-center-y poi)
+              (length (poi-images poi)))
       (format t "poi.thumbnail = ~D;~%" (length (poi-images poi)))
       (when (poi-airals poi)
 
-	(format t "poi.luftbild = ~D;~%" (store-object-id (first (poi-airals poi)))))
+        (format t "poi.luftbild = ~D;~%" (store-object-id (first (poi-airals poi)))))
       (when (poi-panoramas poi)
-	(format t "poi.panoramas = [ ~{~D~^, ~} ];~%" (mapcar #'store-object-id (poi-panoramas poi))))
+        (format t "poi.panoramas = [ ~{~D~^, ~} ];~%" (mapcar #'store-object-id (poi-panoramas poi))))
       (when (poi-movies poi)
-	(format t "poi.movies = [ ~{~S~^, ~} ];~%" (mapcar #'poi-movie-url (poi-movies poi))))
+        (format t "poi.movies = [ ~{~S~^, ~} ];~%" (mapcar #'poi-movie-url (poi-movies poi))))
       (loop for slot-name in '(title subtitle description)
-	 for javascript-name in '("imageueberschrift" "imageuntertitel" "imagetext")
-	 for slot-values = (mapcar (lambda (image)
-				     (escape-nl (slot-string image slot-name language)))
-				   (poi-images poi))
-	 when slot-values
-	 do (format t "poi.~A = [ ~{~S~^, ~} ];~%" javascript-name slot-values))
+         for javascript-name in '("imageueberschrift" "imageuntertitel" "imagetext")
+         for slot-values = (mapcar (lambda (image)
+                                     (escape-nl (slot-string image slot-name language)))
+                                   (poi-images poi))
+         when slot-values
+         do (format t "poi.~A = [ ~{~S~^, ~} ];~%" javascript-name slot-values))
       (format t "pois.push(poi);~%"))
     (dolist (allocation-area (remove-if (complement #'allocation-area-active-p) (class-instances 'allocation-area)))
       (destructuring-bind (x y) (allocation-area-center allocation-area)
-	(format t "poi = [];~%")
-	(format t "poi['icon'] = ~S;~%" "sale")
-	(format t "poi['name'] = ~S;~%" "Zu Verkaufen")
-	(format t "poi['x'] = ~D;~%" x)
-	(format t "poi['y'] = ~D;~%" y)
-	(format t "poi['thumbnail'] = 0;~%")
-	(format t "pois.push(poi);~%")))))
+        (format t "poi = [];~%")
+        (format t "poi['icon'] = ~S;~%" "sale")
+        (format t "poi['name'] = ~S;~%" "Zu Verkaufen")
+        (format t "poi['x'] = ~D;~%" x)
+        (format t "poi['y'] = ~D;~%" y)
+        (format t "poi['thumbnail'] = 0;~%")
+        (format t "pois.push(poi);~%")))))

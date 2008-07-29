@@ -31,9 +31,9 @@
    (my-slot :read))
   (:default-initargs :contract nil)
   (:class-indices (m2-index :index-type tiled-index
-			    :slots (x y)
-			    :index-reader m2-at
-			    :index-initargs (:width +width+
+                            :slots (x y)
+                            :index-reader m2-at
+                            :index-initargs (:width +width+
                                              :height +width+
                                              :tile-size +m2tile-width+
                                              :tile-class 'image-tile))))
@@ -51,7 +51,7 @@
 (defun ensure-m2 (&rest coords)
   (or (m2-at coords)
       (destructuring-bind (x y) coords
-	(make-instance 'm2 :x x :y y))))
+        (make-instance 'm2 :x x :y y))))
 
 (defmethod get-m2-with-num ((num integer))
   (multiple-value-bind (y x) (truncate num +width+)
@@ -93,22 +93,22 @@
 
 (defmethod m2-allocation-area ((m2 m2))
   (find-if #'(lambda (allocation-area) (point-in-polygon-p (m2-x m2) (m2-y m2) (allocation-area-vertices allocation-area)))
-	   (class-instances 'allocation-area)))
+           (class-instances 'allocation-area)))
 
 (defun m2s-polygon (m2s)
   (let* ((m2 (first m2s))
-	 (contract (m2-contract m2)))
+         (contract (m2-contract m2)))
     (region-to-polygon (list (m2-x m2) (m2-y m2))
-		       (lambda (p)
-			 (let ((m2 (apply #'get-m2 p)))
-			   (and m2 (eql contract (m2-contract m2))))))))
+                       (lambda (p)
+                         (let ((m2 (apply #'get-m2 p)))
+                           (and m2 (eql contract (m2-contract m2))))))))
 
 (defun m2s-polygon-lon-lat (m2s)
   (let ((polygon (m2s-polygon m2s)))
     (mapcar (lambda (point)
-	      (destructuring-bind (x y) point
-		(geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ x) (- +nw-utm-y+ y) +utm-zone+ t)))
-	    polygon)))
+              (destructuring-bind (x y) point
+                (geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ x) (- +nw-utm-y+ y) +utm-zone+ t)))
+            polygon)))
 
 (defun m2s-connected-p (m2s)
   "Is this region of m2 objects geographically connected? We do
@@ -181,7 +181,7 @@
 (defun make-sponsor (&rest initargs &key login &allow-other-keys)
   (apply #'make-object 'sponsor
          :login (or login (format nil "s-~36R-~36R" (next-sponsor-counter) (get-universal-time)))
-	 :master-code (mod (+ (get-universal-time) (random 1000000)) 1000000)
+         :master-code (mod (+ (get-universal-time) (random 1000000)) 1000000)
          initargs))
 
 (defun sponsor-consistent-p (sponsor)
@@ -236,17 +236,17 @@
 ;;; CONTRACT-SET-PAIDP (contract newval) => newval
 
 (defvar *claim-colors* '((0 0 128)
-			 (0 128 0)
-			 (0 128 128)
-			 (128 0 0)
-			 (128 0 128)
-			 (128 128 0)
-			 (0 0 255)
-			 (0 255 0)
-			 (0 255 255)
-			 (255 0 0)
-			 (255 0 255)
-			 (255 255 0)))
+                         (0 128 0)
+                         (0 128 128)
+                         (128 0 0)
+                         (128 0 128)
+                         (128 128 0)
+                         (0 0 255)
+                         (0 255 0)
+                         (0 255 255)
+                         (255 0 0)
+                         (255 0 255)
+                         (255 255 0)))
 
 (define-persistent-class contract ()
   ((sponsor :read :relaxed-object-reference t)
@@ -296,9 +296,9 @@
 (defun get-contract (id)
   (let ((contract (store-object-with-id id)))
     (prog1
-	contract
+        contract
       (unless (subtypep (type-of contract) 'contract)
-	(error "invalid contract id (wrong type) ~A" id)))))
+        (error "invalid contract id (wrong type) ~A" id)))))
 
 (defun publish-contract-change (contract &key type)
   (publish-rect-change *rect-publisher* (contract-bounding-box contract) contract :type type))
@@ -325,23 +325,23 @@
 
 (defmethod contract-fdf-pathname ((contract contract) &key language print)
   (when (and print
-	     (contract-download-only-p contract))
+             (contract-download-only-p contract))
     (error "no print fdf for download-only contract ~A" contract))
   (merge-pathnames (make-pathname :name (format nil "~D-~(~A~)"
                                                 (store-object-id contract)
                                                 language)
-				  :type "fdf")
-		   (if print *cert-mail-directory* *cert-download-directory*)))
+                                  :type "fdf")
+                   (if print *cert-mail-directory* *cert-download-directory*)))
 
 (defmethod contract-m2-pdf-pathname ((contract contract) &key print)
   (merge-pathnames (make-pathname :name (format nil "~D-m2s" (store-object-id contract))
-				  :type "pdf")
-		   (if print bos.m2::*cert-mail-directory* bos.m2::*cert-download-directory*)))
+                                  :type "pdf")
+                   (if print bos.m2::*cert-mail-directory* bos.m2::*cert-download-directory*)))
 
 (defmethod contract-pdf-pathname ((contract contract) &key print)
   (merge-pathnames (make-pathname :name (format nil "~D" (store-object-id contract))
-				  :type "pdf")
-		   (if print bos.m2::*cert-mail-directory* bos.m2::*cert-download-directory*)))
+                                  :type "pdf")
+                   (if print bos.m2::*cert-mail-directory* bos.m2::*cert-download-directory*)))
 
 (defmethod contract-pdf-url ((contract contract))
   (format nil "/certificate/~A" (store-object-id contract)))
@@ -349,7 +349,7 @@
 (defmethod contract-certificates-generated-p (contract)
   (and (probe-file (contract-pdf-pathname contract))
        (or (contract-download-only-p contract)
-	   (probe-file (contract-pdf-pathname contract :print t)))))
+           (probe-file (contract-pdf-pathname contract :print t)))))
 
 (defmethod contract-delete-certificate-files (contract)
   (ignore-errors
@@ -369,7 +369,7 @@
   (let (image-tiles)
     (dolist (m2 (contract-m2s contract))
       (pushnew (get-map-tile (m2-x m2) (m2-y m2))
-	       image-tiles))
+               image-tiles))
     image-tiles))
 
 (defmethod contract-bounding-box ((contract contract))
@@ -398,54 +398,54 @@
            (area (length m2s))
            (scaler (ceiling area 1000.0))
            (bounding-box (contract-bounding-box contract))
-	   (bounding-width (third bounding-box))
-	   (bounding-height (fourth bounding-box)))
+           (bounding-width (third bounding-box))
+           (bounding-height (fourth bounding-box)))
       (if (= area (* bounding-width bounding-height))
-	  ;; no need to run screamer here, since we already know the
-	  ;; answer
-	  bounding-box
-	  (geometry:with-rectangle bounding-box
-	    (declare (ignore width height))
-	    (labels ( ;; to-orig
-		     (distance-to-orig (d)
-		       (when-scaling-needed d
-					    (round (* d scaler))))
-		     (x-coordinate-to-orig (x)
-		       (when-scaling-needed x
-					    (+ left (round (* (- x left) scaler)))))
-		     (y-coordinate-to-orig (y)
-		       (when-scaling-needed y
-					    (+ top (round (* (- y top) scaler)))))
-		     (rectangle-to-orig (r)
-		       (when-scaling-needed r
-					    (geometry:with-rectangle r
-					      (list (x-coordinate-to-orig left)
-						    (y-coordinate-to-orig top)
-						    (distance-to-orig width)
-						    (distance-to-orig height)))))
-		     ;; from-orig
-		     (distance-from-orig (d)
-		       (when-scaling-needed d
-					    (floor d scaler)))
-		     (x-coordinate-from-orig (x)
-		       (when-scaling-needed x
-					    (+ left (floor (- x left) scaler))))
-		     (y-coordinate-from-orig (y)
-		       (when-scaling-needed y
-					    (+ top (floor (- y top) scaler))))
-		     (rectangle-from-orig (r)
-		       (when-scaling-needed r
-					    (geometry:with-rectangle r
-					      (list (x-coordinate-from-orig left)
-						    (y-coordinate-from-orig top)
-						    (distance-from-orig width)
-						    (distance-from-orig height))))))
-	      (rectangle-to-orig
-	       (screamer-user:largest-rectangle
-		(rectangle-from-orig bounding-box)
-		(lambda (x y)
-		  (let ((m2 (get-m2 (x-coordinate-to-orig x) (y-coordinate-to-orig y))))
-		    (and m2 (eql contract (m2-contract m2)))))))))))))
+          ;; no need to run screamer here, since we already know the
+          ;; answer
+          bounding-box
+          (geometry:with-rectangle bounding-box
+            (declare (ignore width height))
+            (labels ( ;; to-orig
+                     (distance-to-orig (d)
+                       (when-scaling-needed d
+                                            (round (* d scaler))))
+                     (x-coordinate-to-orig (x)
+                       (when-scaling-needed x
+                                            (+ left (round (* (- x left) scaler)))))
+                     (y-coordinate-to-orig (y)
+                       (when-scaling-needed y
+                                            (+ top (round (* (- y top) scaler)))))
+                     (rectangle-to-orig (r)
+                       (when-scaling-needed r
+                                            (geometry:with-rectangle r
+                                              (list (x-coordinate-to-orig left)
+                                                    (y-coordinate-to-orig top)
+                                                    (distance-to-orig width)
+                                                    (distance-to-orig height)))))
+                     ;; from-orig
+                     (distance-from-orig (d)
+                       (when-scaling-needed d
+                                            (floor d scaler)))
+                     (x-coordinate-from-orig (x)
+                       (when-scaling-needed x
+                                            (+ left (floor (- x left) scaler))))
+                     (y-coordinate-from-orig (y)
+                       (when-scaling-needed y
+                                            (+ top (floor (- y top) scaler))))
+                     (rectangle-from-orig (r)
+                       (when-scaling-needed r
+                                            (geometry:with-rectangle r
+                                              (list (x-coordinate-from-orig left)
+                                                    (y-coordinate-from-orig top)
+                                                    (distance-from-orig width)
+                                                    (distance-from-orig height))))))
+              (rectangle-to-orig
+               (screamer-user:largest-rectangle
+                (rectangle-from-orig bounding-box)
+                (lambda (x y)
+                  (let ((m2 (get-m2 (x-coordinate-to-orig x) (y-coordinate-to-orig y))))
+                    (and m2 (eql contract (m2-contract m2)))))))))))))
 
 (defun contract-neighbours (contract)
   "Return all contracts that have an adjacent m2 to one of CONTRACT's m2s.
@@ -487,22 +487,22 @@ Note that this function takes also diagonally connected m2s into account."
 (deftransaction do-make-contract (sponsor m2-count &key date paidp expires download-only)
   (let ((m2s (allocate-m2s-for-sale  m2-count)))
     (if m2s
-	(let ((contract (make-object 'contract
-				     :sponsor sponsor
-				     :date date
-				     :m2s m2s
-				     :expires expires
-				     :download-only download-only)))
-	  (when paidp
-	    (contract-set-paidp contract paidp))
-	  contract)
-	(warn "can't create contract, ~A square meters for ~A could not be allocated" m2-count sponsor))))
+        (let ((contract (make-object 'contract
+                                     :sponsor sponsor
+                                     :date date
+                                     :m2s m2s
+                                     :expires expires
+                                     :download-only download-only)))
+          (when paidp
+            (contract-set-paidp contract paidp))
+          contract)
+        (warn "can't create contract, ~A square meters for ~A could not be allocated" m2-count sponsor))))
 
 (define-condition allocation-areas-exhausted (simple-error)
   ((numsqm :initarg :numsqm :reader numsqm))
   (:report (lambda (condition stream)
-	     (format stream "Could not satisfy your request for ~A sqms, please contact the BOS office"
-		     (numsqm condition)))))
+             (format stream "Could not satisfy your request for ~A sqms, please contact the BOS office"
+                     (numsqm condition)))))
 
 (defun make-contract (sponsor m2-count
                       &key (date (get-universal-time))
@@ -510,22 +510,22 @@ Note that this function takes also diagonally connected m2s into account."
                       (expires (+ (get-universal-time) *manual-contract-expiry-time*))
                       download-only)
   (unless (and (integerp m2-count)
-	       (plusp m2-count))
+               (plusp m2-count))
     (error "number of square meters must be a positive integer"))
   (let ((contract (do-make-contract sponsor m2-count
-				    :date date
-				    :paidp paidp
-				    :expires expires
-				    :download-only download-only)))
+                                    :date date
+                                    :paidp paidp
+                                    :expires expires
+                                    :download-only download-only)))
     (unless contract
       (send-system-mail :subject "Contact creation failed - Allocation areas exhaused"
-			:text (format nil "A contract for ~A square meters could not be created, presumably because no
+                        :text (format nil "A contract for ~A square meters could not be created, presumably because no
 suitable allocation area was found.  Please check the free allocation
 areas and add more space.
 
 Sponsor-ID: ~A
 "
-				      m2-count (store-object-id sponsor)))
+                                      m2-count (store-object-id sponsor)))
       (error 'allocation-areas-exhausted :numsqm m2-count))
     contract))
 
@@ -612,8 +612,8 @@ neighbours."
 
 (defun add-to-contract-stats (contract)
   (let* ((area (contract-area contract))
-	 (sponsor (contract-sponsor contract))
-	 (new-sponsor-p (alexandria:length= 1 (sponsor-contracts sponsor)))
+         (sponsor (contract-sponsor contract))
+         (new-sponsor-p (alexandria:length= 1 (sponsor-contracts sponsor)))
          (country (sponsor-country sponsor)))
     (with-slots (sold-m2s paying-sponsors country-sponsors last-contracts)
         *contract-stats*
@@ -644,15 +644,15 @@ neighbours."
   (assert (keywordp country))
   (let ((stat (gethash country (contract-stats-country-sponsors *contract-stats*))))
     (if stat
-	(values (country-stat-paying-sponsors stat)
-		(country-stat-sold-m2s stat))
-	(values 0 0))))
+        (values (country-stat-paying-sponsors stat)
+                (country-stat-sold-m2s stat))
+        (values 0 0))))
 
 (defun last-paid-contracts ()
   (remove-if (lambda (contract)
-	       (or (null contract)
-		   (object-destroyed-p contract)))
-	     (contract-stats-last-contracts *contract-stats*)))
+               (or (null contract)
+                   (object-destroyed-p contract)))
+             (contract-stats-last-contracts *contract-stats*)))
 
 (defun invoke-with-countries (function)
   (alexandria:maphash-keys function (contract-stats-country-sponsors *contract-stats*)))
@@ -677,15 +677,15 @@ neighbours."
       (format t "profil.name = ~S;~%" (string-safe (or (user-full-name sponsor) "[anonym]")))
       (format t "profil.country = ~S;~%" (or (sponsor-country sponsor) "[unbekannt]"))
       (format t "profil.anzahl = ~D;~%" (loop for contract in paid-contracts
-					   sum (length (contract-m2s contract))))
+                                           sum (length (contract-m2s contract))))
       (format t "profil.nachricht = \"~A\";~%" (string-safe (sponsor-info-text sponsor)))
       (format t "profil.contracts = [ ];~%")
       (loop for contract in paid-contracts
-	 do (destructuring-bind (left top width height) (contract-bounding-box contract)
-	      (format t "profil.contracts.push({ id: ~A, left: ~A, top: ~A, width: ~A, height: ~A, date: ~S });~%"
-		      (store-object-id contract)
-		      left top width height
-		      (format-date-time (contract-date contract) :show-time nil)))))))
+         do (destructuring-bind (left top width height) (contract-bounding-box contract)
+              (format t "profil.contracts.push({ id: ~A, left: ~A, top: ~A, width: ~A, height: ~A, date: ~S });~%"
+                      (store-object-id contract)
+                      left top width height
+                      (format-date-time (contract-date contract) :show-time nil)))))))
 
 (defun delete-directory (pathname)
   (cl-fad:delete-directory-and-files pathname :if-does-not-exist :ignore))
@@ -698,18 +698,18 @@ neighbours."
   (unless directory
     (error ":DIRECTORY parameter not set in m2.rc"))
   (assert (and (null (pathname-name directory))
-	       (null (pathname-type directory)))
-	  (directory)
-	  ":DIRECTORY parameter is ~s (not a directory pathname)" directory)
+               (null (pathname-type directory)))
+          (directory)
+          ":DIRECTORY parameter is ~s (not a directory pathname)" directory)
   (when delete
     (delete-directory directory)
     (assert (not (probe-file directory))))
   (close-store)
   (make-instance 'm2-store
-		 :directory directory
-		 :subsystems (list (make-instance 'store-object-subsystem)
-				   (make-instance 'blob-subsystem
-						  :n-blobs-per-directory 1000)
+                 :directory directory
+                 :subsystems (list (make-instance 'store-object-subsystem)
+                                   (make-instance 'blob-subsystem
+                                                  :n-blobs-per-directory 1000)
                                    (make-instance 'initialization-subsystem)))
   (format t "~&; Startup der Quadratmeterdatenbank done.~%")
   (force-output))
@@ -728,73 +728,73 @@ neighbours."
 (defun fill-with-random-contracts (&optional percentage)
   (loop for sponsor = (make-sponsor)
      while (and (or (null percentage)
-		    (< (allocation-area-percent-used (first (class-instances 'allocation-area))) percentage))
-		(make-contract sponsor
-			       (random-elt (cons (1+ (random 300))
-						 '(1 1 1 1 1 5 5 10 10 10 10 10 10 10 10
-						   10 10 10 10 10 30 30 30)))
-			       :paidp t))))
+                    (< (allocation-area-percent-used (first (class-instances 'allocation-area))) percentage))
+                (make-contract sponsor
+                               (random-elt (cons (1+ (random 300))
+                                                 '(1 1 1 1 1 5 5 10 10 10 10 10 10 10 10
+                                                   10 10 10 10 10 30 30 30)))
+                               :paidp t))))
 
 
 ;;; for quick visualization
 #+ltk
 (defun show-m2s-polygon (m2s &aux (points (m2s-polygon m2s)))
   (labels ((compute-bounding-box (m2s)
-	     (let* ((left (m2-x (elt m2s 0)))
-		    (top (m2-y (elt m2s 0)))
-		    (right left)
-		    (bottom top))
-	       (loop for i from 1 below (length m2s) do
-		    (let* ((v (elt m2s i))
-			   (x (m2-x v))
-			   (y (m2-y v)))
-		      (setf left (min left x)
-			    right (max right x)
-			    top (min top y)
-			    bottom (max bottom y))))
-	       (values left top (- right left) (- bottom top)))))
+             (let* ((left (m2-x (elt m2s 0)))
+                    (top (m2-y (elt m2s 0)))
+                    (right left)
+                    (bottom top))
+               (loop for i from 1 below (length m2s) do
+                    (let* ((v (elt m2s i))
+                           (x (m2-x v))
+                           (y (m2-y v)))
+                      (setf left (min left x)
+                            right (max right x)
+                            top (min top y)
+                            bottom (max bottom y))))
+               (values left top (- right left) (- bottom top)))))
     (multiple-value-bind (left top width height)
-	(compute-bounding-box m2s)
+        (compute-bounding-box m2s)
       (declare (ignore width height))
       (finish-output)
       (flet ((transform-x (x)
-	       (+ 30 (* 30 (- x left))))
-	     (transform-y (y)
-	       (+ 30 (* 30 (- y top)))))
-	(ltk:with-ltk ()
-	  (let ((canvas (make-instance 'ltk:canvas :width 700 :height 700)))
-	    ;; draw m2s
-	    (loop for m2 in m2s
-	       for x = (transform-x (m2-x m2))
-	       for y = (transform-y (m2-y m2))
-	       do (ltk:create-text canvas (+ 10 x) (+ 10 y) "x"))
-	    ;; draw polygon
-	    (loop for a in points
-	       for b in (cdr points)
-	       while (and a b)
-	       do (ltk:create-line* canvas
-				    (transform-x (first a)) (transform-y (second a))
-				    (transform-x (first b)) (transform-y (second b))))
-	    (let ((a (first points)))
-	      (ltk:create-text canvas (transform-x (first a)) (transform-y (second a)) "o"))
-	    (ltk:pack canvas)))))))
+               (+ 30 (* 30 (- x left))))
+             (transform-y (y)
+               (+ 30 (* 30 (- y top)))))
+        (ltk:with-ltk ()
+          (let ((canvas (make-instance 'ltk:canvas :width 700 :height 700)))
+            ;; draw m2s
+            (loop for m2 in m2s
+               for x = (transform-x (m2-x m2))
+               for y = (transform-y (m2-y m2))
+               do (ltk:create-text canvas (+ 10 x) (+ 10 y) "x"))
+            ;; draw polygon
+            (loop for a in points
+               for b in (cdr points)
+               while (and a b)
+               do (ltk:create-line* canvas
+                                    (transform-x (first a)) (transform-y (second a))
+                                    (transform-x (first b)) (transform-y (second b))))
+            (let ((a (first points)))
+              (ltk:create-text canvas (transform-x (first a)) (transform-y (second a)) "o"))
+            (ltk:pack canvas)))))))
 
 #+ltk
 (defun show-contract-center (contract)
   (labels ((compute-bounding-box (m2s)
-	     (let* ((left (m2-x (elt m2s 0)))
-		    (top (m2-y (elt m2s 0)))
-		    (right left)
-		    (bottom top))
-	       (loop for i from 1 below (length m2s) do
-		    (let* ((v (elt m2s i))
-			   (x (m2-x v))
-			   (y (m2-y v)))
-		      (setf left (min left x)
-			    right (max right x)
-			    top (min top y)
-			    bottom (max bottom y))))
-	       (values left top (- right left) (- bottom top)))))
+             (let* ((left (m2-x (elt m2s 0)))
+                    (top (m2-y (elt m2s 0)))
+                    (right left)
+                    (bottom top))
+               (loop for i from 1 below (length m2s) do
+                    (let* ((v (elt m2s i))
+                           (x (m2-x v))
+                           (y (m2-y v)))
+                      (setf left (min left x)
+                            right (max right x)
+                            top (min top y)
+                            bottom (max bottom y))))
+               (values left top (- right left) (- bottom top)))))
     (let* ((m2s (contract-m2s contract))
            (rectangle (contract-largest-rectangle contract))
            (center (geometry:rectangle-center rectangle)))

@@ -6,8 +6,8 @@
   (multiple-value-bind (second minute hour date month year)
       (decode-universal-time timestamp 0)
     (format nil
-	    "~D-~2,'0D-~2,'0D ~2,'0D:~2,'0D:~2,'0D"
-	    year month date hour minute second)))
+            "~D-~2,'0D-~2,'0D ~2,'0D:~2,'0D:~2,'0D"
+            year month date hour minute second)))
 
 (defun m2< (a b)
   (or (< (m2-x a) (m2-x b))
@@ -83,9 +83,9 @@
              (let ((value (funcall accessor sponsor)))
                (unless (and (typep value 'sequence) (zerop (length value)))
                  (attribute name (write-to-string value :escape nil))))))
-      (attr "profile-id"	#'user-login)
+      (attr "profile-id"        #'user-login)
       (attr "password"          #'user-password)
-      (attr "full-name"		#'user-full-name)
+      (attr "full-name"         #'user-full-name)
       (attr "email-address"     #'user-email)
       (attr "info-text"         #'sponsor-info-text)
       (attr "country"           #'sponsor-country))

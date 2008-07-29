@@ -14,16 +14,16 @@
 
 (defun contract-node-timestamp-updater (contract)
   (lambda (node) (setf (timestamp node)
-		       (max (timestamp node) (contract-date contract)))))
+                       (max (timestamp node) (contract-date contract)))))
 
 (defun contract-node-find-corresponding-store-image (node)
   (let ((store-images (get-keyword-store-images (contract-node-keyword node))))
     (if (alexandria:length= 1 store-images)
-	;; good, there is only one
-	(first store-images)
-	;; We will just return NIL, if we cannot find one.
+        ;; good, there is only one
+        (first store-images)
+        ;; We will just return NIL, if we cannot find one.
         ;; If there are too many, we will return the newest one and delete the rest.
-	(let ((store-images-newest-first
+        (let ((store-images-newest-first
                (sort (copy-list store-images) #'> :key #'blob-timestamp)))
           (mapc #'delete-object (rest store-images-newest-first))
           (first store-images-newest-first)))))
@@ -33,7 +33,7 @@
   (let ((image (contract-node-find-corresponding-store-image node)))
     (when (and image (probe-file (blob-pathname image)))
       (setf (image node) image
-	    (timestamp node) (blob-timestamp image)))))
+            (timestamp node) (blob-timestamp image)))))
 
 (defvar *contract-tree* nil)
 (defparameter *contract-tree-images-size* 128) ; was 256
@@ -90,12 +90,12 @@ with its center placemark."
   (let ((geo-box (contract-geo-box contract))
         (geo-center (contract-geo-center contract)))
     (ensure-intersecting-children contract-tree geo-box
-				  (contract-node-timestamp-updater contract))
+                                  (contract-node-timestamp-updater contract))
     (let ((placemark-node (find-node-if
-			   (lambda (node) (contract-placemark-at-node-p node contract))
-			   contract-tree
-			   :prune-test (lambda (node)
-					 (not (geo-point-in-box-p (geo-box node) geo-center))))))
+                           (lambda (node) (contract-placemark-at-node-p node contract))
+                           contract-tree
+                           :prune-test (lambda (node)
+                                         (not (geo-point-in-box-p (geo-box node) geo-center))))))
       (assert placemark-node)
       (push contract (placemark-contracts placemark-node)))))
 
@@ -240,8 +240,8 @@ has to be unique."
              (destructuring-bind (r g b)
                  (contract-color contract)
                (cl-gd:find-color r g b :alpha (if (node-has-children-p node)
-						  40
-						  0)))))
+                                                  40
+                                                  0)))))
     (let ((box (geo-box node))
           (image-size *contract-tree-images-size*))
       ;; (warn "will update image for ~a" node)
@@ -306,14 +306,14 @@ has to be unique."
 (defmethod handle ((handler contract-tree-image-handler))
   (with-query-params (path)
     (let* ((path (parse-path path))
-	   (node (find-node-with-path *contract-tree* path))
-	   (image (image node)))
+           (node (find-node-with-path *contract-tree* path))
+           (image (image node)))
       (assert image nil "contract-tree node ~{~D~} does not have an image" path)
       (hunchentoot:handle-if-modified-since (blob-timestamp image))
       (with-store-image* (image)
-	(emit-image-to-browser cl-gd:*default-image* :png
-			       :date (blob-timestamp image)
-			       :max-age 600)))))
+        (emit-image-to-browser cl-gd:*default-image* :png
+                               :date (blob-timestamp image)
+                               :max-age 600)))))
 
 ;; contract-tree image update daemon
 (defvar *contract-tree-image-update-daemon* nil)
@@ -332,8 +332,8 @@ has to be unique."
   (unless (contract-tree-image-update-daemon-running-p)
     (setq *contract-tree-image-update-daemon-halt* nil)
     (setq *contract-tree-image-update-daemon*
-	  (bt:make-thread #'contract-tree-image-update-daemon-loop
-			  :name "contract-tree-image-update-daemon"))))
+          (bt:make-thread #'contract-tree-image-update-daemon-loop
+                          :name "contract-tree-image-update-daemon"))))
 
 (defun stop-contract-tree-image-update-daemon (&key wait)
   (when (contract-tree-image-update-daemon-running-p)

@@ -26,20 +26,20 @@
     (format stream "at (~D,~D) width ~D"
             (tile-nw-x tile)
             (tile-nw-y tile)
-	    (tile-width tile))))
+            (tile-width tile))))
 
 (defmethod initialize-instance :after ((tile tile) &key width &allow-other-keys)
   (setf (slot-value tile 'objects)
-	(make-array (list width width)
-		    :initial-element nil)))
+        (make-array (list width width)
+                    :initial-element nil)))
 
 (defmethod validate-coords ((tile tile) x y)
   (unless (and (< -1 (- x (tile-nw-x tile)) (tile-width tile))
-	       (< -1 (- y (tile-nw-y tile)) (tile-width tile)))
+               (< -1 (- y (tile-nw-y tile)) (tile-width tile)))
     (error "coordinates ~D/~D are out of range for ~A" x y tile)))
 
 (defmethod tile-height ((tile tile))
-  (tile-width tile))			; assume quadratic tiles
+  (tile-width tile))                    ; assume quadratic tiles
 
 (defmethod tile-absolute-x ((tile tile) relative-x)
   (+ (tile-nw-x tile) relative-x))
@@ -70,41 +70,41 @@
     (setf x-slot-name (first slots))
     (setf y-slot-name (second slots)))
   (unless (and (zerop (mod width tile-size))
-	       (zerop (mod height tile-size)))
+               (zerop (mod height tile-size)))
     (error "invalid tile-index dimensions (width ~D height ~D) for tile size ~D~%index dimensions must be dividable by tile size"
-	   width height tile-size))
+           width height tile-size))
   (index-clear tiled-index))
 
 (defmethod print-object ((tiled-index tiled-index) stream)
   (print-unreadable-object (tiled-index stream :type t :identity nil)
     (ignore-errors
       (with-slots (width height tile-size tile-class) tiled-index
-	(format stream "width ~D height ~D tile-size ~D tile-class ~D"
-		width height tile-size tile-class)))))
+        (format stream "width ~D height ~D tile-size ~D tile-class ~D"
+                width height tile-size tile-class)))))
 
 (defmethod validate-coords ((tiled-index tiled-index) x y)
   (unless (and (< -1 x (slot-value tiled-index 'width))
-	       (< -1 y (slot-value tiled-index 'height)))
+               (< -1 y (slot-value tiled-index 'height)))
     (error "coordinates ~D/~D are out of range for ~A" x y tiled-index)))
 
 (defmethod get-tile ((tiled-index tiled-index) x y)
   (validate-coords tiled-index x y)
   (with-slots (tiles tile-size) tiled-index
     (aref tiles
-	  (floor x tile-size)
-	  (floor y tile-size))))
+          (floor x tile-size)
+          (floor y tile-size))))
 
 (defmethod ensure-tile ((tiled-index tiled-index) x y)
   (validate-coords tiled-index x y)
   (with-slots (tiles tile-size tile-class) tiled-index
     (or (get-tile tiled-index x y)
-	(setf (aref tiles
-		    (floor x tile-size)
-		    (floor y tile-size))
-	      (make-instance tile-class
-			     :nw-x (* tile-size (floor x tile-size))
-			     :nw-y (* tile-size (floor y tile-size))
-			     :width tile-size)))))
+        (setf (aref tiles
+                    (floor x tile-size)
+                    (floor y tile-size))
+              (make-instance tile-class
+                             :nw-x (* tile-size (floor x tile-size))
+                             :nw-y (* tile-size (floor y tile-size))
+                             :width tile-size)))))
 
 (defmethod object-at ((tiled-index tiled-index) x y)
   (let ((tile (get-tile tiled-index x y)))
@@ -119,12 +119,12 @@
 (defmethod index-add ((index tiled-index) object)
   (with-slots (x-slot-name y-slot-name) index
     (unless (and (slot-boundp object x-slot-name)
-		 (slot-boundp object y-slot-name))
+                 (slot-boundp object y-slot-name))
       (return-from index-add nil))
     (setf (object-at index
-		     (slot-value object x-slot-name)
-		     (slot-value object y-slot-name))
-	  object)))
+                     (slot-value object x-slot-name)
+                     (slot-value object y-slot-name))
+          object)))
 
 (defmethod index-get ((index tiled-index) coords)
   (apply #'object-at index coords))
@@ -132,22 +132,22 @@
 (defmethod index-remove ((index tiled-index) object)
   (with-slots (x-slot-name y-slot-name) index
     (unless (and (slot-boundp object x-slot-name)
-		 (slot-boundp object y-slot-name))
+                 (slot-boundp object y-slot-name))
       (return-from index-remove nil))
     (unless (eq object
-		(object-at index
+                (object-at index
                            (slot-value object x-slot-name)
                            (slot-value object y-slot-name)))
       (error "while removing object ~A from ~A - unexpected object ~A in index, can't remove object"
-	     object
-	     index
-	     (object-at index
+             object
+             index
+             (object-at index
                         (slot-value object x-slot-name)
                         (slot-value object y-slot-name))))
     (setf (object-at index
-		     (slot-value object x-slot-name)
-		     (slot-value object y-slot-name))
-	  nil)))
+                     (slot-value object x-slot-name)
+                     (slot-value object y-slot-name))
+          nil)))
 
 (defmethod index-keys ((index tiled-index))
   (error "An TILED-INDEX has no keys."))
@@ -166,7 +166,7 @@
 
 (defmethod index-reinitialize ((new-index tiled-index) (old-index tiled-index))
   (unless (every #'(lambda (slot-name) (equal (slot-value old-index slot-name)
-					      (slot-value new-index slot-name)))
-		 '(width height tile-size x-slot-name y-slot-name))
+                                              (slot-value new-index slot-name)))
+                 '(width height tile-size x-slot-name y-slot-name))
     (error "can't change index parameters for index ~A" old-index))
   (setf (slot-value new-index 'tiles) (slot-value old-index 'tiles)))

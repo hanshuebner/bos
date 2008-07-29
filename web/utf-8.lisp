@@ -41,8 +41,8 @@ starting with a given byte."
      :with array-length = (length string)
      :while (< i array-length)
      :do (progn
-	   (incf (the fixnum string-length) 1)
-	   (incf i (utf-8-group-size (char-code (char string i)))))
+           (incf (the fixnum string-length) 1)
+           (incf i (utf-8-group-size (char-code (char string i)))))
      :finally (return string-length)))
 
 (defun get-utf-8-character (string group-size &optional (start 0))
@@ -75,18 +75,18 @@ extract the character starting at the given start position."
   (declare #.*optimize*)
   (loop
      with buffer = (make-array (utf-8-string-length string)
-			       :element-type '(unsigned-byte 16))
+                               :element-type '(unsigned-byte 16))
      with string-position = 0
      with buffer-position = 0
      with string-length = (length string)
      while (< string-position string-length)
      do (let* ((byte (char-code (char string string-position)))
-	       (current-group (utf-8-group-size byte)))
-	  (when (> (+ current-group string-position) string-length)
-	    (error 'utf-8-decoding-error
-		   :message "Unfinished character at end of byte array."))
-	  (setf (aref buffer buffer-position)
-		(get-utf-8-character string current-group string-position))
-	  (incf buffer-position 1)
-	  (incf string-position current-group))
+               (current-group (utf-8-group-size byte)))
+          (when (> (+ current-group string-position) string-length)
+            (error 'utf-8-decoding-error
+                   :message "Unfinished character at end of byte array."))
+          (setf (aref buffer buffer-position)
+                (get-utf-8-character string current-group string-position))
+          (incf buffer-position 1)
+          (incf string-position current-group))
      finally (return buffer)))

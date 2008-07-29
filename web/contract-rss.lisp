@@ -8,10 +8,10 @@
 
 (defmethod rss-item-title ((contract contract))
   (format nil (case (intern (bos.web::request-language))
-		(de "~A Quadratmeter wurden ~@[von ~A ~]gekauft")
-		(t "~A square meters bought~@[ by ~A~]"))
-	  (length (contract-m2s contract))
-	  (user-full-name (contract-sponsor contract))))
+                (de "~A Quadratmeter wurden ~@[von ~A ~]gekauft")
+                (t "~A square meters bought~@[ by ~A~]"))
+          (length (contract-m2s contract))
+          (user-full-name (contract-sponsor contract))))
 
 (defmethod rss-item-description ((contract contract))
   (rss-item-title contract))

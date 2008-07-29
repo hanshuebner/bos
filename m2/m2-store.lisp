@@ -12,4 +12,4 @@
   (setq *m2-store* store)
   (geometry:make-rect-publisher) ; needs to exist for tile-index already during restore
   (setf (slot-value store 'tile-index)
-	(indexed-class-index-named (find-class 'm2) 'm2-index)))
+        (indexed-class-index-named (find-class 'm2) 'm2-index)))

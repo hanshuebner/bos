@@ -26,13 +26,13 @@
 (defmethod print-object ((allocation-area allocation-area) stream)
   (print-unreadable-object (allocation-area stream :type t)
     (format stream "~a x ~a ~:[inactive~;active~] free: ~s ID: ~a"
-	    (allocation-area-width allocation-area)
-	    (allocation-area-height allocation-area)
-	    (allocation-area-active-p allocation-area)
-	    (if (slot-boundp allocation-area 'free-m2s)
-		(allocation-area-free-m2s allocation-area)
-		:unbound)
-	    (store-object-id allocation-area))))
+            (allocation-area-width allocation-area)
+            (allocation-area-height allocation-area)
+            (allocation-area-active-p allocation-area)
+            (if (slot-boundp allocation-area 'free-m2s)
+                (allocation-area-free-m2s allocation-area)
+                :unbound)
+            (store-object-id allocation-area))))
 
 (defmethod initialize-persistent-instance :after ((allocation-area allocation-area))
   (with-slots (total-m2s free-m2s) allocation-area
@@ -61,26 +61,26 @@
          (right left)
          (bottom top))
     (loop for i from 1 below (length vertices) do
-	 (let* ((v (elt vertices i))
-		(x (car v))
-		(y (cdr v)))
-	   (setf left (min left x)
-		 right (max right x)
-		 top (min top y)
-		 bottom (max bottom y))))
+         (let* ((v (elt vertices i))
+                (x (car v))
+                (y (cdr v)))
+           (setf left (min left x)
+                 right (max right x)
+                 top (min top y)
+                 bottom (max bottom y))))
     (values left top (- right left) (- bottom top))))
 
 (defmethod allocation-area-center ((allocation-area allocation-area))
   (with-slots (left top width height) allocation-area
     (list (floor (+ left (/ width 2)))
-	  (floor (+ top (/ height 2))))))
+          (floor (+ top (/ height 2))))))
 
 (defun make-allocation-rectangle (left top width height)
   (make-allocation-area (coerce (list (cons left top)
-				      (cons (+ left width) top)
-				      (cons (+ left width) (+ top height))
-				      (cons left (+ top height)))
-				'vector)))
+                                      (cons (+ left width) top)
+                                      (cons (+ left width) (+ top height))
+                                      (cons left (+ top height)))
+                                'vector)))
 
 (defun make-allocation-area (vertices)
   "Can be called like this:
@@ -114,10 +114,10 @@
     ;; for y from top upto (1- (+ top height)) ?
     (loop for y from top upto (+ top height)
        do (loop for x from left upto (+ left width)
-	     when (point-in-polygon-p x y vertices)
-	     do (dolist (allocation-area (class-instances 'allocation-area))
-		  (when (point-in-polygon-p x y (allocation-area-vertices allocation-area))
-		    (error "new allocation area must not intersect with existing allocation area ~A"
+             when (point-in-polygon-p x y vertices)
+             do (dolist (allocation-area (class-instances 'allocation-area))
+                  (when (point-in-polygon-p x y (allocation-area-vertices allocation-area))
+                    (error "new allocation area must not intersect with existing allocation area ~A"
                            allocation-area))))))
 
   (make-allocation-area/unchecked vertices))
@@ -140,10 +140,10 @@
   (with-slots (left top width height bounding-box) allocation-area
     (unless (slot-boundp allocation-area 'bounding-box)
       (setf bounding-box (coerce (list (cons left top)
-				       (cons (+ left width) top)
-				       (cons (+ left width) (+ top height))
-				       (cons left (+ top height)))
-				 'vector)))
+                                       (cons (+ left width) top)
+                                       (cons (+ left width) (+ top height))
+                                       (cons left (+ top height)))
+                                 'vector)))
     bounding-box))
 
 (defmethod allocation-area-bounding-box2 ((allocation-area allocation-area))
@@ -233,10 +233,10 @@ anymore."
 contract, so if a contract is allocated in multiple allocation areas, it may or may
 not be returned by this function"
   (remove-if #'(lambda (contract)
-		 (not (in-polygon-p (m2-x (first (contract-m2s contract)))
-				    (m2-y (first (contract-m2s contract)))
-				    (allocation-area-vertices allocation-area))))
-	     (store-objects-with-class 'contract)))
+                 (not (in-polygon-p (m2-x (first (contract-m2s contract)))
+                                    (m2-y (first (contract-m2s contract)))
+                                    (allocation-area-vertices allocation-area))))
+             (store-objects-with-class 'contract)))
 
 (defmethod calculate-total-m2-count ((allocation-area allocation-area))
   "Returns the total number of sqms in the allocation area (note: brute force)"
@@ -244,8 +244,8 @@ not be returned by this function"
     (loop for x from left upto (+ left width)
        with retval = 0
        do (loop for y from top upto (+ top height)
-	     when (in-polygon-p x y vertices)
-	     do (incf retval))
+             when (in-polygon-p x y vertices)
+             do (incf retval))
        finally (return retval))))
 
 (defmethod calculate-allocated-m2-count ((allocation-area allocation-area))
@@ -253,10 +253,10 @@ not be returned by this function"
   (let ((retval 0))
     (dolist (contract (store-objects-with-class 'contract))
       (dolist (m2 (contract-m2s contract))
-	(unless m2
-	  (error "contract ~A has no m2s" contract))
-	(when (in-polygon-p (m2-x m2) (m2-y m2) (allocation-area-vertices allocation-area))
-	  (incf retval))))
+        (unless m2
+          (error "contract ~A has no m2s" contract))
+        (when (in-polygon-p (m2-x m2) (m2-y m2) (allocation-area-vertices allocation-area))
+          (incf retval))))
     retval))
 
 (defmethod allocation-area-percent-used ((allocation-area allocation-area))
@@ -265,11 +265,11 @@ not be returned by this function"
 
 (defun tiles-crossing (left top width height)
   (let (tiles
-	(right (* 90 (ceiling (+ left width) 90)))
-	(bottom (* 90 (ceiling (+ top height) 90))))
+        (right (* 90 (ceiling (+ left width) 90)))
+        (bottom (* 90 (ceiling (+ top height) 90))))
     (loop for x from left upto right by 90
        do (loop for y from top upto bottom by 90
-	     do (pushnew (ensure-map-tile x y) tiles)))
+             do (pushnew (ensure-map-tile x y) tiles)))
     tiles))
 
 (defmethod allocation-area-tiles ((allocation-area allocation-area))

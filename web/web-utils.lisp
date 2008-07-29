@@ -21,13 +21,13 @@
 
 (defmethod website-session-info ((website bos-website))
   (html :br :hr
-	((:p :class "footer")
-	 "local time is " (:princ-safe (format-date-time))
-	 " - "
-	 (if (bknr-session-user)
-	     (html "logged in as " (html-link (bknr-session-user)))
-	     (html "not logged in"))
-	 " - current content language is "
+        ((:p :class "footer")
+         "local time is " (:princ-safe (format-date-time))
+         " - "
+         (if (bknr-session-user)
+             (html "logged in as " (html-link (bknr-session-user)))
+             (html "not logged in"))
+         " - current content language is "
          (cmslink "change-language"
            (:princ-safe (request-language))
            " ("

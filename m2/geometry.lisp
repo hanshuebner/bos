@@ -8,8 +8,8 @@
 
 (defmacro with-point (point &body body)
   (let* ((*package* (symbol-package point))
-	 (x (intern (format nil "~A-X" (symbol-name point))))
-	 (y (intern (format nil "~A-Y" (symbol-name point)))))
+         (x (intern (format nil "~A-X" (symbol-name point))))
+         (y (intern (format nil "~A-Y" (symbol-name point)))))
     `(destructuring-bind (,x ,y) ,point
        ,@body)))
 
@@ -17,8 +17,8 @@
   (if (null points)
       `(progn ,@body)
       `(with-point ,(car points)
-	 (with-points (,@(cdr points))
-	   ,@body))))
+         (with-points (,@(cdr points))
+           ,@body))))
 
 (defmacro with-rectangle (rectangle-or-options &body body)
   (destructuring-bind (rectangle &key suffix) (ensure-list rectangle-or-options)
@@ -36,7 +36,7 @@
 (defun distance (point-a point-b)
   (with-points (point-a point-b)
     (sqrt (+ (expt (- point-a-x point-b-x) 2)
-	     (expt (- point-a-y point-b-y) 2)))))
+             (expt (- point-a-y point-b-y) 2)))))
 
 (defmacro dorect ((point (left top width height) &key test row-change) &body body)
   "Iterate with POINT over all points in rect row per row. The list
@@ -53,16 +53,16 @@ that will be called between the rows."
        (with ,point = (list nil nil))
        (for y from ,top to (1- (+ ,top ,height)))
        ,(when row-change
-	      `(unless (first-time-p)
-		 (funcall ,row-change)))
+              `(unless (first-time-p)
+                 (funcall ,row-change)))
        (iter
-	 (for x from ,left to (1- (+ ,left ,width)))
-	 (setf (first ,point) x
-	       (second ,point) y)
-	 (when ,(if test
-		    `(funcall ,test ,point)
-		    t)
-	   ,@body)))))
+         (for x from ,left to (1- (+ ,left ,width)))
+         (setf (first ,point) x
+               (second ,point) y)
+         (when ,(if test
+                    `(funcall ,test ,point)
+                    t)
+           ,@body)))))
 
 (defun rectangle-center (rectangle &key roundp)
   (with-rectangle rectangle
@@ -89,18 +89,18 @@ that will be called between the rows."
 ;; point as an argument?
 (defun point-in-polygon-p (x y polygon)
   (let (result
-	(py y))
+        (py y))
     (loop with (pjx . pjy) = (aref polygon (1- (length polygon)))
        for (pix . piy) across polygon
        when (and (or (and (<= piy py) (< py pjy))
-		     (and (<= pjy py) (< py piy)))
-		 (< x
-		    (+ (/ (* (- pjx pix) (- py piy))
-			  (- pjy piy))
-		       pix)))
+                     (and (<= pjy py) (< py piy)))
+                 (< x
+                    (+ (/ (* (- pjx pix) (- py piy))
+                          (- pjy piy))
+                       pix)))
        do (setf result (not result))
        do (setf pjx pix
-		pjy piy))
+                pjy piy))
     result))
 
 (defun point-in-circle-p (point center radius)
@@ -119,8 +119,8 @@ that will be called between the rows."
 ;;   (let ((center (list 4 4)))
 ;;     (dorect (p (0 0 10 10) :row-change #'terpri)
 ;;       (if (point-in-circle-p p center 3)
-;;	  (princ "x")
-;;	  (princ ".")))))
+;;        (princ "x")
+;;        (princ ".")))))
 
 (defun bounding-box (objects &key (key #'identity))
   (let (min-x min-y max-x max-y)
@@ -209,18 +209,18 @@ that will be called between the rows."
   (destructuring-bind (x y)
       point
     (destructuring-bind (dx dy)
-	(direction-as-list direction)
+        (direction-as-list direction)
       (list (+ x dx)
-	    (+ y dy)))))
+            (+ y dy)))))
 
 ;;; TODO add eql for directions ?
 
 (defun find-boundary-point (point in-region-p &optional (direction :up))
   (let* ((direction (direction-as-list direction))
-	 (next (move point direction)))
+         (next (move point direction)))
     (if (funcall in-region-p next)
-	(find-boundary-point next in-region-p)
-	point)))
+        (find-boundary-point next in-region-p)
+        point)))
 
 ;;; region-to-polygon
 (defun region-to-polygon (point in-region-p)
@@ -228,50 +228,50 @@ that will be called between the rows."
 IN-REGION-P is a predicate that takes a point as an argument.
 It defines the region whose bounding polygon is to be found."
   (let ((polygon)
-	(count 0)
-	(boundary-point (find-boundary-point point in-region-p :up))
-	(initial-direction :left))
+        (count 0)
+        (boundary-point (find-boundary-point point in-region-p :up))
+        (initial-direction :left))
     (labels ((neighbour (point direction)
-	       "Validate the NEIGHBOUR of POINT in DIRECTION,
+               "Validate the NEIGHBOUR of POINT in DIRECTION,
               if it is part of the region, returns (NEIGHBOUR DIRECTION),
               otherwise returns NIL."
-	       (when point
-		 (let ((neighbour (move point direction)))
-		   (when (funcall in-region-p neighbour)
-		     (list neighbour direction)))))
-	     (choose-next (point direction)
-	       "Returns a place to move to next as a list (NEXT-POINT NEXT-DIRECTION).
+               (when point
+                 (let ((neighbour (move point direction)))
+                   (when (funcall in-region-p neighbour)
+                     (list neighbour direction)))))
+             (choose-next (point direction)
+               "Returns a place to move to next as a list (NEXT-POINT NEXT-DIRECTION).
                 NEXT-POINT can be the same POINT (but then with a different direction."
-	       (acond
-		((neighbour point (turn-right direction)) it)
-		((neighbour (first (neighbour point direction))
-			    (turn-right direction))
-		 it)
-		((neighbour point direction) it)
-		(t (list point (turn-left direction)))))
-	     (terminate (point direction)
-	       "Are we done?"
-	       (when (and (eql direction initial-direction)
-			  (equal point boundary-point))
-		 (incf count)
-		 (= 2 count)))
-	     (push-point (point direction)
-	       "Add a point to POLYGON. The actual point
+               (acond
+                ((neighbour point (turn-right direction)) it)
+                ((neighbour (first (neighbour point direction))
+                            (turn-right direction))
+                 it)
+                ((neighbour point direction) it)
+                (t (list point (turn-left direction)))))
+             (terminate (point direction)
+               "Are we done?"
+               (when (and (eql direction initial-direction)
+                          (equal point boundary-point))
+                 (incf count)
+                 (= 2 count)))
+             (push-point (point direction)
+               "Add a point to POLYGON. The actual point
                 depends on the DIRECTION."
-	       (push
-		(case direction
-		  (:left point)
-		  (:down (move point :down))
-		  (:right (move (move point :down) :right))
-		  (:up (move point :right)))
-		polygon))
-	     (traverse (point direction)
-	       "Go to next POINT by DIRECTION."
-	       (push-point point direction)
-	       (unless (terminate point direction)
-		 (destructuring-bind (next-point next-direction)
-		     (choose-next point direction)
-		   (traverse next-point next-direction)))))
+               (push
+                (case direction
+                  (:left point)
+                  (:down (move point :down))
+                  (:right (move (move point :down) :right))
+                  (:up (move point :right)))
+                polygon))
+             (traverse (point direction)
+               "Go to next POINT by DIRECTION."
+               (push-point point direction)
+               (unless (terminate point direction)
+                 (destructuring-bind (next-point next-direction)
+                     (choose-next point direction)
+                   (traverse next-point next-direction)))))
       (traverse boundary-point initial-direction)
       (nreverse polygon))))
 
@@ -280,7 +280,7 @@ It defines the region whose bounding polygon is to be found."
 ;; proposed by Michael Weber on alexandria-devel
 (defun format-mixed-radix-number (stream number radix-list format-list
                                   &key lsb-first leading-zeros
-				  (trailing-zeros t))
+                                  (trailing-zeros t))
   "Prints NUMBER to STREAM in mixed-radix RADIX.
 representation-LIST is a list of radixes, least-significant first.
 FORMAT-LIST is a list of format directives, one for each digit.
@@ -291,30 +291,30 @@ trailing zero digits are not printed, respectively. \(default: remove
 leading zeros, keep trailing zeros)"
   (let ((format-pairs
          (loop with digit and fraction
-	    initially (setf (values number fraction)
-			    (truncate number))
-	    for f-list on format-list
-	    and r-list = radix-list then (rest r-list)
-	    collect (list (first f-list)
-			  (cond ((endp r-list)
-				 (shiftf number 0))
-				((rest f-list)
-				 (setf (values number digit)
-				       (truncate number (first r-list)))
-				 digit)
-				(t number)))
-	    into list
-	    finally (progn
-		      (incf (cadar list) fraction)
-		      (return (nreverse list))))))
+            initially (setf (values number fraction)
+                            (truncate number))
+            for f-list on format-list
+            and r-list = radix-list then (rest r-list)
+            collect (list (first f-list)
+                          (cond ((endp r-list)
+                                 (shiftf number 0))
+                                ((rest f-list)
+                                 (setf (values number digit)
+                                       (truncate number (first r-list)))
+                                 digit)
+                                (t number)))
+            into list
+            finally (progn
+                      (incf (cadar list) fraction)
+                      (return (nreverse list))))))
     (unless trailing-zeros
       (setf format-pairs (member-if #'plusp format-pairs :key
-				    #'second)))
+                                    #'second)))
     (when lsb-first
       (setf format-pairs (nreverse format-pairs)))
     (unless leading-zeros
       (setf format-pairs (member-if #'plusp format-pairs :key
-				    #'second)))
+                                    #'second)))
     (format stream "~{~{~@?~}~}" format-pairs)))
 
 
@@ -323,10 +323,10 @@ leading zeros, keep trailing zeros)"
 
 (defun format-lon-lat (stream lon lat)
   (format stream "~A~:[S~;N~], ~A~:[W~;E~]"
-	  (format-decimal-degree (abs lat))
-	  (plusp lat)
-	  (format-decimal-degree (abs lon))
-	  (plusp lon)))
+          (format-decimal-degree (abs lat))
+          (plusp lat)
+          (format-decimal-degree (abs lon))
+          (plusp lon)))
 
 ;;; publish - subscribe on rectangles
 

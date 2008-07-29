@@ -46,7 +46,7 @@ Download-Urkunden erzeugt werden sollen")
 (defparameter *cert-download-template* (merge-pathnames #p"urkunde-download.pdf"
                                                         *pdf-base-directory*))
 (defparameter *receipt-mail-template* (merge-pathnames #p"spendenbescheinigung-print.pdf"
-						       *pdf-base-directory*))
+                                                       *pdf-base-directory*))
 (defparameter *receipt-download-template* (merge-pathnames #p"spendenbescheinigung-download.pdf"
                                                            *pdf-base-directory*))
 (defparameter *cert-daemon-poll-seconds* 2

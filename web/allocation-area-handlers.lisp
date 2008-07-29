@@ -11,10 +11,10 @@
      (:h2 "Defined allocation areas")
      ((:table :border "1")
       (:tr (:th "ID")
-	   (:th "active?")
-	   (:th "total")
-	   (:th "free")
-	   (:th "%used")
+           (:th "active?")
+           (:th "total")
+           (:th "free")
+           (:th "%used")
            (:th "Google Earth view"))
       (loop for allocation-area in (all-allocation-areas)
          do (html
@@ -34,45 +34,45 @@
     (with-slots (active-p left top width height) allocation-area
       (html
        ((:table :border "1")
-	(:tr
-	 (:td "id")
-	 (:td (:princ-safe (store-object-id allocation-area))))
-	(:tr
-	 (:td "active?")
-	 (:td (if active-p (html "yes") (html "no"))))
-	(:tr
-	 (:td "usage")
-	 (:td (:princ-safe (round (allocation-area-percent-used allocation-area))) "%"))
-	(:tr
-	 (:td "x")
-	 (:td (:princ-safe left)))
-	(:tr
-	 (:td "y")
-	 (:td (:princ-safe top)))
-	(:tr
-	 (:td "width")
-	 (:td (:princ-safe width)))
-	(:tr
-	 (:td "height")
-	 (:td (:princ-safe height)))
-	(:tr
-	 (:td "total number of sqms")
-	 (:td (:princ-safe (allocation-area-total-m2s allocation-area))))
-	(:tr
-	 (:td "number of free sqms")
-	 (:td (:princ-safe (allocation-area-free-m2s allocation-area))))
-	(:tr
-	 (:td "number of contracts")
-	 (:td (:princ-safe (length (allocation-area-contracts allocation-area))))))
+        (:tr
+         (:td "id")
+         (:td (:princ-safe (store-object-id allocation-area))))
+        (:tr
+         (:td "active?")
+         (:td (if active-p (html "yes") (html "no"))))
+        (:tr
+         (:td "usage")
+         (:td (:princ-safe (round (allocation-area-percent-used allocation-area))) "%"))
+        (:tr
+         (:td "x")
+         (:td (:princ-safe left)))
+        (:tr
+         (:td "y")
+         (:td (:princ-safe top)))
+        (:tr
+         (:td "width")
+         (:td (:princ-safe width)))
+        (:tr
+         (:td "height")
+         (:td (:princ-safe height)))
+        (:tr
+         (:td "total number of sqms")
+         (:td (:princ-safe (allocation-area-total-m2s allocation-area))))
+        (:tr
+         (:td "number of free sqms")
+         (:td (:princ-safe (allocation-area-free-m2s allocation-area))))
+        (:tr
+         (:td "number of contracts")
+         (:td (:princ-safe (length (allocation-area-contracts allocation-area))))))
        (:p
-	((:form :method "post")
-	 (submit-button "delete" "delete" :confirm "Really delete the allocation area?")
+        ((:form :method "post")
+         (submit-button "delete" "delete" :confirm "Really delete the allocation area?")
          (if active-p
              (submit-button "deactivate" "deactivate" :confirm "Really deactivate the allocation area?")
              (submit-button "activate" "activate" :confirm "Really activate the allocation area?"))))
        (:h2 "Allocation Graphics")
        ((:table :cellspacing "0" :cellpadding "0" :border "0")
-	(loop for y from (floor top 90) below (ceiling (+ top height) 90)
+        (loop for y from (floor top 90) below (ceiling (+ top height) 90)
            do (html (:tr
                      (loop for x from (floor left 90) below (ceiling (+ left width) 90)
                         for tile-x = (* 90 x)
@@ -103,74 +103,74 @@
     (cond
       ((and x y left top)
        (destructuring-bind (x y left top) (mapcar #'parse-integer (list x y left top))
-	 (if (or (some (complement #'plusp) (list x y left top))
+         (if (or (some (complement #'plusp) (list x y left top))
                  (<= x left)
                  (<= y top))
-	     (with-bos-cms-page (:title "Invalid area selected")
-	       (:h2 "Choose upper left corner first, then lower-right corner"))
-	     (redirect (format nil "/allocation-area/~D" (store-object-id
-							  (make-allocation-rectangle left top (- x left) (- y top))))))))
+             (with-bos-cms-page (:title "Invalid area selected")
+               (:h2 "Choose upper left corner first, then lower-right corner"))
+             (redirect (format nil "/allocation-area/~D" (store-object-id
+                                                          (make-allocation-rectangle left top (- x left) (- y top))))))))
       ((and x y)
        (redirect (format nil "/map-browser/~A/~A?heading=~A&chosen-url=~A&"
-			 x y
-			 (encode-urlencoded "Choose lower right point of allocation area")
-			 (encode-urlencoded (format nil "~A?left=~A&top=~A&"
+                         x y
+                         (encode-urlencoded "Choose lower right point of allocation area")
+                         (encode-urlencoded (format nil "~A?left=~A&top=~A&"
                                                     (hunchentoot:request-uri*)
                                                     x y)))))
       (t
        (with-bos-cms-page (:title "Create allocation area")
-	 ((:form :method "POST" :enctype "multipart/form-data"))
-	 ((:table :border "0")
-	  (:tr ((:td :colspan "2")
-		(:h2 "Create from list of UTM coordinates")))
-	  (:tr (:td "File: ") (:td ((:input :type "file" :name "text-file" :value "*.txt"))))
-	  (:tr (:td (submit-button "upload" "upload")))
-	  (:tr ((:td :colspan "2")
-		(:h2 "Create by choosing rectangular area")))
-	  (:tr (:td "Start-X") (:td (text-field "start-x" :value 0 :size 5)))
-	  (:tr (:td "Start-Y") (:td (text-field "start-y" :value 0 :size 5)))
-	  (:tr (:td (submit-button "rectangle" "rectangle")))))))))
+         ((:form :method "POST" :enctype "multipart/form-data"))
+         ((:table :border "0")
+          (:tr ((:td :colspan "2")
+                (:h2 "Create from list of UTM coordinates")))
+          (:tr (:td "File: ") (:td ((:input :type "file" :name "text-file" :value "*.txt"))))
+          (:tr (:td (submit-button "upload" "upload")))
+          (:tr ((:td :colspan "2")
+                (:h2 "Create by choosing rectangular area")))
+          (:tr (:td "Start-X") (:td (text-field "start-x" :value 0 :size 5)))
+          (:tr (:td "Start-Y") (:td (text-field "start-y" :value 0 :size 5)))
+          (:tr (:td (submit-button "rectangle" "rectangle")))))))))
 
 (defmethod handle-form ((handler create-allocation-area-handler) (action (eql :rectangle)))
   (with-query-params (start-x start-y)
     (redirect (format nil "/map-browser/~A/~A?heading=~A&chosen-url=~A&"
-		      start-x start-y
-		      (encode-urlencoded "Choose upper left point of allocation area")
-		      (encode-urlencoded (format nil "~A?" (hunchentoot:request-uri*)))))))
+                      start-x start-y
+                      (encode-urlencoded "Choose upper left point of allocation area")
+                      (encode-urlencoded (format nil "~A?" (hunchentoot:request-uri*)))))))
 
 (defmethod handle-form ((handler create-allocation-area-handler) (action (eql :upload)))
   (let ((uploaded-text-file (request-uploaded-file "text-file")))
     (cond
       ((not uploaded-text-file)
        (with-bos-cms-page (:title "No Text file uploaded")
-	 (:h2 "File not uploaded")
-	 (:p "Please upload your text file containing the allocation polygon UTM coordinates")))
+         (:h2 "File not uploaded")
+         (:p "Please upload your text file containing the allocation polygon UTM coordinates")))
       (t
        (with-bos-cms-page (:title #?"Importing allocation polygons from uploaded text file")
-	 (handler-case
-	     (let* ((vertices (polygon-from-text-file (upload-pathname uploaded-text-file)))
-		    (existing-area (find (coerce vertices 'list)
+         (handler-case
+             (let* ((vertices (polygon-from-text-file (upload-pathname uploaded-text-file)))
+                    (existing-area (find (coerce vertices 'list)
                                          (class-instances 'allocation-area)
                                          :key #'(lambda (area) (coerce (allocation-area-vertices area) 'list))
                                          :test #'equal)))
-	       (if existing-area
-		   (html (:p (:h2 "Polygon already imported")
-			     "The polygon " (:princ-safe vertices) " has already been "
-			     "imported as "
-			     (cmslink (format nil "allocation-area/~D" (store-object-id existing-area))
-			       "allocation area " (:princ-safe (store-object-id existing-area)))))
-		   (let ((allocation-area (make-allocation-area vertices)))
-		     (html (:p (:h2 "Successfully imported new allocation area")
-			       "The polygon "
-			       (cmslink (format nil "allocation-area/~D" (store-object-id allocation-area))
-				 (:princ-safe (store-object-id allocation-area)))
-			       " has been successfully imported")))))
-	   (error (e)
-	     (html
-	      (:h2 "Error reading the text file")
-	      (:p "Please make sure that the uploaded file only contains a simple path.")
-	      (:p "The error encountered is:")
-	      (:pre (:princ-safe e))))))))))
+               (if existing-area
+                   (html (:p (:h2 "Polygon already imported")
+                             "The polygon " (:princ-safe vertices) " has already been "
+                             "imported as "
+                             (cmslink (format nil "allocation-area/~D" (store-object-id existing-area))
+                               "allocation area " (:princ-safe (store-object-id existing-area)))))
+                   (let ((allocation-area (make-allocation-area vertices)))
+                     (html (:p (:h2 "Successfully imported new allocation area")
+                               "The polygon "
+                               (cmslink (format nil "allocation-area/~D" (store-object-id allocation-area))
+                                 (:princ-safe (store-object-id allocation-area)))
+                               " has been successfully imported")))))
+           (error (e)
+             (html
+              (:h2 "Error reading the text file")
+              (:p "Please make sure that the uploaded file only contains a simple path.")
+              (:p "The error encountered is:")
+              (:pre (:princ-safe e))))))))))
 
 (defun ensure-line (file regex &key skip)
   (handler-case
@@ -190,7 +190,7 @@
 
 (defun scale-coordinate (name min x)
   (unless (and (>= x min)
-	       (<= x (+ min +width+)))
+               (<= x (+ min +width+)))
     (error "invalid ~A coordinate ~A (must be between ~A and ~A)" name x min (+ min +width+)))
   (round (- x min)))
 
@@ -203,27 +203,27 @@
 
 (defun polygon-from-text-file (filename)
   (coerce (with-open-file (input-file filename)
-	    (loop
+            (loop
                with last-point
-	       for line-number from 1
-	       for line = (read-line input-file nil)
-	       while line
-	       for point = (handler-case
+               for line-number from 1
+               for line = (read-line input-file nil)
+               while line
+               for point = (handler-case
                                (parse-point line)
                              (error (e)
                                (error "Problem with text file in line ~A '~A': ~A in " line-number line e)))
                when (and point (not (equal point last-point)))
                collect (setq last-point point)))
-	  'vector))
+          'vector))
 
 (defun parse-illustrator-point (line)
   (destructuring-bind (x y type &rest foo) (split " " line)
     (declare (ignore foo))
     (unless (scan #?r"^[lm]$" type)
       (html "Could not parse line from illustrator file:"
-	    (:pre (:princ-safe line))))
+            (:pre (:princ-safe line))))
     (cons (round (read-from-string x))
-	  (round (- 10800 (read-from-string y))))))
+          (round (- 10800 (read-from-string y))))))
 
 (defun polygons-from-illustrator-file (filename)
   ;; convert from mac line endings to dos line endings
@@ -233,7 +233,7 @@
       (ensure-line file #?r"^%AI3_Cropmarks: 0 0 10800 10800" :skip t)
       (ensure-line file #?r"^%%Note:" :skip t)
       (let (polygons)
-	(loop for polygon = (loop for line = (read-line file)
+        (loop for polygon = (loop for line = (read-line file)
                                until (scan #?r"^n" line)
                                collect (parse-illustrator-point line))
            do (when (equal (first polygon)
@@ -241,5 +241,5 @@
                 (setf polygon (cdr polygon)))
            do (push (coerce polygon 'vector) polygons)
            until (equal #\% (peek-char nil file)))
-	(ensure-line file #?r"^%%EOF" :skip t)
-	polygons))))
+        (ensure-line file #?r"^%%EOF" :skip t)
+        polygons))))

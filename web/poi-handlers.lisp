@@ -154,7 +154,7 @@
                   (html "Upload new panorama view"
                         ((:input :type "file" :name "image-file"))
                         :br
-                        (submit-button "upload-panorama" "upload-panorama"))))        
+                        (submit-button "upload-panorama" "upload-panorama"))))
         (:tr (:td "movies"
                   ((:input :id "movie-id" :type "hidden" :name "movie-id")))
              (:td (dolist (movie (poi-movies poi))
@@ -233,7 +233,7 @@
 
 (defmethod handle-object-form ((handler edit-poi-handler)
                                (action (eql :add-movie))
-                               (poi poi)) 
+                               (poi poi))
   (with-query-params (movie-url)
     (with-transaction ("add poi movie")
       (push (make-object 'poi-movie :poi poi :url movie-url)
@@ -574,7 +574,7 @@
                       (attribute "align" "center")
                       (with-element "a"
                         (attribute "href" (poi-xml-path))
-			(attribute "target" "POI-micro-site")
+                        (attribute "target" "POI-micro-site")
                         (text (dictionary-entry "learn more" language)))))
                   (with-element "tr"
                     (with-element "td"

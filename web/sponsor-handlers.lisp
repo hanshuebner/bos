@@ -24,10 +24,10 @@
     (loop
        for (language-symbol language-name) in (website-languages)
        do (if (string-equal language-symbol language)
-	      (html ((:option :value language-symbol :selected "selected")
-		     (:princ-safe language-name)))
-	      (html ((:option :value language-symbol)
-		     (:princ-safe language-name))))))))
+              (html ((:option :value language-symbol :selected "selected")
+                     (:princ-safe language-name)))
+              (html ((:option :value language-symbol)
+                     (:princ-safe language-name))))))))
 
 (defmethod language-selector ((sponsor sponsor))
   (language-selector (sponsor-language sponsor)))
@@ -107,11 +107,11 @@
 (defmethod handle-object-form ((handler edit-sponsor-handler) (action (eql :create)) (sponsor (eql nil)))
   (with-query-params (numsqm country email name address date language)
     (let* ((sponsor (make-sponsor :email email :country country :language language))
-	   (contract (make-contract sponsor (parse-integer numsqm)
-				    :paidp (format nil "~A: manually created by ~A"
-						   (format-date-time (get-universal-time))
-						   (user-login (bknr.web:bknr-session-user)))
-				    :date (date-to-universal date))))
+           (contract (make-contract sponsor (parse-integer numsqm)
+                                    :paidp (format nil "~A: manually created by ~A"
+                                                   (format-date-time (get-universal-time))
+                                                   (user-login (bknr.web:bknr-session-user)))
+                                    :date (date-to-universal date))))
       (contract-issue-cert contract name :address address :language language)
       (send-to-postmaster #'mail-backoffice-sponsor-data contract numsqm country email name address language (all-request-params))
       (redirect (format nil "/edit-sponsor/~D" (store-object-id sponsor))))))
@@ -126,73 +126,73 @@
       (:h2 "Sponsor Data")
       ((:table)
        (:tr (:td "sponsor-id")
-	    (:td (:princ-safe (store-object-id sponsor))))
+            (:td (:princ-safe (store-object-id sponsor))))
        (:tr (:td "master-code")
-	    (:td (:princ-safe (sponsor-master-code sponsor))))
+            (:td (:princ-safe (sponsor-master-code sponsor))))
        (:tr (:td "name")
-	    (:td (text-field "full-name" :value (user-full-name sponsor))))
+            (:td (text-field "full-name" :value (user-full-name sponsor))))
        (:tr (:td "email")
-	    (:td (text-field "email" :value (user-email sponsor))))
+            (:td (text-field "email" :value (user-email sponsor))))
        (:tr (:td "password")
-	    (:td (text-field "password" :size 20))
-	    (:td "(Password is never displayed)"))
+            (:td (text-field "password" :size 20))
+            (:td "(Password is never displayed)"))
        (:tr (:td "country")
-	    (:td (text-field "country"
-			     :value (sponsor-country sponsor)
-			     :size 2)))
+            (:td (text-field "country"
+                             :value (sponsor-country sponsor)
+                             :size 2)))
        (:tr (:td "language")
-	    (:td (language-selector sponsor)))
+            (:td (language-selector sponsor)))
        (:tr (:td "info-text")
-	    (:td (textarea-field "info-text"
-				 :value (sponsor-info-text sponsor)
-				 :rows 5
-				 :cols 40))))
+            (:td (textarea-field "info-text"
+                                 :value (sponsor-info-text sponsor)
+                                 :rows 5
+                                 :cols 40))))
       (:p (cmslink (format nil "kml-root/~A?lang=~A" (store-object-id sponsor) (sponsor-language sponsor)) "Google Earth"))
       (:h2 "Contracts")
       ((:table :border "1")
        (:tr (:th "ID") (:th "date") (:th "# of sqm") (:th "UTM coordinate")(:th "paid?") (:th))
        (dolist (contract (sort (copy-list (sponsor-contracts sponsor)) #'> :key #'contract-date))
-	 (html (:tr (:td (:princ-safe (store-object-id contract)))
-		    (:td (:princ-safe (format-date-time (contract-date contract) :show-time nil)))
-		    (:td (:princ-safe (length (contract-m2s contract))))
-		    (:td (:princ (format nil "~,3f<br/>~,3f"
-					 (m2-utm-x (first (contract-m2s (first (sponsor-contracts sponsor)))))
-					 (m2-utm-y (first (contract-m2s (first (sponsor-contracts sponsor))))))))
-		    (:td (:princ-safe (if (contract-paidp contract) "paid" "not paid")))
-		    (:td (cmslink (format nil "cert-regen/~A" (store-object-id contract)) "Regenerate Certificate")
-			 (when (probe-file (contract-pdf-pathname contract))
-			   (html :br (cmslink (contract-pdf-url contract) "Show Certificate")))
-			 (when (contract-worldpay-trans-id contract)
-			   (html :br ((:a :class "cmslink"
-					  :target "_new"
-					  :href (format nil "https://select.worldpay.com/merchant/orderList/showOrderDetailMerchant.html?orderCode=~A"
-							(contract-worldpay-trans-id contract)))
-				      "Show WorldPay transaction"))))))))
+         (html (:tr (:td (:princ-safe (store-object-id contract)))
+                    (:td (:princ-safe (format-date-time (contract-date contract) :show-time nil)))
+                    (:td (:princ-safe (length (contract-m2s contract))))
+                    (:td (:princ (format nil "~,3f<br/>~,3f"
+                                         (m2-utm-x (first (contract-m2s (first (sponsor-contracts sponsor)))))
+                                         (m2-utm-y (first (contract-m2s (first (sponsor-contracts sponsor))))))))
+                    (:td (:princ-safe (if (contract-paidp contract) "paid" "not paid")))
+                    (:td (cmslink (format nil "cert-regen/~A" (store-object-id contract)) "Regenerate Certificate")
+                         (when (probe-file (contract-pdf-pathname contract))
+                           (html :br (cmslink (contract-pdf-url contract) "Show Certificate")))
+                         (when (contract-worldpay-trans-id contract)
+                           (html :br ((:a :class "cmslink"
+                                          :target "_new"
+                                          :href (format nil "https://select.worldpay.com/merchant/orderList/showOrderDetailMerchant.html?orderCode=~A"
+                                                        (contract-worldpay-trans-id contract)))
+                                      "Show WorldPay transaction"))))))))
       (:p (submit-button "save" "save")
-	  (submit-button "delete" "delete" :confirm "Really delete this sponsor?"))))))
+          (submit-button "delete" "delete" :confirm "Really delete this sponsor?"))))))
 
 (defmethod handle-object-form ((handler edit-sponsor-handler) (action (eql :save)) sponsor)
   (let (changed)
     (with-bos-cms-page (:title "Saving sponsor data")
       (dolist (field-name '(full-name email password country language info-text))
-	(let ((field-value (query-param (string-downcase (symbol-name field-name)))))
-	  (when (and field-value
-		     (not (equal field-value (slot-value sponsor field-name))))
-	    (case field-name
+        (let ((field-value (query-param (string-downcase (symbol-name field-name)))))
+          (when (and field-value
+                     (not (equal field-value (slot-value sponsor field-name))))
+            (case field-name
               (password (set-user-password sponsor field-value))
               (t (change-slot-values sponsor field-name field-value)))
-	    (setf changed t)
-	    (html (:p "Changed " (:princ-safe (string-downcase (symbol-name field-name))))))))
+            (setf changed t)
+            (html (:p "Changed " (:princ-safe (string-downcase (symbol-name field-name))))))))
       (dolist (contract (sponsor-contracts sponsor))
-	(when (and (query-param (contract-checkbox-name contract))
-		   (not (contract-paidp contract)))
-	  (change-slot-values contract 'paidp t)
-	  (setf changed t)
-	  (html (:p "Changed contract status to \"paid\""))))
+        (when (and (query-param (contract-checkbox-name contract))
+                   (not (contract-paidp contract)))
+          (change-slot-values contract 'paidp t)
+          (setf changed t)
+          (html (:p "Changed contract status to \"paid\""))))
       (unless changed
-	(html (:p "No changes have been made")))
+        (html (:p "No changes have been made")))
       (html (cmslink (hunchentoot:request-uri*)
-	      "Return to sponsor profile")))))
+              "Return to sponsor profile")))))
 
 (defmethod handle-object-form ((handler edit-sponsor-handler) (action (eql :delete)) sponsor)
   (with-bos-cms-page (:title "Sponsor deleted")
@@ -211,37 +211,37 @@
   (if (contract-paidp contract)
       (redirect (format nil "/edit-sponsor/~D" (store-object-id (contract-sponsor contract))))
       (let ((numsqm (length (contract-m2s contract))))
-	(with-query-params (email)
-	  (with-bos-cms-page (:title "Complete square meter sale with wire transfer payment")
-	    (html
-	     ((:form :name "form")
-	      ((:input :type "hidden" :name "numsqm" :value #?"$(numsqm)"))
-	      ((:table)
-	       (:tr (:td "Number of square meters")
-		    (:td (:princ-safe numsqm)))
-	       (:tr (:td "Bought on")
-		    (:td (:princ-safe (format-date-time (contract-date contract)))))
-	       (:tr (:td "Country code (2 chars)")
-		    (:td (text-field "country" :size 2 :value "DE")))
-	       (:tr (:td "Language")
-		    (:td (:princ-safe (sponsor-language (contract-sponsor contract)))))
-	       (:tr (:td "Email-Address")
-		    (:td (text-field "email" :size 20 :value email)))
-	       (:tr (:td (submit-button "process" "process" :formcheck "javascript:return check_complete_sale()")))))))))))
+        (with-query-params (email)
+          (with-bos-cms-page (:title "Complete square meter sale with wire transfer payment")
+            (html
+             ((:form :name "form")
+              ((:input :type "hidden" :name "numsqm" :value #?"$(numsqm)"))
+              ((:table)
+               (:tr (:td "Number of square meters")
+                    (:td (:princ-safe numsqm)))
+               (:tr (:td "Bought on")
+                    (:td (:princ-safe (format-date-time (contract-date contract)))))
+               (:tr (:td "Country code (2 chars)")
+                    (:td (text-field "country" :size 2 :value "DE")))
+               (:tr (:td "Language")
+                    (:td (:princ-safe (sponsor-language (contract-sponsor contract)))))
+               (:tr (:td "Email-Address")
+                    (:td (text-field "email" :size 20 :value email)))
+               (:tr (:td (submit-button "process" "process" :formcheck "javascript:return check_complete_sale()")))))))))))
 
 (defmethod handle-object-form ((handler complete-transfer-handler) (action (eql :process)) contract)
   (with-query-params (email country)
     (with-bos-cms-page (:title "Square meter sale completion")
       (if (contract-paidp contract)
-	  (html (:h2 "This sale has already been completed"))
-	  (progn
-	    (html (:h2 "Completing square meter sale"))
-	    (sponsor-set-country (contract-sponsor contract) country)
-	    (contract-set-paidp contract (format nil "~A: wire transfer processed by ~A"
-						 (format-date-time) (user-login (bknr.web:bknr-session-user))))
-	    (when email
-	      (html (:p "Sending instruction email to " (:princ-safe email)))
-	      (mail-instructions-to-sponsor contract email))))
+          (html (:h2 "This sale has already been completed"))
+          (progn
+            (html (:h2 "Completing square meter sale"))
+            (sponsor-set-country (contract-sponsor contract) country)
+            (contract-set-paidp contract (format nil "~A: wire transfer processed by ~A"
+                                                 (format-date-time) (user-login (bknr.web:bknr-session-user))))
+            (when email
+              (html (:p "Sending instruction email to " (:princ-safe email)))
+              (mail-instructions-to-sponsor contract email))))
       (:p (cmslink (format nil "edit-sponsor/~D" (store-object-id (contract-sponsor contract)))
             "click here") " to edit the sponsor's database entry"))))
 
@@ -251,23 +251,23 @@
 (defmethod handle ((handler m2-javascript-handler))
   (multiple-value-bind (sponsor-id-or-x y) (parse-url)
     (let ((sponsor (cond
-		     (y
-		      (let ((m2 (get-m2 (parse-integer sponsor-id-or-x) (parse-integer y))))
-			(when (and m2 (m2-contract m2))
-			  (contract-sponsor (m2-contract m2)))))
-		     (sponsor-id-or-x
-		      (find-store-object (parse-integer sponsor-id-or-x) :class 'sponsor))
-		     (t
-		      (and (typep (bknr-session-user) 'sponsor)
+                     (y
+                      (let ((m2 (get-m2 (parse-integer sponsor-id-or-x) (parse-integer y))))
+                        (when (and m2 (m2-contract m2))
+                          (contract-sponsor (m2-contract m2)))))
+                     (sponsor-id-or-x
+                      (find-store-object (parse-integer sponsor-id-or-x) :class 'sponsor))
+                     (t
+                      (and (typep (bknr-session-user) 'sponsor)
                            (bknr-session-user))))))
       (with-http-response (:content-type "text/html; charset=UTF-8")
-	(with-http-body ()
+        (with-http-body ()
           (html
            ((:script :language "JavaScript")
-	    (:princ "var profil;")
-	    (when (and sponsor (find-if #'contract-paidp (sponsor-contracts sponsor)))
-	      (html (:princ (make-m2-javascript sponsor))))
-	    (:princ "parent.qm_fertig(profil);"))))))))
+            (:princ "var profil;")
+            (when (and sponsor (find-if #'contract-paidp (sponsor-contracts sponsor)))
+              (html (:princ (make-m2-javascript sponsor))))
+            (:princ "parent.qm_fertig(profil);"))))))))
 
 (defclass sponsor-login-handler (page-handler)
   ())
@@ -296,7 +296,7 @@
 
 (defmethod object-handler-get-object ((handler cert-regen-handler))
   (let* ((object-id-string (first (decoded-handler-path handler)))
-	 (object (store-object-with-id (parse-integer object-id-string))))
+         (object (store-object-with-id (parse-integer object-id-string))))
     (cond
       ((contract-p object)
        object)
@@ -311,13 +311,13 @@
      ((:form :name "form")
       ((:table)
        (:tr (:td "Name")
-	    (:td (text-field "name" :size 40)))
+            (:td (text-field "name" :size 40)))
        (:tr (:td "Language")
             (:td (language-selector contract)))
        (unless (contract-download-only-p contract)
          (html
-	  (:tr (:td "Address")
-	       (:td (textarea-field "address")))))
+          (:tr (:td "Address")
+               (:td (textarea-field "address")))))
        (html
         (:tr (:td (submit-button "regenerate" "regenerate")))))))))
 

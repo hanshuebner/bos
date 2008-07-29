@@ -9,5 +9,5 @@
   (with-bos-cms-page (:title "Allocation Cache")
     (html
      (:pre (:princ
-	    (with-output-to-string (*standard-output*)
-	      (bos.m2.allocation-cache:pprint-cache)))))))
+            (with-output-to-string (*standard-output*)
+              (bos.m2.allocation-cache:pprint-cache)))))))

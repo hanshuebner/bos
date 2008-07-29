@@ -34,5 +34,5 @@
 (defun all-news-items (&optional language)
   (if language
       (remove-if-not (lambda (item) (news-item-published item language))
-		     (store-objects-with-class 'news-item))
+                     (store-objects-with-class 'news-item))
       (sort (copy-list (store-objects-with-class 'news-item)) #'> :key #'news-item-time)))

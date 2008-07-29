@@ -9,7 +9,7 @@
 (define-bknr-tag news-headlines (&key archive)
   (let ((language (request-language)))
     (let* ((now (get-universal-time))
-	   (news-items (if archive
+           (news-items (if archive
                            (all-news-items language)
                            (let ((items (sort (remove-if
                                                #'(lambda (news-item)
@@ -19,12 +19,12 @@
                                               :key #'news-item-time)))
                              (subseq items 0 (min (length items) 3))))))
       (labels ((show-news-entry (news-item)
-		 (html ((:a :href (format nil "javascript:window_news('/~a/news/~a')" language (store-object-id news-item))
-			    :class "more")
-			(:strong (:princ-safe (format-date-time (news-item-time news-item) :show-time nil))
+                 (html ((:a :href (format nil "javascript:window_news('/~a/news/~a')" language (store-object-id news-item))
+                            :class "more")
+                        (:strong (:princ-safe (format-date-time (news-item-time news-item) :show-time nil))
                          :br
                          (:princ-safe (news-item-title news-item language)))))))
-	(loop for news-item in news-items
+        (loop for news-item in news-items
            for index from 1
            do (if archive
                   (html (show-news-entry news-item)
@@ -34,10 +34,10 @@
 
 (define-bknr-tag news-item ()
   (let ((news-item (find-store-object (parse-integer (nth-value 1 (parse-url)))))
-	(language (request-language)))
+        (language (request-language)))
     (html ((:h1 :class "extra")
-	   (:princ-safe (format-date-time (news-item-time news-item) :show-time nil))
-	   ", "
-	   (:princ-safe (news-item-title news-item language)))
-	  ((:p :class "text_content")
-	   (:princ (news-item-text news-item language))))))
+           (:princ-safe (format-date-time (news-item-time news-item) :show-time nil))
+           ", "
+           (:princ-safe (news-item-title news-item language)))
+          ((:p :class "text_content")
+           (:princ (news-item-text news-item language))))))
