@@ -276,7 +276,7 @@
 (defun contract-p (object)
   (equal (class-of object) (find-class 'contract)))
 
-(defmethod initialize-persistent-instance :after ((contract contract))
+(defmethod initialize-persistent-instance :after ((contract contract) &key)
   (pushnew contract (sponsor-contracts (contract-sponsor contract)))
   (dolist (m2 (contract-m2s contract))
     (setf (m2-contract m2) contract))
@@ -377,7 +377,11 @@
     (dolist (m2 (contract-m2s contract))
       (collect (list (m2-x m2) (m2-y m2))))))
 
-(defun contracts-bounding-box (&optional (contracts (class-instances 'contract)))
+(defun all-contracts ()
+  "Return list of all contracts in the system."
+  (class-instances 'all-contracts))
+
+(defun contracts-bounding-box (&optional (contracts (all-contracts)))
   (geometry:with-bounding-box-collect (collect)
     (dolist (contract contracts)
       (dolist (m2 (contract-m2s contract))

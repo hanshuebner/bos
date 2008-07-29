@@ -30,7 +30,7 @@
     (when poi
       (setf (poi-images poi) (remove poi-image (poi-images poi))))))
 
-(defmethod initialize-persistent-instance :after ((poi-image poi-image))
+(defmethod initialize-persistent-instance :after ((poi-image poi-image) &key)
   (setf (poi-images (poi-image-poi poi-image)) (append (poi-images (poi-image-poi poi-image)) (list poi-image))))
 
 (deftransaction update-poi-image (poi-image language
@@ -53,6 +53,7 @@
    (name :read :index-type string-unique-index
                :index-reader find-poi :index-values all-pois
                :documentation "Symbolischer Name")
+   (published :update :initform nil)
    (title :update :initform (make-string-hash-table) :documentation "Angezeigter Name")
    (subtitle :update :initform (make-string-hash-table) :documentation "Unterschrift")
    (description :update :initform (make-string-hash-table) :documentation "Beschreibungstext")
