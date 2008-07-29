@@ -11,7 +11,7 @@
                (:file "geometry" :depends-on ("packages"))
                (:file "config" :depends-on ("packages"))
                (:file "utils" :depends-on ("packages"))
-               (:file "news" :depends-on ("packages" "poi"))
+               (:file "news" :depends-on ("packages" "slot-strings"))
                (:file "tiled-index" :depends-on ("packages"))
                (:file "mail-generator" :depends-on ("packages"))
                (:file "make-certificate" :depends-on ("packages"))
@@ -24,7 +24,8 @@
                (:file "allocation" :depends-on ("geometry" "packages"))
                (:file "allocation-cache" :depends-on ("allocation" "initialization-subsystem"
                                                                    "packages" "utils"))
-               (:file "poi" :depends-on ("packages"))
+               (:file "slot-strings" :depends-on ("packages"))
+               (:file "poi" :depends-on ("packages" "slot-strings"))
                (:file "import" :depends-on ("packages"))
                (:file "map" :depends-on ("config" "packages" "tiled-index"))
                (:file "export" :depends-on ("packages"))

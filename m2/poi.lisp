@@ -3,33 +3,7 @@
 ;; Klassen und Funktione für die "Points of Information", die für die
 ;; Quadratmeter-Datenbank gespeichert werden.
 
-;; Die Implementation kurvt ein bisschen um den aktuellen Datastore
-;; herum, da eine ästhetische Implementation der mehrsprachigen
-;; Strings MOP erforderlich machen würde, die Umstellung des Datastore
-;; auf MOP jedoch noch nicht fertig ist.
-
 (in-package :bos.m2)
-
-;; Multilinguale Strings als Slots, werden als Hashes im Objekt
-;; gespeichert und über slot-string bzw. (setf slot-string)
-;; angesprochen.
-
-(defun make-string-hash-table ()
-  (make-hash-table :test #'equal))
-
-(defun slot-string (object slot-name language &optional (not-found-value ""))
-  (or (gethash language (slot-value object slot-name)) not-found-value))
-
-(defun set-slot-string (object slot-name language new-value)
-  (unless (in-transaction-p)
-    (error "attempt to set string in multi-language string slot ~a of object ~a outside of transaction" slot-name object))
-  (setf (gethash language (slot-value object slot-name)) new-value))
-
-(defsetf slot-string set-slot-string)
-
-(deftransaction set-slot-string-values (object language &rest args)
-  (loop for (slot-name value) on args by #'cddr
-     do (setf (slot-string object slot-name language) value)))
 
 ;;; POI-Anwendungsklassen und Konstruktoren
 
@@ -75,19 +49,16 @@
 
 ;;; poi
 (define-persistent-class poi ()
-  ((name :read :index-type string-unique-index
+  ((published :update :initform nil)
+   (name :read :index-type string-unique-index
                :index-reader find-poi :index-values all-pois
                :documentation "Symbolischer Name")
    (title :update :initform (make-string-hash-table) :documentation "Angezeigter Name")
    (subtitle :update :initform (make-string-hash-table) :documentation "Unterschrift")
    (description :update :initform (make-string-hash-table) :documentation "Beschreibungstext")
    (area :update :initform nil :documentation "Polygon mit den POI-Koordinaten")
-   (icon :update :initform "palme" :documentation "Name des Icons")
-   (images :update :initform nil)
-   (airals :update :initform nil)
-   (panoramas :update :initform nil)
-   (movies :update :initform nil)
-   (published :update :initform nil)))
+   (icon :update :initform "palme" :documentation "Name des Icons")   
+   (medias :update :initform nil)))
 
 (defmethod poi-movies :before ((poi poi))
   "Lazily update the db schema. Method can be removed later."
