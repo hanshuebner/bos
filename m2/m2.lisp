@@ -278,7 +278,7 @@
 (defun contract-p (object)
   (equal (class-of object) (find-class 'contract)))
 
-(defmethod initialize-instance :after ((contract contract) &key)
+(defmethod initialize-persistent-instance :after ((contract contract) &key)
   (pushnew contract (sponsor-contracts (contract-sponsor contract)))
   (dolist (m2 (contract-m2s contract))
     (setf (m2-contract m2) contract))

@@ -35,7 +35,7 @@
            or description is given")
   (apply #'make-object class-name rest))
 
-(defmethod initialize-instance :after ((poi-medium poi-medium) &key language title subtitle description poi)
+(defmethod initialize-persistent-instance :after ((poi-medium poi-medium) &key language title subtitle description poi)
   (when poi
     (push poi-medium (poi-media poi)))
   (update-textual-attributes poi-medium language
@@ -84,7 +84,7 @@
     (setf (slot-string poi 'description language) description)
     poi))
 
-(defmethod initialize-instance :after ((poi poi) &key language title subtitle description)
+(defmethod initialize-persistent-instance :after ((poi poi) &key language title subtitle description)
   (update-textual-attributes poi language
                              :title title
                              :subtitle subtitle
