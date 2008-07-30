@@ -16,6 +16,13 @@
    (description :initform (make-string-hash-table)
                 :documentation "beschreibungstext")))
 
+(defmethod initialize-persistent-instance :after ((obj textual-attributes-mixin)
+                                                  &key language title subtitle description)
+  (update-textual-attributes obj language
+                             :title title
+                             :subtitle subtitle
+                             :description description))
+
 (deftransaction update-textual-attributes (obj language &key title subtitle description)
   (when title
     (setf (slot-string obj 'title language) title))
@@ -36,13 +43,9 @@
            or description is given")
   (apply #'make-object class-name rest))
 
-(defmethod initialize-persistent-instance :after ((poi-medium poi-medium) &key language title subtitle description poi)
+(defmethod initialize-persistent-instance :after ((poi-medium poi-medium) &key poi)
   (when poi
-    (push poi-medium (poi-media poi)))
-  (update-textual-attributes poi-medium language
-                             :title title
-                             :subtitle subtitle
-                             :description description))
+    (push poi-medium (poi-media poi))))
 
 (defmethod print-object ((object poi-medium) stream)
   (print-unreadable-object (object stream :type t :identity nil)
@@ -70,7 +73,7 @@
   ((url :accessor poi-movie-url :initarg :url :initform nil)))
 
 ;;; poi
-(defpersistent-class poi (textual-attributes-mixin)  
+(defpersistent-class poi (textual-attributes-mixin)
   ((name
     :reader poi-name :initarg :name
     :index-type string-unique-index
@@ -89,17 +92,12 @@
     :accessor poi-media :initarg :media :initform nil
     :documentation "liste aller poi-medien, wie poi-image, poi-airal ...")))
 
-(deftransaction make-poi (language name &key title description area)
-  (let ((poi (make-object 'poi :name name :area area)))
-    (setf (slot-string poi 'title language) title)
-    (setf (slot-string poi 'description language) description)
-    poi))
-
-(defmethod initialize-persistent-instance :after ((poi poi) &key language title subtitle description)
-  (update-textual-attributes poi language
-                             :title title
-                             :subtitle subtitle
-                             :description description))
+(deftransaction make-poi (name &rest rest &key area language title subtitle description)
+  (declare (ignore area))
+  (assert (if (or title subtitle description) language t) nil
+          "language needs to be specified, if any of title, subtitle
+           or description is given")
+  (apply #'make-object 'poi :name name rest))
 
 (defmethod destroy-object :before ((poi poi))
   (mapc #'delete-object (poi-media poi)))

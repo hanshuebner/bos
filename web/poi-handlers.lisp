@@ -17,7 +17,7 @@
          (html (:h2 "Bad technical name")
                "Please use only alphanumerical characters, - and _ for technical POI names")))
       (t
-       (redirect (edit-object-url (make-poi (request-language) name)))))))
+       (redirect (edit-object-url (make-poi name)))))))
 
 (defclass edit-poi-handler (editor-only-handler edit-object-handler)
   ()
