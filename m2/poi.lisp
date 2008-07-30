@@ -197,3 +197,15 @@ var poi = { symbol: ~S,
 
 (defmethod convert-slot-value-while-restoring ((poi poi) (slot-name (eql 'panoramas)) value)
   (appendf (poi-media poi) (mapcar (lambda (obj) (change-class obj 'poi-panorama :poi poi)) value)))
+
+(defun pois-sanity-check ()
+  (labels ((poi-sanity-check (poi)
+             (dolist (medium (poi-media poi))
+               (unless (eq poi (poi-medium-poi medium))
+                 (warn "~s does not point to ~s" medium poi)))
+             (dolist (movie (poi-movies poi))
+               (unless (stringp (poi-movie-url movie))
+                 (warn "~s has a url of ~s" movie (poi-movie-url movie))))))
+    (mapc #'poi-sanity-check (class-instances 'poi))
+    (values)))
+

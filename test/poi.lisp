@@ -40,20 +40,20 @@
       (is (string= "a subtitle" (slot-string poi2 'subtitle "de")))
       (is (string= "a description" (slot-string poi2 'description "de"))))))
 
-(defun test-make-poi-javascript ()
+(defun finishes-make-poi-javascript ()
   (dolist (language '("de" "en" "da"))
     (finishes (make-poi-javascript language))))
 
 (test make-poi-javascript
   (with-fixture initial-bos-store ()
-    (test-make-poi-javascript)
+    (finishes-make-poi-javascript)
     (make-poi "turm" :area (list 50 60))
-    (test-make-poi-javascript)
+    (finishes-make-poi-javascript)
     (make-poi "brunnen" :language "de"
               :title "a title"
               :subtitle "a subtitle"
               :description "a description")
-    (test-make-poi-javascript)))
+    (finishes-make-poi-javascript)))
 
 (test make-poi-image
   (with-fixture initial-bos-store ()
@@ -71,4 +71,4 @@
       (is (= 120 (store-image-height (first (poi-media poi)))))
       (let ((medium (first (poi-media poi))))
         (is (eq poi (poi-medium-poi medium))))
-      (test-make-poi-javascript))))
+      (finishes-make-poi-javascript))))
