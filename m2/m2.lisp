@@ -38,12 +38,17 @@
                                              :tile-size +m2tile-width+
                                              :tile-class 'image-tile))))
 
-(defmethod print-object ((object m2) stream)
-  (print-unreadable-object (object stream :type t :identity nil)
-    (format stream "at (~D,~D), ~A"
-            (m2-x object)
-            (m2-y object)
-            (if (m2-contract object) "sold" "free"))))
+(defmethod print-object ((m2 m2) stream)
+  (if (and (slot-boundp m2 'x)
+           (slot-boundp m2 'y)
+           (slot-boundp m2 'contract))
+      (print-unreadable-object (m2 stream :type t :identity nil)
+        (format stream "at (~D,~D), ~A"
+                (m2-x m2)
+                (m2-y m2)
+                (if (m2-contract m2) "sold" "free")))
+      (print-unreadable-object (m2 stream :type t :identity t)
+        (format stream "(unbound slots)"))))
 
 (defun get-m2 (&rest coords)
   (m2-at coords))
