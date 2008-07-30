@@ -200,47 +200,40 @@
            #:allocation-area-percent-used
            #:left #:top #:width #:height #:active-p
 
-           ;; pois
-           #:*current-language*
+           ;; slot-strings
            #:slot-string
            #:set-slot-string-values
-
+                      
+           ;; pois
+           #:title #:subtitle #:description ; for slot-string access
+           #:update-textual-attributes
+           #:poi-medium
+           #:poi-medium-poi
+           #:make-poi-medium
            #:poi-image
-           #:poi-image-poi
-           #:poi-image-title
-           #:poi-image-subtitle
-           #:poi-image-description
-           #:poi-airals
-           #:airals
-           #:poi-panoramas
-           #:panoramas
-           #:poi-movies
-           #:movies
+           #:poi-airal
+           #:poi-panorama
            #:poi-movie
-           #:poi-movie-poi
            #:poi-movie-url
-           #:make-poi-image
-           #:update-poi-image
            #:poi
            #:poi-name
+           #:find-poi
+           #:all-pois
            #:poi-published
-           #:poi-title
-           #:poi-subtitle
-           #:poi-description
            #:poi-area
            #:poi-icon
-           #:poi-images
-           #:poi-complete
-           #:title #:subtitle #:description ; for slot-string access
+           #:poi-media
            #:make-poi
-           #:update-poi
-           #:find-poi
-
+           #:poi-complete
            #:poi-center-x
            #:poi-center-y
            #:poi-center-lon-lat
+           #:poi-images
+           #:poi-airals
+           #:poi-panoramas
+           #:poi-movies
            #:make-poi-javascript
-
+           
            ;; news
            #:news-item
            #:make-news-item

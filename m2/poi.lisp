@@ -8,13 +8,13 @@
 ;;; POI-Anwendungsklassen und Konstruktoren
 
 ;;; textual-attributes-mixin
-(define-persistent-class textual-attributes-mixin ()
-  ((title :update :initform (make-string-hash-table)
-                  :documentation "Angezeigter Name")
-   (subtitle :update :initform (make-string-hash-table)
-                     :documentation "Unterschrift")
-   (description :update :initform (make-string-hash-table)
-                        :documentation "Beschreibungstext")))
+(defpersistent-class textual-attributes-mixin ()
+  ((title :initform (make-string-hash-table)
+          :documentation "angezeigter name")
+   (subtitle :initform (make-string-hash-table)
+             :documentation "unterschrift")
+   (description :initform (make-string-hash-table)
+                :documentation "beschreibungstext")))
 
 (deftransaction update-textual-attributes (obj language &key title subtitle description)
   (when title
@@ -22,11 +22,12 @@
   (when subtitle
     (setf (slot-string obj 'subtitle language) subtitle))
   (when description
-    (setf (slot-string obj 'description language) description)))
+    (setf (slot-string obj 'description language) description))
+  obj)
 
 ;;; poi-medium
-(define-persistent-class poi-medium (textual-attributes-mixin)
-  ((poi :read)))
+(defpersistent-class poi-medium (textual-attributes-mixin)
+  ((poi :reader poi-medium-poi :initarg :poi)))
 
 (deftransaction make-poi-medium (class-name &rest rest &key language title subtitle description poi initargs)
   (declare (ignore poi initargs))
@@ -53,30 +54,40 @@
       (setf (poi-media poi) (remove poi-medium (poi-media poi))))))
 
 ;;; poi-image
-(define-persistent-class poi-image (store-image poi-medium)
+(defpersistent-class poi-image (store-image poi-medium)
   ())
 
 ;;; poi-airal
-(define-persistent-class poi-airal (store-image poi-medium)
+(defpersistent-class poi-airal (store-image poi-medium)
   ())
 
 ;;; poi-panorama
-(define-persistent-class poi-panorama (store-image poi-medium)
+(defpersistent-class poi-panorama (store-image poi-medium)
   ())
 
 ;;; poi-movie
-(define-persistent-class poi-movie (poi-medium)
-  ((url :update :initform nil)))
+(defpersistent-class poi-movie (poi-medium)
+  ((url :accessor poi-movie-url :initarg :url :initform nil)))
 
 ;;; poi
-(define-persistent-class poi (textual-attributes-mixin)
-  ((name :read :index-type string-unique-index
-               :index-reader find-poi :index-values all-pois
-               :documentation "Symbolischer Name")
-   (published :update :initform nil :documentation "Wenn dieses Flag NIL ist, wird der POI in den UIs nicht angezeigt")
-   (area :update :initform nil :documentation "Polygon mit den POI-Koordinaten")
-   (icon :update :initform "palme" :documentation "Name des Icons")
-   (media :update :initform nil :documentation "Liste aller POI-Medien, wie POI-IMAGE, POI-AIRAL ...")))
+(defpersistent-class poi (textual-attributes-mixin)  
+  ((name
+    :reader poi-name :initarg :name
+    :index-type string-unique-index
+    :index-reader find-poi :index-values all-pois
+    :documentation "symbolischer name")
+   (published
+    :accessor poi-published :initarg :published :initform nil
+    :documentation "wenn dieses flag nil ist, wird der poi in den uis nicht angezeigt")
+   (area
+    :accessor poi-area :initarg :area :initform nil
+    :documentation "polygon mit den poi-koordinaten")
+   (icon
+    :accessor poi-icon :initarg :icon :initform "palme"
+    :documentation "name des icons")
+   (media
+    :accessor poi-media :initarg :media :initform nil
+    :documentation "liste aller poi-medien, wie poi-image, poi-airal ...")))
 
 (deftransaction make-poi (language name &key title description area)
   (let ((poi (make-object 'poi :name name :area area)))
