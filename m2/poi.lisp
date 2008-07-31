@@ -148,12 +148,12 @@
 ;;; Exchanges (nth index (poi-sat-images poi)) with
 ;;; (nth (1+ index) (poi-sat-images poi)).
 (deftransaction poi-sat-images-exchange-neighbours (poi index)  
-  (check-type index (integer 0 4))
+  (check-type index (mod 6))
   (multiple-value-bind (images positions)
       (poi-images poi)
     (declare (ignore images))
     (let ((media-index-a (nth index positions))
-          (media-index-b (nth (1+ index) positions)))
+          (media-index-b (nth (mod (1+ index) 6) positions)))
       (rotatef (nth media-index-a (poi-media poi))
                (nth media-index-b (poi-media poi))))))
 

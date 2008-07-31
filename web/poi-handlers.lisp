@@ -52,21 +52,14 @@
 
 (defmethod handle-object-form ((handler edit-poi-handler)
                                action (poi poi))
-  (with-query-params (language shift shift-by)
+  (with-query-params (language shift shift-id)
     (unless language (setq language (request-language)))
     (when shift
-      ;; change image order
-      (setq shift (find-store-object (parse-integer shift)))
-      (setq shift-by (parse-integer shift-by))
-      (let* ((new-images (poi-sat-images poi))
-             (old-position (position shift new-images))
-             (tmp (nth old-position new-images)))
-        (assert (and (< -1 old-position (length new-images))
-                     (< -1 (+ shift-by old-position) (length new-images))))
-        (setf (nth old-position new-images) (nth (+ shift-by old-position) new-images))
-        (setf (nth (+ shift-by old-position) new-images) tmp)
-        (with-transaction ("setf poi-sat-images")
-          (setf (poi-sat-images poi) new-images))))
+      (let ((shift (parse-integer shift))
+            (shift-id (parse-integer shift-id)))
+        ;; only if this exchange has not already happened
+        (when (= shift-id (store-object-id (nth shift (poi-sat-images poi))))
+          (poi-sat-images-exchange-neighbours poi shift))))
     (with-bos-cms-page (:title "Edit POI")
       (content-language-chooser)
       (unless (poi-complete poi language)
@@ -110,20 +103,20 @@
               ((:table)
                (:tr
                 (loop for image in (poi-sat-images poi)
-                   for index from 1 by 1
+                   for index upfrom 0
                    do (html (:td ((:a :href (format nil "/edit-poi-image/~a?poi=~A" (store-object-id image) (store-object-id poi)))
                                   ((:img :border "0" :src (format nil "/image/~a/thumbnail,,55,55" (store-object-id image)))))
                                  :br
-                                 (if (eql index 1)
+                                 (if (zerop index)
                                      (html ((:img :src "/images/trans.gif" :width "16")))
-                                     (html ((:a :href (format nil "/edit-poi/~A?shift=~A&shift-by=-1"
-                                                              (store-object-id poi)
-                                                              (store-object-id image)))
+                                     (html ((:a :href (format nil "/edit-poi/~A?shift=~D&shift-id=~D"
+                                                              (store-object-id poi) (1- index)
+                                                              (store-object-id (nth (1- index) (poi-sat-images poi)))))
                                             ((:img :border "0" :src "/images/pfeil-l.gif")))))
                                  ((:img :src "/images/trans.gif" :width "23"))
                                  (unless (eql index (length (poi-sat-images poi)))
-                                   (html ((:a :href (format nil "/edit-poi/~A?shift=~A&shift-by=1"
-                                                            (store-object-id poi)
+                                   (html ((:a :href (format nil "/edit-poi/~A?shift=~D&shift-id=~D"
+                                                            (store-object-id poi) index
                                                             (store-object-id image)))
                                           ((:img :border "0" :src "/images/pfeil-r.gif"))))))))))
               (unless (eql 6 (length (poi-sat-images poi)))
