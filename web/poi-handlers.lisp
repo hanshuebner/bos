@@ -457,8 +457,8 @@
                    (attribute "title" (slot-string image 'title language))
                    (attribute "subtitle" (slot-string image 'subtitle language))
                    (with-element "description" (text (slot-string image 'description language))))
-                 (with-element "url" (text (format nil "http://createrainforest.org/image/~D"
-                                                   (store-object-id image))))
+                 (with-element "url" (text (format nil "http://~A/image/~D"
+                                                   (website-host) (store-object-id image))))
                  (with-element "width" (text (princ-to-string (store-image-width image))))
                  (with-element "height" (text (princ-to-string (store-image-height image)))))))
       (with-accessors ((id store-object-id)
