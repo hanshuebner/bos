@@ -29,11 +29,8 @@
   (cmslink (edit-object-url poi)
     (:princ (format nil "edit ~a" (poi-name poi)))))
 
-(defmethod object-url ((poi-image poi-image))
-  (format nil "/poi-image/~A" (store-object-id poi-image)))
-
-(defmethod edit-object-url ((poi-image poi-image))
-  (format nil "/edit-poi-image/~a" (store-object-id poi-image)))
+(defmethod edit-object-url ((medium poi-medium))
+  (format nil "/edit-poi-medium/~a" (store-object-id medium)))
 
 (defmethod html-link ((poi-image poi-image))
   (cmslink (object-url poi-image)

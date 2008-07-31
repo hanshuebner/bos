@@ -157,6 +157,7 @@
   (make-instance 'bos-website
                  :name "create-rainforest.org CMS"
                  :handler-definitions `(("/edit-poi-image" edit-poi-image-handler)
+                                        ("/edit-poi-medium" edit-poi-medium-handler)
                                         ("/edit-poi" edit-poi-handler)
                                         ("/edit-sponsor" edit-sponsor-handler)
                                         ("/kml-upload" kml-upload-handler)

@@ -64,7 +64,7 @@
       (content-language-chooser)
       (unless (poi-complete poi language)
         (html (:h2 "This POI is not complete in the current language - Please check that "
-                   "the location and all text fields are set and that at least one image "
+                   "the location and all text fields are set and that at least 6 images "
                    "has been uploaded.")))
       ((:form :method "POST" :enctype "multipart/form-data")
        ((:table :border "1")
@@ -98,13 +98,13 @@
                        "[choose]")))))
         (:tr (:td "icon")
              (:td (icon-chooser "icon" (poi-icon poi))))
-        (:tr (:td "images")
+        (:tr (:td "sat images")
              (:td
               ((:table)
                (:tr
                 (loop for image in (poi-sat-images poi)
                    for index upfrom 0
-                   do (html (:td ((:a :href (format nil "/edit-poi-image/~a?poi=~A" (store-object-id image) (store-object-id poi)))
+                   do (html (:td ((:a :href (format nil "/edit-poi-medium/~a?poi=~A" (store-object-id image) (store-object-id poi)))
                                   ((:img :border "0" :src (format nil "/image/~a/thumbnail,,55,55" (store-object-id image)))))
                                  :br
                                  (if (zerop index)
@@ -119,57 +119,31 @@
                                                             (store-object-id poi) index
                                                             (store-object-id image)))
                                           ((:img :border "0" :src "/images/pfeil-r.gif"))))))))))
-              (unless (eql 6 (length (poi-sat-images poi)))
+              (unless (= 6 (length (poi-sat-images poi)))
                 (html
                  :br
-                 (cmslink (format nil "edit-poi-image/?poi=~A" (store-object-id poi)) "[new]")))))
-        (:tr (:td "airal view"
-                  ((:input :id "airal-id" :type "hidden" :name "airal-id")))
-             (:td (:table (dolist (airal (poi-airals poi))
-                            (html (:tr (:td ((:a :href (format nil "/image/~D" (store-object-id airal))
-                                                 :target "_new")
-                                             ((:img :src (format nil "/image/~D" (store-object-id airal))
-                                                    :width "90" :height "90"))))
-                                       (:td (submit-button "delete-airal" "delete-airal"
-                                                           :formcheck #?"javascript:confirm_delete('airal-id', $((store-object-id airal)), 'Really delete the airal?')")))))
-                          (:tr ((:td :colspan "2")
-                                "Upload new airal view"
-                                ((:input :type "file" :name "image-file"))
-                                :br
-                                (submit-button "upload-airal" "upload-airal"))))))
-        (:tr (:td "panorama view"
-                  ((:input :id "panorama-id" :type "hidden" :name "panorama-id")))
-             (:td (dolist (panorama (poi-panoramas poi))
-                    (html (:princ-safe (format-date-time (blob-timestamp panorama)))
-                          ((:a :href (format nil "/image/~D" (store-object-id panorama)) :target "_new" :class "cmslink")
-                           " view ")
-                          (submit-button "delete-panorama" "delete-panorama"
-                                         :formcheck #?"javascript:confirm_delete('panorama-id', $((store-object-id panorama)), 'Really delete this panorama image?')")
-                          :br))
-                  (html "Upload new panorama view"
-                        ((:input :type "file" :name "image-file"))
-                        :br
-                        (submit-button "upload-panorama" "upload-panorama"))))
-        (:tr (:td "movies"
-                  ((:input :id "movie-id" :type "hidden" :name "movie-id")))
-             (:td (dolist (movie (poi-movies poi))
-                    (html (:princ-safe (format-date-time (store-object-last-change movie 0)))
-                          ((:a :href (format nil "/poi-movie/~D" (store-object-id movie)) :target "_new" :class "cmslink")
-                           " view ")
-                          (submit-button "delete-movie" "delete-movie"
-                                         :formcheck #?"javascript:confirm_delete('movie-id', $((store-object-id movie)), 'Really delete this movie?')")
-                          :br))
-                  (html "URL or 'embed' string: "
-                        ((:input :type "text"
-                                 :size "50"
-                                 :name "movie-url"
-                                 :id "movie"
-                                 :value ""
-                                 :onchange "parse_youtube_link(this)"))
-                        :br
-                        (submit-button "add-movie" "add-movie"))))
+                 (cmslink (format nil "edit-poi-medium/?poi=~A" (store-object-id poi)) "[new]")))))        
         (:tr (:td (submit-button "save" "save")
-                  (submit-button "delete" "delete" :confirm "Really delete the POI?"))))))))
+                  (submit-button "delete" "delete" :confirm "Really delete the POI?"))))
+       ;; ;;;;;;;;;;;;;;;;
+       (:h2 "Upload new medium")
+       ((:form :method "post" :action "/edit-poi-medium" :enctype "multipart/form-data")
+        (:table (:tr (:td "Type")
+                     (:td (select-box "medium-type" (mapcar #'(lambda (class-name) (string-downcase (symbol-name class-name)))
+                                                            (class-subclasses (find-class 'poi-medium)))
+                                      :default "poi-image")))
+                (:tr
+                 (:td "File")
+                 (:td ((:input :type "file" :name "image-file")))
+                 (:tr ((:td :colspan "2") (submit-button "upload" "upload"))))))
+       (:h2 "Attached POI media")
+       ((:table :border "1")
+        (dolist (medium (poi-media poi))
+          (html (:tr (:td (:princ-safe (medium-pretty-type-string medium)))
+                     (:td (:table (medium-handler-preview medium :small t)
+                                  (:tr (:td)
+                                       (:td (cmslink (format nil "/edit-poi-medium/~D?poi=~D"
+                                                             (store-object-id medium) (store-object-id poi)) "edit")))))))))))))
 
 (defmethod handle-object-form ((handler edit-poi-handler)
                                (action (eql :save)) (poi poi))
@@ -277,6 +251,114 @@
   (with-bos-cms-page (:title "POI has been deleted")
     (html (:h2 "POI has been deleted")
           "The POI has been deleted")))
+
+
+;;; edit-poi-medium-handler
+(defclass edit-poi-medium-handler (editor-only-handler edit-object-handler)
+  ()
+  (:default-initargs :object-class 'poi-medium))
+
+(defmethod handle-object-form ((handler edit-poi-medium-handler) action (medium poi-medium))
+  (with-query-params (language poi)
+    (unless language (setq language (request-language)))
+    (with-bos-cms-page (:title (format nil "Edit ~A" (medium-pretty-type-string medium)))
+      (html
+       (cmslink (edit-object-url (poi-medium-poi medium)) "Back to POI")
+       (content-language-chooser)
+       ((:form :method "post" :enctype "multipart/form-data")
+        ((:input :type "hidden" :name "poi" :value poi))
+        (:table (medium-handler-preview medium)                
+                (:tr ((:td :colspan "2" :height "10")))
+                (:tr (:td "upload new image")
+                     (:td ((:input :type "file" :name "image-file"))
+                          :br
+                          (submit-button "upload" "upload")))
+                (:tr ((:td :colspan "2" :height "10")))
+                (:tr (:td "title")
+                     (:td (text-field "title"
+                                      :value (slot-string medium 'title language))))
+                (:tr (:td "subtitle")
+                     (:td (text-field "subtitle"
+                                      :value (slot-string medium 'subtitle language))))
+                (:tr (:td "description")
+                     (:td (textarea-field "description"
+                                          :value (slot-string medium 'description language)
+                                          :rows 5
+                                          :cols 40)))
+                (:tr (:td (submit-button "save" "save") (submit-button "delete" "delete" :confirm "Really delete?")))))))))
+
+(defgeneric medium-pretty-type-string (medium)
+  (:method ((medium poi-image)) "POI Image")
+  (:method ((medium poi-panorama)) "POI Panorama")
+  (:method ((medium poi-airal)) "POI Airal")
+  (:method ((medium poi-movie)) "POI Movie"))
+
+(defgeneric medium-handler-preview (medium &key small)
+  (:method ((medium t) &key small)
+    (declare (ignore small))
+    (html ((:tr :colspan "2") "No preview")))
+  (:method ((medium poi-image) &key small)
+    (html
+     (:tr (:td "thumbnail")
+          (:td ((:img :src (format nil "/image/~A/thumbnail,,55,55" (store-object-id medium))))))
+     (unless small
+       (html
+        (:tr (:td "full image")
+             (:td ((:img :src (format nil "/image/~A" (store-object-id medium))))))))))
+  (:method ((medium poi-panorama) &key small)
+    (declare (ignore small))
+    (html
+     (:tr (:td "thumbnail")
+          (:td ((:img :src (format nil "/image/~A/thumbnail,,500,100" (store-object-id medium)))))))))
+
+(defmethod handle-object-form ((handler edit-poi-medium-handler) (action (eql :save)) (medium poi-medium))
+  (with-query-params (title subtitle description language)
+    (unless language (setq language (request-language)))
+    (update-textual-attributes medium language
+                               :title title
+                               :subtitle subtitle
+                               :description description)
+    (let ((type-string (medium-pretty-type-string medium)))
+      (with-bos-cms-page (:title (format nil "~A has been updated" type-string))
+        (:h2 (format nil "The ~A information has been updated" type-string))
+        "You may " (cmslink (format nil "~A?language=~A" (edit-object-url medium) language)
+                     (:princ-safe (format nil "continue editing the ~A" type-string)))))))
+
+(defmethod handle-object-form ((handler edit-poi-medium-handler) (action (eql :delete)) (medium poi-medium))
+  (let ((poi (poi-medium-poi medium))
+        (type-string (medium-pretty-type-string medium)))
+    (delete-object medium)
+    (with-bos-cms-page (:title (format nil "~A has been deleted" type-string))
+      (:h2 (format nil "The ~A has been deleted" type-string))
+      "You may " (cmslink (edit-object-url poi) "continue editing the POI"))))
+
+(defmethod handle-object-form ((handler edit-poi-medium-handler) (action (eql :upload)) medium)
+  (with-query-params (poi)
+    (setq poi (find-store-object (parse-integer poi) :class 'poi))
+    (let ((upload (request-uploaded-file "image-file")))
+      (unless upload
+        (error "no file uploaded in upload handler"))
+      (bknr.web:with-image-from-upload* (upload)
+        (unless (and (eql (cl-gd:image-width) *poi-image-width*)
+                     (eql (cl-gd:image-height) *poi-image-height*))
+          (with-bos-cms-page (:title "Invalid image size")
+            (:h2 "Invalid image size")
+            (:p "The image needs to be "
+                (:princ-safe *poi-image-width*) " pixels wide and "
+                (:princ-safe *poi-image-height*) " pixels high.  Your uploaded image is "
+                (:princ-safe (cl-gd:image-width)) " pixels wide and "
+                (:princ-safe (cl-gd:image-height)) " pixels high.  Please use an image editor "
+                "to resize the image and upload it again.")
+            (:p (cmslink (edit-object-url poi) "Back to POI")))
+          (return-from handle-object-form t)))
+      (let ((new-medium (import-image upload
+                                      :class-name (type-of medium)
+                                      :initargs `(:poi ,poi))))
+        (when medium        
+          (delete-object medium))
+        (redirect (format nil "/edit-poi-medium/~D?poi=~D"
+                          (store-object-id new-medium)
+                          (store-object-id poi)))))))
 
 ;;; edit-poi-image-handler
 (defclass edit-poi-image-handler (editor-only-handler edit-object-handler)
