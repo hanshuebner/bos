@@ -56,15 +56,15 @@
       ;; change image order
       (setq shift (find-store-object (parse-integer shift)))
       (setq shift-by (parse-integer shift-by))
-      (let* ((new-images (poi-images poi))
+      (let* ((new-images (poi-sat-images poi))
              (old-position (position shift new-images))
              (tmp (nth old-position new-images)))
         (assert (and (< -1 old-position (length new-images))
                      (< -1 (+ shift-by old-position) (length new-images))))
         (setf (nth old-position new-images) (nth (+ shift-by old-position) new-images))
         (setf (nth (+ shift-by old-position) new-images) tmp)
-        (with-transaction ("setf poi-images")
-          (setf (poi-images poi) new-images))))
+        (with-transaction ("setf poi-sat-images")
+          (setf (poi-sat-images poi) new-images))))
     (with-bos-cms-page (:title "Edit POI")
       (content-language-chooser)
       (unless (poi-complete poi language)
@@ -107,24 +107,24 @@
              (:td
               ((:table)
                (:tr
-                (loop for image in (poi-images poi)
+                (loop for image in (poi-sat-images poi)
                    for index from 1 by 1
                    do (html (:td ((:a :href (format nil "/edit-poi-image/~a?poi=~A" (store-object-id image) (store-object-id poi)))
                                   ((:img :border "0" :src (format nil "/image/~a/thumbnail,,55,55" (store-object-id image)))))
-                             :br
-                             (if (eql index 1)
-                                 (html ((:img :src "/images/trans.gif" :width "16")))
-                                 (html ((:a :href (format nil "/edit-poi/~A?shift=~A&shift-by=-1"
-                                                          (store-object-id poi)
-                                                          (store-object-id image)))
-                                        ((:img :border "0" :src "/images/pfeil-l.gif")))))
-                             ((:img :src "/images/trans.gif" :width "23"))
-                             (unless (eql index (length (poi-images poi)))
-                               (html ((:a :href (format nil "/edit-poi/~A?shift=~A&shift-by=1"
-                                                        (store-object-id poi)
-                                                        (store-object-id image)))
-                                      ((:img :border "0" :src "/images/pfeil-r.gif"))))))))))
-              (unless (eql 6 (length (poi-images poi)))
+                                 :br
+                                 (if (eql index 1)
+                                     (html ((:img :src "/images/trans.gif" :width "16")))
+                                     (html ((:a :href (format nil "/edit-poi/~A?shift=~A&shift-by=-1"
+                                                              (store-object-id poi)
+                                                              (store-object-id image)))
+                                            ((:img :border "0" :src "/images/pfeil-l.gif")))))
+                                 ((:img :src "/images/trans.gif" :width "23"))
+                                 (unless (eql index (length (poi-sat-images poi)))
+                                   (html ((:a :href (format nil "/edit-poi/~A?shift=~A&shift-by=1"
+                                                            (store-object-id poi)
+                                                            (store-object-id image)))
+                                          ((:img :border "0" :src "/images/pfeil-r.gif"))))))))))
+              (unless (eql 6 (length (poi-sat-images poi)))
                 (html
                  :br
                  (cmslink (format nil "edit-poi-image/?poi=~A" (store-object-id poi)) "[new]")))))
@@ -342,8 +342,8 @@
                      (:td ((:img :src (format nil "/image/~A" (store-object-id poi-image))))))
                 (:tr (:td "upload new image")
                      (:td ((:input :type "file" :name "image-file"))
-                      :br
-                      (submit-button "upload" "upload")))
+                          :br
+                          (submit-button "upload" "upload")))
                 (:tr (:td "title")
                      (:td (text-field "title"
                                       :value (slot-string poi-image 'title language))))
@@ -416,9 +416,9 @@
     (declare (ignore poi-name))
     (let ((image-index (1- (parse-integer image-index-string))))
       (if (and (not (minusp image-index))
-               (< image-index (length (poi-images poi))))
+               (< image-index (length (poi-sat-images poi))))
           (redirect (format nil "/image/~D~@[~{/~a~}~]"
-                            (store-object-id (nth image-index (poi-images poi)))
+                            (store-object-id (nth image-index (poi-sat-images poi)))
                             imageproc-arguments))
           (error "image index ~a out of bounds for poi ~a" image-index poi)))))
 
@@ -436,8 +436,8 @@
      ((:param :name "movie" :value (poi-movie-url poi-movie)))
      ((:param :name "allowFullScreen" :value "true"))
      ((:embed :src (poi-movie-url poi-movie) :type "application/x-shockwave-flash"
-                                             :allowFullScreen "true"
-                                             :width "425" :height "344")))))
+              :allowFullScreen "true"
+              :width "425" :height "344")))))
 
 (defun write-poi-xml (poi language)
   "Writes the poi xml format for one specific language.  This is used
@@ -467,7 +467,7 @@
                        (subtitle poi-subtitle)
                        (description poi-description)
                        (airals poi-airals)
-                       (images poi-images)
+                       (images poi-sat-images)
                        (panoramas poi-panoramas)
                        (movies poi-movies)) poi
         (with-element "poi"
@@ -564,7 +564,7 @@
                          (with-element "br")))
                       (with-element "table"
                         (with-element "tbody"
-                          (let ((images (poi-images poi)))
+                          (let ((images (poi-sat-images poi)))
                             (images-2trs (subseq images 0 (min 3 (length images))))
                             (when (> (length images) 3)
                               (images-2trs (subseq images 3 (min 6 (length images))))))))))

@@ -229,6 +229,8 @@
            #:poi-center-y
            #:poi-center-lon-lat
            #:poi-images
+           #:poi-sat-images
+           #:poi-sat-images-exchange-neighbours
            #:poi-airals
            #:poi-panoramas
            #:poi-movies

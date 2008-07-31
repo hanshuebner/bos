@@ -117,15 +117,45 @@
 (defun poi-center-lon-lat (poi)
   (geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ (poi-center-x poi)) (- +nw-utm-y+ (poi-center-y poi)) +utm-zone+ t))
 
+;;; POI media are stored in one list - for convenience we provide
+;;; accessors by type. POI-IMAGES e.g. returns a list of all
+;;; POI-IMAGES in the same order as they appear in the media list. The
+;;; second value is a list of corresponding positions in that list.
 (macrolet ((define-poi-medium-reader (name)
              (let ((type (find-symbol (subseq (symbol-name name) 0 (1- (length (symbol-name name)))))))
                (assert type)
                `(defun ,name (poi)
-                  (remove-if-not (lambda (medium) (typep medium ',type)) (poi-media poi))))))
+                  ;; this surely could be optimized
+                  (let ((media-of-type (remove-if-not (lambda (medium) (typep medium ',type)) (poi-media poi))))
+                    (values media-of-type
+                            (mapcar (lambda (medium) (position medium (poi-media poi))) media-of-type)))))))
   (define-poi-medium-reader poi-images)
   (define-poi-medium-reader poi-airals)
   (define-poi-medium-reader poi-panoramas)
   (define-poi-medium-reader poi-movies))
+
+(defun poi-sat-images (poi)
+  "We use the 6 last (oldest) images of POI as images for the
+  satellite application."
+  (multiple-value-bind (images positions)
+      (poi-images poi)
+    (let* ((length (length images))
+           (start (max 0 (- length 6))))
+      (values (subseq images start length)
+              (subseq positions start length)))))
+
+;;; Provides for the shifting of images in the edit-poi handler.
+;;; Exchanges (nth index (poi-sat-images poi)) with
+;;; (nth (1+ index) (poi-sat-images poi)).
+(deftransaction poi-sat-images-exchange-neighbours (poi index)  
+  (check-type index (integer 0 4))
+  (multiple-value-bind (images positions)
+      (poi-images poi)
+    (declare (ignore images))
+    (let ((media-index-a (nth index positions))
+          (media-index-b (nth (1+ index) positions)))
+      (rotatef (nth media-index-a (poi-media poi))
+               (nth media-index-b (poi-media poi))))))
 
 (defun make-poi-javascript (language)
   "Erzeugt das POI-Javascript für das Infosystem"
@@ -155,8 +185,8 @@ var poi = { symbol: ~S,
               (escape-nl (slot-string poi 'description language))
               (poi-center-x poi)
               (poi-center-y poi)
-              (length (poi-images poi)))
-      (format t "poi.thumbnail = ~D;~%" (length (poi-images poi)))
+              (length (poi-sat-images poi)))
+      (format t "poi.thumbnail = ~D;~%" (length (poi-sat-images poi)))
       (when (poi-airals poi)
 
         (format t "poi.luftbild = ~D;~%" (store-object-id (first (poi-airals poi)))))
@@ -168,7 +198,7 @@ var poi = { symbol: ~S,
          for javascript-name in '("imageueberschrift" "imageuntertitel" "imagetext")
          for slot-values = (mapcar (lambda (image)
                                      (escape-nl (slot-string image slot-name language)))
-                                   (poi-images poi))
+                                   (poi-sat-images poi))
          when slot-values
          do (format t "poi.~A = [ ~{~S~^, ~} ];~%" javascript-name slot-values))
       (format t "pois.push(poi);~%"))
