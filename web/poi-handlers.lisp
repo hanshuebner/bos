@@ -2,6 +2,7 @@
 
 (enable-interpol-syntax)
 
+;;; make-poi-handler
 (defclass make-poi-handler (page-handler)
   ())
 
@@ -19,6 +20,7 @@
       (t
        (redirect (edit-object-url (make-poi name)))))))
 
+;;; edit-poi-handler
 (defclass edit-poi-handler (editor-only-handler edit-object-handler)
   ()
   (:default-initargs :object-class 'poi :query-function #'find-poi))
@@ -283,8 +285,7 @@
     (html (:h2 "POI has been deleted")
           "The POI has been deleted")))
 
-;; edit-poi-image
-
+;;; edit-poi-image-handler
 (defclass edit-poi-image-handler (editor-only-handler edit-object-handler)
   ()
   (:default-initargs :object-class 'poi-image))
@@ -375,6 +376,7 @@
       (:h2 "The POI image has been deleted")
       "You may " (cmslink (edit-object-url poi) "continue editing the POI"))))
 
+;;; poi-javascript-handler
 (defclass poi-javascript-handler (page-handler)
   ())
 
@@ -403,6 +405,7 @@
           (:princ "parent.poi_fertig(pois, anzahlSponsoren, anzahlVerkauft);")
           (:princ (format nil "parent.last_sponsors([~{~A~^,~%~}]);" (mapcar #'contract-js last-paid-contracts)))))))))
 
+;;; poi-image-handler
 (defclass poi-image-handler (object-handler)
   ()
   (:default-initargs :object-class 'poi :query-function #'find-poi))
@@ -422,6 +425,7 @@
                             imageproc-arguments))
           (error "image index ~a out of bounds for poi ~a" image-index poi)))))
 
+;;; poi-movie-handler
 (defclass poi-movie-handler (admin-only-handler object-handler)
   ()
   (:default-initargs :object-class 'poi-movie))
@@ -439,6 +443,7 @@
               :allowFullScreen "true"
               :width "425" :height "344")))))
 
+;;; poi-xml-handler
 (defun write-poi-xml (poi language)
   "Writes the poi xml format for one specific language.  This is used
    to generate the POI microsite using XSLT (client side)."
@@ -492,6 +497,21 @@
             (with-media ("movie" "Video")
               (with-element "url" (text (poi-movie-url movie))))))))))
 
+(defclass poi-xml-handler (object-handler)
+  ()
+  (:default-initargs :object-class 'poi :query-function #'find-poi))
+
+
+(defmethod handle-object ((handler poi-xml-handler) poi)
+  (let ((timestamp (store-object-last-change poi 1)))
+    (hunchentoot:handle-if-modified-since timestamp)
+    (setf (hunchentoot:header-out :last-modified)
+          (hunchentoot:rfc-1123-date timestamp))
+    (with-query-params ((lang "en"))
+      (with-xml-response (:xsl-stylesheet-name "/static/poi.xsl")
+        (write-poi-xml poi lang)))))
+
+;;; poi-kml-handler
 (defun poi-description-google-earth (poi language &key (image-width 120))
   (labels ((website-path (path &rest args)
              (format nil "http://~a~a" (website-host)
@@ -590,8 +610,6 @@
                         (text " | copyright")))))))))
       (error (c) (error "while generating poi-description-google-earth for ~s:~%~a" poi c)))))
 
-
-
 (defun write-poi-kml (poi language)
   (with-element "Placemark"
     (with-element "name" (text (or (slot-string poi 'title language nil)
@@ -602,20 +620,6 @@
     (with-element "Point"
       (with-element "coordinates"
         (text (format nil "~{~,20F,~}0" (poi-center-lon-lat poi)))))))
-
-(defclass poi-xml-handler (object-handler)
-  ()
-  (:default-initargs :object-class 'poi :query-function #'find-poi))
-
-
-(defmethod handle-object ((handler poi-xml-handler) poi)
-  (let ((timestamp (store-object-last-change poi 1)))
-    (hunchentoot:handle-if-modified-since timestamp)
-    (setf (hunchentoot:header-out :last-modified)
-          (hunchentoot:rfc-1123-date timestamp))
-    (with-query-params ((lang "en"))
-      (with-xml-response (:xsl-stylesheet-name "/static/poi.xsl")
-        (write-poi-xml poi lang)))))
 
 (defclass poi-kml-handler (object-handler)
   ()
@@ -629,6 +633,7 @@
         (with-element "kml"
           (write-poi-kml poi lang))))))
 
+;;; poi-kml-all-handler
 (defclass poi-kml-all-handler (page-handler)
   ())
 
