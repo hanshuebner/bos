@@ -70,7 +70,8 @@
        ((:table :border "1")
         (:tr (:td "name")
              (:td (:princ-safe (poi-name poi))
-                  (cmslink (format nil "/poi-xml/~D?lang=~A" (store-object-id poi) language) "view")))
+                  " "
+                  (cmslink (format nil "/poi-xml/~D?lang=~A" (store-object-id poi) language) "[view]")))
         (:tr (:td "published")
              (:td (checkbox-field "published" "published" :checked (poi-published poi))))
         (:tr (:td "title")
@@ -90,11 +91,15 @@
                      (html (:princ-safe (format nil "~D/~D " (first (poi-area poi)) (second (poi-area poi)))))
                      (cmslink (format nil "map-browser/~A/~A?chosen-url=~A"
                                       (first (poi-area poi)) (second (poi-area poi))
-                                      (encode-urlencoded (format nil "~A?action=save&" (hunchentoot:request-uri*))))
+                                      (encode-urlencoded (format nil "~A?action=save&~:[~;published=on~]"
+                                                                 (hunchentoot:request-uri*)
+                                                                 (poi-published poi))))
                        "[relocate]"))
                     (t
                      (cmslink (format nil "map-browser/?chosen-url=~A"
-                                      (encode-urlencoded (format nil "~A?action=save&" (hunchentoot:request-uri*))))
+                                      (encode-urlencoded (format nil "~A?action=save&~:[~;published=on~]"
+                                                                 (hunchentoot:request-uri*)
+                                                                 (poi-published poi))))
                        "[choose]")))))
         (:tr (:td "icon")
              (:td (icon-chooser "icon" (poi-icon poi))))
@@ -104,8 +109,10 @@
                (:tr
                 (loop for image in (poi-sat-images poi)
                    for index upfrom 0
-                   do (html (:td ((:a :href (format nil "/edit-poi-medium/~a?poi=~A" (store-object-id image) (store-object-id poi)))
-                                  ((:img :border "0" :src (format nil "/image/~a/thumbnail,,55,55" (store-object-id image)))))
+                   do (html (:td ((:a :href (format nil "/edit-poi-medium/~a?poi=~A"
+                                                    (store-object-id image) (store-object-id poi)))
+                                  ((:img :border "0" :src (format nil "/image/~a/thumbnail,,55,55"
+                                                                  (store-object-id image)))))
                                  :br
                                  (if (zerop index)
                                      (html ((:img :src "/images/trans.gif" :width "16")))
@@ -124,41 +131,46 @@
                  :br
                  (cmslink (format nil "edit-poi-medium/?poi=~A" (store-object-id poi)) "[new]")))))        
         (:tr (:td (submit-button "save" "save")
-                  (submit-button "delete" "delete" :confirm "Really delete the POI?"))))
-       ;; ;;;;;;;;;;;;;;;;
-       (:h2 "Upload new medium")
-       ((:form :method "post" :action "/edit-poi-medium" :enctype "multipart/form-data")
-        (:table (:tr (:td "Type")
-                     (:td (select-box "medium-type" (mapcar #'(lambda (class-name) (string-downcase (symbol-name class-name)))
-                                                            (class-subclasses (find-class 'poi-medium)))
-                                      :default "poi-image")))
-                (:tr
-                 (:td "File")
-                 (:td ((:input :type "file" :name "image-file")))
-                 (:tr ((:td :colspan "2") (submit-button "upload" "upload"))))))
-       (:h2 "Attached POI media")
-       ((:table :border "1")
-        (dolist (medium (poi-media poi))
-          (html (:tr (:td (:princ-safe (medium-pretty-type-string medium)))
-                     (:td (:table (medium-handler-preview medium :small t)
-                                  (:tr (:td)
-                                       (:td (cmslink (format nil "/edit-poi-medium/~D?poi=~D"
-                                                             (store-object-id medium) (store-object-id poi)) "edit")))))))))))))
+                  (submit-button "delete" "delete" :confirm "Really delete the POI?")))))
+      (:h2 "Upload new medium")
+      ((:form :method "post" :action "/edit-poi-medium" :enctype "multipart/form-data")
+       (:table
+        ((:input :type "hidden" :name "poi" :value (store-object-id poi)))
+        (:tr (:td "Type")
+             (:td (select-box "new-medium-type" (mapcar #'(lambda (class-name) (string-downcase class-name))
+                                                    (class-subclasses (find-class 'poi-medium)))
+                              :default "poi-image")))
+        (:tr
+         (:td "File")
+         (:td ((:input :type "file" :name "image-file")))
+         (:tr ((:td :colspan "2") (submit-button "upload" "upload"))))))
+      (:h2 "Attached POI media")
+      ((:table :border "1")
+       (dolist (medium (poi-media poi))
+         (html (:tr (:td (:princ-safe (medium-pretty-type-string medium)))
+                    (:td (:table (medium-handler-preview medium :small t)
+                                 (:tr (:td)
+                                      (:td (cmslink (format nil "/edit-poi-medium/~D?poi=~D"
+                                                            (store-object-id medium) (store-object-id poi))
+                                             "edit"))))))))))))
 
 (defmethod handle-object-form ((handler edit-poi-handler)
                                (action (eql :save)) (poi poi))
-  (with-query-params (published title subtitle description language x y icon movie)
+  (with-query-params ((published nil boolean)
+                      title subtitle description language
+                      (x nil integer)
+                      (y nil integer)
+                      icon)
+    (prin1 (list :published published :title title :subtitle subtitle :x x :y y :icon icon))
     (unless language (setq language (request-language)))
-    (let ((args (list :title title
-                      :published published
-                      :subtitle subtitle
-                      :description description
-                      :icon icon)))
-      (when (and x y)
-        (setq args (append args (list :area (list (parse-integer x) (parse-integer y))))))
-      (when movie
-        (setq args (append args (list :movies (list movie)))))
-      (apply #'update-poi poi language args))
+    (update-textual-attributes  poi language
+                                :title title
+                                :subtitle subtitle
+                                :description description)
+    (update-poi poi
+                :published published
+                :area (when (and x y) (list x y))
+                :icon icon)
     (with-bos-cms-page (:title "POI has been updated")
       (html (:h2 "Your changes have been saved")
             "You may " (cmslink (edit-object-url poi) "continue editing the POI") "."))))
@@ -333,26 +345,24 @@
       "You may " (cmslink (edit-object-url poi) "continue editing the POI"))))
 
 (defmethod handle-object-form ((handler edit-poi-medium-handler) (action (eql :upload)) medium)
-  (with-query-params (poi)
-    (setq poi (find-store-object (parse-integer poi) :class 'poi))
+  (with-query-params ((poi nil integer)
+                      new-medium-type)
+    (setq poi (find-store-object poi :class 'poi))
     (let ((upload (request-uploaded-file "image-file")))
       (unless upload
         (error "no file uploaded in upload handler"))
       (bknr.web:with-image-from-upload* (upload)
         (unless (and (eql (cl-gd:image-width) *poi-image-width*)
-                     (eql (cl-gd:image-height) *poi-image-height*))
-          (with-bos-cms-page (:title "Invalid image size")
-            (:h2 "Invalid image size")
-            (:p "The image needs to be "
-                (:princ-safe *poi-image-width*) " pixels wide and "
-                (:princ-safe *poi-image-height*) " pixels high.  Your uploaded image is "
-                (:princ-safe (cl-gd:image-width)) " pixels wide and "
-                (:princ-safe (cl-gd:image-height)) " pixels high.  Please use an image editor "
-                "to resize the image and upload it again.")
-            (:p (cmslink (edit-object-url poi) "Back to POI")))
-          (return-from handle-object-form t)))
+                     (eql (cl-gd:image-height) *poi-image-height*))          
+          (error "Invalid image size. The image needs to be ~D pixels wide and ~D pixels high. Your uploaded ~
+                  image is ~D pixels wide and ~D pixels high. Please use an image editor to resize the image ~
+                  and upload it again."
+                 *poi-image-width* *poi-image-height*
+                 (cl-gd:image-width) (cl-gd:image-height))))
       (let ((new-medium (import-image upload
-                                      :class-name (type-of medium)
+                                      :class-name (if medium
+                                                      (type-of medium)
+                                                      (intern (string-upcase new-medium-type)))
                                       :initargs `(:poi ,poi))))
         (when medium        
           (delete-object medium))

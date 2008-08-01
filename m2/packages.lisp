@@ -224,6 +224,7 @@
            #:poi-icon
            #:poi-media
            #:make-poi
+           #:update-poi
            #:poi-complete
            #:poi-center-x
            #:poi-center-y

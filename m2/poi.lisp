@@ -102,6 +102,16 @@
 (defmethod destroy-object :before ((poi poi))
   (mapc #'delete-object (poi-media poi)))
 
+(deftransaction update-poi (poi &key published icon area)
+  (check-type published boolean)
+  (check-type area list)
+  (setf (poi-published poi) published)
+  (when icon
+    (setf (poi-icon poi) icon))
+  (when area
+    (setf (poi-area poi) area))
+  poi)
+
 (defmethod poi-complete ((poi poi) language)
   (and (every #'(lambda (slot-name) (slot-string poi slot-name language nil)) '(title subtitle description))
        (poi-area poi)
