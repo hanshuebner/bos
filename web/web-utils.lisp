@@ -37,18 +37,19 @@
 (defun language-name (language-short-name)
   (cadr (assoc language-short-name (website-languages) :test #'equal)))
 
-(defun content-language-chooser ()  
+(defun content-language-chooser ()
   (html
    ((:p :class "languages")
     "Content languages: "
     (loop for (language-symbol language-name) in (website-languages)
-       do (labels ((show-language-link ()                     
+       do (labels ((show-language-link ()
                      (html (cmslink (with-output-to-string (out)
                                       (write-string (hunchentoot:script-name*) out)
                                       ;; write language param and remaining get params
                                       (write-string "?language=" out)
                                       (write-string language-symbol out)
-                                      (dolist (get-param (remove "language" (hunchentoot:get-parameters*) :key #'first :test #'equal))
+                                      (dolist (get-param (remove "language" (hunchentoot:get-parameters*)
+                                                                 :key #'first :test #'equal))
                                         (destructuring-bind (key . value) get-param
                                           (write-string "&" out)
                                           (write-string key out)
