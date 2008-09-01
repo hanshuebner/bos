@@ -207,6 +207,7 @@
            ;; pois
            #:title #:subtitle #:description ; for slot-string access
            #:update-textual-attributes
+           #:very-shallow-copy-textual-attributes
            #:poi-medium
            #:poi-medium-poi
            #:make-poi-medium

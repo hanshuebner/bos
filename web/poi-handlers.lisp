@@ -130,8 +130,7 @@
                                       ((:img :border "0" :src "/images/pfeil-r.gif"))))))))))
               (unless (= 6 (length (poi-sat-images poi)))
                 (html
-                 :br
-                 (cmslink (format nil "edit-poi-medium/?poi=~A" (store-object-id poi)) "[new]")))))
+                 (:p "You may add to these by uploading a new medium of type 'poi-image' below.")))))
         (:tr (:td (submit-button "save" "save")
                   (submit-button "delete" "delete" :confirm "Really delete the POI?")))))
       (:h2 "Upload new medium")
@@ -274,20 +273,22 @@
 
 (defmethod handle-object-form ((handler edit-poi-medium-handler) action (medium poi-medium))
   (with-query-params (language poi)
+    (assert poi nil "POI id should have been given as a GET param")
     (unless language (setq language (request-language)))
     (with-bos-cms-page (:title (format nil "Edit ~A" (medium-pretty-type-string medium)))
       (html
        (cmslink (edit-object-url (poi-medium-poi medium)) "Back to POI")
        (content-language-chooser)
-       ((:form :method "post" :enctype "multipart/form-data")
-        ((:input :type "hidden" :name "poi" :value poi))
-        (:table (medium-handler-preview medium)
-                (:tr ((:td :colspan "2" :height "10")))
+       (:table (medium-handler-preview medium)
+               (:tr ((:td :colspan "2" :height "10")))
+               ((:form :method "post" :enctype "multipart/form-data")
+                ((:input :type "hidden" :name "poi" :value poi))
                 (:tr (:td "upload new image")
                      (:td ((:input :type "file" :name "image-file"))
                       :br
-                      (submit-button "upload" "upload")))
-                (:tr ((:td :colspan "2" :height "10")))
+                      (submit-button "upload" "upload"))))
+               (:tr ((:td :colspan "2" :height "10")))
+               ((:form :method "post")
                 (:tr (:td "title")
                      (:td (text-field "title"
                                       :value (slot-string medium 'title language))))
@@ -327,7 +328,7 @@
           (:td ((:img :src (format nil "/image/~A/thumbnail,,500,100" (store-object-id medium)))))))))
 
 (defmethod handle-object-form ((handler edit-poi-medium-handler) (action (eql :save)) (medium poi-medium))
-  (with-query-params (title subtitle description language)
+  (with-query-params (title subtitle description language poi)
     (unless language (setq language (request-language)))
     (update-textual-attributes medium language
                                :title title
@@ -336,7 +337,8 @@
     (let ((type-string (medium-pretty-type-string medium)))
       (with-bos-cms-page (:title (format nil "~A has been updated" type-string))
         (:h2 (format nil "The ~A information has been updated" type-string))
-        "You may " (cmslink (format nil "~A?language=~A" (edit-object-url medium) language)
+        "You may " (cmslink (format nil "~A?language=~A&poi=~A"
+                                    (edit-object-url medium) language poi)
                      (:princ-safe (format nil "continue editing the ~A" type-string)))))))
 
 (defmethod handle-object-form ((handler edit-poi-medium-handler) (action (eql :delete)) (medium poi-medium))
@@ -368,6 +370,7 @@
                                                       (intern (string-upcase new-medium-type)))
                                       :initargs `(:poi ,poi))))
         (when medium
+          (very-shallow-copy-textual-attributes medium new-medium)
           (delete-object medium))
         (redirect (format nil "/edit-poi-medium/~D?poi=~D"
                           (store-object-id new-medium)

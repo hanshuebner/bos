@@ -32,6 +32,15 @@
     (setf (slot-string obj 'description language) description))
   obj)
 
+(deftransaction very-shallow-copy-textual-attributes (from to)
+  "Useful for making the TEXTUAL-ATTRIBUTES of FROM available to TO,
+before FROM is deleted. Please note that copying is so shallow that
+FROM and TO must not both continue to exist."
+  (setf (slot-value to 'title) (slot-value from 'title)
+        (slot-value to 'subtitle) (slot-value from 'subtitle)
+        (slot-value to 'description) (slot-value from 'description))
+  to)
+
 ;;; poi-medium
 (defpersistent-class poi-medium (textual-attributes-mixin)
   ((poi :reader poi-medium-poi :initarg :poi)))
@@ -157,7 +166,7 @@
 ;;; Provides for the shifting of images in the edit-poi handler.
 ;;; Exchanges (nth index (poi-sat-images poi)) with
 ;;; (nth (1+ index) (poi-sat-images poi)).
-(deftransaction poi-sat-images-exchange-neighbours (poi index)  
+(deftransaction poi-sat-images-exchange-neighbours (poi index)
   (check-type index (mod 6))
   (multiple-value-bind (images positions)
       (poi-images poi)
@@ -248,4 +257,3 @@ var poi = { symbol: ~S,
                  (warn "~s has a url of ~s" movie (poi-movie-url movie))))))
     (mapc #'poi-sanity-check (class-instances 'poi))
     (values)))
-
