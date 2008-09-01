@@ -1,4 +1,4 @@
-                                        ; please don't read this code, it is not pretty
+;; please don't read this code, it is not pretty
 
 (in-package :bos.web)
 
@@ -38,9 +38,13 @@
         (apply #'ensure-valid-coordinates handler-arguments)))))
 
 (defmethod handle ((handler map-browser-handler))
-  (with-query-params (chosen-url)
-    (when chosen-url
-      (setf (hunchentoot:session-value :chosen-url) chosen-url)))
+  (flet ((append-&-if-needed (string)
+           (if (char= #\& (char string (1- (length string))))
+               string
+               (concatenate 'string string "&"))))
+    (with-query-params (chosen-url)
+      (when chosen-url
+        (setf (hunchentoot:session-value :chosen-url) (append-&-if-needed chosen-url)))))
   (with-query-params (view-x view-y)
     (destructuring-bind (&optional click-x click-y) (decode-ismap-query-string)
       (destructuring-bind (&optional point-x point-y) (decode-coords-in-handler-path handler)
