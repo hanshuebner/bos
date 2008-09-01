@@ -86,21 +86,22 @@
                                   :rows 6
                                   :cols 60)))
         (:tr (:td "location")
-             (:td (cond
-                    ((poi-area poi)
-                     (html (:princ-safe (format nil "~D/~D " (first (poi-area poi)) (second (poi-area poi)))))
-                     (cmslink (format nil "map-browser/~A/~A?chosen-url=~A"
-                                      (first (poi-area poi)) (second (poi-area poi))
-                                      (encode-urlencoded (format nil "~A?action=save&~:[~;published=on~]"
-                                                                 (hunchentoot:request-uri*)
-                                                                 (poi-published poi))))
-                       "[relocate]"))
-                    (t
-                     (cmslink (format nil "map-browser/?chosen-url=~A"
-                                      (encode-urlencoded (format nil "~A?action=save&~:[~;published=on~]"
-                                                                 (hunchentoot:request-uri*)
-                                                                 (poi-published poi))))
-                       "[choose]")))))
+             (:td (flet ((format-chosen-url ()
+                           (encode-urlencoded
+                            (format nil "~A?action=save&language=~A&~:[~;published=on~]"
+                                    (hunchentoot:script-name*)
+                                    language
+                                    (poi-published poi)))))
+                    (cond
+                      ((poi-area poi)
+                       (html (:princ-safe (format nil "~D/~D " (first (poi-area poi)) (second (poi-area poi)))))
+                       (cmslink (format nil "map-browser/~A/~A?chosen-url=~A"
+                                        (first (poi-area poi)) (second (poi-area poi)) (format-chosen-url))
+                         "[relocate]"))
+                      (t
+                       (cmslink (format nil "map-browser/?chosen-url=~A"
+                                        (format-chosen-url))
+                         "[choose]"))))))
         (:tr (:td "icon")
              (:td (icon-chooser "icon" (poi-icon poi))))
         (:tr (:td "sat images")
@@ -118,7 +119,8 @@
                                  (html ((:img :src "/images/trans.gif" :width "16")))
                                  (html ((:a :href (format nil "/edit-poi/~A?shift=~D&shift-id=~D"
                                                           (store-object-id poi) (1- index)
-                                                          (store-object-id (nth (1- index) (poi-sat-images poi)))))
+                                                          (store-object-id (nth (1- index)
+                                                                                (poi-sat-images poi)))))
                                         ((:img :border "0" :src "/images/pfeil-l.gif")))))
                              ((:img :src "/images/trans.gif" :width "23"))
                              (unless (eql index (length (poi-sat-images poi)))
@@ -161,7 +163,6 @@
                       (x nil integer)
                       (y nil integer)
                       icon)
-    (prin1 (list :published published :title title :subtitle subtitle :x x :y y :icon icon))
     (unless language (setq language (request-language)))
     (update-textual-attributes  poi language
                                 :title title
@@ -298,7 +299,8 @@
                                           :value (slot-string medium 'description language)
                                           :rows 5
                                           :cols 40)))
-                (:tr (:td (submit-button "save" "save") (submit-button "delete" "delete" :confirm "Really delete?")))))))))
+                (:tr (:td (submit-button "save" "save")
+                          (submit-button "delete" "delete" :confirm "Really delete?")))))))))
 
 (defgeneric medium-pretty-type-string (medium)
   (:method ((medium poi-image)) "POI Image")
@@ -442,7 +444,8 @@
                                           :value (slot-string poi-image 'description language)
                                           :rows 5
                                           :cols 40)))
-                (:tr (:td (submit-button "save" "save") (submit-button "delete" "delete" :confirm "Really delete the image?")))))))))
+                (:tr (:td (submit-button "save" "save")
+                          (submit-button "delete" "delete" :confirm "Really delete the image?")))))))))
 
 (defmethod handle-object-form ((handler edit-poi-image-handler) (action (eql :save)) poi-image)
   (with-query-params (title subtitle description language)
@@ -489,7 +492,8 @@
          ((:script :language "JavaScript")
           (:princ (make-poi-javascript (request-language)))
           (:princ "parent.poi_fertig(pois, anzahlSponsoren, anzahlVerkauft);")
-          (:princ (format nil "parent.last_sponsors([~{~A~^,~%~}]);" (mapcar #'contract-js last-paid-contracts)))))))))
+          (:princ (format nil "parent.last_sponsors([~{~A~^,~%~}]);"
+                          (mapcar #'contract-js last-paid-contracts)))))))))
 
 ;;; poi-image-handler
 (defclass poi-image-handler (object-handler)
@@ -641,7 +645,8 @@
             (with-element "head")
             (with-element "body"
               (with-element "table"
-                (attribute "cellspacing" "0") (attribute "width" "500") (attribute "cellpadding" "5") (attribute "border" "0")
+                (attribute "cellspacing" "0") (attribute "width" "500")
+                (attribute "cellpadding" "5") (attribute "border" "0")
                 (attribute "style" "background-color: rgb(186, 186, 186);")
                 (with-element "tbody"
                   (with-element "tr"
