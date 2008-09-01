@@ -156,8 +156,7 @@
 
   (make-instance 'bos-website
                  :name "create-rainforest.org CMS"
-                 :handler-definitions `(("/edit-poi-image" edit-poi-image-handler)
-                                        ("/edit-poi-medium" edit-poi-medium-handler)
+                 :handler-definitions `(("/edit-poi-medium" edit-poi-medium-handler)
                                         ("/edit-poi" edit-poi-handler)
                                         ("/edit-sponsor" edit-sponsor-handler)
                                         ("/kml-upload" kml-upload-handler)
@@ -175,8 +174,6 @@
                                         ("/complete-transfer" complete-transfer-handler)
                                         ("/edit-news" edit-news-handler)
                                         ("/make-poi" make-poi-handler)
-                                        ("/poi-image" poi-image-handler)
-                                        ("/poi-movie" poi-movie-handler)
                                         ("/poi-xml" poi-xml-handler)
                                         ("/poi-kml-all" poi-kml-all-handler)
                                         ("/poi-kml" poi-kml-handler)
