@@ -85,3 +85,22 @@ function confirm_delete(field_name, value, confirm_string)
     return confirm(confirm_string);
 }
 
+function upload_new_medium_input_toggle(medium_type)
+{
+    var upload_new_medium_form = $("upload_new_medium_form");
+    var upload_new_medium_input = $("upload_new_medium_input");
+    var upload_new_medium_input_label = $("upload_new_medium_input_label");
+    if (medium_type == "poi-movie") {
+        upload_new_medium_input.setAttribute("type", "text");
+        upload_new_medium_input.setAttribute("name", "url");
+        upload_new_medium_form.setAttribute("onsubmit", "return parse_youtube_link($(\"upload_new_medium_input\"));");
+        upload_new_medium_input_label.innerHTML = "URL";
+    } else {
+        upload_new_medium_input.setAttribute("type", "file");
+        upload_new_medium_input.setAttribute("name", "image-file");
+        upload_new_medium_input.setAttribute("onchange", "return true;");
+        upload_new_medium_form.setAttribute("onsubmit", "return true;");
+        upload_new_medium_input_label.innerHTML = "File";
+    }
+}
+

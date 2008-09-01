@@ -134,17 +134,21 @@
         (:tr (:td (submit-button "save" "save")
                   (submit-button "delete" "delete" :confirm "Really delete the POI?")))))
       (:h2 "Upload new medium")
-      ((:form :method "post" :action "/edit-poi-medium" :enctype "multipart/form-data")
+      ((:form :id "upload_new_medium_form"
+              :method "post" :action "/edit-poi-medium" :enctype "multipart/form-data")
        (:table
         ((:input :type "hidden" :name "poi" :value (store-object-id poi)))
         (:tr (:td "Type")
-             (:td (select-box "new-medium-type" (mapcar #'(lambda (class-name) (string-downcase class-name))
-                                                        (class-subclasses (find-class 'poi-medium)))
-                              :default "poi-image")))
+             (:td ((:select :name "new-medium-type" :size "1"
+                                                    :onchange "upload_new_medium_input_toggle(this.value);")
+                   ((:option :value "poi-image" :selected "selected") "poi-image")
+                   ((:option :value "poi-airal") "poi-airal")
+                   ((:option :value "poi-panorama") "poi-panorama")
+                   ((:option :value "poi-movie") "poi-movie"))))
         (:tr
-         (:td "File")
-         (:td ((:input :type "file" :name "image-file")))
-         (:tr ((:td :colspan "2") (submit-button "upload" "upload"))))))
+         ((:td :id "upload_new_medium_input_label") "File")
+         (:td ((:input :id "upload_new_medium_input" :type "file" :size "60" :name "image-file"))))
+        (:tr ((:td :colspan "2") (submit-button "upload" "upload")))))
       (:h2 "Attached POI media")
       ((:table :border "1")
        (dolist (medium (poi-media poi))
@@ -231,10 +235,13 @@
   (:method ((medium t) &key small)
     (declare (ignore small))
     (html ((:tr :colspan "2") "No preview")))
-  (:method ((medium poi-image) &key small)
+  (:method ((medium store-image) &key small)
+    "The default method for store-images."
     (html
      (:tr (:td "thumbnail")
-          (:td ((:img :src (format nil "/image/~A/thumbnail,,55,55" (store-object-id medium))))))
+          (:td ((:a :href (format nil "/image/~A" (store-object-id medium))
+                    :target "_blank")
+                ((:img :src (format nil "/image/~A/thumbnail,,55,55" (store-object-id medium)))))))
      (unless small
        (html
         (:tr (:td "full image")
@@ -243,7 +250,31 @@
     (declare (ignore small))
     (html
      (:tr (:td "thumbnail")
-          (:td ((:img :src (format nil "/image/~A/thumbnail,,500,100" (store-object-id medium)))))))))
+          (:td ((:a :href (format nil "/image/~A" (store-object-id medium))
+                    :target "_blank")
+                ((:img :src (format nil "/image/~A/thumbnail,,500,100" (store-object-id medium)))))))))
+  (:method ((medium poi-movie) &key small)
+    (if small
+        (call-next-method)
+        (html
+         (:tr (:td "movie")
+              (:td ((:embed :src (poi-movie-url medium)
+                            :type "application/x-shockwave-flash"
+                            :allowFullScreen "true"
+                            :width "425" :height "344"))))))))
+
+(defgeneric medium-handler-validate-image-size (medium-or-type width height)
+  (:method (medium-or-type width height)
+    (declare (ignore medium-or-type width height))
+    t)
+  (:method ((medium standard-object) width height)
+    (medium-handler-validate-image-size (type-of medium) width height))
+  (:method ((type (eql 'poi-image)) width height)
+    (and (= width *poi-image-width*)
+         (= height *poi-image-height*)))
+  (:method ((type (eql 'poi-airal)) width height)
+    (and (= width *poi-image-width*)
+         (= height *poi-image-height*))))
 
 (defmethod handle-object-form ((handler edit-poi-medium-handler) (action (eql :save)) (medium poi-medium))
   (with-query-params (title subtitle description language poi)
@@ -268,25 +299,32 @@
       "You may " (cmslink (edit-object-url poi) "continue editing the POI"))))
 
 (defmethod handle-object-form ((handler edit-poi-medium-handler) (action (eql :upload)) medium)
-  (with-query-params ((poi nil integer)
-                      new-medium-type)
-    (setq poi (find-store-object poi :class 'poi))
-    (let ((upload (request-uploaded-file "image-file")))
-      (unless upload
-        (error "no file uploaded in upload handler"))
-      (bknr.web:with-image-from-upload* (upload)
-        (unless (and (eql (cl-gd:image-width) *poi-image-width*)
-                     (eql (cl-gd:image-height) *poi-image-height*))
-          (error "Invalid image size. The image needs to be ~D pixels wide and ~D pixels high. Your uploaded ~
-                  image is ~D pixels wide and ~D pixels high. Please use an image editor to resize the image ~
-                  and upload it again."
-                 *poi-image-width* *poi-image-height*
-                 (cl-gd:image-width) (cl-gd:image-height))))
-      (let ((new-medium (import-image upload
-                                      :class-name (if medium
-                                                      (type-of medium)
-                                                      (intern (string-upcase new-medium-type)))
-                                      :initargs `(:poi ,poi))))
+  (flet ((make-new-medium (new-medium-type poi)
+           (case new-medium-type
+             (poi-movie
+              (make-object 'poi-movie :poi poi :url (query-param "url")))
+             (otherwise
+              (let ((upload (request-uploaded-file "image-file")))
+                (unless upload
+                  (error "no file uploaded in upload handler"))
+                (bknr.web:with-image-from-upload* (upload)
+                  (unless (medium-handler-validate-image-size new-medium-type
+                                                              (cl-gd:image-width) (cl-gd:image-height))
+                    (error "Invalid image size. The image needs to be ~D pixels wide and ~D pixels high. Your uploaded ~
+                            image is ~D pixels wide and ~D pixels high. Please use an image editor to resize the image ~
+                            and upload it again."
+                           *poi-image-width* *poi-image-height*
+                           (cl-gd:image-width) (cl-gd:image-height)))
+                  (import-image upload
+                                :class-name new-medium-type
+                                :initargs `(:poi ,poi))))))))
+    (with-query-params ((poi nil integer)
+                        new-medium-type)
+      (setq poi (find-store-object poi :class 'poi))
+      (let* ((new-medium-type (if medium
+                                  (type-of medium)
+                                  (intern (string-upcase new-medium-type))))
+             (new-medium (make-new-medium new-medium-type poi)))
         (when medium
           (very-shallow-copy-textual-attributes medium new-medium)
           (delete-object medium))
