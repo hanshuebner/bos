@@ -232,11 +232,11 @@ to determine the intensity of the returned RGB value."
 
 (defun import-tiles (directory)
   (bknr.datastore::without-sync ()
-    (dolist (px (directory directory #+nil :all #+nil nil)) ; was :ALL NIL used on cmucl?
+    (dolist (px (directory directory :all nil))
       (print px)
       (let ((x (parse-integer (car (last (pathname-directory px)))))
             (i 0))
-        (dolist (image-pathname (directory px #+nil :all #+nil nil))
+        (dolist (image-pathname (directory px :all nil))
           (handler-case
               (let* ((y (parse-integer (pathname-name image-pathname)))
                      (tile (ensure-original-map-tile x y)))
