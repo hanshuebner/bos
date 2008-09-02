@@ -104,7 +104,7 @@
                          "[choose]"))))))
         (:tr (:td "icon")
              (:td (icon-chooser "icon" (poi-icon poi))))
-        (:tr (:td "sat images")
+        (:tr (:td "images for sat-app")
              (:td
               ((:table)
                (:tr
@@ -153,11 +153,20 @@
       ((:table :border "1")
        (dolist (medium (poi-media poi))
          (html (:tr (:td (:princ-safe (medium-pretty-type-string medium)))
-                    (:td (:table (medium-handler-preview medium :small t)
-                                 (:tr (:td)
-                                      (:td (cmslink (format nil "/edit-poi-medium/~D?poi=~D"
-                                                            (store-object-id medium) (store-object-id poi))
-                                             "edit"))))))))))))
+                    (:td (:table
+                          (:colgroup ((:col :width "80")) ((:col :width "400")))
+                          (:tr (:td)
+                               (:td (:b (:princ-safe (slot-string medium 'title language "[no title]"))))
+                               (:td (:princ-safe (format-date-time (poi-medium-creation-time medium)))))
+                          (:tr (:td ((:p :style "text-align:center;")
+                                     (cmslink (format nil "/edit-poi-medium/~D?poi=~D"
+                                                      (store-object-id medium) (store-object-id poi))
+                                       "edit"))
+                                    ((:p :style "text-align:center;")
+                                     (cmslink (format nil "/edit-poi-medium/~D?action=delete&ask-for-confirmation=on&poi=~D"
+                                                      (store-object-id medium) (store-object-id poi))
+                                       "delete")))
+                               ((:td :colspan "2") (medium-handler-preview medium :small t))))))))))))
 
 (defmethod handle-object-form ((handler edit-poi-handler)
                                (action (eql :save)) (poi poi))
@@ -201,7 +210,7 @@
       (html
        (cmslink (edit-object-url (poi-medium-poi medium)) "Back to POI")
        (content-language-chooser)
-       (:table (medium-handler-preview medium)
+       (:table (:tr (:td) (:td (medium-handler-preview medium)))
                (:tr ((:td :colspan "2" :height "10")))
                ((:form :method "post" :enctype "multipart/form-data")
                 ((:input :type "hidden" :name "poi" :value poi))
@@ -226,51 +235,48 @@
                           (submit-button "delete" "delete" :confirm "Really delete?")))))))))
 
 (defgeneric medium-pretty-type-string (medium)
-  (:method ((medium poi-image)) "POI Image")
-  (:method ((medium poi-panorama)) "POI Panorama")
-  (:method ((medium poi-airal)) "POI Airal")
-  (:method ((medium poi-movie)) "POI Movie"))
+  (:method ((medium poi-image)) "Image")
+  (:method ((medium poi-panorama)) "Panorama")
+  (:method ((medium poi-airal)) "Airal")
+  (:method ((medium poi-movie)) "Movie"))
 
 (defgeneric medium-handler-preview (medium &key small)
-  (:method ((medium t) &key small)
+  (:method ((medium poi-medium) &key small)
     (declare (ignore small))
-    (html ((:tr :colspan "2") "No preview")))
+    (html "No preview"))
   (:method ((medium store-image) &key small)
     "The default method for store-images."
     (html
-     (:tr (:td "thumbnail")
-          (:td ((:a :href (format nil "/image/~A" (store-object-id medium))
-                    :target "_blank")
-                ((:img :src (format nil "/image/~A/thumbnail,,55,55" (store-object-id medium)))))))
+     ((:a :href (format nil "/edit-poi-medium/~A?poi=~A"
+                        (store-object-id medium) (store-object-id (poi-medium-poi medium))))
+      ((:img :src (format nil "/image/~A/thumbnail,,70,70" (store-object-id medium)))))
      (unless small
        (html
-        (:tr (:td "full image")
-             (:td ((:img :src (format nil "/image/~A" (store-object-id medium))))))))))
+        (:p "Full size:"
+            (:br)
+            ((:img :src (format nil "/image/~A" (store-object-id medium)))))))))
   (:method ((medium poi-panorama) &key small)
-    (html
-     (:tr (:td "thumbnail")
-          (:td (if small
-                   (html
-                    ((:a :href (format nil "/image/~A" (store-object-id medium))
-                         :target "_blank")
-                     ((:img :src (format nil "/image/~A/thumbnail,,500,100" (store-object-id medium))))))
-                   (html
-                    ((:applet :archive "/static/ptviewer.jar"
-                              :code "ptviewer.class"
-                              :width "300"
-                              :height "150")
-                     ((:param :name "file"
-                              :value (format nil "/image/~A" (store-object-id medium))))
-                     ((:param :name "quality" :value "3")))))))))
+    (if small
+        (html
+         ((:a :href (format nil "/edit-poi-medium/~A?poi=~A"
+                            (store-object-id medium) (store-object-id (poi-medium-poi medium))))
+          ((:img :src (format nil "/image/~A/thumbnail,,500,100" (store-object-id medium))))))
+        (html
+         ((:applet :archive "/static/ptviewer.jar"
+                   :code "ptviewer.class"
+                   :width "300"
+                   :height "150")
+          ((:param :name "file"
+                   :value (format nil "/image/~A" (store-object-id medium))))
+          ((:param :name "quality" :value "3"))))))
   (:method ((medium poi-movie) &key small)
     (if small
         (call-next-method)
         (html
-         (:tr (:td "movie")
-              (:td ((:embed :src (poi-movie-url medium)
-                            :type "application/x-shockwave-flash"
-                            :allowFullScreen "true"
-                            :width "425" :height "344"))))))))
+         ((:embed :src (poi-movie-url medium)
+                  :type "application/x-shockwave-flash"
+                  :allowFullScreen "true"
+                  :width "425" :height "344"))))))
 
 (defgeneric medium-handler-validate-image-size (medium-or-type width height)
   (:method (medium-or-type width height)
@@ -300,12 +306,22 @@
                      (:princ-safe (format nil "continue editing the ~A" type-string)))))))
 
 (defmethod handle-object-form ((handler edit-poi-medium-handler) (action (eql :delete)) (medium poi-medium))
-  (let ((poi (poi-medium-poi medium))
-        (type-string (medium-pretty-type-string medium)))
-    (delete-object medium)
-    (with-bos-cms-page (:title (format nil "~A has been deleted" type-string))
-      (:h2 (format nil "The ~A has been deleted" type-string))
-      "You may " (cmslink (edit-object-url poi) "continue editing the POI"))))
+  (with-query-params ((ask-for-confirmation nil boolean))
+    (let ((poi (poi-medium-poi medium))
+          (type-string (medium-pretty-type-string medium)))
+      (cond
+        (ask-for-confirmation
+         (with-bos-cms-page (:title (format nil "Really delete ~A?" type-string))
+           (:h2 (format nil "Really delete ~A?" type-string))
+           (:p "Yes, " (cmslink (format nil "/edit-poi-medium/~D?action=delete&poi=~D"
+                                        (store-object-id medium) (store-object-id poi))
+                         "delete it."))
+           (:p "No, take me " (cmslink (edit-object-url poi) "back to the POI"))))
+        (t
+         (delete-object medium)
+         (with-bos-cms-page (:title (format nil "~A has been deleted" type-string))
+           (:h2 (format nil "The ~A has been deleted" type-string))
+           "You may " (cmslink (edit-object-url poi) "continue editing the POI")))))))
 
 (defmethod handle-object-form ((handler edit-poi-medium-handler) (action (eql :upload)) medium)
   (flet ((make-new-medium (new-medium-type poi)

@@ -210,6 +210,7 @@
            #:very-shallow-copy-textual-attributes
            #:poi-medium
            #:poi-medium-poi
+           #:poi-medium-creation-time
            #:make-poi-medium
            #:poi-image
            #:poi-airal

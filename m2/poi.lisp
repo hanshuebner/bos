@@ -60,6 +60,10 @@ FROM and TO must not both continue to exist."
   (print-unreadable-object (object stream :type t :identity nil)
     (format stream "~D" (store-object-id object))))
 
+(defgeneric poi-medium-creation-time (medium)
+  (:method ((medium blob))
+    (blob-timestamp medium)))
+
 (defmethod destroy-object :before ((poi-medium poi-medium))
   (with-slots (poi) poi-medium
     (when poi
@@ -79,7 +83,8 @@ FROM and TO must not both continue to exist."
 
 ;;; poi-movie
 (defpersistent-class poi-movie (poi-medium)
-  ((url :accessor poi-movie-url :initarg :url :initform nil)))
+  ((url :accessor poi-movie-url :initarg :url :initform nil)
+   (created :initform (get-universal-time) :reader poi-medium-creation-time)))
 
 ;;; poi
 (defpersistent-class poi (textual-attributes-mixin)
@@ -135,6 +140,9 @@ FROM and TO must not both continue to exist."
 
 (defun poi-center-lon-lat (poi)
   (geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ (poi-center-x poi)) (- +nw-utm-y+ (poi-center-y poi)) +utm-zone+ t))
+
+(defmethod (setf poi-media) :after (value (poi poi))
+  (setf (slot-value poi 'media) (sort (slot-value poi 'media) #'> :key #'poi-medium-creation-time)))
 
 ;;; POI media are stored in one list - for convenience we provide
 ;;; accessors by type. POI-IMAGES e.g. returns a list of all
