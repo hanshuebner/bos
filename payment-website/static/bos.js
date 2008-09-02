@@ -22,7 +22,7 @@ function window_news(target) {
 
 // ***  extrafenster fuer satellitenkarte *** //
 function window_infosys() {
-    var url = "/infosystem/" + document.body.lang + "/satellitenkarte.htm";
+    var url = "/infosystem/" + document.body.getAttribute("bos:lang") + "/satellitenkarte.htm";
 
     var sponsorid_input = document.getElementById('sponsorid-input');
     var password_input = document.getElementById('password-input');
