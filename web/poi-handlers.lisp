@@ -341,7 +341,7 @@
           (store-object-id contract)
           (format-date-time (contract-date contract) :js-style t)
           (or (user-full-name (contract-sponsor contract)) "anonymous")
-          (sponsor-country (contract-sponsor contract))
+          (or (sponsor-country (contract-sponsor contract)) "de")
           (length (contract-m2s contract))))
 
 (defmethod handle ((handler poi-javascript-handler))
