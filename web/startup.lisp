@@ -44,7 +44,10 @@
   (when *webserver*
     (hunchentoot:stop-server *webserver*))
   (setf hunchentoot:*hunchentoot-default-external-format* (flex:make-external-format :utf-8 :eol-style :lf)
-        hunchentoot:*rewrite-for-session-urls* nil)
+        hunchentoot:*rewrite-for-session-urls* nil
+        ;; the reason for the following setting is that ptviewer sends
+        ;; a different User-Agent -- (when requesting PTDefault.html)
+        hunchentoot:*use-user-agent-for-sessions* nil)
   (setq *webserver* (hunchentoot:start-server :port *port* :threaded (not debug)
                                               :persistent-connections-p (not debug)))
   (if start-frontend
