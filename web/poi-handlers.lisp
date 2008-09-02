@@ -247,12 +247,21 @@
         (:tr (:td "full image")
              (:td ((:img :src (format nil "/image/~A" (store-object-id medium))))))))))
   (:method ((medium poi-panorama) &key small)
-    (declare (ignore small))
     (html
      (:tr (:td "thumbnail")
-          (:td ((:a :href (format nil "/image/~A" (store-object-id medium))
-                    :target "_blank")
-                ((:img :src (format nil "/image/~A/thumbnail,,500,100" (store-object-id medium)))))))))
+          (:td (if small
+                   (html
+                    ((:a :href (format nil "/image/~A" (store-object-id medium))
+                         :target "_blank")
+                     ((:img :src (format nil "/image/~A/thumbnail,,500,100" (store-object-id medium))))))
+                   (html
+                    ((:applet :archive "/static/ptviewer.jar"
+                              :code "ptviewer.class"
+                              :width "300"
+                              :height "150")
+                     ((:param :name "file"
+                              :value (format nil "/image/~A" (store-object-id medium))))
+                     ((:param :name "quality" :value "3")))))))))
   (:method ((medium poi-movie) &key small)
     (if small
         (call-next-method)
