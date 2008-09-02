@@ -274,8 +274,9 @@
       (with-element "listItemType" (text "checkHideChildren"))
       (with-element "bgColor" (text "00ffffff")))))
 
-(defun kml-network-link (href &key rect lod name http-query
+(defun kml-network-link (href &key rect lod name
                          fly-to-view hide-children)
+  ;; http-query could be added to &key args
   (with-element "NetworkLink"
     (when name (with-element "name" (text name)))
     (when rect (kml-region rect lod))

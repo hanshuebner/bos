@@ -236,7 +236,7 @@ to determine the intensity of the returned RGB value."
       (print px)
       (let ((x (parse-integer (car (last (pathname-directory px)))))
             (i 0))
-        (dolist (image-pathname (directory px :all nil))
+        (dolist (image-pathname (directory px #+nil :all #+nil nil)) ; was :ALL NIL used on cmucl?
           (handler-case
               (let* ((y (parse-integer (pathname-name image-pathname)))
                      (tile (ensure-original-map-tile x y)))
