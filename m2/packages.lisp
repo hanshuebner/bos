@@ -221,7 +221,8 @@
            #:poi-name
            #:find-poi
            #:all-pois
-           #:poi-published
+           #:poi-published-web
+           #:poi-published-earth
            #:poi-area
            #:poi-icon
            #:poi-media

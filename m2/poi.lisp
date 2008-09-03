@@ -93,9 +93,12 @@ FROM and TO must not both continue to exist."
     :index-type string-unique-index
     :index-reader find-poi :index-values all-pois
     :documentation "symbolischer name")
-   (published
-    :accessor poi-published :initarg :published :initform nil
-    :documentation "wenn dieses flag nil ist, wird der poi in den uis nicht angezeigt")
+   (published-web
+    :accessor poi-published-web :initarg :published-web :initform nil
+    :documentation "wenn dieses flag nil ist, wird der poi auf der Website nicht angezeigt")
+   (published-earth
+    :accessor poi-published-earth :initarg :published-earth :initform nil
+    :documentation "wenn dieses flag nil ist, wird der poi in Google Earth nicht angezeigt")
    (area
     :accessor poi-area :initarg :area :initform nil
     :documentation "polygon mit den poi-koordinaten")
@@ -105,6 +108,10 @@ FROM and TO must not both continue to exist."
    (media
     :accessor poi-media :initarg :media :initform nil
     :documentation "liste aller poi-medien, wie poi-image, poi-airal ...")))
+
+
+(defmethod convert-slot-value-while-restoring ((object poi) (slot-name (eql 'published)) published)
+  (setf (slot-value object 'published-web) published))
 
 (deftransaction make-poi (name &rest rest &key area language title subtitle description)
   (declare (ignore area))
@@ -116,10 +123,12 @@ FROM and TO must not both continue to exist."
 (defmethod destroy-object :before ((poi poi))
   (mapc #'delete-object (poi-media poi)))
 
-(deftransaction update-poi (poi &key published icon area)
-  (check-type published boolean)
+(deftransaction update-poi (poi &key published-web published-earth icon area)
+  (check-type published-web boolean)
+  (check-type published-earth boolean)
   (check-type area list)
-  (setf (poi-published poi) published)
+  (setf (poi-published-web poi) published-web
+        (poi-published-earth poi) published-earth)
   (when icon
     (setf (poi-icon poi) icon))
   (when area
@@ -191,7 +200,7 @@ FROM and TO must not both continue to exist."
     (format t "var anzahlVerkauft = ~D;~%" (number-of-sold-sqm))
     (format t "var pois = new Array;~%")
     (dolist (poi (sort (remove-if #'(lambda (poi) (or (not (poi-complete poi language))
-                                                      (not (poi-published poi))))
+                                                      (not (poi-published-web poi))))
                                   (store-objects-with-class 'poi))
                        #'(lambda (poi-1 poi-2) (string-lessp (slot-string poi-1 'title language) (slot-string poi-2 'title language)))))
       (format t "

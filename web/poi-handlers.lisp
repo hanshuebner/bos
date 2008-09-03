@@ -73,7 +73,8 @@
         (:tr (:td "name")
              (:td (:princ-safe (poi-name poi))))
         (:tr (:td "published")
-             (:td (checkbox-field "published" "published" :checked (poi-published poi))))
+             (:td (checkbox-field "published-web" "published-web" :checked (poi-published-web poi)) " "
+                  (checkbox-field "published-earth" "published-earth" :checked (poi-published-earth poi))))
         (:tr (:td "title")
              (:td (text-field "title"
                               :value (slot-string poi 'title language))))
@@ -88,10 +89,11 @@
         (:tr (:td "location")
              (:td (flet ((format-chosen-url ()
                            (encode-urlencoded
-                            (format nil "~A?action=save&language=~A&~:[~;published=on~]"
+                            (format nil "~A?action=save&language=~A&~:[~;published-web=on~]&~:[~;published-earth=on~]"
                                     (hunchentoot:script-name*)
                                     language
-                                    (poi-published poi)))))
+                                    (poi-published-web poi)
+                                    (poi-published-earth poi)))))
                     (cond
                       ((poi-area poi)
                        (html (:princ-safe (format nil "~D/~D " (first (poi-area poi)) (second (poi-area poi)))))
@@ -170,7 +172,8 @@
 
 (defmethod handle-object-form ((handler edit-poi-handler)
                                (action (eql :save)) (poi poi))
-  (with-query-params ((published nil boolean)
+  (with-query-params ((published-web nil boolean)
+                      (published-earth nil boolean)
                       title subtitle description language
                       (x nil integer)
                       (y nil integer)
@@ -181,7 +184,8 @@
                                 :subtitle subtitle
                                 :description description)
     (update-poi poi
-                :published published
+                :published-web published-web
+                :published-earth published-earth
                 :area (when (and x y) (list x y))
                 :icon icon)
     (with-bos-cms-page (:title "POI has been updated")
@@ -592,7 +596,7 @@
   ())
 
 (defmethod handle ((handler poi-kml-all-handler))
-  (let* ((relevant-pois (remove-if-not #'(lambda (poi) (and (poi-area poi) (poi-published poi)))
+  (let* ((relevant-pois (remove-if-not #'(lambda (poi) (and (poi-area poi) (poi-published-earth poi)))
                                        (class-instances 'poi)))
          (pois-last-change (reduce #'max relevant-pois :key (lambda (poi) (store-object-last-change poi 1)))))
     (hunchentoot:handle-if-modified-since pois-last-change)
