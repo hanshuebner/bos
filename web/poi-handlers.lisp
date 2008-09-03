@@ -441,9 +441,14 @@
             (with-media ("movie" "Video")
               (with-element "url" (text (poi-movie-url movie))))))))))
 
+(defun find-poi-or-ptdefault (string)
+  (if (string= string "PTDefault.html")
+      :ptdefault
+      (find-poi string)))
+
 (defclass poi-xml-handler (object-handler)
   ()
-  (:default-initargs :object-class 'poi :query-function #'find-poi))
+  (:default-initargs :query-function #'find-poi-or-ptdefault))
 
 
 (defmethod handle-object ((handler poi-xml-handler) poi)
@@ -454,6 +459,10 @@
     (with-query-params ((lang "en"))
       (with-xml-response (:xsl-stylesheet-name "/static/poi.xsl")
         (write-poi-xml poi lang)))))
+
+(defmethod handle-object ((handler poi-xml-handler) (poi (eql :ptdefault)))
+  "ptviewer will request /poi-xml/PTDefault.html"
+  )
 
 ;;; poi-kml-handler
 (defun poi-description-google-earth (poi language &key (image-width 120))
