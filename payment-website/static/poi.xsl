@@ -74,15 +74,15 @@
       <xsl:variable name="height"><xsl:value-of select="image/height"/></xsl:variable>
       <div class="accordion_toggle"><xsl:value-of select="@title"/>:<xsl:value-of select="@subtitle"/></div>
       <div class="accordion_content">
-        <div class="scrollpane" style="border: 1px solid black; width: 600px;
-                                       height:{$height}px; background-image: url({$url});
-                                       background-position: -690px 0px; background-repeat:repeat-x;"
-             id="pano-{$id}"></div>
-        <script type="text/javascript">
-          var myPano = new Pano();
-          myPano.scrollPano('<xsl:value-of select="image/url"/>', 690,
-          <xsl:value-of select="image/height"/>, 'pano-<xsl:value-of select="image/@id"/>');
-        </script>
+        <div class="scrollpane" style="border: 1px solid black; width: 600px; height: {$height div 2}px">
+          <applet archive="/static/ptviewer.jar"
+                  code="ptviewer.class"
+                  width="600"
+                  height="{$height div 2}">
+            <param name="file" value="/image/{$id}"/>
+            <param name="quality" value="3"/>
+          </applet>
+        </div>
       </div>
     </xsl:if>
     <xsl:if test="@type='movie'">
