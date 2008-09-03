@@ -66,12 +66,12 @@
         (html (:h2 "This POI is not complete in the current language - Please check that "
                    "the location and all text fields are set and that at least 6 images "
                    "have been uploaded.")))
+      (:p (cmslink (format nil "/poi-xml/~D?lang=~A" (store-object-id poi) language)
+            (:format "show this POI in ~A microsite" (string-upcase language))))
       ((:form :method "POST" :enctype "multipart/form-data")
        ((:table :border "1")
         (:tr (:td "name")
-             (:td (:princ-safe (poi-name poi))
-                  " "
-                  (cmslink (format nil "/poi-xml/~D?lang=~A" (store-object-id poi) language) "[view]")))
+             (:td (:princ-safe (poi-name poi))))
         (:tr (:td "published")
              (:td (checkbox-field "published" "published" :checked (poi-published poi))))
         (:tr (:td "title")
