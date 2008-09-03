@@ -226,6 +226,8 @@
 
   (publish-directory :prefix "/static/"
                      :destination (merge-pathnames "static/" website-directory))
+  (publish-directory :prefix "/ge/"
+                     :destination (merge-pathnames "ge/" website-directory))
   (publish-directory :prefix "/images/"
                      :destination (merge-pathnames "images/" website-directory))
   (publish-directory :prefix "/infosystem/"
