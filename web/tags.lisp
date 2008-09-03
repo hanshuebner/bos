@@ -124,8 +124,9 @@
                       contract-id
                       name vorname strasse plz ort telefon want-print
                       email donationcert-yearly)
-    (let* ((contract (store-object-with-id (parse-integer contract-id)))
-           (download-only (< (contract-price contract) *mail-certificate-threshold*)))
+    (let* ((contract (store-object-with-id (parse-integer contract-id)))           
+           (download-only (or (< (contract-price contract) *mail-certificate-threshold*)
+                              (not want-print))))      
       (with-transaction (:prepare-before-mail)
         (setf (contract-download-only contract) download-only)
         (setf (sponsor-country (contract-sponsor contract)) country))
