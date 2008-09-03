@@ -110,7 +110,8 @@ FROM and TO must not both continue to exist."
     :documentation "liste aller poi-medien, wie poi-image, poi-airal ...")))
 
 
-(defmethod convert-slot-value-while-restoring ((object poi) (slot-name (eql 'published)) published)
+(defmethod convert-slot-value-while-restoring ((object poi) (slot-name (eql 'published))
+                                               published)
   (setf (slot-value object 'published-web) published))
 
 (deftransaction make-poi (name &rest rest &key area language title subtitle description)
@@ -229,7 +230,13 @@ var poi = { symbol: ~S,
       (when (poi-panoramas poi)
         (format t "poi.panoramas = [ ~{~D~^, ~} ];~%" (mapcar #'store-object-id (poi-panoramas poi))))
       (when (poi-movies poi)
-        (format t "poi.movies = [ ~{~S~^, ~} ];~%" (mapcar #'poi-movie-url (poi-movies poi))))
+        (format t "poi.movies = [ ~{~S~^, ~} ];~%"
+                (mapcar #'(lambda (movie)                                                        
+                            (assert (stringp (poi-movie-url movie)) nil
+                                    "POI-MOVIE-URL of ~S is ~S, but should be a string"
+                                    movie (poi-movie-url movie))
+                            (poi-movie-url movie))
+                        (poi-movies poi))))
       (loop for slot-name in '(title subtitle description)
          for javascript-name in '("imageueberschrift" "imageuntertitel" "imagetext")
          for slot-values = (mapcar (lambda (image)
