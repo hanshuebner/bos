@@ -58,30 +58,40 @@
     (geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ x) (- +nw-utm-y+ y) +utm-zone+ t)))
 
 (defun contract-placemark-at-node-p (node contract)
-  "Returns T if CONTRACT is large enough at the LOD of NODE to be displayed
-with its center placemark."
-  (if (not (node-has-children-p node))
-      t
-      (let ((geo-box (geo-box node)))
-        (destructuring-bind (geo-box-utm-west geo-box-utm-north &rest _)
-            (geo-utm:lon-lat-to-utm-x-y (geo-box-west geo-box) (geo-box-north geo-box))
-          (declare (ignore _))
-          (destructuring-bind (geo-box-utm-east geo-box-utm-south &rest _)
-              (geo-utm:lon-lat-to-utm-x-y (geo-box-east geo-box) (geo-box-south geo-box))
-            (declare (ignore _))
-            (let* ((output-images-size *contract-tree-images-size*)
-                   (rect (contract-largest-rectangle contract))
-                   (contract-width (third rect))
-                   (contract-height (fourth rect))
-                   (geo-width (- geo-box-utm-east geo-box-utm-west))
-                   (geo-height (- geo-box-utm-north geo-box-utm-south))
-                   (contract-pixel-size (min (* contract-width (/ output-images-size geo-width))
-                                             (* contract-height (/ output-images-size geo-height)))))
-              (if (< (contract-area contract) 4)
-                  nil
-                  (if (< (depth node) 6)
-                      (> contract-pixel-size 15)
-                      (> contract-pixel-size 30)))))))))
+  "Returns T if CONTRACT is large enough at the LOD of NODE to be
+displayed with its center placemark.
+
+This predicate is called by INSERT-CONTRACT. We assume that for
+bulk-insertions contracts with larger area are inserted first."
+  (cond
+    ((not (node-has-children-p node))
+     t)
+    ;; let's fill nodes to a very low minimum - as noted above, larger
+    ;; contracts are inserted first
+    ((and (> (depth node) 3)
+          (< (length (placemark-contracts node)) 2))
+     t)
+    (t (let ((geo-box (geo-box node)))
+         (destructuring-bind (geo-box-utm-west geo-box-utm-north &rest _)
+             (geo-utm:lon-lat-to-utm-x-y (geo-box-west geo-box) (geo-box-north geo-box))
+           (declare (ignore _))
+           (destructuring-bind (geo-box-utm-east geo-box-utm-south &rest _)
+               (geo-utm:lon-lat-to-utm-x-y (geo-box-east geo-box) (geo-box-south geo-box))
+             (declare (ignore _))
+             (let* ((output-images-size *contract-tree-images-size*)
+                    (rect (contract-largest-rectangle contract))
+                    (contract-width (third rect))
+                    (contract-height (fourth rect))
+                    (geo-width (- geo-box-utm-east geo-box-utm-west))
+                    (geo-height (- geo-box-utm-north geo-box-utm-south))
+                    (contract-pixel-size (min (* contract-width (/ output-images-size geo-width))
+                                              (* contract-height (/ output-images-size geo-height)))))
+               (cond
+                 ((< (contract-area contract) 4)
+                  nil)
+                 ((< (depth node) 4)
+                  (> contract-pixel-size 5))
+                 (t (> contract-pixel-size 10))))))))))
 
 (defun find-contract-node (node contract)
   (find-node-if (lambda (node) (member contract (placemark-contracts node))) node))
@@ -353,12 +363,14 @@ has to be unique."
 
 ;;; make-contract-tree-from-m2
 (defun make-contract-tree-from-m2 ()
+  (when *contract-tree*
+    (map-nodes #'delete-node-extension *contract-tree*))
   (setq *contract-tree* (make-instance 'contract-node
                                        ;; we know that MAKE-QUAD-TREE
                                        ;; has already been called
                                        :base-node *quad-tree*
                                        :name '*contract-tree*))
-  (dolist (contract (all-contracts))
+  (dolist (contract (sort (copy-list (all-contracts)) #'> :key #'contract-area))    
     (when (contract-published-p contract)
       (insert-contract *contract-tree* contract)))
   (geometry:register-rect-subscriber geometry:*rect-publisher* *contract-tree*
