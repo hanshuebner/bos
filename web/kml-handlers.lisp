@@ -181,7 +181,11 @@
             (text (sponsor-info-text sponsor))))))))
 
 (defclass kml-root-dynamic-handler (object-handler)
-  ((timestamp :accessor timestamp :initform (get-universal-time))))
+  ()
+  (:documentation "This handler is not actually used anymore, because
+the root kml files are uploaded through the CMS. It is still left here
+in the codebase, because it was used to generate the initial templates
+and might be needed again."))
 
 (defun write-personalized-contract-placemark-kml (contract lang)
   (with-element "Style"
@@ -194,14 +198,12 @@
   (write-contract-placemark-kml contract lang))
 
 (defun write-root-kml (handler sponsor)
+  (declare (ignore handler))
   (let ((*print-case* :downcase)
         (contract (when sponsor (first (sponsor-contracts sponsor)))))
-    (hunchentoot:handle-if-modified-since (timestamp handler))
     ;; only the first contract of SPONSOR will be shown
     (with-xml-response (:content-type #+nil "text/xml" "application/vnd.google-earth.kml+xml; charset=utf-8"
                                       :root-element "kml")
-      (setf (hunchentoot:header-out :last-modified)
-            (hunchentoot:rfc-1123-date (timestamp handler)))
       (with-query-params ((lang "en"))
         (with-element "Document"
           (with-element "name" (text "BOS"))
