@@ -624,8 +624,7 @@ neighbours."
 (defun add-to-contract-stats (contract)
   (let* ((area (contract-area contract))
          (sponsor (contract-sponsor contract))
-         (new-sponsor-p (alexandria:length= 1 (sponsor-contracts sponsor)))
-         (country (sponsor-country sponsor)))
+         (new-sponsor-p (alexandria:length= 1 (sponsor-contracts sponsor))))
     (with-slots (sold-m2s paying-sponsors country-sponsors last-contracts)
         *contract-stats*
       ;; sold-m2s
@@ -634,8 +633,9 @@ neighbours."
       (when new-sponsor-p
         (incf paying-sponsors))
       ;; country-sponsors
-      (when country
-        (let ((country-stat (gethash country country-sponsors)))
+      (when (sponsor-country sponsor)
+        (let* ((country (make-keyword-from-string (sponsor-country sponsor)))
+               (country-stat (gethash country country-sponsors)))
           (unless country-stat
             (setq country-stat (setf (gethash country country-sponsors) (make-country-stat))))
           (when new-sponsor-p

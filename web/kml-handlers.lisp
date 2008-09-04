@@ -286,9 +286,9 @@
             (attribute "id" "countryStatsStyle")
             (with-element "IconStyle"
               (with-element "Icon"
-                ;; (with-element "href" (text "http://maps.google.com/mapfiles/kml/pal3/icon23.png"))
                 (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
           (do-sponsor-countries (country)
+            (assert (keywordp country))
             (let ((coords (cdr (assoc country *country-coords*))))
               (when coords
                 (destructuring-bind (lon lat)
@@ -296,7 +296,6 @@
                   (multiple-value-bind (number-of-paying-sponsors number-of-sold-m2s)
                       (contract-stats-for-country country)
                     (with-element "Placemark"
-                      ;; (with-element "name" (text (format nil "~a ~a" (car country-contracts) (length (cdr country-contracts)))))
                       (with-element "styleUrl" (text "#countryStatsStyle"))
                       (with-element "description"
                         (text (format nil "<p>~A</p><table><tbody><tr><td>~A:</td><td>~D ~A</td></tr>
