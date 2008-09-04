@@ -92,7 +92,7 @@
              (:tr (:td "Email-Address")
                   (:td (text-field "email" :size 40)))
              (:tr (:td "Language for communication and certificate")
-                  (:td (language-selector "en")))
+                  (:td (language-selector "de")))
              (:tr (:td "Name for certificate")
                   (:td (text-field "name" :size 20)))
              (:tr (:td "Postal address for certificate")
