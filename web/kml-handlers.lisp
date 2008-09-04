@@ -244,10 +244,10 @@
                             :name (dictionary-entry "POIs" lang)
                             :rect (make-rectangle :x 0 :y 0 :width +width+ :height +width+)
                             :lod '(:min 0 :max -1)
-                            :hide-children t)
+                            :hide-children nil)
           (kml-network-link (format nil "http://~a/country-stats?lang=~A" (website-host) lang)
                             :name (dictionary-entry "Country-Stats" lang)
-                            :hide-children t))))))
+                            :hide-children nil))))))
 
 (defmethod handle-object ((handler kml-root-dynamic-handler) (object sponsor))
   (write-root-kml handler object))
