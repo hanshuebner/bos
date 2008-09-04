@@ -74,7 +74,9 @@
              (:td (:princ-safe (poi-name poi))))
         (:tr (:td "published")
              (:td (checkbox-field "published-web" "published-web" :checked (poi-published-web poi)) " "
-                  (checkbox-field "published-earth" "published-earth" :checked (poi-published-earth poi))))
+                  (checkbox-field "published-earth" "published-earth" :checked (poi-published-earth poi))
+                  " with lod-min "
+                  (text-field "lod-min" :size 5 :value (poi-lod-min poi))))
         (:tr (:td "title")
              (:td (text-field "title"
                               :value (slot-string poi 'title language))))
@@ -89,7 +91,8 @@
         (:tr (:td "location")
              (:td (flet ((format-chosen-url ()
                            (encode-urlencoded
-                            (format nil "~A?action=save&language=~A&~:[~;published-web=on~]&~:[~;published-earth=on~]"
+                            (format nil "~A?action=save&language=~A&~
+                                         ~:[~;published-web=on~]&~:[~;published-earth=on~]"
                                     (hunchentoot:script-name*)
                                     language
                                     (poi-published-web poi)
@@ -177,7 +180,8 @@
                       title subtitle description language
                       (x nil integer)
                       (y nil integer)
-                      icon)
+                      icon
+                      (lod-min nil integer))
     (unless language (setq language (request-language)))
     (update-textual-attributes  poi language
                                 :title title
@@ -187,7 +191,8 @@
                 :published-web published-web
                 :published-earth published-earth
                 :area (when (and x y) (list x y))
-                :icon icon)
+                :icon icon
+                :lod-min lod-min)
     (with-bos-cms-page (:title "POI has been updated")
       (html (:h2 "Your changes have been saved")
             "You may " (cmslink (format nil "~A?language=~A" (edit-object-url poi) language)
@@ -250,7 +255,7 @@
 (defgeneric medium-web-link (medium)
   (:method ((medium store-image))
     (format nil "http://~A/image/~A"
-            (website-host) (store-object-id medium)))  
+            (website-host) (store-object-id medium)))
   (:method ((medium poi-movie))
     (poi-movie-url medium)))
 
@@ -582,6 +587,7 @@
   (with-element "Placemark"
     (with-element "name" (text (or (slot-string poi 'title language nil)
                                    (slot-string poi 'title "en"))))
+    (kml-region (make-rectangle2 (list 0 0 +width+ +width+)) `(:min ,(poi-lod-min poi) :max -1))
     (with-element "styleUrl" (text "#poiPlacemarkIcon"))
     (with-element "description"
       (cdata (poi-description-google-earth poi language)))
@@ -625,5 +631,4 @@
                   (with-element "scale" (text "0.8"))
                   (with-element "Icon"
                     (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
-              (kml-region (make-rectangle2 (list 0 0 +width+ +width+)) '(:min 600 :max -1))
               (mapc #'(lambda (poi) (write-poi-kml poi lang)) relevant-pois))))))))
