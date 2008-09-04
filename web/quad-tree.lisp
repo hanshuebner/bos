@@ -177,8 +177,13 @@
   (def-extension-reader depth))
 
 (defmethod print-object ((node node-extension) stream)
-  (print-unreadable-object (node stream :type t :identity t)
-    (format stream "name: ~s path: ~s" (name node) (node-path node))))
+  (handler-case
+      (let ((name (name node))
+            (node-path (node-path node)))
+        (print-unreadable-object (node stream :type t :identity t)
+          (format stream "name: ~s path: ~s" name node-path)))
+    (error ()
+      (print-unreadable-object (node stream :type t :identity t)))))
 
 (defmethod delete-node-extension ((node node-extension))
   (setf (%extensions (base-node node))
