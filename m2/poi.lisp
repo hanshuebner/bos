@@ -107,7 +107,10 @@ FROM and TO must not both continue to exist."
     :documentation "name des icons")
    (media
     :accessor poi-media :initarg :media :initform nil
-    :documentation "liste aller poi-medien, wie poi-image, poi-airal ...")))
+    :documentation "liste aller poi-medien, wie poi-image, poi-airal ...")
+   (lod-min
+    :accessor poi-lod-min :initarg :poi-lod-min :initform 600
+    :documentation "the lod minimum used in Google Earth")))
 
 
 (defmethod convert-slot-value-while-restoring ((object poi) (slot-name (eql 'published))
@@ -124,7 +127,7 @@ FROM and TO must not both continue to exist."
 (defmethod destroy-object :before ((poi poi))
   (mapc #'delete-object (poi-media poi)))
 
-(deftransaction update-poi (poi &key published-web published-earth icon area)
+(deftransaction update-poi (poi &key published-web published-earth icon area lod-min)
   (check-type published-web boolean)
   (check-type published-earth boolean)
   (check-type area list)
@@ -134,6 +137,8 @@ FROM and TO must not both continue to exist."
     (setf (poi-icon poi) icon))
   (when area
     (setf (poi-area poi) area))
+  (when lod-min
+    (setf (poi-lod-min poi) (abs lod-min)))
   poi)
 
 (defmethod poi-complete ((poi poi) language)
@@ -231,7 +236,7 @@ var poi = { symbol: ~S,
         (format t "poi.panoramas = [ ~{~D~^, ~} ];~%" (mapcar #'store-object-id (poi-panoramas poi))))
       (when (poi-movies poi)
         (format t "poi.movies = [ ~{~S~^, ~} ];~%"
-                (mapcar #'(lambda (movie)                                                        
+                (mapcar #'(lambda (movie)
                             (assert (stringp (poi-movie-url movie)) nil
                                     "POI-MOVIE-URL of ~S is ~S, but should be a string"
                                     movie (poi-movie-url movie))
