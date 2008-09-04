@@ -370,7 +370,7 @@ has to be unique."
                                        ;; has already been called
                                        :base-node *quad-tree*
                                        :name '*contract-tree*))
-  (dolist (contract (sort (copy-list (all-contracts)) #'> :key #'contract-area))    
+  (dolist (contract (sort (copy-list (all-contracts)) #'> :key #'contract-area))
     (when (contract-published-p contract)
       (insert-contract *contract-tree* contract)))
   (geometry:register-rect-subscriber geometry:*rect-publisher* *contract-tree*
