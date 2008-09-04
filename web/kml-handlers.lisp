@@ -58,9 +58,22 @@
                        ;; we want this after the processing
                        (:p (:format "last-change: ~A"
                                     (format-date-time (store-object-last-change kml-root-data 0)))
+                           " "
                            (cmslink (format nil "/kml-upload?lang=~A&action=download" language)
                              "download current version")))))
-             (submit-button "upload" "upload"))))))
+             (submit-button "upload" "upload"))
+            (:p "Please note that the " (:b "download current version")
+                " links above show you the kml files exactly like you
+                uploaded them. These are not the KML files as seen by the
+                users.")
+            (:p "For the actually served kml files some automatic
+            replacements are being done. You can inspect those by the
+            following links:")
+            (:p (dolist (kml-root-data (class-instances 'kml-root-data))
+                  (let ((language (language kml-root-data)))
+                    (html (cmslink (format nil "/kml-root?lang=~A" language)
+                            (:format "kml ~A" language))
+                          " "))))))))
 
 (defmethod handle-form ((handler kml-upload-handler) (action (eql :download)))
   (with-query-params (lang)
