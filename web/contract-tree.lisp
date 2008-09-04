@@ -270,7 +270,10 @@ has to be unique."
           (setf (image node) new-store-image)
           ;; delete the old one
           (when old-store-image
-            (delete-file (blob-pathname old-store-image))
+            (if (probe-file (blob-pathname old-store-image))
+                (delete-file (blob-pathname old-store-image))
+                (warn "Intended to delete ~A of ~A.~%But it already does not exist."
+                      (blob-pathname old-store-image) old-store-image))
             (delete-object old-store-image)))))))
 
 (defun contract-node-update-image-needed-p (node)
