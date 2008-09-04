@@ -203,7 +203,7 @@
            ;; slot-strings
            #:slot-string
            #:set-slot-string-values
-                      
+
            ;; pois
            #:title #:subtitle #:description ; for slot-string access
            #:update-textual-attributes
@@ -226,6 +226,7 @@
            #:poi-area
            #:poi-icon
            #:poi-media
+           #:poi-lod-min
            #:make-poi
            #:update-poi
            #:poi-complete
@@ -239,7 +240,7 @@
            #:poi-panoramas
            #:poi-movies
            #:make-poi-javascript
-           
+
            ;; news
            #:news-item
            #:make-news-item
