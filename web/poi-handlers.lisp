@@ -223,6 +223,9 @@
                       :br
                       (submit-button "upload" "upload"))))
                (:tr ((:td :colspan "2" :height "10")))
+               (:tr (:td "web link")
+                    (:td (:princ-safe (medium-web-link medium))))
+               (:tr ((:td :colspan "2" :height "10")))
                ((:form :method "post")
                 (:tr (:td "title")
                      (:td (text-field "title"
@@ -243,6 +246,13 @@
   (:method ((medium poi-panorama)) "Panorama")
   (:method ((medium poi-airal)) "Airal")
   (:method ((medium poi-movie)) "Movie"))
+
+(defgeneric medium-web-link (medium)
+  (:method ((medium store-image))
+    (format nil "http://~A/image/~A"
+            (website-host) (store-object-id medium)))  
+  (:method ((medium poi-movie))
+    (poi-movie-url medium)))
 
 (defgeneric medium-handler-preview (medium &key small)
   (:method ((medium poi-medium) &key small)
