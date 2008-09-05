@@ -332,10 +332,13 @@
 (defmethod handle-object-form ((handler cert-regen-handler) (action (eql :wait)) (contract contract))
   (if (not (and (contract-certificates-generated-p contract)
                 (not (contract-tree-needs-update-p))))
-      (html (:html
-             (:head ((:meta :http-equiv "refresh"
-                            :content #?"2; url=/cert-regen/$((store-object-id contract))?action=wait")))
-             (:body "waiting for certificate to be regenerated...")))
+      (with-http-response (:content-type "text/html; charset=UTF-8")
+        (with-http-body ()
+          (html
+           (:html
+            (:head ((:meta :http-equiv "refresh"
+                           :content #?"2; url=/cert-regen/$((store-object-id contract))?action=wait")))
+            (:body (:p "waiting for certificate to be regenerated..."))))))
       (with-bos-cms-page (:title "Certificate has been recreated")
         (html "The certificates for the sponsor have been re-generated." :br)
         (unless (contract-download-only-p contract)
