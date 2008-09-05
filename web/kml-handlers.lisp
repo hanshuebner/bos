@@ -89,7 +89,7 @@
 
 (defun replace-all-url-hosts (string new-host)
   "Replaces all hostnames in STRING by NEW-HOST."
-  (ppcre:regex-replace-all #?r"((?:https?|ftp)://)\w+(?:\.\w+)*" string #?r"\1${new-host}"))
+  (ppcre:regex-replace-all #?r"((?:https?|ftp)://)\w+(?:\.\w+)*(?::\d+)?" string #?r"\1${new-host}"))
 
 (defun replace-lang-query-params (string new-lang)
   (ppcre:regex-replace-all #?r"(?i)(lang=)[a-z]{2,2}" string #?r"\1${new-lang}"))
