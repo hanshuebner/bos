@@ -330,6 +330,10 @@
 (deftransaction contract-set-download-only-p (contract newval)
   (setf (contract-download-only contract) newval))
 
+(defmethod (setf contract-download-only) :around (newval (obj contract))
+  "Ensures that NEWVAL is either T or NIL."
+  (call-next-method (if newval t nil) obj))
+
 (defmethod contract-fdf-pathname ((contract contract) &key language print)
   (when (and print
              (contract-download-only-p contract))
