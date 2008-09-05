@@ -255,10 +255,11 @@
 (defun kml-format-color (color &optional (opacity 255))
   (format nil "~2,'0X~{~2,'0X~}" opacity (reverse color)))
 
-(defmethod kml-link ((href string) &key http-query)
+(defmethod kml-link ((href string) &key refresh-on-region http-query)
   (with-element "Link"
     (with-element "href" (text href))
-    (with-element "viewRefreshMode" (text "onRegion"))
+    (when refresh-on-region
+      (with-element "viewRefreshMode" (text "onRegion")))
     (when http-query
       (with-element "httpQuery" (text http-query)))))
 
@@ -283,7 +284,7 @@
     (when hide-children
       (kml-hide-children-style))
     (when fly-to-view (with-element "flyToView" (text "1")))
-    (kml-link href)))
+    (kml-link href :refresh-on-region (and rect t))))
 
 (defun kml-lat-lon-box (rect &optional (element "LatLonBox"))
   (bind-nsew (bounding-box-lon-lat rect)
