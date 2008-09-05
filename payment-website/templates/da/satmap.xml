@@ -56,9 +56,12 @@
 	</tr>        
 	<tr>
 	  <td colspan="3">
-	    Wenn die <a href='http://earth.google.de/' target='_blank' shape='rect' class='titlegreen'>Google Earth Software</a>
-            auf Ihrem Computer installiert ist, können Sie sich das Projektgebiet mit einer Auswahl verschiedener
-            Satelliten Bilder (aus dem Zeitraum 2000 - 2007) und vielen weiteren Informationen anschauen.                        
+            If the Google Earth Software
+            <a href='http://earth.google.de/' target='_blank' shape='rect' class='titlegreen'>http://earth.google.de/</a>
+            is installed on your computer, you can view the project area with
+            satellite images from 2002 and 2007 plus a lot of additional
+            information. For an optimal viewing experience, you can also use the
+            above link to upgrade your Google Earth installation if needed.
 	  </td>
 	</tr>
 	<tr>
