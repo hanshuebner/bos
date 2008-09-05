@@ -330,16 +330,16 @@
   (redirect #?"/cert-regen/$((store-object-id contract))?action=wait")
 
 (defmethod handle-object-form ((handler cert-regen-handler) (action (eql :wait)) (contract contract))
-  (if (and (contract-certificates-generated-p contract)
-           (not (contract-tree-needs-update-p)))
+  (if (not (and (contract-certificates-generated-p contract)
+                (not (contract-tree-needs-update-p))))
+      (html (:html
+             (:head ((:meta :http-equiv "refresh"
+                            :content #?"2; url=/cert-regen/$((store-object-id contract))?action=wait")))
+             (:body "waiting for certificate to be regenerated...")))
       (with-bos-cms-page (:title "Certificate has been recreated")
         (html "The certificates for the sponsor have been re-generated." :br)
         (unless (contract-download-only-p contract)
           (mail-print-pdf contract)
           (html "The print certificate has been sent to the relevant BOS office address by email." :br))
         (let ((sponsor (contract-sponsor contract)))
-          (cmslink #?"edit-sponsor/$((store-object-id sponsor))" "return to sponsor")))
-      (html (:html
-             (:head ((:meta :http-equiv "refresh"
-                           :content #?"2; url=/cert-regen/$((store-object-id contract))?action=wait")))
-             (:body "waiting for certificate to be regenerated...")))))
+          (cmslink #?"edit-sponsor/$((store-object-id sponsor))" "return to sponsor")))))
