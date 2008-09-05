@@ -35,7 +35,7 @@
              (dolist (kml-root-data (class-instances 'kml-root-data))
                (let ((language (language kml-root-data)))
                  (html (:h2 (:princ language))
-                       (:p ((:input :type "file" :name language))
+                       (:p ((:input :type "file" :name language :size 50))
                            " "
                            (let ((file-upload (request-uploaded-file language)))
                              (when file-upload
