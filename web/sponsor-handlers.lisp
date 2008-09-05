@@ -327,7 +327,7 @@
 (defmethod handle-object-form ((handler cert-regen-handler) (action (eql :regenerate)) (contract contract))
   (with-query-params (name address language)
     (contract-issue-cert contract name :address address :language language))
-  (redirect #?"/cert-regen/$((store-object-id contract))?action=wait")
+  (redirect #?"/cert-regen/$((store-object-id contract))?action=wait"))
 
 (defmethod handle-object-form ((handler cert-regen-handler) (action (eql :wait)) (contract contract))
   (if (not (and (contract-certificates-generated-p contract)
