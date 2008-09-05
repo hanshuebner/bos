@@ -211,12 +211,12 @@ and might be needed again."))
           (when contract
             (write-personalized-contract-placemark-kml contract lang))
           (with-element "LookAt"
-            (with-element "longitude" (text "116.988156014724"))
-            (with-element "latitude" (text "-1.045791509671129"))
+            (with-element "longitude" (text "116.975859"))
+            (with-element "latitude" (text "-1.044691"))
             (with-element "altitude" (text "0"))
-            (with-element "range" (text "1134.262777389377"))
+            (with-element "range" (text "11000"))
             (with-element "tilt" (text "0"))
-            (with-element "heading" (text "1.391362238653075")))
+            (with-element "heading" (text "0")))
           (with-element "Folder"
             (attribute "name" (dictionary-entry "Sat-Images" lang))
             (attribute "open" "1")
