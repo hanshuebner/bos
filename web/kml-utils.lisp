@@ -276,11 +276,13 @@
       (with-element "bgColor" (text "00ffffff")))))
 
 (defun kml-network-link (href &key rect lod name
-                         fly-to-view hide-children)
+                         fly-to-view hide-children
+                         look-at)
   ;; http-query could be added to &key args
   (with-element "NetworkLink"
     (when name (with-element "name" (text name)))
     (when rect (kml-region rect lod))
+    (when look-at (funcall look-at))
     (when hide-children
       (kml-hide-children-style))
     (when fly-to-view (with-element "flyToView" (text "1")))

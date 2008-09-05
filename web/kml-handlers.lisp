@@ -246,7 +246,15 @@ and might be needed again."))
                             :hide-children nil)
           (kml-network-link (format nil "http://~a/country-stats?lang=~A" (website-host) lang)
                             :name (dictionary-entry "Country-Stats" lang)
-                            :hide-children nil))))))
+                            :hide-children nil
+                            :look-at (lambda ()
+                                       (with-element "LookAt"
+                                         (with-element "longitude" (text "8.297592139883164"))
+                                         (with-element "latitude" (text "49.89989439494514"))
+                                         (with-element "altitude" (text "0"))
+                                         (with-element "range" (text "5400715.913126094"))
+                                         (with-element "tilt" (text "0"))
+                                         (with-element "heading" (text "0"))))))))))
 
 (defmethod handle-object ((handler kml-root-dynamic-handler) (object sponsor))
   (write-root-kml handler object))
@@ -273,14 +281,7 @@ and might be needed again."))
                                       :root-element "kml")
       (with-query-params ((lang "en"))
         (with-element "Document"
-          (with-element "name" (text "Country-Stats"))
-          (with-element "LookAt"
-            (with-element "longitude" (text "8.297592139883164"))
-            (with-element "latitude" (text "49.89989439494514"))
-            (with-element "altitude" (text "0"))
-            (with-element "range" (text "5400715.913126094"))
-            (with-element "tilt" (text "0"))
-            (with-element "heading" (text "0")))
+          (with-element "name" (text "Country-Stats"))          
           (with-element "Style"
             (attribute "id" "countryStatsStyle")
             (with-element "IconStyle"
