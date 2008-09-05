@@ -170,6 +170,14 @@ links are created."))
                (rmcid (when rmcid (parse-integer rmcid)))
                (rmcpath (parse-path rmcpath)))
           (with-element "Document"
+            (when (null path)
+              ;; for the toplevel
+              (with-element "LookAt"
+                (with-element "longitude" (text "116.987378"))
+                (with-element "latitude" (text "-1.045410"))
+                (with-element "range" (text "2531"))
+                (with-element "tilt" (text "0"))
+                (with-element "heading" (text "0"))))
             (with-element "Style"
               (attribute "id" "contractPlacemarkIcon")
               (with-element "IconStyle"
