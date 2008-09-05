@@ -220,9 +220,6 @@ and might be needed again."))
           (with-element "Folder"
             (attribute "name" (dictionary-entry "Sat-Images" lang))
             (attribute "open" "1")
-            (with-element "Style"
-              (with-element "ListStyle"
-                (with-element "listItemType" (text "radioFolder"))))
             (dolist (sat-layer (sort (copy-list (class-instances 'sat-layer))
                                      #'< :key #'year))
               (kml-network-link (format nil "http://~a/sat-root-kml?name=~A" (website-host) (name sat-layer))
