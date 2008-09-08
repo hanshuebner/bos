@@ -16,13 +16,13 @@
 	<tr>
 	  <td colspan="2">
 	    <span class="headline">
-	      Satellitenkarte
+	      Satellite Map
 	    </span>
 	  </td>
 	  <td align="center" valign="top">
 	    <img src="../images/pfeil_back.gif" width="10" height="9" alt="" />
 	    <a href="javascript:history.back()" class="titlegray">
-	      zurück
+	      back
 	    </a>  
 	  </td>		
 	</tr>
@@ -32,9 +32,9 @@
 	</tr>        
 	<tr>
 	  <td colspan="3">
-	    Verschaffen Sie sich einen Überblick auf unserer
+	    Take a look at our
             <a shape="rect" title="Satellitenkarte" class="titlegreen" href="javascript:window_infosys()">
-	      Satellitenkarte</a>.            
+	      Satellite Map</a>.            
 	  </td>
 	</tr>
         <!--         separator -->
@@ -46,7 +46,7 @@
         <tr>
 	  <td colspan="3">
 	    <span class="headline">
-	      Besuchen Sie Samboja Lestari in Google Earth
+	      Visit Samboja Lestari in Google Earth
 	    </span>
 	  </td>
 	</tr>
@@ -70,7 +70,7 @@
 	</tr>                
 	<tr>
 	  <td colspan="3">
-            Über diesen Link wird sich direkt Ihre Google Earth Applikation öffnen:            
+            Your Google Earth application will be started via the following link:
 	  </td>
 	</tr>        
 	<tr>
@@ -81,7 +81,7 @@
 	  <td colspan="3">
             <img alt="" height="9" width="10" src="/images/pfeil_link_on.gif"/>
             <a shape="rect" class="more" href="/kml-root?lang=en">
-	      zu Google Earth
+	      to Google Earth
 	    </a>
 	  </td>
 	</tr>        
