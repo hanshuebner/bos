@@ -299,6 +299,10 @@ and might be needed again."))
                       (with-element "name" (text (format nil "~A" (dictionary-entry
                                                                    (second (assoc country *country-english-names*)) lang))))
                       (with-element "styleUrl" (text "#countryStatsStyle"))
+                      (with-element "LookAt"
+                        (with-element "longitude" (text (format nil "~,20F" lat)))
+                        (with-element "latitude" (text (format nil "~,20F" lon)))
+                        (with-element "range" (text "1000000")))
                       (with-element "description"
                         (text (format nil "<p>~A</p><table><tbody><tr><td>~A:</td><td>~D ~A</td></tr>
                                              <tr><td>~A:</td><td>~D m²</td></tr></tbody></table>"
