@@ -591,6 +591,8 @@
     (with-element "styleUrl" (text "#poiPlacemarkIcon"))
     (with-element "description"
       (cdata (poi-description-google-earth poi language)))
+    (with-element "Snippet"
+      (text (slot-string poi 'subtitle language)))
     (with-element "Point"
       (with-element "coordinates"
         (text (format nil "~{~,20F,~}0" (poi-center-lon-lat poi)))))))
