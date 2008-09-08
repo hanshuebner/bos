@@ -316,6 +316,18 @@ font-size: 100.1%;
 	background-color : White;
 }
 
+#google_earth_logo
+{
+  position: relative;
+  top: 200px;
+  text-align: center;
+}
+
+#google_earth_logo img
+{
+  border: none;
+}
+
 #helpbox
 {
 	position: relative;

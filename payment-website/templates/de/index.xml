@@ -119,6 +119,9 @@ Internet beobachten.
 					<input type="text" class="form_big" name="email" size="20" maxlength="40" value="" />
 					<input value="ja" class="form_big" name="action" type="submit" onclick="return send_info_request();" />
 			</form> 
-		</div>	
+		</div>
+	        <div id="google_earth_logo">
+                  <a href="/de/satmap"><img src="/static/google_earth_logo.png" width="80" height="72"/></a>
+                </div>
 	</div>
 </bknr:toplevel>
