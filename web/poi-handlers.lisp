@@ -634,3 +634,23 @@
                   (with-element "Icon"
                     (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
               (mapc #'(lambda (poi) (write-poi-kml poi lang)) relevant-pois))))))))
+
+;;; poi-image-handler
+(defclass poi-image-handler (object-handler)
+  ()
+  (:default-initargs :object-class 'poi :query-function #'find-poi))
+
+(defmethod handle-object ((handler poi-image-handler) (poi (eql nil)))
+  (error "poi not found"))
+
+(defmethod handle-object ((handler poi-image-handler) poi)
+  (destructuring-bind (poi-name image-index-string &rest imageproc-arguments)
+      (multiple-value-list (parse-handler-url handler))
+    (declare (ignore poi-name))
+    (let ((image-index (1- (parse-integer image-index-string))))
+      (if (and (not (minusp image-index))
+               (< image-index (length (poi-sat-images poi))))
+          (redirect (format nil "/image/~D~@[~{/~a~}~]"
+                            (store-object-id (nth image-index (poi-sat-images poi)))
+                            imageproc-arguments))
+          (error "image index ~a out of bounds for poi ~a" image-index poi)))))
