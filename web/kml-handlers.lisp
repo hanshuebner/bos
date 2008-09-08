@@ -311,6 +311,12 @@ and might be needed again."))
                                           (dictionary-entry "sponsors" lang))
                                       (dictionary-entry "total contribution" lang)
                                       number-of-sold-m2s)))
+                      (with-element "Snippet"
+                        (text (format nil "~A ~A"
+                                      number-of-paying-sponsors
+                                      (if (= 1 number-of-paying-sponsors)
+                                          (dictionary-entry "sponsor" lang)
+                                          (dictionary-entry "sponsors" lang)))))
                       (with-element "Point"
                         (with-element "coordinates"
                           (text (format nil "~,20F,~,20F,0" lat lon)))))))))))))))
