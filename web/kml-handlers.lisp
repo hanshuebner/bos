@@ -296,6 +296,8 @@ and might be needed again."))
                   (multiple-value-bind (number-of-paying-sponsors number-of-sold-m2s)
                       (contract-stats-for-country country)
                     (with-element "Placemark"
+                      (with-element "name" (text (format nil "~A" (dictionary-entry
+                                                                   (second (assoc country *country-english-names*)) lang))))
                       (with-element "styleUrl" (text "#countryStatsStyle"))
                       (with-element "description"
                         (text (format nil "<p>~A</p><table><tbody><tr><td>~A:</td><td>~D ~A</td></tr>
