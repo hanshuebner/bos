@@ -914,6 +914,11 @@ function show_poi_microsite() {
                 "microsite", "width=820,height=780,scrollbars=yes");
 }
 
+function show_poi_google_earth() {
+    var the_poi = poi[aktuelles_objekt];
+    document.location = "/poi-kml-look-at/" + the_poi.id;
+}
+
 var poi_menu_items;
 var poi_active_menu_item;
 
@@ -952,7 +957,9 @@ function PoiDetail_anzeigen(index) {
     if (the_poi.movies) {
 	poi_menu_items.push([ msg('Film'), show_poi_movie ]);
     }
-    poi_menu_items.push(["more info", show_poi_microsite]);
+    poi_menu_items.push(["More-Info", show_poi_microsite]);
+
+    poi_menu_items.push(["Google-Earth", show_poi_google_earth]);
 
     poi_active_menu_item = msg('Sat-Karte');
 

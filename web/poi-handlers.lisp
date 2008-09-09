@@ -635,6 +635,31 @@
                     (with-element "href" (text (format nil "http://~a/static/Orang_weiss.png" (website-host)))))))
               (mapc #'(lambda (poi) (write-poi-kml poi lang)) relevant-pois))))))))
 
+;;; poi-kml-look-at-handler
+(defclass poi-kml-look-at-handler (object-handler)
+  ()
+  (:default-initargs :object-class 'poi :query-function #'find-poi))
+
+(defmethod handle-object ((handler poi-kml-look-at-handler) poi)
+  (let ((poi-last-change (store-object-last-change poi 0)))
+    (hunchentoot:handle-if-modified-since poi-last-change)
+    (setf (hunchentoot:header-out :last-modified)
+          (hunchentoot:rfc-1123-date poi-last-change)
+          (hunchentoot:header-out :content-disposition)
+          (format nil "attachment; filename=look-at-~A.kml" (store-object-id poi)))
+    (destructuring-bind (lon lat)
+        (poi-center-lon-lat poi)
+      (with-xml-response (:content-type "application/vnd.google-earth.kml+xml; charset=utf-8")
+        (with-namespace (nil "http://earth.google.com/kml/2.1")
+          (with-element "kml"
+            (with-element "Document"
+              (with-element "LookAt"
+                (with-element "longitude" (text (format nil "~,20F" lon)))
+                (with-element "latitude" (text (format nil "~,20F" lat)))
+                (with-element "range" (text "253"))
+                (with-element "tilt" (text "0"))
+                (with-element "heading" (text "0"))))))))))
+
 ;;; poi-image-handler
 (defclass poi-image-handler (object-handler)
   ()

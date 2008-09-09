@@ -177,6 +177,7 @@
                                         ("/poi-image" poi-image-handler)
                                         ("/poi-xml" poi-xml-handler)
                                         ("/poi-kml-all" poi-kml-all-handler)
+                                        ("/poi-kml-look-at" poi-kml-look-at-handler)
                                         ("/poi-kml" poi-kml-handler)
                                         ("/map-browser" map-browser-handler)
                                         ("/poi-javascript" poi-javascript-handler)
