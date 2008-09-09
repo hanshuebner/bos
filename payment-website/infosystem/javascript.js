@@ -908,6 +908,12 @@ function hide_poi_movie() {
     document.getElementById("MovieApplet").innerHTML = '';
 }
 
+function show_poi_microsite() {
+    var the_poi = poi[aktuelles_objekt]; // would be nice as an arg
+    window.open("/poi-xml/" + the_poi.id + "?lang=" + document.language,
+                "microsite", "width=820,height=780,scrollbars=yes");
+}
+
 var poi_menu_items;
 var poi_active_menu_item;
 
@@ -946,6 +952,7 @@ function PoiDetail_anzeigen(index) {
     if (the_poi.movies) {
 	poi_menu_items.push([ msg('Film'), show_poi_movie ]);
     }
+    poi_menu_items.push(["more info", show_poi_microsite]);
 
     poi_active_menu_item = msg('Sat-Karte');
 
