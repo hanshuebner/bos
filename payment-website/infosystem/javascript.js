@@ -922,9 +922,7 @@ function show_poi_google_earth() {
 var poi_menu_items;
 var poi_active_menu_item;
 
-function poi_menu_select(index) {
-    poi_active_menu_item = poi_menu_items[index][0];
-    make_poi_menu();
+function invoke_poi_menu(index) {
     document.getElementById("PoiInfoText").innerHTML = poi[aktuelles_objekt]['text'];
     poi_menu_items[index][1].call();
 }
@@ -937,7 +935,7 @@ function make_poi_menu() {
 	if (item_name == poi_active_menu_item) {
 	    poi_menu += '<span class="PoiMenuItemActive">' + item_name + '</span>';
 	} else {
-	    poi_menu += '<a class="PoiMenuItem" href="#" onclick="poi_menu_select(' + i + ');">' + item_name + '</a>';
+	    poi_menu += '<a class="PoiMenuItem" href="#" onclick="invoke_poi_menu(' + i + ');">' + item_name + '</a>';
 	}
     }
 
@@ -947,21 +945,9 @@ function make_poi_menu() {
 function PoiDetail_anzeigen(index) {
     var the_poi = poi[index];
 
-    poi_menu_items = [ [ msg("Sat-Karte"), show_poi_satbild ] ];
-    if (the_poi['luftbild']) {
-	poi_menu_items.push([ msg('Luftbild'), show_poi_luftbild ]);
-    }
-    if (the_poi.panoramas) {
-	poi_menu_items.push([ msg('Panorama'), show_poi_panorama ]);
-    }
-    if (the_poi.movies) {
-	poi_menu_items.push([ msg('Film'), show_poi_movie ]);
-    }
-    poi_menu_items.push(["More-Info", show_poi_microsite]);
-
+    poi_menu_items = [];
+    poi_menu_items.push(["More-Info", show_poi_microsite]);    
     poi_menu_items.push(["Google-Earth", show_poi_google_earth]);
-
-    poi_active_menu_item = msg('Sat-Karte');
 
     make_poi_menu();
     
