@@ -947,7 +947,8 @@ function PoiDetail_anzeigen(index) {
 
     poi_menu_items = [];
     poi_menu_items.push(["More-Info", show_poi_microsite]);    
-    poi_menu_items.push(["Google-Earth", show_poi_google_earth]);
+    if (the_poi.published_earth)
+      poi_menu_items.push(["Google-Earth", show_poi_google_earth]);
 
     make_poi_menu();
     

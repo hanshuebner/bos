@@ -218,7 +218,8 @@ var poi = { id: ~S,
             text: ~S,
             x: ~D,
             y: ~D,
-            thumbnail: ~D
+            thumbnail: ~D,
+            published_earth: ~:[false~;true~]
 };
 "
               (store-object-id poi)
@@ -229,7 +230,8 @@ var poi = { id: ~S,
               (escape-nl (slot-string poi 'description language))
               (poi-center-x poi)
               (poi-center-y poi)
-              (length (poi-sat-images poi)))
+              (length (poi-sat-images poi))
+              (poi-published-earth poi))
       (format t "poi.thumbnail = ~D;~%" (length (poi-sat-images poi)))
       (when (poi-airals poi)
 
