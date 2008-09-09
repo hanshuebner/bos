@@ -210,7 +210,8 @@ FROM and TO must not both continue to exist."
                                   (store-objects-with-class 'poi))
                        #'(lambda (poi-1 poi-2) (string-lessp (slot-string poi-1 'title language) (slot-string poi-2 'title language)))))
       (format t "
-var poi = { symbol: ~S,
+var poi = { id: ~S,
+            symbol: ~S,
             icon: ~S,
             name: ~S,
             untertitel: ~S,
@@ -220,6 +221,7 @@ var poi = { symbol: ~S,
             thumbnail: ~D
 };
 "
+              (store-object-id poi)
               (poi-name poi)
               (poi-icon poi)
               (slot-string poi 'title language)
