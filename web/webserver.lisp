@@ -163,6 +163,8 @@
                                         ("/kml-root-dynamic" kml-root-dynamic-handler)
                                         ("/kml-root" kml-root-handler)
                                         ("/country-stats" country-stats-handler)
+                                        ("/sitemap.xml" sitemap-handler)
+                                        ("/contract-placemark" contract-placemark-handler)
                                         ("/contract-tree-kml" contract-tree-kml-handler)
                                         ("/contract-tree-image" contract-tree-image-handler)
                                         ("/contract-image" contract-image-handler)

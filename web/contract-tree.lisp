@@ -132,7 +132,64 @@ bulk-insertions contracts with larger area are inserted first."
      (hunchentoot:handle-if-modified-since (timestamp node))
      ,@body))
 
-;;; kml handler
+;;; contract-placemark-handler
+(defclass contract-placemark-handler (object-handler)
+  ()
+  (:default-initargs :object-class 'contract)
+  (:documentation "Publishes a contract as a kml placemark to be
+crawled by Google."))
+
+(defmethod handle-object ((handler contract-placemark-handler) contract
+                          &aux (last-change (store-object-last-change contract 0)))
+  (hunchentoot:handle-if-modified-since last-change)
+  (setf (hunchentoot:header-out :last-modified)
+        (hunchentoot:rfc-1123-date last-change))
+  (let ((name (user-full-name (contract-sponsor contract))))
+    (with-xml-response (:content-type "application/vnd.google-earth.kml+xml")
+      (with-namespace (nil "http://www.opengis.net/kml/2.2")
+        (with-namespace ("atom" "http://www.w3.org/2005/Atom")
+          (with-element "kml"
+            (with-element "Document"
+              (when name (with-element "name" (text name)))
+              (with-element* ("atom" "author")
+                (with-element* ("atom" "name")
+                  (text "BOS Deutschland e.V. - Borneo Orangutan Survival Deutschland")))
+              (with-element* ("atom" "link")
+                (attribute "href" (format nil "http://~A" (website-host))))
+              (with-element "Placemark"                          
+                (when name (with-element "name" (text name)))
+                (with-element "Snippet"
+                  (attribute "maxLines" "2")
+                  (text (format-date-time (contract-date contract) :show-time nil))
+                  (with-element "br")
+                  (text (format nil "~D m²" (contract-area contract))))
+                (with-element "description" (cdata (contract-description contract "en")))
+                (with-element "Point"
+                  (with-element "coordinates"
+                    (destructuring-bind (x y)
+                        (contract-center contract)
+                      (text (with-output-to-string (out)
+                              (kml-format-point (make-point :x x :y y) out))))))))))))))
+
+;;; sitemap-handler
+(defclass sitemap-handler (page-handler)
+  ())
+
+(defmethod handle ((handler sitemap-handler))
+  (with-xml-response ()
+    (with-namespace (nil "http://www.sitemaps.org/schemas/sitemap/0.9")
+      (with-namespace ("geo" "http://www.google.com/geo/schemas/sitemap/1.0")
+        (with-element "urlset"
+          (dolist (contract (class-instances 'contract))
+            (when (user-full-name (contract-sponsor contract))
+              (with-element "url"
+                (with-element "loc"
+                  (text (format nil "http://~A/contract-placemark/~D"
+                                (website-host) (store-object-id contract))))
+                (with-element* ("geo" "geo")
+                  (with-element* ("geo" "format") (text "kml")))))))))))
+
+;;; contract-tree-kml-handler
 (defclass contract-tree-kml-handler (page-handler)
   ()
   (:documentation "Generates a kml representation of the queried
