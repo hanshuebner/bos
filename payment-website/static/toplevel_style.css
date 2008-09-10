@@ -105,10 +105,10 @@ font-size: 100.1%;
 /* menueleiste im header - neue version - mittlerer bereich hauptmenue */
 #menue_header_main
 {	position: absolute;
-	z-index: 9;
+	z-index: 120;
 	margin-top: 74px;
 	margin-left: 230px;
-	width: 450px;
+	width: 410px;
 	height: 15px;
 	visibility: visible;
 	display: block;
