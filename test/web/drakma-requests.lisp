@@ -7,10 +7,10 @@
                  (let* ((,port-var (+ 70000 (random 5253)))
                         (server (bos.web::init :port ,port-var
                                                :worldpay-test-mode t)))
-                   (check-type server bos.web::bos-server)
+                   (check-type server hunchentoot::server)
                    (unwind-protect
                         (progn ,@body)
-                     (bos.web::bos-server-stop)))))
+                     (hunchentoot:stop-server server)))))
 
 (test web-init
       (with-bos-test-server (port)
