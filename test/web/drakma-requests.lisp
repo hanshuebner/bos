@@ -10,7 +10,7 @@
                    (check-type server bos.web::bos-server)
                    (unwind-protect
                         (progn ,@body)
-                     (hunchentoot:stop-server server)))))
+                     (bos.web::bos-server-stop)))))
 
 (test web-init
       (with-bos-test-server (port)
