@@ -2,6 +2,115 @@
 
 (enable-interpol-syntax)
 
+;;;; bos-server
+(defvar *webserver* nil
+  "When the bos-server is running this is set to the server
+instance.")
+
+(defclass bos-server ()
+  ())
+
+;;; internal protocol
+(defgeneric bos-server-start-internal (server))
+(defgeneric bos-server-stop-internal (server))
+(defgeneric bos-server-running-p-internal (server))
+
+;;; external protocol
+(defun bos-server-start (&key port threaded)
+  (let ((server-class (if threaded
+                          'bos-multi-threaded-server
+                          'bos-single-threaded-server)))
+    (prog1
+        (setq *webserver* (make-instance server-class :port port))
+      (bos-server-start-internal *webserver*))))
+
+(defun bos-server-stop ()
+  (unless (bos-server-running-p)
+    (error "BOS server is not running"))
+  (bos-server-stop-internal *webserver*))
+
+(defun bos-server-running-p ()
+  (when *webserver*
+    (bos-server-running-p-internal *webserver*)))
+
+(defun bos-server-restart (&key port threaded)
+  (when (bos-server-running-p)
+    (bos-server-stop))
+  (bos-server-start :port port :threaded threaded))
+
+(defgeneric bos-server-port (server))
+
+;;; bos-server-hunchentoot-mixin
+(defclass bos-server-hunchentoot-mixin ()
+  ())
+
+(defmethod bos-server-start-internal :before ((server bos-server-hunchentoot-mixin))
+  (declare (ignore server))
+  (setf hunchentoot:*hunchentoot-default-external-format*
+        (flex:make-external-format :utf-8 :eol-style :lf)
+        hunchentoot:*rewrite-for-session-urls*
+        nil
+        ;; the reason for the following setting is that ptviewer sends
+        ;; a different User-Agent -- (when requesting PTDefault.html)
+        hunchentoot:*use-user-agent-for-sessions*
+        nil))
+
+;;;; bos-multi-threaded-server
+(defclass bos-multi-threaded-server (bos-server bos-server-hunchentoot-mixin)
+  ((port :reader bos-server-port :initarg :port)
+   (native-server :accessor bos-server-native-server)))
+
+(defmethod bos-server-start-internal ((server bos-multi-threaded-server))
+  (setf (bos-server-native-server server)
+        (hunchentoot:start-server :port (bos-server-port server)
+                                  :threaded t :persistent-connections-p t)))
+
+(defmethod bos-server-stop-internal ((server bos-multi-threaded-server))
+  (hunchentoot:stop-server (bos-server-native-server server)))
+
+(defmethod bos-server-running-p-internal ((server bos-multi-threaded-server))
+  (not (hunchentoot::server-shutdown-p (bos-server-native-server server))))
+
+;;;; bos-single-threaded-server
+(defclass bos-single-threaded-server (bos-server bos-server-hunchentoot-mixin)
+  ((port :reader bos-server-port :initarg :port)
+   (server-thread :accessor bos-server-thread :initform nil)))
+
+(defmethod bos-server-start-internal ((server bos-single-threaded-server))
+  (setf (bos-server-thread server)
+        (bt:make-thread (lambda ()
+                          (catch 'stop-tag
+                            (hunchentoot:start-server :port (bos-server-port server)
+                                                      :threaded nil :persistent-connections-p nil)))
+                        :name "bos-single-threaded-server")))
+
+(defvar *stop-server-handler-authorized-p* nil)
+
+(defmacro with-stop-server-handler-autorization (&body body)
+  `(unwind-protect
+        (progn
+          (setq *stop-server-handler-authorized-p* t)
+          ,@body)
+     (setq *stop-server-handler-authorized-p* nil)))
+
+(defclass stop-server-handler (page-handler)
+  ())
+
+(defmethod handle ((handler stop-server-handler))
+  (if *stop-server-handler-authorized-p*
+      (throw 'stop-tag nil)
+      (error "not found")))
+
+(defmethod bos-server-stop-internal ((server bos-single-threaded-server))
+  (with-stop-server-handler-autorization
+      (ignore-errors (drakma:http-request (format nil "http://localhost:~D/stop-server"
+                                                  (bos-server-port server)))))
+  nil)
+
+(defmethod bos-server-running-p-internal ((server bos-single-threaded-server))
+  (and (bos-server-thread server)
+       (bt:thread-alive-p (bos-server-thread server))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -156,7 +265,8 @@
 
   (make-instance 'bos-website
                  :name "create-rainforest.org CMS"
-                 :handler-definitions `(("/edit-poi-medium" edit-poi-medium-handler)
+                 :handler-definitions `(("/stop-server" stop-server-handler)
+                                        ("/edit-poi-medium" edit-poi-medium-handler)
                                         ("/edit-poi" edit-poi-handler)
                                         ("/edit-sponsor" edit-sponsor-handler)
                                         ("/kml-upload" kml-upload-handler)

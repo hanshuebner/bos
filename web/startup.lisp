@@ -8,8 +8,6 @@
      :host (pathname-host me)
      :version nil)))
 
-(defvar *webserver* nil)
-
 (defvar *port*)
 (defvar *website-directory*)
 (defvar *website-url*)
@@ -24,7 +22,7 @@
              worldpay-test-mode
              (google-analytics-account "UA-3432041-1")
              start-frontend
-             debug)
+             threaded)
   (when website-url-given
     (warn "Specifying :website-url in web.rc is deprecated. Use :host instead.~
          ~%Website-url will then be initialized by  (format nil \"http://~~A\" host)."))
@@ -39,17 +37,9 @@
   (bos.web::publish-website :website-directory *website-directory*
                             :website-url *website-url*
                             :worldpay-test-mode *worldpay-test-mode*)
-  (format t "~&; Starting hunchentoot~@[ in debug mode~].~%" debug)
-  (force-output)
-  (when *webserver*
-    (hunchentoot:stop-server *webserver*))
-  (setf hunchentoot:*hunchentoot-default-external-format* (flex:make-external-format :utf-8 :eol-style :lf)
-        hunchentoot:*rewrite-for-session-urls* nil
-        ;; the reason for the following setting is that ptviewer sends
-        ;; a different User-Agent -- (when requesting PTDefault.html)
-        hunchentoot:*use-user-agent-for-sessions* nil)
-  (setq *webserver* (hunchentoot:start-server :port *port* :threaded (not debug)
-                                              :persistent-connections-p (not debug)))
+  (format t "~&; Starting hunchentoot.~%")
+  (force-output)  
+  (bos-server-restart :port *port* :threaded threaded)
   (if start-frontend
       (start-frontend :host host :backend-port port :port frontend-port)
       (warn "frontend not started - to achieve this specify :start-frontend t"))
