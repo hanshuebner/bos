@@ -9,7 +9,7 @@
   
   <!-- Server side setup -->
   <servers>
-    <server host="horst.headcraft.de" port="80" type="tcp"></server>
+    <server host="prod.headcraft.de" port="80" type="tcp"></server>
   </servers>
 
   <!-- to start os monitoring (cpu, network, memory). Use an erlang
