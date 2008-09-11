@@ -6,18 +6,18 @@
   <clients>
     <client host="localhost" use_controller_vm="true" maxusers="15000"/>
   </clients>
-  
+
   <!-- Server side setup -->
   <servers>
     <server host="prod.headcraft.de" port="80" type="tcp"></server>
   </servers>
 
   <!-- to start os monitoring (cpu, network, memory). Use an erlang
-       agent on the remote machine or SNMP. erlang is the default --> 
+       agent on the remote machine or SNMP. erlang is the default -->
   <!--   <monitoring> -->
   <!--     <monitor host="myserver" type="snmp"></monitor> -->
   <!--   </monitoring> -->
-  
+
   <!-- several arrival phases can be set: for each phase, you can set
        the mean inter-arrival time between new clients and the phase
        duration -->
@@ -2150,5 +2150,3 @@
 
   </sessions>
 </tsung>
-
-

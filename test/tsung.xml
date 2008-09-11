@@ -6,18 +6,18 @@
   <clients>
     <client host="localhost" use_controller_vm="true" maxusers="15000"/>
   </clients>
-  
+
   <!-- Server side setup -->
   <servers>
     <server host="prod.headcraft.de" port="80" type="tcp"></server>
   </servers>
 
   <!-- to start os monitoring (cpu, network, memory). Use an erlang
-       agent on the remote machine or SNMP. erlang is the default --> 
+       agent on the remote machine or SNMP. erlang is the default -->
   <!--   <monitoring> -->
   <!--     <monitor host="myserver" type="snmp"></monitor> -->
   <!--   </monitoring> -->
-  
+
   <!-- several arrival phases can be set: for each phase, you can set
        the mean inter-arrival time between new clients and the phase
        duration -->
@@ -26,7 +26,7 @@
     <arrivalphase phase="1" duration="30" unit="second">
       <users interarrival="2" unit="second" maxnumber="500"></users>
     </arrivalphase>
-    
+
     <arrivalphase phase="2" duration="2" unit="minute">
       <users interarrival="0.1" unit="second" maxnumber="500"></users>
     </arrivalphase>
@@ -494,46 +494,46 @@
       <request><http url='/images/step1.gif' version='1.1' method='GET'></http></request>
 
       <thinktime random='true' value='7'/>
-      
-      <transaction name='buy_sqm'>	      
-	<request>
-	  <!-- 	<dyn_variable name="contract_id"  -->
-	  <!--                       regexp='input +value="([0-9]+)" +name="contract-id" +type="hidden"'/> -->
-	  <dyn_variable name="contract_id" regexp='cartId=\([0-9]*\)'></dyn_variable>
-	  <dyn_variable name="sponsor_id" regexp='MC_sponsorid=\([0-9]*\)'></dyn_variable>
-	  <dyn_variable name="master_code" regexp='MC_password=\([0-9]*\)'></dyn_variable>
-	  <http url='/de/buy-sqm'
-		version='1.1'
-		contents='numsqm=1&amp;numsqm1=&amp;disclaimer_read=1'
-		content_type='application/x-www-form-urlencoded' method='POST'></http>
-	</request>
-	<request><http url='/images/step3.gif' version='1.1' method='GET'></http></request>
+
+      <transaction name='buy_sqm'>
+        <request>
+          <!--  <dyn_variable name="contract_id"  -->
+          <!--                       regexp='input +value="([0-9]+)" +name="contract-id" +type="hidden"'/> -->
+          <dyn_variable name="contract_id" regexp='cartId=\([0-9]*\)'></dyn_variable>
+          <dyn_variable name="sponsor_id" regexp='MC_sponsorid=\([0-9]*\)'></dyn_variable>
+          <dyn_variable name="master_code" regexp='MC_password=\([0-9]*\)'></dyn_variable>
+          <http url='/de/buy-sqm'
+                version='1.1'
+                contents='numsqm=1&amp;numsqm1=&amp;disclaimer_read=1'
+                content_type='application/x-www-form-urlencoded' method='POST'></http>
+        </request>
+        <request><http url='/images/step3.gif' version='1.1' method='GET'></http></request>
       </transaction>
       <!-- https://select.worldpay.com -->
-      
+
       <thinktime random='false' value='10'/>
-      
+
       <request subst="true">
-	<http url='/handle-sale?transStatus=P&amp;name=TestSponsor&amp;address=abc&amp;instId=103530&amp;cartId=%%_contract_id%%&amp;amount=3&amp;currency=EUR&amp;lang=de&amp;desc=3%20qm%20Regenwald%20in%20Samboja%20Lestari&amp;MC_sponsorid=%%_sponsor_id%%&amp;MC_password=%%_master_code%%&amp;MC_donationcert-yearly=0&amp;MC_gift=0&amp;testMode=100'
-	      version='1.1' method='GET'></http>
+        <http url='/handle-sale?transStatus=P&amp;name=TestSponsor&amp;address=abc&amp;instId=103530&amp;cartId=%%_contract_id%%&amp;amount=3&amp;currency=EUR&amp;lang=de&amp;desc=3%20qm%20Regenwald%20in%20Samboja%20Lestari&amp;MC_sponsorid=%%_sponsor_id%%&amp;MC_password=%%_master_code%%&amp;MC_donationcert-yearly=0&amp;MC_gift=0&amp;testMode=100'
+              version='1.1' method='GET'></http>
       </request>
-      
+
       <thinktime random='true' value='5'/>
 
       <request subst="true">
-	<http url='/de/versand_quittung' version='1.1'
-	      contents='sponsor-id=%%_sponsor_id%%&amp;master-code=%%_master_code%%&amp;contract-id=%%_contract_id%%&amp;email=&amp;next-step-name=weiter&amp;name=TestSponsor&amp;want-print=no&amp;address=TestSponsor%0D%0Aabc%0D%0A&amp;Button=speichern+und+weiter'
-	      content_type='application/x-www-form-urlencoded'
-	      method='POST'></http>
+        <http url='/de/versand_quittung' version='1.1'
+              contents='sponsor-id=%%_sponsor_id%%&amp;master-code=%%_master_code%%&amp;contract-id=%%_contract_id%%&amp;email=&amp;next-step-name=weiter&amp;name=TestSponsor&amp;want-print=no&amp;address=TestSponsor%0D%0Aabc%0D%0A&amp;Button=speichern+und+weiter'
+              content_type='application/x-www-form-urlencoded'
+              method='POST'></http>
       </request>
 
       <thinktime random='true' value='2'/>
 
       <request subst="true">
-	<http url='/de/generate-cert' version='1.1'
-	      contents='sponsor-id=%%_sponsor_id%%&amp;__sponsorid=%%_sponsor_id%%&amp;__password=%%_master_code%%&amp;contract-id=%%_contract_id%%&amp;want-print=no&amp;name=TestSponsor&amp;address=TestSponsor%0D%0Aabc%0D%0A&amp;email=&amp;gift=&amp;Button=weiter'
-	      content_type='application/x-www-form-urlencoded'
-	      method='POST'></http>
+        <http url='/de/generate-cert' version='1.1'
+              contents='sponsor-id=%%_sponsor_id%%&amp;__sponsorid=%%_sponsor_id%%&amp;__password=%%_master_code%%&amp;contract-id=%%_contract_id%%&amp;want-print=no&amp;name=TestSponsor&amp;address=TestSponsor%0D%0Aabc%0D%0A&amp;email=&amp;gift=&amp;Button=weiter'
+              content_type='application/x-www-form-urlencoded'
+              method='POST'></http>
       </request>
       <request subst="true"><http url='/de/profil_setup?name=TestSponsor&amp;email=&amp;sponsor-id=%%_sponsor_id%%' version='1.1' method='GET'></http></request>
 
@@ -1069,5 +1069,3 @@
     </session>
   </sessions>
 </tsung>
-
-
