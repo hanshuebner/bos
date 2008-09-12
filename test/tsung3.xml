@@ -36,6 +36,50 @@
     <arrivalphase phase="3" duration="2" unit="minute">
       <users interarrival="0.1" unit="second" maxnumber="500"></users>
     </arrivalphase>
+
+    <arrivalphase phase="4" duration="7" unit="minute">
+      <users interarrival="2" unit="second" maxnumber="500"></users>
+    </arrivalphase>
+
+
+    <arrivalphase phase="5" duration="5" unit="minute">
+      <users interarrival="0.5" unit="second" maxnumber="500"></users>
+    </arrivalphase>
+
+
+    <arrivalphase phase="6" duration="2" unit="minute">
+      <users interarrival="0.1" unit="second" maxnumber="500"></users>
+    </arrivalphase>
+
+    <arrivalphase phase="7" duration="7" unit="minute">
+      <users interarrival="2" unit="second" maxnumber="500"></users>
+    </arrivalphase>
+
+
+    <arrivalphase phase="8" duration="5" unit="minute">
+      <users interarrival="0.5" unit="second" maxnumber="500"></users>
+    </arrivalphase>
+
+
+    <arrivalphase phase="9" duration="2" unit="minute">
+      <users interarrival="0.1" unit="second" maxnumber="500"></users>
+    </arrivalphase>
+
+    <arrivalphase phase="10" duration="7" unit="minute">
+      <users interarrival="2" unit="second" maxnumber="500"></users>
+    </arrivalphase>
+
+
+    <arrivalphase phase="11" duration="5" unit="minute">
+      <users interarrival="0.5" unit="second" maxnumber="500"></users>
+    </arrivalphase>
+
+
+    <arrivalphase phase="12" duration="2" unit="minute">
+      <users interarrival="0.1" unit="second" maxnumber="500"></users>
+    </arrivalphase>
+
+
   </load>
 
   <options>
