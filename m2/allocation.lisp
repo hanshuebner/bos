@@ -1,16 +1,15 @@
 (in-package :bos.m2)
 
-(define-persistent-class allocation-area ()
-  ((active-p :update)
-   (left :update)
-   (top :update)
-   (width :update)
-   (height :update)
-   (vertices :update)
-   (y :update)
-   (total-m2s :read)
-   (free-m2s :update)
-   (bounding-box :update :transient t))
+(defpersistent-class allocation-area ()
+  ((active-p :accessor allocation-area-active-p :initarg :active-p)
+   (left :reader allocation-area-left :initarg :left)
+   (top :reader allocation-area-top :initarg :top)
+   (width :reader allocation-area-width :initarg :width)
+   (height :reader allocation-area-height :initarg :height)
+   (vertices :reader allocation-area-vertices :initarg :vertices)
+   (total-m2s :reader allocation-area-total-m2s)
+   (free-m2s :transient t :writer (setf allocation-area-free-m2s)) ;free-m2s reader defined below
+   (bounding-box :transient t :reader allocation-area-bounding-box))
   (:documentation
    "A polygon in which to allocate meters.  LEFT, TOP, WIDTH, and
     HEIGHT designate the bounding rectangle of the polygon.
@@ -34,10 +33,17 @@
                 :unbound)
             (store-object-id allocation-area))))
 
+(defmethod allocation-area-free-m2s ((area allocation-area))
+  (flet ((compute-free-m2s ()
+           (with-slots (total-m2s free-m2s) area
+             (setf free-m2s (- total-m2s (calculate-allocated-m2-count area))))))    
+    (if (slot-boundp area 'free-m2s)
+        (slot-value area 'free-m2s)
+        (compute-free-m2s))))
+
 (defmethod initialize-persistent-instance :after ((allocation-area allocation-area) &key)
-  (with-slots (total-m2s free-m2s) allocation-area
-    (setf total-m2s (calculate-total-m2-count allocation-area))
-    (setf free-m2s (- total-m2s (calculate-allocated-m2-count allocation-area))))
+  (with-slots (total-m2s) allocation-area
+    (setf total-m2s (calculate-total-m2-count allocation-area)))
   ;; FIXME probably we dont need this and should rely on *rect-publisher*
   (dolist (tile (allocation-area-tiles allocation-area))
     (image-tile-changed tile)))
@@ -48,7 +54,7 @@
 (defmethod destroy-object :before ((allocation-area allocation-area))
   (notify-tiles allocation-area))
 
-(defmethod initialize-transient-instance :after ((allocation-area allocation-area))
+(defmethod initialize-transient-instance :after ((allocation-area allocation-area))  
   (notify-tiles allocation-area))
 
 (defun compute-bounding-box (vertices)
@@ -348,28 +354,32 @@ meter."
                 (result (search-adjacent n m2 #'allocatable-p)))
            (when result
              (assert (alexandria:setp result :test #'equal))
-             (assert (= n (length result)))
-             (decf (allocation-area-free-m2s area) n)
+             (assert (= n (length result)))             
              (return result))
            (when (> (get-internal-real-time) deadline)
              (return nil)))))))
 
 (defun allocate-m2s-for-sale (n)
   "The main entry point to the allocation machinery. Will return a
-   list of N m2 instances or NIL if the requested amount cannot be
-   allocated."
-  (or (bos.m2.allocation-cache:find-exact-match n :remove t)
-      (dolist (area (active-allocation-areas))
-        (when (<= n (allocation-area-free-m2s area))
-          (let ((m2s (allocate-in-area area n)))
-            (when m2s
-              (return m2s)))))
-      (dolist (area (inactive-nonempty-allocation-areas))
-        (when (<= n (allocation-area-free-m2s area))
-          (let ((m2s (allocate-in-area area n)))
-            (when m2s
-              (activate-allocation-area area)
-              (return m2s)))))))
+list of N m2 instances or NIL if the requested amount cannot be
+allocated. As a second value, returns the corresponding
+allocation-area.
+
+The returned m2s are still free and (decf (allocation-area-free-m2s
+area) n) has not yet happened."
+  (alexandria:nth-value-or 0
+    (bos.m2.allocation-cache:find-exact-match n :remove t)
+    (dolist (area (active-allocation-areas))
+      (when (<= n (allocation-area-free-m2s area))
+        (let ((m2s (allocate-in-area area n)))
+          (when m2s
+            (return (values m2s area))))))
+    (dolist (area (inactive-nonempty-allocation-areas))
+      (when (<= n (allocation-area-free-m2s area))
+        (let ((m2s (allocate-in-area area n)))
+          (when m2s
+            (activate-allocation-area area)
+            (return (values m2s area))))))))
 
 (defgeneric return-contract-m2s (m2s)
   (:documentation "Mark the given square meters as free, so that

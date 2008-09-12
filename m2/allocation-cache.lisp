@@ -177,25 +177,27 @@ from the index."
   (<= 1 n +threshold+))
 
 (defun find-exact-match (n &key remove)
-  "Will return a free contiguous region of size N
-as a list of m2 instances. If no such region exactly
-matching N can be found, simply returns NIL.
+  "Will return a free contiguous region of size N as a list of m2
+instances and as a second value the corresponding allocation-area. If
+no such region exactly matching N can be found, simply returns NIL.
 
 If REMOVE is T then the returned region is removed from
-the cache and FREE-M2S of the affected allocation-area
-is decremented."
-  (let ((region (cond
-                  ((not (size-indexed-p n)) nil)
-                  (remove (awhen (index-pop n)
-                            (with-slots (area region) it
-                              (decf (allocation-area-free-m2s area) n)
-                              region)))
-                  (t (awhen (index-lookup n)
-                       (cache-entry-region it))))))
-    (if region
-        (incf (hit-count *allocation-cache*))
-        (incf (miss-count *allocation-cache*)))
-    region))
+the cache."
+  (flet ((hit (cache-entry)
+           (incf (hit-count *allocation-cache*))
+           (values (cache-entry-region cache-entry)
+                   (cache-entry-area cache-entry)))
+         (miss ()
+           (incf (miss-count *allocation-cache*))
+           nil))
+    (cond
+      ((not (size-indexed-p n)) (miss))
+      (remove (aif (index-pop n)
+                   (hit it)
+                   (miss)))
+      (t (aif (index-lookup n)
+              (hit it)
+              (miss))))))
 
 (defun add-area (allocation-area)
   (dolist (region (free-regions allocation-area)

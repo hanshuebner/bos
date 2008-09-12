@@ -55,8 +55,8 @@
 
 (defun ensure-m2 (&rest coords)
   (or (m2-at coords)
-      (destructuring-bind (x y) coords
-        (make-instance 'm2 :x x :y y))))
+      (destructuring-bind (x y) coords          
+        (make-object 'm2 :x x :y y))))
 
 (defmethod get-m2-with-num ((num integer))
   (multiple-value-bind (y x) (truncate num +width+)
@@ -296,9 +296,9 @@
     (when sponsor
       (setf (sponsor-contracts sponsor) (remove contract (sponsor-contracts sponsor)))))
   (publish-contract-change contract :type 'delete)
+  (return-contract-m2s (contract-m2s contract))
   (dolist (m2 (contract-m2s contract))
-    (setf (m2-contract m2) nil))
-  (return-contract-m2s (contract-m2s contract)))
+    (setf (m2-contract m2) nil)))
 
 (defun get-contract (id)
   (let ((contract (store-object-with-id id)))
@@ -499,25 +499,13 @@ Note that this function takes also diagonally connected m2s into account."
   (warn "Old tx-make-contract transaction used, contract dates may be wrong")
   (tx-do-make-contract sponsor m2-count :date date :paidp paidp :expires expires))
 
-(deftransaction do-make-contract (sponsor m2-count &key date paidp expires download-only)
-  (let ((m2s (allocate-m2s-for-sale  m2-count)))
-    (if m2s
-        (let ((contract (make-object 'contract
-                                     :sponsor sponsor
-                                     :date date
-                                     :m2s m2s
-                                     :expires expires
-                                     :download-only download-only)))
-          (when paidp
-            (contract-set-paidp contract paidp))
-          contract)
-        (warn "can't create contract, ~A square meters for ~A could not be allocated" m2-count sponsor))))
-
 (define-condition allocation-areas-exhausted (simple-error)
   ((numsqm :initarg :numsqm :reader numsqm))
   (:report (lambda (condition stream)
              (format stream "Could not satisfy your request for ~A sqms, please contact the BOS office"
                      (numsqm condition)))))
+
+(defvar *make-contract-lock* (bt:make-lock "make-contract-lock"))
 
 (defun make-contract (sponsor m2-count
                       &key (date (get-universal-time))
@@ -527,22 +515,30 @@ Note that this function takes also diagonally connected m2s into account."
   (unless (and (integerp m2-count)
                (plusp m2-count))
     (error "number of square meters must be a positive integer"))
-  (let ((contract (do-make-contract sponsor m2-count
-                                    :date date
-                                    :paidp paidp
-                                    :expires expires
-                                    :download-only download-only)))
-    (unless contract
-      (send-system-mail :subject "Contact creation failed - Allocation areas exhaused"
-                        :text (format nil "A contract for ~A square meters could not be created, presumably because no
+  (bt:with-lock-held (*make-contract-lock*)
+    (multiple-value-bind (m2s area)
+        (allocate-m2s-for-sale m2-count)
+      (unless m2s
+        (warn "can't create contract, ~A square meters for ~A could not be allocated" m2-count sponsor)
+        (send-system-mail :subject "Contact creation failed - Allocation areas exhaused"
+                          :text (format nil "A contract for ~A square meters could not be created, presumably because no
 suitable allocation area was found.  Please check the free allocation
 areas and add more space.
 
 Sponsor-ID: ~A
 "
-                                      m2-count (store-object-id sponsor)))
-      (error 'allocation-areas-exhausted :numsqm m2-count))
-    contract))
+                                        m2-count (store-object-id sponsor)))
+        (error 'allocation-areas-exhausted :numsqm m2-count))      
+      ;; FREE-M2S might be lazily computed at his point, before it is
+      ;; decremented. If this happens, the m2s must still be free.
+      (decf (allocation-area-free-m2s area) m2-count)
+      (make-object 'contract
+                   :sponsor sponsor
+                   :date date
+                   :m2s m2s
+                   :expires expires
+                   :download-only download-only
+                   :paidp paidp))))
 
 (deftransaction recolorize-contracts (&optional colors)
   "Assigns a new color to each contract choosing from COLORS, so
