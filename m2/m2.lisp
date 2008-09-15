@@ -34,9 +34,9 @@
                             :slots (x y)
                             :index-reader m2-at
                             :index-initargs (:width +width+
-                                             :height +width+
-                                             :tile-size +m2tile-width+
-                                             :tile-class 'image-tile))))
+                                                    :height +width+
+                                                    :tile-size +m2tile-width+
+                                                    :tile-class 'image-tile))))
 
 (defmethod print-object ((m2 m2) stream)
   (if (and (slot-boundp m2 'x)
@@ -55,7 +55,7 @@
 
 (defun ensure-m2 (&rest coords)
   (or (m2-at coords)
-      (destructuring-bind (x y) coords          
+      (destructuring-bind (x y) coords
         (make-object 'm2 :x x :y y))))
 
 (defmethod get-m2-with-num ((num integer))
@@ -264,7 +264,7 @@
    (worldpay-trans-id :update :initform nil)
    (expires :read :documentation "universal time which specifies the
      time the contract expires (is deleted) when it has not been paid for"
-                  :initform nil)
+            :initform nil)
    (largest-rectangle :update))
   (:default-initargs
       :m2s nil
@@ -283,10 +283,11 @@
 (defun contract-p (object)
   (equal (class-of object) (find-class 'contract)))
 
-(defmethod initialize-persistent-instance :after ((contract contract) &key)
+(defmethod initialize-persistent-instance :after ((contract contract) &key area)
   (pushnew contract (sponsor-contracts (contract-sponsor contract)))
   (dolist (m2 (contract-m2s contract))
-    (setf (m2-contract m2) contract))
+    (setf (m2-contract m2) contract)
+    (decf (allocation-area-free-m2s area)))
   (setf (contract-largest-rectangle contract)
         (contract-compute-largest-rectangle contract))
   (publish-contract-change contract))
@@ -528,14 +529,12 @@ areas and add more space.
 Sponsor-ID: ~A
 "
                                         m2-count (store-object-id sponsor)))
-        (error 'allocation-areas-exhausted :numsqm m2-count))      
-      ;; FREE-M2S might be lazily computed at his point, before it is
-      ;; decremented. If this happens, the m2s must still be free.
-      (decf (allocation-area-free-m2s area) m2-count)
+        (error 'allocation-areas-exhausted :numsqm m2-count))
       (make-object 'contract
                    :sponsor sponsor
                    :date date
                    :m2s m2s
+                   :area area
                    :expires expires
                    :download-only download-only
                    :paidp paidp))))

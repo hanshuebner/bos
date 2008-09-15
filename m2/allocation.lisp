@@ -8,7 +8,7 @@
    (height :reader allocation-area-height :initarg :height)
    (vertices :reader allocation-area-vertices :initarg :vertices)
    (total-m2s :reader allocation-area-total-m2s)
-   (free-m2s :transient t :writer (setf allocation-area-free-m2s)) ;free-m2s reader defined below
+   (free-m2s :accessor allocation-area-free-m2s)
    (bounding-box :transient t :reader allocation-area-bounding-box))
   (:documentation
    "A polygon in which to allocate meters.  LEFT, TOP, WIDTH, and
@@ -27,20 +27,13 @@
     (format stream "~a x ~a ~:[inactive~;active~] ID: ~a"
             (allocation-area-width allocation-area)
             (allocation-area-height allocation-area)
-            (allocation-area-active-p allocation-area)            
+            (allocation-area-active-p allocation-area)
             (store-object-id allocation-area))))
 
-(defmethod allocation-area-free-m2s ((area allocation-area))
-  (flet ((compute-free-m2s ()
-           (with-slots (total-m2s free-m2s) area
-             (setf free-m2s (- total-m2s (calculate-allocated-m2-count area))))))    
-    (if (slot-boundp area 'free-m2s)
-        (slot-value area 'free-m2s)
-        (compute-free-m2s))))
-
 (defmethod initialize-persistent-instance :after ((allocation-area allocation-area) &key)
-  (with-slots (total-m2s) allocation-area
-    (setf total-m2s (calculate-total-m2-count allocation-area)))
+  (with-slots (total-m2s free-m2s) allocation-area
+    (setf total-m2s (calculate-total-m2-count allocation-area))
+    (setf free-m2s (- total-m2s (calculate-allocated-m2-count allocation-area))))
   ;; FIXME probably we dont need this and should rely on *rect-publisher*
   (dolist (tile (allocation-area-tiles allocation-area))
     (image-tile-changed tile)))
@@ -51,7 +44,7 @@
 (defmethod destroy-object :before ((allocation-area allocation-area))
   (notify-tiles allocation-area))
 
-(defmethod initialize-transient-instance :after ((allocation-area allocation-area))  
+(defmethod initialize-transient-instance :after ((allocation-area allocation-area))
   (notify-tiles allocation-area))
 
 (defun compute-bounding-box (vertices)
@@ -351,7 +344,7 @@ meter."
                 (result (search-adjacent n m2 #'allocatable-p)))
            (when result
              (assert (alexandria:setp result :test #'equal))
-             (assert (= n (length result)))             
+             (assert (= n (length result)))
              (return result))
            (when (> (get-internal-real-time) deadline)
              (return nil)))))))
