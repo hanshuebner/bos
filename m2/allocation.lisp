@@ -24,13 +24,10 @@
 
 (defmethod print-object ((allocation-area allocation-area) stream)
   (print-unreadable-object (allocation-area stream :type t)
-    (format stream "~a x ~a ~:[inactive~;active~] free: ~s ID: ~a"
+    (format stream "~a x ~a ~:[inactive~;active~] ID: ~a"
             (allocation-area-width allocation-area)
             (allocation-area-height allocation-area)
-            (allocation-area-active-p allocation-area)
-            (if (slot-boundp allocation-area 'free-m2s)
-                (allocation-area-free-m2s allocation-area)
-                :unbound)
+            (allocation-area-active-p allocation-area)            
             (store-object-id allocation-area))))
 
 (defmethod allocation-area-free-m2s ((area allocation-area))
