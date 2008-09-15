@@ -1,467 +1,467 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>	  
-	<head>
-		<title>Satellit Perspektiv  - Samboja Lestari</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" charset="utf-8" />
-		<meta http-equiv="imagetoolbar" content="no"/>
+<html>
+  <head>
+    <title>Satellit Perspektiv  - Samboja Lestari</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" charset="utf-8" />
+    <meta http-equiv="imagetoolbar" content="no"/>
 
-		<link href="../satellitenkarte_style.css" rel="stylesheet"/>
-		<script language="JavaScript" type="text/JavaScript" src="messages.js"></script>
-		<script language="JavaScript" type="text/JavaScript" src="../MochiKit.js"></script>
-		<script language="JavaScript" type="text/JavaScript" src="../javascript.js"></script>
-		<script language="JavaScript" type="text/JavaScript">
-			<!--
-			function MM_reloadPage(init) {  //reloads the window if Nav4 resized
-			  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
-				document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
-			  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
-			}
-			MM_reloadPage(true);
-			
-			//-->
-		</script>
-		<style type="text/css">
-			<!--
-			body {
-				margin-left: 0px;
-				margin-top: 0px;
-				margin-right: 0px;
-				margin-bottom: 0px;
-			}
-			-->
-		</style>
-	</head>
-	<body>
-	<table width="740" height="500" border="0" cellpadding="0" cellspacing="0">
-	  <tr> 
-		<td height="50" colspan="3"><img src="../bilder/infosystem_header-en.gif" width="740" height="76"/></td>
-	  </tr>
-	  <tr> 
-		<td height="20" class="BreadCrumbs"><img src="../bilder/spacer.gif" width="1" height="1"/></td>
-		<td height="20" colspan="2" class="BreadCrumbs"><img src="../bilder/spacer.gif" width="1" height="1"/></td>
-	  </tr>
-	  <tr> 
-		<td width="140" height="430" align="left" valign="top" class="SpaltenBK"><img src="../bilder/spacer.gif" width="1" height="1"/></td>
-		<td width="380" height="430" align="left" valign="top"><img src="../bilder/spacer.gif" width="1" height="1"/></td>
-		<td width="180" height="430" align="left" valign="top" class="SpaltenBK"><img src="../bilder/spacer.gif" width="1" height="1"/> </td>
-	  </tr>
-	</table>
-	<div id="Loginfehler" style="position:absolute; width:138px; height:88px; z-index:21; left: 10px; top: 403px; visibility: hidden;" class="KarteRahmen"> 
-		<table width="138" border="0" cellspacing="0" cellpadding="0">
-		  <tr> 
-			<td colspan="2" class="InfoKopf">Log ind fejl</td>
-		  </tr>
-		</table>
-		<div style="position:absolute; width:138px; z-index:21; left: 0px; top: 10px; visibility: inherit;" class="InfoZelle">
-			<br/>Fejl opstod ved log ind, check venligst dit sponsor ID og dit kodeord eller hovedkode.
-			<img src="/images/pfeil_link_on.gif" border="0"/>
-			<a class="FaehnchenLink" href="#" onclick="document.getElementById('Loginfehler').style.visibility = 'hidden'">
-			    fortsæt
-			</a>
-		</div>
-	</div>
-	<div id="Anmelden" style="position:absolute; width:138px; height:88px; z-index:20; left: 10px; top: 403px; visibility: hidden;" class="KarteRahmen"> 
-		<table width="138" border="0" cellspacing="0" cellpadding="0">
-		  <tr> 
-			<td colspan="2" class="InfoKopf">"mine" m²</td>
-		  </tr>
-		</table>
-		<div id="AnmeldenInhalt" style="position:absolute; width:138px; z-index:20; left: 0px; top: 10px; visibility: inherit;"> 
-		  <form id="form0" name="form0" onsubmit="return do_login();" method="get">
-			<table width="138" border="0" cellspacing="0" cellpadding="0">
-			  <tr> 
-				<td colspan="2" height="5" class="InfoZelle">
-				</td>
-			  </tr>
-			  <tr> 
-				<td colspan="2" class="InfoZelle">
-					Sponsor ID
-				</td>
-			  </tr>
-			  <tr>
-				<td colspan="2" class="InfoZelle">
-					<input name="__sponsorid" type="text" class="FormSponsorenID" onFocus="sponsorfeld_leeren();"/>
-				</td>
-			  </tr>
-			  <tr> 
-				<td colspan="2" class="InfoZelle">
-					Kodeord
-				</td>
-			  </tr>
-			  <tr> 
-				<td class="InfoZelleKennwort">
-					<input name="__password" type="password" class="FormKennwort"/> 
-				</td>
-				<td class="InfoZelleSubmit">
-					<a href="#" onclick="do_login();">
-						<img src="../bilder/submit.gif" width="18" height="18" border="0"/>
-					</a>
-				</td>
-			  </tr>
-			</table>
-			<input type="submit" name="Submit" value="anmelden" class="submitButton"/>
-		  </form>
-		</div>
-	</div>
-	<div id="SponsorInfo" style="position:absolute; width:138px; height:78px; z-index:20; left: 10px; top: 413px; visibility: hidden;" class="KarteRahmen">
-		   <table width="138" border="0" cellspacing="0" cellpadding="0">
-			<tr>
-			 <td colspan="2" class="InfoKopf">Logget på som</td>
-			</tr>
-			<tr>
-			 <td class="InfoZelle" height="20">
-			  <div id="SponsorInfoText" style="position:absolute; width:120px; height:10px; z-index:21; left: 10px; top:20px; visibility: inherit;"></div>
-			 </td>
-			</tr>
-			<tr>
-			 <td colspan="2">
-			  <img src="../bilder/spacer.gif" width="1" height="18"/>
-			 </td>
-			</tr>
-		   </table>
-		<div id="SponsorInfoInhalt" style="position:absolute; width:138px; z-index:20; left: 0px; top: 50px; visibility: inherit;"> 
-		  <form id="form1" name="form1" action="/logout?url=/infosystem/da/satellitenkarte.htm" method="post">
-			<input name="logout" type="hidden" value="1"/>
-			<table width="138" border="0" cellspacing="0" cellpadding="0">
-			<tr>
-			 <td class="InfoZelleKennwort">
-			  <a class="FaehnchenLink" href="#" onclick="document.location.href = '/da/profil'">
-			   <img src="/images/pfeil_link_on.gif" border="0"/>
-			   Profil
-			  </a>
-			 </td>
-			</tr>
-			<tr>
-			 <td class="InfoZelleKennwort">
-			  <a class="FaehnchenLink" href="#" onclick="document.form1.submit();">
-			   <img src="/images/pfeil_back.gif" border="0"/>
-			   Log ud
-			  </a>
-			 </td>
-			</tr>
-			</table>
-		  </form>	   
-		</div>
-	</div>
-	<div id="UebersichtKlein" style="position:absolute; width:138px; height:76px; z-index:10; left: 10px; top: 79px;" class="KarteRahmen"> 
-	  <table width="138" border="0" cellspacing="0" cellpadding="0">
-		<tr> 
-		  <td class="InfoKopf">Overblik</td>
-		</tr>
-		<tr> 
-		  <td align="center" valign="middle"><div id="UebersichtPosition" style="position:absolute; width:4px; height:4px; z-index:5"><img src="../bilder/spacer.gif" width="4" height="4" border="0"/></div>
-		   <a href="#" class="Navigation" onclick="Uebersicht_anzeigen(); self.focus();">
-		    <img src="../bilder/uebersichtskarte_klein.gif" width="118" height="62" border="0"/>
-		   </a>
-		  </td>
-		</tr>
-	  </table>
-	</div>
-	<div id="Uebersicht" style="position:absolute; width:1px; height:1px; z-index:4; left: 0px; top: 0px; visibility: visible;">
-	  <div id="Info3" style="position:absolute; width:178px; height:142px; z-index:3; top: 329px; left: 550px; visibility: inherit;" class="KarteRahmen"> 
-		<table width="178" border="0" cellspacing="0" cellpadding="0">
-		  <tr> 
-			<td class="InfoKopf">"Salgs" stand</td>
-		  </tr>
-		  <tr> 
-			<td width="166">
-			 <div id="Info3Text" class="InfoZelle">
-			 </div>
-			</td>
-		  </tr>
-		</table>
-	  </div>
-	  <div id="Info2" style="position:absolute; width:178px; height:107px; z-index:3; top: 205px; left: 550px; visibility: inherit;" class="KarteRahmen"> 
-		<table width="178" border="0" cellspacing="0" cellpadding="0">
-		  <tr> 
-			<td height="30" class="InfoKopf">Samboja Lestari ligger på Borneo</td>
-		  </tr>
-		  <tr> 
-			<td width="160" height="74" align="center" valign="middle"><img src="../bilder/uebersicht_info2.gif" width="178" height="78"/></td>
-		  </tr>
-		</table>
-	  </div>
-	  <div id="Info1" style="position:absolute; width:178px; height:113px; z-index:14; top: 79px; left: 550px; visibility: inherit;" class="KarteRahmen"> 
-		<table width="178" border="0" cellspacing="0" cellpadding="0">
-		  <tr> 
-			<td height="30" class="InfoKopf">Samboja Lestari ligger i Indonesien</td>
-		  </tr>
-		  <tr> 
-			<td width="160" height="74" align="center" valign="middle"><img src="../bilder/uebersicht_info1.gif" width="178" height="83"/></td>
-		  </tr>
-		</table>
-	  </div>
-	  <div id="KartUebersicht" style="position:absolute; width:360px; height:390px; z-index:1; left: 169px; top: 100px; visibility: inherit;" class="KarteRahmen"> 
-		<div align="right">
-		<img src="../bilder/karte_uebersicht.jpg" width="360" height="360"/>
-		<br/>
-		</div>
-	  </div>
-	  <div id="Faehnchen" style="position:absolute; width:120px; height:15px; z-index:7; left: 169px; top: 100px; visibility: hidden;">
-	   <img src="../bilder/spacer.gif" width="1" height="1"/>
-	  </div>
-	  <div id="Uebersichthome" style="position:absolute; width:140px; height:20px; z-index:6; left: 10px; top: 164px; visibility: inherit;" class="Navigation">
-	   Interessante punkter
-	   <div id="UebersichtPoiNavi" style="position:absolute; width:125px; height:80px; z-index:7; left: 19px; top: 17px; visibility: inherit;"></div>
-	  </div>
-	</div>
-	<div id="PoiDetail" style="position:absolute; width:1px; height:1px; z-index:4; left: 0px; top: 0px; visibility: hidden;"> 
-	  <div id="PoiDetailKarte" style="position:absolute; width:360px; height:390px; z-index:1; left: 169px; top: 100px; visibility: inherit;" class="KarteRahmen">
-		<div id="PoiPos" style="position:absolute; width:16px; height:16px; z-index:2; visibility: inherit;">
-		        <img border="0" name="poiicon" id="poiicon" width="16" height="16"/>
-		</div>
-		<div id="PoiMenu" style="position: absolute; vertical-align: bottom; bottom: 31px; left: 1px; z-index: 10; visibility: inherit;">
-		</div>
-	        <div id="Luftbild" style="position:absolute; width:360px; height:360px; z-index:9; left: 0px; top: 0px; visibility: hidden;">
-		    <img src="../bilder/submit.gif" name="poiluftbild" width="360" height="360" border="0" />
-		</div>
-	        <div id="Panorama" style="position:absolute; width:360px; height:360px; z-index:9; left: 0px; top: 0px; border: 0px; visibility: hidden;">
-		    <div id="PanoramaApplet" style="position: absolute; top: 0px; left: 0px; width:360px; height:340px;">
-		    </div>
-		    <div id="PanoramaFooter" style="position: absolute; top: 0px; left: 0px; width:360px; height:360px; color: white; background-color: black; " align="right">
-		    </div>
-		</div>
-	        <div id="Movie" style="position:absolute; width:360px; height:360px; z-index:9; left: 0px; top: 0px; border: 0px; visibility: hidden;">
-		    <div id="MovieApplet" style="position: absolute; top: 0px; left: 0px; width:360px; height:340px;">
-		    </div>
-		    <div id="MovieFooter" style="position: absolute; top: 0px; left: 0px; width:360px; height:360px; color: white; background-color: black; " align="right">
-		    </div>
-		</div>
-		<div align="right"> 
-		  <table width="360" height="360" border="0" cellpadding="0" cellspacing="0">
-			<tr> 
-			  <td height="90" width="90"><img name="img11" width="90" height="90" id="img11"/></td>
-			  <td height="90" width="90"><img name="img21" width="90" height="90" id="img21"/></td>
-			  <td height="90" width="90"><img name="img31" width="90" height="90" id="img31"/></td>
-			  <td height="90" width="90"><img name="img41" width="90" height="90" id="img41"/></td>
-			</tr>
-			<tr> 
-			  <td height="90" width="90"><img name="img12" width="90" height="90" id="img12"/></td>
-			  <td height="90" width="90"><img name="img22" width="90" height="90" id="img22"/></td>
-			  <td height="90" width="90"><img name="img32" width="90" height="90" id="img32"/></td>
-			  <td height="90" width="90"><img name="img42" width="90" height="90" id="img42"/></td>
-			</tr>
-			<tr> 
-			  <td height="90" width="90"><img name="img13" width="90" height="90" id="img13"/></td>
-			  <td height="90" width="90"><img name="img23" width="90" height="90" id="img23"/></td>
-			  <td height="90" width="90"><img name="img33" width="90" height="90" id="img33"/></td>
-			  <td height="90" width="90"><img name="img43" width="90" height="90" id="img43"/></td>
-			</tr>
-			<tr> 
-			  <td height="90" width="90"><img name="img14" width="90" height="90" id="img14"/></td>
-			  <td height="90" width="90"><img name="img24" width="90" height="90" id="img24"/></td>
-			  <td height="90" width="90"><img name="img34" width="90" height="90" id="img34"/></td>
-			  <td height="90" width="90"><img name="img44" width="90" height="90" id="img44"/></td>
-			</tr>
-		  </table>
-		</div>
-	  </div>
-	  <div id="PoiDetailThumb" style="position:absolute; width:360px; height:390px; z-index:1; left: 169px; top: 100px; visibility: inherit;" class="KarteRahmen"> 
-		<div id="zurueck" style="position:absolute; top:-19px; left:290px; width:70px; height:19px; z-index:7; visibility: inherit;"><a href="#" onClick="Thumbausblenden();" class="Navigation"><img src="/images/pfeil_back.gif" border="0"/>back</a></div>    <div align="right"> 
-		  <table width="360" height="360" border="0" cellpadding="0" cellspacing="0">
-			<tr> 
-			  <td colspan="4"><img name="DetailThumb" width="360" height="360" id="DetailThumb"/></td>
-			</tr>
-		  </table>
-		</div>
-	  </div>
-	  <div id="PoiInfo" style="position:absolute; width:178px; height:238px; z-index:3; top: 222px; left: 550px; visibility: inherit;" class="KarteRahmen"> 
-		<table width="178" border="0" cellspacing="0" cellpadding="0">
-		  <tr> 
-			<td class="InfoKopf">Information</td>
-		  </tr>
-		  <tr> 
-			<td width="160" align="left" valign="top"><div id="PoiInfoText" style="position:absolute; width:158px; height:210px; z-index:4; left: 0px; top: 20px; overflow: auto; visibility: inherit;" class="InfoZelle"></div></td>
-		  </tr>
-		</table>
-	  </div>
-	  <div id="PoiThumb" style="position:absolute; width:178px; height:131px; z-index:3; top: 79px; left: 550px; visibility: inherit;" class="KarteRahmen"> 
-		<table width="178" height="131" border="0" cellpadding="0" cellspacing="0">
-		  <tr> 
-			<td class="InfoKopf">Foto Galleri</td>
-		  </tr>
-		  <tr>
-		  <td align="center" valign="middle"> <table width="174" border="0" cellpadding="0" cellspacing="0">
-			  <tr> 
-				<td align="center" valign="middle" class="ThumbRahmen"><img name="thumb1" width="55" height="55" id="thumb1"/></td>
-				<td align="center" valign="middle" class="ThumbRahmen"><img name="thumb2" width="55" height="55" id="thumb2"/></td>
-				<td align="center" valign="middle" class="ThumbRahmen"><img name="thumb3" width="55" height="55" id="thumb3"/></td>
-			  </tr>
-			  <tr> 
-				<td align="center" valign="middle" class="ThumbRahmen"><img name="thumb4" width="55" height="55" id="thumb4"/></td>
-				<td align="center" valign="middle" class="ThumbRahmen"><img name="thumb5" width="55" height="55" id="thumb5"/></td>
-				<td align="center" valign="middle" class="ThumbRahmen"><img name="thumb6" width="55" height="55" id="thumb6"/></td>
-			  </tr>
-			</table></td>
-		  </tr>
-		</table>
-		<div id="ThumbLink1" style="position:absolute; width:55px; height:55px; z-index:4; top: 16px; left: 3px; visibility: inherit;"><a href="#" onClick="ThumbVergoessern(1)"><img src="../bilder/spacer.gif" width="55" height="55" border="0"/></a></div>
-		<div id="ThumbLink2" style="position:absolute; width:55px; height:55px; z-index:4; top: 16px; left: 60px; visibility: inherit;"><a href="#" onClick="ThumbVergoessern(2)"><img src="../bilder/spacer.gif" width="55" height="55" border="0"/></a></div>
-		<div id="ThumbLink3" style="position:absolute; width:55px; height:55px; z-index:4; top: 16px; left: 117px; visibility: inherit;"><a href="#" onClick="ThumbVergoessern(3)"><img src="../bilder/spacer.gif" width="55" height="55" border="0"/></a></div>
-		<div id="ThumbLink4" style="position:absolute; width:55px; height:55px; z-index:4; top: 73px; left: 3px; visibility: inherit;"><a href="#" onClick="ThumbVergoessern(4)"><img src="../bilder/spacer.gif" width="55" height="55" border="0"/></a></div>
-		<div id="ThumbLink5" style="position:absolute; width:55px; height:55px; z-index:4; top: 73px; left: 60px; visibility: inherit;"><a href="#" onClick="ThumbVergoessern(5)"><img src="../bilder/spacer.gif" width="55" height="55" border="0"/></a></div>
-		<div id="ThumbLink6" style="position:absolute; width:55px; height:55px; z-index:4; top: 73px; left: 117px; visibility: inherit;"><a href="#" onClick="ThumbVergoessern(6)"><img src="../bilder/spacer.gif" width="55" height="55" border="0"/></a></div>
-	  </div>
-	  <div id="home" style="position:absolute; width:140px; height:20px; z-index:6; left: 10px; top: 164px; visibility: inherit;" class="NavigationAktiv">
-	    Interessante punkter
-	   <div id="PoiNavi" style="position:absolute; width:125px; height:80px; z-index:7; left: 19px; top: 17px; visibility: inherit;"></div>
-	  </div>
-	</div>
-	<div id="qmDetail" style="position:absolute; width:1px; height:1; z-index:4; left: 0px; top: 0px; visibility: hidden;"> 
-	  <div id="qmDetailKarte" style="position:absolute; width:360px; height:390px; z-index:1; left: 169px; top: 100px; visibility: inherit;" class="KarteRahmen"> 
-		<div id="qmLupe" style="position:absolute; width:36px; height:24px; z-index:11; visibility: inherit;"><img src="../bilder/lupe.gif" width="36" height="24"/></div>
-		<div id="selected_contract" style="position:absolute; z-index:10; visibility: inherit;">
-		 <img id="selected_contract_img" src="../bilder/spacer.gif" width="1" height="1"/>
-		</div>
-		<div id="own_contract" style="position:absolute; z-index:10; visibility: inherit;">
-		 <img id="own_contract_img" src="../bilder/spacer.gif" width="1" height="1"/>
-		</div>
-		<div id="LayersMenu" class="KarteRahmen" style="position: absolute; bottom: 31px; right: 1px; z-index: 15; visibility: inherit;">
-		  <table width="90" border="0" cellspacing="0" cellpadding="0">
-		    <tr> 
-		      <td align="center" class="InfoKopf">Lag</td>
-		    </tr>
-		    <tr> 
-		      <td valign="top" align="center">
-		        <a class="LayersMenuItemActive" id="LayerMenu_background" href="#" onclick="toggle_layer('background')">Sat Foto</a><br/>
-		      </td>
-		    </tr>
-		    <tr> 
-		      <td valign="top" align="center">
-		        <a class="LayersMenuItemActive" id="LayerMenu_areas" href="#" onclick="toggle_layer('areas')">Sælgende områder</a><br/>
-		      </td>
-		    </tr>
-		    <tr>
-		      <td valign="top" align="center">
-		        <a class="LayersMenuItemActive" id="LayerMenu_contracts" href="#" onclick="toggle_layer('contracts')">Nuværende status</a><br/>
-		      </td>
-		    </tr>
-		  </table>
-		</div>
-		<img id="MapCaptureImage" style="position: absolute; top: 0px; left: 0px; z-index: 12; visibility: inherit;"
-		     width="360" height="360"
-		     border="0" src="../bilder/spacer.gif" />
-		<div align="right" style="z-index: 10;"> 
-		  <table width="360" height="360" border="0" cellpadding="0" cellspacing="0">
-			<tr> 
-			  <td width="90" height="90"><img name="qmimg11" width="90" height="90" id="qmimg11"/></td>
-			  <td height="90" width="90"><img name="qmimg21" width="90" height="90" id="qmimg21"/></td>
-			  <td height="90" width="90"><img name="qmimg31" width="90" height="90" id="qmimg31"/></td>
-			  <td height="90" width="90"><img name="qmimg41" width="90" height="90" id="qmimg41"/></td>
-			</tr>
-			<tr> 
-			  <td height="90" width="90"><img name="qmimg12" width="90" height="90" id="qmimg12"/></td>
-			  <td height="90" width="90"><img name="qmimg22" width="90" height="90" id="qmimg22"/></td>
-			  <td height="90" width="90"><img name="qmimg32" width="90" height="90" id="qmimg32"/></td>
-			  <td height="90" width="90"><img name="qmimg42" width="90" height="90" id="qmimg42"/></td>
-			</tr>
-			<tr> 
-			  <td height="90" width="90"><img name="qmimg13" width="90" height="90" id="qmimg13"/></td>
-			  <td height="90" width="90"><img name="qmimg23" width="90" height="90" id="qmimg23"/></td>
-			  <td height="90" width="90"><img name="qmimg33" width="90" height="90" id="qmimg33"/></td>
-			  <td height="90" width="90"><img name="qmimg43" width="90" height="90" id="qmimg43"/></td>
-			</tr>
-			<tr> 
-			  <td height="90" width="90"><img name="qmimg14" width="90" height="90" id="qmimg14"/></td>
-			  <td height="90" width="90"><img name="qmimg24" width="90" height="90" id="qmimg24"/></td>
-			  <td height="90" width="90"><img name="qmimg34" width="90" height="90" id="qmimg34"/></td>
-			  <td height="90" width="90"><img name="qmimg44" width="90" height="90" id="qmimg44"/></td>
-			</tr>
-		  </table> 
-		</div>
-	  </div>
-	  <div id="qmLaden" style="position:absolute; width:158px; height:16px; z-index:21; left: 560px; top: 165px; visibility: hidden;" class="Laden"> 
-		<div align="center" valign="middle">Vent venligst, loading ...</div>
-	  </div>
-	  <div id="qmAusschnittRahmen" style="position:absolute; width:178; height:131px; z-index:3; top: 99px; left: 550px; visibility: inherit;" class="KarteRahmen"> 
-		<table width="178" border="0" cellspacing="0" cellpadding="0">
-		  <tr> 
-			<td class="InfoKopf" >Klik på "solgt" m²!</td>
-		  </tr>
-		  <tr>
-		  <td align="center" valign="middle">
-		        <img src="../bilder/spacer.gif" width="0" height="0"/>
-		  </td>
-		  </tr>
-		</table>
-	  </div>
-	  <div id="qmInfo" style="position:absolute; width:178px; height:218px; z-index:10; top: 242px; left: 550px; visibility: inherit;" class="KarteRahmen"> 
-		<table width="178" border="0" cellspacing="0" cellpadding="0">
-		  <tr> 
-			<td class="InfoKopf">Sponsor information</td>
-		  </tr>
-		  <tr> 
-		   <td width="160" align="left" valign="top">
-		    <div id="qmInfoText" style="position:absolute; width:158px; height:195px; left: 0px; top: 20px; overflow: hidden; visibility: inherit;"
-		         class="InfoZelle" onMouseOver="enlarge_info();" onMouseOut="collapse_info();">
-		    </div>
-		   </td>
-		  </tr>
-		</table>
-	  </div>
-	  <div id="qmhome" style="position:absolute; width:140px; height:20px; z-index:6; left: 10px; top: 105px; visibility: inherit;" class="NavigationAktiv">
-	   <img src="/images/pfeil_link_on.gif" width="29" height="12" border="0"/>
-	   "solgt" m²
-	  </div>
-	  <div id="qmAusschnitt" style="position:absolute; width:200px; height:115px; z-index:7; left: 172px; top: 512px; visibility: inherit;">
-		<div id="lupe_selected_contract" style="position:absolute; z-index:10; visibility: inherit;">
-		 <img id="lupe_selected_contract_img" src="../bilder/spacer.gif" width="1" height="1"/>
-		</div>
-		<div id="lupe_own_contract" style="position:absolute; z-index:10; visibility: inherit;">
-		 <img id="lupe_own_contract_img" src="../bilder/spacer.gif" width="1" height="1"/>
-		</div>
-		<table width="1800" height="1800" border="0" cellpadding="0" cellspacing="0">
-		  <tr>
-			<td><img name="qmlupe11" width="450" height="450" id="qmlupe11"/></td>
-			<td><img name="qmlupe21" width="450" height="450" id="qmlupe21"/></td>
-			<td><img name="qmlupe31" width="450" height="450" id="qmlupe31"/></td>
-			<td><img name="qmlupe41" width="450" height="450" id="qmlupe41"/></td>
-		  </tr>
-		  <tr>
-			<td><img name="qmlupe12" width="450" height="450" id="qmlupe12"/></td>
-			<td><img name="qmlupe22" width="450" height="450" id="qmlupe22"/></td>
-			<td><img name="qmlupe32" width="450" height="450" id="qmlupe32"/></td>
-			<td><img name="qmlupe42" width="450" height="450" id="qmlupe42"/></td>
-		  </tr>
-		  <tr>
-			<td><img name="qmlupe13" width="450" height="450" id="qmlupe13"/></td>
-			<td><img name="qmlupe23" width="450" height="450" id="qmlupe23"/></td>
-			<td><img name="qmlupe33" width="450" height="450" id="qmlupe33"/></td>
-			<td><img name="qmlupe43" width="450" height="450" id="qmlupe43"/></td>
-		  </tr>
-		  <tr>
-			<td><img name="qmlupe14" width="450" height="450" id="qmlupe14"/></td>
-			<td><img name="qmlupe24" width="450" height="450" id="qmlupe24"/></td>
-			<td><img name="qmlupe34" width="450" height="450" id="qmlupe34"/></td>
-			<td><img name="qmlupe44" width="450" height="450" id="qmlupe44"/></td>
-	
-		  </tr>
-		</table>
-	  </div>
-	</div>
-	<div id="Ueberschrift" style="position:absolute; width:290px; height:20px; z-index:5; left: 169px; top: 80px;">Samboja Lestari - Overblik</div>
-	<div id="Untertitel" style="position:absolute; width:350px; height:20px; z-index:5; left: 169px; top: 469px;" align="right">Mere end 17 millioner kvadratmeter i al evighed.</div>
-	<div class="Links" style="position:absolute; width:178px; height:132px; z-index:3; top: 482px; left: 550px;">
-	 <span style="padding-right:2px">
-	  <img src="/images/pfeil_link_on.gif" border="0" />
-	  <a class="FaehnchenLink" href="javascript:window_infosystem_hilfe();"> Hjælp </a>
-	 </span>
-	 <span style="padding-right:2px">
-	  <img src="/images/pfeil_link_on.gif" border="0" />
-	  <a class="FaehnchenLink" href="javascript:bestellung();"> Køb m²s </a>
-	 </span>
-	 <span style="padding-right:2px">
-	  <img src="/images/pfeil_link_on.gif" border="0" />
-	  <a class="FaehnchenLink" href="javascript:window.close();"> Luk </a>
-	 </span>
-	</div>
-	<div id="dataqm" style="position:absolute; width:1px; height:1px; z-index:11; left: 1px; top: 1px;"></div>
-	<div id="debugger" style="position:absolute; width:400px; height:400px; z-index:21; left: 760px; top: 20px; visibility: hidden;" class="InfoZelle"></div>
-	<div id="data">
-		<iframe src="about:blank" height="0" width="0" name="data"> </iframe>
-	</div>
-	<script language="JavaScript">init();</script>
-	</body>
+    <link href="../satellitenkarte_style.css" rel="stylesheet"/>
+    <script language="JavaScript" type="text/JavaScript" src="messages.js"></script>
+    <script language="JavaScript" type="text/JavaScript" src="../MochiKit.js"></script>
+    <script language="JavaScript" type="text/JavaScript" src="../javascript.js"></script>
+    <script language="JavaScript" type="text/JavaScript">
+      <!--
+          function MM_reloadPage(init) {  //reloads the window if Nav4 resized
+          if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
+          document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
+          else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
+          }
+          MM_reloadPage(true);
+
+          //-->
+    </script>
+    <style type="text/css">
+      <!--
+          body {
+          margin-left: 0px;
+          margin-top: 0px;
+          margin-right: 0px;
+          margin-bottom: 0px;
+          }
+        -->
+    </style>
+  </head>
+  <body>
+    <table width="740" height="500" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td height="50" colspan="3"><img src="../bilder/infosystem_header-en.gif" width="740" height="76"/></td>
+      </tr>
+      <tr>
+        <td height="20" class="BreadCrumbs"><img src="../bilder/spacer.gif" width="1" height="1"/></td>
+        <td height="20" colspan="2" class="BreadCrumbs"><img src="../bilder/spacer.gif" width="1" height="1"/></td>
+      </tr>
+      <tr>
+        <td width="140" height="430" align="left" valign="top" class="SpaltenBK"><img src="../bilder/spacer.gif" width="1" height="1"/></td>
+        <td width="380" height="430" align="left" valign="top"><img src="../bilder/spacer.gif" width="1" height="1"/></td>
+        <td width="180" height="430" align="left" valign="top" class="SpaltenBK"><img src="../bilder/spacer.gif" width="1" height="1"/> </td>
+      </tr>
+    </table>
+    <div id="Loginfehler" style="position:absolute; width:138px; height:88px; z-index:21; left: 10px; top: 403px; visibility: hidden;" class="KarteRahmen">
+      <table width="138" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td colspan="2" class="InfoKopf">Log ind fejl</td>
+        </tr>
+      </table>
+      <div style="position:absolute; width:138px; z-index:21; left: 0px; top: 10px; visibility: inherit;" class="InfoZelle">
+        <br/>Fejl opstod ved log ind, check venligst dit sponsor ID og dit kodeord eller hovedkode.
+        <img src="/images/pfeil_link_on.gif" border="0"/>
+        <a class="FaehnchenLink" href="#" onclick="document.getElementById('Loginfehler').style.visibility = 'hidden'">
+          fortsæt
+        </a>
+      </div>
+    </div>
+    <div id="Anmelden" style="position:absolute; width:138px; height:88px; z-index:20; left: 10px; top: 403px; visibility: hidden;" class="KarteRahmen">
+      <table width="138" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td colspan="2" class="InfoKopf">"mine" m²</td>
+        </tr>
+      </table>
+      <div id="AnmeldenInhalt" style="position:absolute; width:138px; z-index:20; left: 0px; top: 10px; visibility: inherit;">
+        <form id="form0" name="form0" onsubmit="return do_login();" method="get">
+          <table width="138" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td colspan="2" height="5" class="InfoZelle">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="InfoZelle">
+                Sponsor ID
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="InfoZelle">
+                <input name="__sponsorid" type="text" class="FormSponsorenID" onFocus="sponsorfeld_leeren();"/>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="InfoZelle">
+                Kodeord
+              </td>
+            </tr>
+            <tr>
+              <td class="InfoZelleKennwort">
+                <input name="__password" type="password" class="FormKennwort"/>
+              </td>
+              <td class="InfoZelleSubmit">
+                <a href="#" onclick="do_login();">
+                  <img src="../bilder/submit.gif" width="18" height="18" border="0"/>
+                </a>
+              </td>
+            </tr>
+          </table>
+          <input type="submit" name="Submit" value="anmelden" class="submitButton"/>
+        </form>
+      </div>
+    </div>
+    <div id="SponsorInfo" style="position:absolute; width:138px; height:78px; z-index:20; left: 10px; top: 413px; visibility: hidden;" class="KarteRahmen">
+      <table width="138" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td colspan="2" class="InfoKopf">Logget på som</td>
+        </tr>
+        <tr>
+          <td class="InfoZelle" height="20">
+            <div id="SponsorInfoText" style="position:absolute; width:120px; height:10px; z-index:21; left: 10px; top:20px; visibility: inherit;"></div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <img src="../bilder/spacer.gif" width="1" height="18"/>
+          </td>
+        </tr>
+      </table>
+      <div id="SponsorInfoInhalt" style="position:absolute; width:138px; z-index:20; left: 0px; top: 50px; visibility: inherit;">
+        <form id="form1" name="form1" action="/logout?url=/infosystem/da/satellitenkarte.htm" method="post">
+          <input name="logout" type="hidden" value="1"/>
+          <table width="138" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td class="InfoZelleKennwort">
+                <a class="FaehnchenLink" href="#" onclick="document.location.href = '/da/profil'">
+                  <img src="/images/pfeil_link_on.gif" border="0"/>
+                  Profil
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td class="InfoZelleKennwort">
+                <a class="FaehnchenLink" href="#" onclick="document.form1.submit();">
+                  <img src="/images/pfeil_back.gif" border="0"/>
+                  Log ud
+                </a>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
+    <div id="UebersichtKlein" style="position:absolute; width:138px; height:76px; z-index:10; left: 10px; top: 79px;" class="KarteRahmen">
+      <table width="138" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td class="InfoKopf">Overblik</td>
+        </tr>
+        <tr>
+          <td align="center" valign="middle"><div id="UebersichtPosition" style="position:absolute; width:4px; height:4px; z-index:5"><img src="../bilder/spacer.gif" width="4" height="4" border="0"/></div>
+            <a href="#" class="Navigation" onclick="Uebersicht_anzeigen(); self.focus();">
+              <img src="../bilder/uebersichtskarte_klein.gif" width="118" height="62" border="0"/>
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div id="Uebersicht" style="position:absolute; width:1px; height:1px; z-index:4; left: 0px; top: 0px; visibility: visible;">
+      <div id="Info3" style="position:absolute; width:178px; height:142px; z-index:3; top: 329px; left: 550px; visibility: inherit;" class="KarteRahmen">
+        <table width="178" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td class="InfoKopf">"Salgs" stand</td>
+          </tr>
+          <tr>
+            <td width="166">
+              <div id="Info3Text" class="InfoZelle">
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="Info2" style="position:absolute; width:178px; height:107px; z-index:3; top: 205px; left: 550px; visibility: inherit;" class="KarteRahmen">
+        <table width="178" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td height="30" class="InfoKopf">Samboja Lestari ligger på Borneo</td>
+          </tr>
+          <tr>
+            <td width="160" height="74" align="center" valign="middle"><img src="../bilder/uebersicht_info2.gif" width="178" height="78"/></td>
+          </tr>
+        </table>
+      </div>
+      <div id="Info1" style="position:absolute; width:178px; height:113px; z-index:14; top: 79px; left: 550px; visibility: inherit;" class="KarteRahmen">
+        <table width="178" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td height="30" class="InfoKopf">Samboja Lestari ligger i Indonesien</td>
+          </tr>
+          <tr>
+            <td width="160" height="74" align="center" valign="middle"><img src="../bilder/uebersicht_info1.gif" width="178" height="83"/></td>
+          </tr>
+        </table>
+      </div>
+      <div id="KartUebersicht" style="position:absolute; width:360px; height:390px; z-index:1; left: 169px; top: 100px; visibility: inherit;" class="KarteRahmen">
+        <div align="right">
+          <img src="../bilder/karte_uebersicht.jpg" width="360" height="360"/>
+          <br/>
+        </div>
+      </div>
+      <div id="Faehnchen" style="position:absolute; width:120px; height:15px; z-index:7; left: 169px; top: 100px; visibility: hidden;">
+        <img src="../bilder/spacer.gif" width="1" height="1"/>
+      </div>
+      <div id="Uebersichthome" style="position:absolute; width:140px; height:20px; z-index:6; left: 10px; top: 164px; visibility: inherit;" class="Navigation">
+        Interessante punkter
+        <div id="UebersichtPoiNavi" style="position:absolute; width:125px; height:80px; z-index:7; left: 19px; top: 17px; visibility: inherit;"></div>
+      </div>
+    </div>
+    <div id="PoiDetail" style="position:absolute; width:1px; height:1px; z-index:4; left: 0px; top: 0px; visibility: hidden;">
+      <div id="PoiDetailKarte" style="position:absolute; width:360px; height:390px; z-index:1; left: 169px; top: 100px; visibility: inherit;" class="KarteRahmen">
+        <div id="PoiPos" style="position:absolute; width:16px; height:16px; z-index:2; visibility: inherit;">
+          <img border="0" name="poiicon" id="poiicon" width="16" height="16"/>
+        </div>
+        <div id="PoiMenu" style="position: absolute; vertical-align: bottom; bottom: 31px; left: 1px; z-index: 10; visibility: inherit;">
+        </div>
+        <div id="Luftbild" style="position:absolute; width:360px; height:360px; z-index:9; left: 0px; top: 0px; visibility: hidden;">
+          <img src="../bilder/submit.gif" name="poiluftbild" width="360" height="360" border="0" />
+        </div>
+        <div id="Panorama" style="position:absolute; width:360px; height:360px; z-index:9; left: 0px; top: 0px; border: 0px; visibility: hidden;">
+          <div id="PanoramaApplet" style="position: absolute; top: 0px; left: 0px; width:360px; height:340px;">
+          </div>
+          <div id="PanoramaFooter" style="position: absolute; top: 0px; left: 0px; width:360px; height:360px; color: white; background-color: black; " align="right">
+          </div>
+        </div>
+        <div id="Movie" style="position:absolute; width:360px; height:360px; z-index:9; left: 0px; top: 0px; border: 0px; visibility: hidden;">
+          <div id="MovieApplet" style="position: absolute; top: 0px; left: 0px; width:360px; height:340px;">
+          </div>
+          <div id="MovieFooter" style="position: absolute; top: 0px; left: 0px; width:360px; height:360px; color: white; background-color: black; " align="right">
+          </div>
+        </div>
+        <div align="right">
+          <table width="360" height="360" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td height="90" width="90"><img name="img11" width="90" height="90" id="img11"/></td>
+              <td height="90" width="90"><img name="img21" width="90" height="90" id="img21"/></td>
+              <td height="90" width="90"><img name="img31" width="90" height="90" id="img31"/></td>
+              <td height="90" width="90"><img name="img41" width="90" height="90" id="img41"/></td>
+            </tr>
+            <tr>
+              <td height="90" width="90"><img name="img12" width="90" height="90" id="img12"/></td>
+              <td height="90" width="90"><img name="img22" width="90" height="90" id="img22"/></td>
+              <td height="90" width="90"><img name="img32" width="90" height="90" id="img32"/></td>
+              <td height="90" width="90"><img name="img42" width="90" height="90" id="img42"/></td>
+            </tr>
+            <tr>
+              <td height="90" width="90"><img name="img13" width="90" height="90" id="img13"/></td>
+              <td height="90" width="90"><img name="img23" width="90" height="90" id="img23"/></td>
+              <td height="90" width="90"><img name="img33" width="90" height="90" id="img33"/></td>
+              <td height="90" width="90"><img name="img43" width="90" height="90" id="img43"/></td>
+            </tr>
+            <tr>
+              <td height="90" width="90"><img name="img14" width="90" height="90" id="img14"/></td>
+              <td height="90" width="90"><img name="img24" width="90" height="90" id="img24"/></td>
+              <td height="90" width="90"><img name="img34" width="90" height="90" id="img34"/></td>
+              <td height="90" width="90"><img name="img44" width="90" height="90" id="img44"/></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="PoiDetailThumb" style="position:absolute; width:360px; height:390px; z-index:1; left: 169px; top: 100px; visibility: inherit;" class="KarteRahmen">
+        <div id="zurueck" style="position:absolute; top:-19px; left:290px; width:70px; height:19px; z-index:7; visibility: inherit;"><a href="#" onClick="Thumbausblenden();" class="Navigation"><img src="/images/pfeil_back.gif" border="0"/>back</a></div>    <div align="right">
+          <table width="360" height="360" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td colspan="4"><img name="DetailThumb" width="360" height="360" id="DetailThumb"/></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="PoiInfo" style="position:absolute; width:178px; height:238px; z-index:3; top: 222px; left: 550px; visibility: inherit;" class="KarteRahmen">
+        <table width="178" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td class="InfoKopf">Information</td>
+          </tr>
+          <tr>
+            <td width="160" align="left" valign="top"><div id="PoiInfoText" style="position:absolute; width:158px; height:210px; z-index:4; left: 0px; top: 20px; overflow: auto; visibility: inherit;" class="InfoZelle"></div></td>
+          </tr>
+        </table>
+      </div>
+      <div id="PoiThumb" style="position:absolute; width:178px; height:131px; z-index:3; top: 79px; left: 550px; visibility: inherit;" class="KarteRahmen">
+        <table width="178" height="131" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td class="InfoKopf">Foto Galleri</td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"> <table width="174" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center" valign="middle" class="ThumbRahmen"><img name="thumb1" width="55" height="55" id="thumb1"/></td>
+                  <td align="center" valign="middle" class="ThumbRahmen"><img name="thumb2" width="55" height="55" id="thumb2"/></td>
+                  <td align="center" valign="middle" class="ThumbRahmen"><img name="thumb3" width="55" height="55" id="thumb3"/></td>
+                </tr>
+                <tr>
+                  <td align="center" valign="middle" class="ThumbRahmen"><img name="thumb4" width="55" height="55" id="thumb4"/></td>
+                  <td align="center" valign="middle" class="ThumbRahmen"><img name="thumb5" width="55" height="55" id="thumb5"/></td>
+                  <td align="center" valign="middle" class="ThumbRahmen"><img name="thumb6" width="55" height="55" id="thumb6"/></td>
+                </tr>
+            </table></td>
+          </tr>
+        </table>
+        <div id="ThumbLink1" style="position:absolute; width:55px; height:55px; z-index:4; top: 16px; left: 3px; visibility: inherit;"><a href="#" onClick="ThumbVergoessern(1)"><img src="../bilder/spacer.gif" width="55" height="55" border="0"/></a></div>
+        <div id="ThumbLink2" style="position:absolute; width:55px; height:55px; z-index:4; top: 16px; left: 60px; visibility: inherit;"><a href="#" onClick="ThumbVergoessern(2)"><img src="../bilder/spacer.gif" width="55" height="55" border="0"/></a></div>
+        <div id="ThumbLink3" style="position:absolute; width:55px; height:55px; z-index:4; top: 16px; left: 117px; visibility: inherit;"><a href="#" onClick="ThumbVergoessern(3)"><img src="../bilder/spacer.gif" width="55" height="55" border="0"/></a></div>
+        <div id="ThumbLink4" style="position:absolute; width:55px; height:55px; z-index:4; top: 73px; left: 3px; visibility: inherit;"><a href="#" onClick="ThumbVergoessern(4)"><img src="../bilder/spacer.gif" width="55" height="55" border="0"/></a></div>
+        <div id="ThumbLink5" style="position:absolute; width:55px; height:55px; z-index:4; top: 73px; left: 60px; visibility: inherit;"><a href="#" onClick="ThumbVergoessern(5)"><img src="../bilder/spacer.gif" width="55" height="55" border="0"/></a></div>
+        <div id="ThumbLink6" style="position:absolute; width:55px; height:55px; z-index:4; top: 73px; left: 117px; visibility: inherit;"><a href="#" onClick="ThumbVergoessern(6)"><img src="../bilder/spacer.gif" width="55" height="55" border="0"/></a></div>
+      </div>
+      <div id="home" style="position:absolute; width:140px; height:20px; z-index:6; left: 10px; top: 164px; visibility: inherit;" class="NavigationAktiv">
+        Interessante punkter
+        <div id="PoiNavi" style="position:absolute; width:125px; height:80px; z-index:7; left: 19px; top: 17px; visibility: inherit;"></div>
+      </div>
+    </div>
+    <div id="qmDetail" style="position:absolute; width:1px; height:1; z-index:4; left: 0px; top: 0px; visibility: hidden;">
+      <div id="qmDetailKarte" style="position:absolute; width:360px; height:390px; z-index:1; left: 169px; top: 100px; visibility: inherit;" class="KarteRahmen">
+        <div id="qmLupe" style="position:absolute; width:36px; height:24px; z-index:11; visibility: inherit;"><img src="../bilder/lupe.gif" width="36" height="24"/></div>
+        <div id="selected_contract" style="position:absolute; z-index:10; visibility: inherit;">
+          <img id="selected_contract_img" src="../bilder/spacer.gif" width="1" height="1"/>
+        </div>
+        <div id="own_contract" style="position:absolute; z-index:10; visibility: inherit;">
+          <img id="own_contract_img" src="../bilder/spacer.gif" width="1" height="1"/>
+        </div>
+        <div id="LayersMenu" class="KarteRahmen" style="position: absolute; bottom: 31px; right: 1px; z-index: 15; visibility: inherit;">
+          <table width="90" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td align="center" class="InfoKopf">Lag</td>
+            </tr>
+            <tr>
+              <td valign="top" align="center">
+                <a class="LayersMenuItemActive" id="LayerMenu_background" href="#" onclick="toggle_layer('background')">Sat Foto</a><br/>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top" align="center">
+                <a class="LayersMenuItemActive" id="LayerMenu_areas" href="#" onclick="toggle_layer('areas')">Sælgende områder</a><br/>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top" align="center">
+                <a class="LayersMenuItemActive" id="LayerMenu_contracts" href="#" onclick="toggle_layer('contracts')">Nuværende status</a><br/>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <img id="MapCaptureImage" style="position: absolute; top: 0px; left: 0px; z-index: 12; visibility: inherit;"
+             width="360" height="360"
+             border="0" src="../bilder/spacer.gif" />
+        <div align="right" style="z-index: 10;">
+          <table width="360" height="360" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td width="90" height="90"><img name="qmimg11" width="90" height="90" id="qmimg11"/></td>
+              <td height="90" width="90"><img name="qmimg21" width="90" height="90" id="qmimg21"/></td>
+              <td height="90" width="90"><img name="qmimg31" width="90" height="90" id="qmimg31"/></td>
+              <td height="90" width="90"><img name="qmimg41" width="90" height="90" id="qmimg41"/></td>
+            </tr>
+            <tr>
+              <td height="90" width="90"><img name="qmimg12" width="90" height="90" id="qmimg12"/></td>
+              <td height="90" width="90"><img name="qmimg22" width="90" height="90" id="qmimg22"/></td>
+              <td height="90" width="90"><img name="qmimg32" width="90" height="90" id="qmimg32"/></td>
+              <td height="90" width="90"><img name="qmimg42" width="90" height="90" id="qmimg42"/></td>
+            </tr>
+            <tr>
+              <td height="90" width="90"><img name="qmimg13" width="90" height="90" id="qmimg13"/></td>
+              <td height="90" width="90"><img name="qmimg23" width="90" height="90" id="qmimg23"/></td>
+              <td height="90" width="90"><img name="qmimg33" width="90" height="90" id="qmimg33"/></td>
+              <td height="90" width="90"><img name="qmimg43" width="90" height="90" id="qmimg43"/></td>
+            </tr>
+            <tr>
+              <td height="90" width="90"><img name="qmimg14" width="90" height="90" id="qmimg14"/></td>
+              <td height="90" width="90"><img name="qmimg24" width="90" height="90" id="qmimg24"/></td>
+              <td height="90" width="90"><img name="qmimg34" width="90" height="90" id="qmimg34"/></td>
+              <td height="90" width="90"><img name="qmimg44" width="90" height="90" id="qmimg44"/></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="qmLaden" style="position:absolute; width:158px; height:16px; z-index:21; left: 560px; top: 165px; visibility: hidden;" class="Laden">
+        <div align="center" valign="middle">Vent venligst, loading ...</div>
+      </div>
+      <div id="qmAusschnittRahmen" style="position:absolute; width:178; height:131px; z-index:3; top: 99px; left: 550px; visibility: inherit;" class="KarteRahmen">
+        <table width="178" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td class="InfoKopf" >Klik på "solgt" m²!</td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle">
+              <img src="../bilder/spacer.gif" width="0" height="0"/>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="qmInfo" style="position:absolute; width:178px; height:218px; z-index:10; top: 242px; left: 550px; visibility: inherit;" class="KarteRahmen">
+        <table width="178" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td class="InfoKopf">Sponsor information</td>
+          </tr>
+          <tr>
+            <td width="160" align="left" valign="top">
+              <div id="qmInfoText" style="position:absolute; width:158px; height:195px; left: 0px; top: 20px; overflow: hidden; visibility: inherit;"
+                   class="InfoZelle" onMouseOver="enlarge_info();" onMouseOut="collapse_info();">
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="qmhome" style="position:absolute; width:140px; height:20px; z-index:6; left: 10px; top: 105px; visibility: inherit;" class="NavigationAktiv">
+        <img src="/images/pfeil_link_on.gif" width="29" height="12" border="0"/>
+        "solgt" m²
+      </div>
+      <div id="qmAusschnitt" style="position:absolute; width:200px; height:115px; z-index:7; left: 172px; top: 512px; visibility: inherit;">
+        <div id="lupe_selected_contract" style="position:absolute; z-index:10; visibility: inherit;">
+          <img id="lupe_selected_contract_img" src="../bilder/spacer.gif" width="1" height="1"/>
+        </div>
+        <div id="lupe_own_contract" style="position:absolute; z-index:10; visibility: inherit;">
+          <img id="lupe_own_contract_img" src="../bilder/spacer.gif" width="1" height="1"/>
+        </div>
+        <table width="1800" height="1800" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td><img name="qmlupe11" width="450" height="450" id="qmlupe11"/></td>
+            <td><img name="qmlupe21" width="450" height="450" id="qmlupe21"/></td>
+            <td><img name="qmlupe31" width="450" height="450" id="qmlupe31"/></td>
+            <td><img name="qmlupe41" width="450" height="450" id="qmlupe41"/></td>
+          </tr>
+          <tr>
+            <td><img name="qmlupe12" width="450" height="450" id="qmlupe12"/></td>
+            <td><img name="qmlupe22" width="450" height="450" id="qmlupe22"/></td>
+            <td><img name="qmlupe32" width="450" height="450" id="qmlupe32"/></td>
+            <td><img name="qmlupe42" width="450" height="450" id="qmlupe42"/></td>
+          </tr>
+          <tr>
+            <td><img name="qmlupe13" width="450" height="450" id="qmlupe13"/></td>
+            <td><img name="qmlupe23" width="450" height="450" id="qmlupe23"/></td>
+            <td><img name="qmlupe33" width="450" height="450" id="qmlupe33"/></td>
+            <td><img name="qmlupe43" width="450" height="450" id="qmlupe43"/></td>
+          </tr>
+          <tr>
+            <td><img name="qmlupe14" width="450" height="450" id="qmlupe14"/></td>
+            <td><img name="qmlupe24" width="450" height="450" id="qmlupe24"/></td>
+            <td><img name="qmlupe34" width="450" height="450" id="qmlupe34"/></td>
+            <td><img name="qmlupe44" width="450" height="450" id="qmlupe44"/></td>
+
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div id="Ueberschrift" style="position:absolute; width:290px; height:20px; z-index:5; left: 169px; top: 80px;">Samboja Lestari - Overblik</div>
+    <div id="Untertitel" style="position:absolute; width:350px; height:20px; z-index:5; left: 169px; top: 469px;" align="right">Mere end 17 millioner kvadratmeter i al evighed.</div>
+    <div class="Links" style="position:absolute; width:178px; height:132px; z-index:3; top: 482px; left: 550px;">
+      <span style="padding-right:2px">
+        <img src="/images/pfeil_link_on.gif" border="0" />
+        <a class="FaehnchenLink" href="javascript:window_infosystem_hilfe();"> Hjælp </a>
+      </span>
+      <span style="padding-right:2px">
+        <img src="/images/pfeil_link_on.gif" border="0" />
+        <a class="FaehnchenLink" href="javascript:bestellung();"> Køb m²s </a>
+      </span>
+      <span style="padding-right:2px">
+        <img src="/images/pfeil_link_on.gif" border="0" />
+        <a class="FaehnchenLink" href="javascript:window.close();"> Luk </a>
+      </span>
+    </div>
+    <div id="dataqm" style="position:absolute; width:1px; height:1px; z-index:11; left: 1px; top: 1px;"></div>
+    <div id="debugger" style="position:absolute; width:400px; height:400px; z-index:21; left: 760px; top: 20px; visibility: hidden;" class="InfoZelle"></div>
+    <div id="data">
+      <iframe src="about:blank" height="0" width="0" name="data"> </iframe>
+    </div>
+    <script language="JavaScript">init();</script>
+  </body>
 </html>
