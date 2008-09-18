@@ -16,7 +16,7 @@
 	<tr>
 	  <td colspan="2">
 	    <span class="headline">
-	      Satellite Map
+	      Satellit kort
 	    </span>
 	  </td>
 	  <td align="center" valign="top">
@@ -32,9 +32,9 @@
 	</tr>        
 	<tr>
 	  <td colspan="3">
-	    Take a look at our
+	    Se vores
             <a shape="rect" title="Satellitenkarte" class="titlegreen" href="javascript:window_infosys()">
-	      Satellite Map</a>.            
+	      Satellit kort</a>.            
 	  </td>
 	</tr>
         <!--         separator -->
@@ -46,7 +46,7 @@
         <tr>
 	  <td colspan="3">
 	    <span class="headline">
-	      Visit Samboja Lestari in Google Earth
+	      Besøg Samboja Lestari via Google Earth
 	    </span>
 	  </td>
 	</tr>
@@ -56,12 +56,13 @@
 	</tr>        
 	<tr>
 	  <td colspan="3">
-            If the Google Earth Software
+            Når du har installeret Google Earths software
             <a href='http://earth.google.de/' target='_blank' shape='rect' class='titlegreen'>http://earth.google.de/</a>
-            is installed on your computer, you can view the project area with
-            satellite images from 2002 and 2007 plus a lot of additional
-            information. For an optimal viewing experience, you can also use the
-            above link to upgrade your Google Earth installation if needed.
+            på din computer, kan du se et
+            udvalg af satellitbilleder fra projektområdet fra perioden
+            2000 til 2007 plus en masse ekstra information. For
+            optimale oplevelse kan du, om nødtvendigt, bruge
+            ovenstående link til at opgradere din Google Earth. 
 	  </td>
 	</tr>
 	<tr>
@@ -70,7 +71,8 @@
 	</tr>                
 	<tr>
 	  <td colspan="3">
-            Your Google Earth application will be started via the following link:
+            Din Google Earth applikation vil starte ved hjælp af
+            flg. link:
 	  </td>
 	</tr>        
 	<tr>
