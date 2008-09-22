@@ -11,7 +11,7 @@
 
 (defun ensure-kml-root-data-for-language (language)
   (or (kml-root-data-with-language language)
-      (make-object 'kml-root-data :language language)))
+      (make-instance 'kml-root-data :language language)))
 
 (defun kml-root-data-validate-file-upload (file-upload)
   (cxml:parse-file (upload-pathname file-upload)
@@ -60,7 +60,7 @@
                                     (format-date-time (store-object-last-change kml-root-data 0)))
                            " "
                            (cmslink (format nil "/kml-upload?lang=~A&action=download" language)
-                             "download current version")))))
+                                    "download current version")))))
              (submit-button "upload" "upload"))
             (:p "Please note that the " (:b "download current version")
                 " links above show you the kml files exactly like you
@@ -72,7 +72,7 @@
             (:p (dolist (kml-root-data (class-instances 'kml-root-data))
                   (let ((language (language kml-root-data)))
                     (html (cmslink (format nil "/kml-root?lang=~A" language)
-                            (:format "kml ~A" language))
+                                   (:format "kml ~A" language))
                           " "))))))))
 
 (defmethod handle-form ((handler kml-upload-handler) (action (eql :download)))

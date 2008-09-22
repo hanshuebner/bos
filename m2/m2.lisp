@@ -34,9 +34,9 @@
                             :slots (x y)
                             :index-reader m2-at
                             :index-initargs (:width +width+
-                                                    :height +width+
-                                                    :tile-size +m2tile-width+
-                                                    :tile-class 'image-tile))))
+                                             :height +width+
+                                             :tile-size +m2tile-width+
+                                             :tile-class 'image-tile))))
 
 (defmethod print-object ((m2 m2) stream)
   (if (and (slot-boundp m2 'x)
@@ -56,7 +56,7 @@
 (defun ensure-m2 (&rest coords)
   (or (m2-at coords)
       (destructuring-bind (x y) coords
-        (make-object 'm2 :x x :y y))))
+        (make-instance 'm2 :x x :y y))))
 
 (defmethod get-m2-with-num ((num integer))
   (multiple-value-bind (y x) (truncate num +width+)
@@ -184,7 +184,7 @@
     (incf *sponsor-counter*)))
 
 (defun make-sponsor (&rest initargs &key login &allow-other-keys)
-  (apply #'make-object 'sponsor
+  (apply #'make-instance 'sponsor
          :login (or login (format nil "s-~36R-~36R" (next-sponsor-counter) (get-universal-time)))
          :master-code (mod (+ (get-universal-time) (random 1000000)) 1000000)
          initargs))
@@ -264,7 +264,7 @@
    (worldpay-trans-id :update :initform nil)
    (expires :read :documentation "universal time which specifies the
      time the contract expires (is deleted) when it has not been paid for"
-            :initform nil)
+                  :initform nil)
    (largest-rectangle :update))
   (:default-initargs
       :m2s nil
@@ -283,7 +283,7 @@
 (defun contract-p (object)
   (equal (class-of object) (find-class 'contract)))
 
-(defmethod initialize-persistent-instance :after ((contract contract) &key area)
+(defmethod initialize-instance :after ((contract contract) &key area)
   (pushnew contract (sponsor-contracts (contract-sponsor contract)))
   (dolist (m2 (contract-m2s contract))
     (setf (m2-contract m2) contract)
@@ -530,14 +530,14 @@ Sponsor-ID: ~A
 "
                                         m2-count (store-object-id sponsor)))
         (error 'allocation-areas-exhausted :numsqm m2-count))
-      (make-object 'contract
-                   :sponsor sponsor
-                   :date date
-                   :m2s m2s
-                   :area area
-                   :expires expires
-                   :download-only download-only
-                   :paidp paidp))))
+      (make-instance 'contract
+                     :sponsor sponsor
+                     :date date
+                     :m2s m2s
+                     :area area
+                     :expires expires
+                     :download-only download-only
+                     :paidp paidp))))
 
 (deftransaction recolorize-contracts (&optional colors)
   "Assigns a new color to each contract choosing from COLORS, so

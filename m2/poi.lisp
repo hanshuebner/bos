@@ -16,7 +16,7 @@
    (description :initform (make-string-hash-table)
                 :documentation "beschreibungstext")))
 
-(defmethod initialize-persistent-instance :after ((obj textual-attributes-mixin)
+(defmethod initialize-instance :after ((obj textual-attributes-mixin)
                                                   &key language title subtitle description)
   (update-textual-attributes obj language
                              :title title
@@ -50,9 +50,9 @@ FROM and TO must not both continue to exist."
   (assert (if (or title subtitle description) language t) nil
           "language needs to be specified, if any of title, subtitle
            or description is given")
-  (apply #'make-object class-name rest))
+  (apply #'make-instance class-name (remove-keys '(:initargs) rest)))
 
-(defmethod initialize-persistent-instance :after ((poi-medium poi-medium) &key poi)
+(defmethod initialize-instance :after ((poi-medium poi-medium) &key poi)
   (when poi
     (push poi-medium (poi-media poi))))
 
@@ -122,7 +122,7 @@ FROM and TO must not both continue to exist."
   (assert (if (or title subtitle description) language t) nil
           "language needs to be specified, if any of title, subtitle
            or description is given")
-  (apply #'make-object 'poi :name name rest))
+  (apply #'make-instance 'poi :name name rest))
 
 (defmethod destroy-object :before ((poi poi))
   (mapc #'delete-object (poi-media poi)))

@@ -10,7 +10,7 @@
    (text :none :initform (make-string-hash-table))))
 
 (deftransaction make-news-item (&key language title text)
-  (let ((news-item (make-object 'news-item)))
+  (let ((news-item (make-instance 'news-item)))
     (setf (slot-string news-item 'title language) title)
     (setf (slot-string news-item 'text language) text)
     news-item))

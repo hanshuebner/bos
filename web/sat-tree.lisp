@@ -189,7 +189,7 @@
   (assert (< local-draw-order (1- +max-num-of-local-draw-order-levels+)))
   (when (find local-draw-order (class-instances 'sat-layer) :key #'local-draw-order)
     (cerror "create the new layer anyway" "There is already a sat-layer with the same local-draw-order '~A'." local-draw-order))
-  (let ((layer (make-object 'sat-layer :name name :geo-box geo-box :local-draw-order local-draw-order)))
+  (let ((layer (make-instance 'sat-layer :name name :geo-box geo-box :local-draw-order local-draw-order)))
     (make-sat-image-tiles-for-depth image geo-box layer start-depth)
     layer))
 

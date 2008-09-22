@@ -30,7 +30,7 @@
             (allocation-area-active-p allocation-area)
             (store-object-id allocation-area))))
 
-(defmethod initialize-persistent-instance :after ((allocation-area allocation-area) &key)
+(defmethod initialize-instance :after ((allocation-area allocation-area) &key)
   (with-slots (total-m2s free-m2s) allocation-area
     (setf total-m2s (calculate-total-m2-count allocation-area))
     (setf free-m2s (- total-m2s (calculate-allocated-m2-count allocation-area))))
@@ -122,14 +122,13 @@
   (multiple-value-bind (left top width height)
       (compute-bounding-box vertices)
     (let ((result
-           (make-object 'allocation-area
-                        :left left
-                        :top top
-                        :width width
-                        :height height
-                        :y top
-                        :active-p nil
-                        :vertices vertices)))
+           (make-instance 'allocation-area
+                          :left left
+                          :top top
+                          :width width
+                          :height height
+                          :active-p nil
+                          :vertices vertices)))
       result)))
 
 (defmethod allocation-area-bounding-box ((allocation-area allocation-area))
@@ -160,13 +159,13 @@ possibly augmented by any contracts that dont have an allocation-area
 anymore."
   (geometry:with-bounding-box-collect (collect)
     (awhen (allocation-areas-bounding-box)
-      (geometry:with-rectangle (it)
-        (collect (list left top))
-        (collect (list (1- (+ left width)) (1- (+ top height))))))
+           (geometry:with-rectangle (it)
+             (collect (list left top))
+             (collect (list (1- (+ left width)) (1- (+ top height))))))
     (awhen (contracts-bounding-box)
-      (geometry:with-rectangle (it)
-        (collect (list left top))
-        (collect (list (1- (+ left width)) (1- (+ top height))))))))
+           (geometry:with-rectangle (it)
+             (collect (list left top))
+             (collect (list (1- (+ left width)) (1- (+ top height))))))))
 
 (defun gauge (area)
   "Liefere den Fuellpegel des Vergabegebiets (0 <= gauge <= 1)"

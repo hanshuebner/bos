@@ -33,9 +33,9 @@
          (:ul
           (loop for poi in (sort (store-objects-with-class 'poi) #'string-lessp :key #'poi-name)
              do (html (:li (cmslink (edit-object-url poi)
-                             (:princ-safe (poi-name poi))
-                             " - "
-                             (:princ-safe (slot-string poi 'title (request-language)))))))))
+                                    (:princ-safe (poi-name poi))
+                                    " - "
+                                    (:princ-safe (slot-string poi 'title (request-language)))))))))
         (html (:h2 "No POIs created yet")))
     ((:form :method "post" :action "/make-poi")
      "Make new POI named "
@@ -67,7 +67,7 @@
                    "the location and all text fields are set and that at least 6 images "
                    "have been uploaded.")))
       (:p (cmslink (format nil "/poi-xml/~D?lang=~A" (store-object-id poi) language)
-            (:format "show this POI in ~A microsite" (string-upcase language))))
+                   (:format "show this POI in ~A microsite" (string-upcase language))))
       ((:form :method "POST" :enctype "multipart/form-data")
        ((:table :border "1")
         (:tr (:td "name")
@@ -102,11 +102,11 @@
                        (html (:princ-safe (format nil "~D/~D " (first (poi-area poi)) (second (poi-area poi)))))
                        (cmslink (format nil "map-browser/~A/~A?chosen-url=~A"
                                         (first (poi-area poi)) (second (poi-area poi)) (format-chosen-url))
-                         "[relocate]"))
+                                "[relocate]"))
                       (t
                        (cmslink (format nil "map-browser/?chosen-url=~A"
                                         (format-chosen-url))
-                         "[choose]"))))))
+                                "[choose]"))))))
         (:tr (:td "icon")
              (:td (icon-chooser "icon" (poi-icon poi))))
         (:tr (:td "images for sat-app")
@@ -166,11 +166,11 @@
                           (:tr (:td ((:p :style "text-align:center;")
                                      (cmslink (format nil "/edit-poi-medium/~D?poi=~D"
                                                       (store-object-id medium) (store-object-id poi))
-                                       "edit"))
+                                              "edit"))
                                     ((:p :style "text-align:center;")
                                      (cmslink (format nil "/edit-poi-medium/~D?action=delete&ask-for-confirmation=on&poi=~D"
                                                       (store-object-id medium) (store-object-id poi))
-                                       "delete")))
+                                              "delete")))
                                ((:td :colspan "2") (medium-handler-preview medium :small t))))))))))))
 
 (defmethod handle-object-form ((handler edit-poi-handler)
@@ -196,7 +196,7 @@
     (with-bos-cms-page (:title "POI has been updated")
       (html (:h2 "Your changes have been saved")
             "You may " (cmslink (format nil "~A?language=~A" (edit-object-url poi) language)
-                         "continue editing the POI") "."))))
+                                "continue editing the POI") "."))))
 
 (defmethod handle-object-form ((handler edit-poi-handler)
                                (action (eql :delete)) (poi poi))
@@ -322,7 +322,7 @@
         (:h2 (format nil "The ~A information has been updated" type-string))
         "You may " (cmslink (format nil "~A?language=~A&poi=~A"
                                     (edit-object-url medium) language poi)
-                     (:princ-safe (format nil "continue editing the ~A" type-string)))))))
+                            (:princ-safe (format nil "continue editing the ~A" type-string)))))))
 
 (defmethod handle-object-form ((handler edit-poi-medium-handler) (action (eql :delete)) (medium poi-medium))
   (with-query-params ((ask-for-confirmation nil boolean))
@@ -334,7 +334,7 @@
            (:h2 (format nil "Really delete ~A?" type-string))
            (:p "Yes, " (cmslink (format nil "/edit-poi-medium/~D?action=delete&poi=~D"
                                         (store-object-id medium) (store-object-id poi))
-                         "delete it."))
+                                "delete it."))
            (:p "No, take me " (cmslink (edit-object-url poi) "back to the POI"))))
         (t
          (delete-object medium)
@@ -346,7 +346,7 @@
   (flet ((make-new-medium (new-medium-type poi)
            (case new-medium-type
              (poi-movie
-              (make-object 'poi-movie :poi poi :url (query-param "url")))
+              (make-instance 'poi-movie :poi poi :url (query-param "url")))
              (otherwise
               (let ((upload (request-uploaded-file "image-file")))
                 (unless upload

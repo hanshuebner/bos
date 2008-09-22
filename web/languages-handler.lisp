@@ -11,7 +11,7 @@
       (:add (handler-case
                 (with-query-params (code name)
                   (when (and code name)
-                    (make-object 'website-language :code code :name name)
+                    (make-instance 'website-language :code code :name name)
                     (html (:h2 "Language " (:princ-safe code) " (" (:princ-safe name) ") created"))))
               (error (e)
                 (html (:h2 "Error creating language")

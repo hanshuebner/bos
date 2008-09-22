@@ -31,9 +31,9 @@
 
 (defun ensure-original-map-tile (x y)
   (or (get-original-map-tile x y)
-      (make-object 'original-map-tile
-                   :x (floor x +m2tile-width+)
-                   :y (floor y +m2tile-width+))))
+      (make-instance 'original-map-tile
+                     :x (floor x +m2tile-width+)
+                     :y (floor y +m2tile-width+))))
 
 ;;;; IMAGE-TILE
 ;;;;
