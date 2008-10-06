@@ -105,7 +105,7 @@
      <tr>
       <td class="Label"></td>
       <td class="Input">
-       <a class="Link" href="#" onclick="document.location.href = '/infosystem/en/satellitenkarte.htm'">
+       <a class="Link" href="#" onclick="document.location.href = '/infosystem/da/satellitenkarte.htm'">
         <img src="/images/pfeil_back.gif" border="0"></img>
 	tilbage
        </a>
