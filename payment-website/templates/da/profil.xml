@@ -10,9 +10,10 @@
  <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
   <bos:save-profile>
    <form name="form" method="POST">
+     <img style="position: absolute;" src="/infosystem/bilder/infosystem_header-en.gif" width="740" height="76"/>         
     <table width="740" border="0" cellpadding="0" cellspacing="0">
      <tr>
-      <td height="50" colspan="3"><img src="../images/header_infosystem.gif" width="740" height="50"></img></td>
+      <td height="50" colspan="3"><img src="/infosystem/bilder/spacer.gif" width="740" height="50"></img></td>
      </tr>
      <tr> 
       <td height="20" class="BreadCrumbs"> </td>
