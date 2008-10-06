@@ -538,7 +538,8 @@
                       (with-element "img"
                         (attribute "width" "400")
                         (attribute "alt" "create rainforest banner / bos logo")
-                        (attribute "src" (website-path "/images/header_ganzneu.gif")))))
+                        (attribute "src" (website-path "/images/google-header-~A.gif"
+                                                       (if (equal "de" language) "de" "en"))))))
                   (with-element "tr"
                     (with-element "td"
                       (attribute "style" "width: 100px;")
