@@ -268,16 +268,20 @@ var poi = { id: ~S,
 
 (define-modify-macro appendf (&rest args) append)
 
-(defmethod convert-slot-value-while-restoring ((poi poi) (slot-name (eql 'airals)) value)
+(defmethod convert-slot-value-while-restoring ((poi poi) (slot-name (eql 'airals)) value)  
+  (unless (slot-boundp poi 'media) (setf (slot-value poi 'media) nil))
   (appendf (poi-media poi) (mapcar (lambda (obj) (change-class obj 'poi-airal :poi poi)) value)))
 
 (defmethod convert-slot-value-while-restoring ((poi poi) (slot-name (eql 'images)) value)
+  (unless (slot-boundp poi 'media) (setf (slot-value poi 'media) nil))
   (appendf (poi-media poi) (mapcar (lambda (obj) (change-class obj 'poi-image :poi poi)) value)))
 
 (defmethod convert-slot-value-while-restoring ((poi poi) (slot-name (eql 'movies)) value)
+  (unless (slot-boundp poi 'media) (setf (slot-value poi 'media) nil))
   (appendf (poi-media poi) (mapcar (lambda (url) (make-instance 'poi-movie :url url :poi poi)) value)))
 
 (defmethod convert-slot-value-while-restoring ((poi poi) (slot-name (eql 'panoramas)) value)
+  (unless (slot-boundp poi 'media) (setf (slot-value poi 'media) nil))
   (appendf (poi-media poi) (mapcar (lambda (obj) (change-class obj 'poi-panorama :poi poi)) value)))
 
 (defun pois-sanity-check ()
