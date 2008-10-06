@@ -207,8 +207,7 @@
                                          :content-type "image/x-icon")
                                         ("/index" index-handler)
                                         user
-                                        images
-                                        stats
+                                        images                                   
                                         ("/" worldpay-template-handler
                                              :destination ,(namestring (merge-pathnames #p"templates/" website-directory))
                                              :command-packages (("http://headcraft.de/bos" . :bos.web)
