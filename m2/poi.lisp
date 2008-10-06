@@ -278,7 +278,7 @@ var poi = { id: ~S,
 
 (defmethod convert-slot-value-while-restoring ((poi poi) (slot-name (eql 'movies)) value)
   (unless (slot-boundp poi 'media) (setf (slot-value poi 'media) nil))
-  (appendf (slot-value poi 'media) (mapcar (lambda (url) (make-instance 'poi-movie :url url :poi poi)) value)))
+  (appendf (slot-value poi 'media) (mapcar (lambda (url) `(poi-movie :url ,url :poi ,poi)) value)))
 
 (defmethod convert-slot-value-while-restoring ((poi poi) (slot-name (eql 'panoramas)) value)
   (unless (slot-boundp poi 'media) (setf (slot-value poi 'media) nil))
