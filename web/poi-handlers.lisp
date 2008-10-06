@@ -579,8 +579,7 @@
                         (attribute "color" "#999999")
                         (with-element "a"
                           (attribute "href" (website-path "/~A/index" language))
-                          (text "create rainforest"))
-                        (text " | copyright")))))))))
+                          (text "create rainforest"))))))))))
       (error (c) (error "while generating poi-description-google-earth for ~s:~%~a" poi c)))))
 
 (defun write-poi-kml (poi language)
