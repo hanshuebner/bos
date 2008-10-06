@@ -15,7 +15,7 @@
 (defparameter *website-url* "http://create-rainforest.org")
 
 ;; Dokumentenversand
-(defparameter *mail-certificate-threshold* 30
+(defparameter *mail-certificate-threshold* 90
   "Limit in Euro für den Versand von Urkunden - Unterhalb dieser Grenze wird die Urkunde nicht verschickt")
 (defparameter *mail-fiscal-certificate-threshold* 100
   "Limit in Euro für den Versand von Spendenbescheinigungen - Ab dieser Grenze wird eine Spendenbescheinigung von BOS verschickt")
