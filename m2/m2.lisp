@@ -578,6 +578,11 @@ neighbours."
                                          #'m2-neighbours
                                          #'eq)))
     (let ((consistent t))
+      (unless (member contract (sponsor-contracts (contract-sponsor contract)))
+        (warn "~s has a sponsor ~s, but is not a member of SPONSOR-CONTRACTS, which is ~s"
+              contract (contract-sponsor contract)
+              (sponsor-contracts (contract-sponsor contract)))
+        (setq consistent nil))
       (unless (every #'m2-points-to-contract (contract-m2s contract))
         (let ((*print-length* 5))
           (warn "~s of ~s dont point to it by M2-CONTRACT~
