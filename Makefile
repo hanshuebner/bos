@@ -21,7 +21,11 @@ clean: cleancore
 
 .PHONY: start
 start: bos.core
-	sbcl --core bos.core --eval '(start)'
+	sbcl --core bos.core --no-userinit --eval '(start)'
+
+.PHONY: start-cert-daemon
+start-cert-daemon: bos.core
+	sbcl --core bos.core --no-userinit --eval '(bos.m2.cert-generator:cert-daemon)'
 
 # TAGS
 TAGS:
