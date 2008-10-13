@@ -98,10 +98,24 @@
   (if (null sponsor)
       string
       (let ((contract (first (sponsor-contracts sponsor))))
-        (ppcre:regex-replace #?r"<!-- +personalized +contract +placemark +-->"
+        (ppcre:regex-replace #?r"<!-- +personalized +contract +placemark *-->"
                              string
                              (cxml:with-xml-output (cxml:make-string-sink :omit-xml-declaration-p t)
                                (write-personalized-contract-placemark-kml contract lang))))))
+
+(defun replace-contract-tree-placeholder (string sponsor lang)
+  (ppcre:regex-replace
+   #?r"<!-- +squaremetre +area +contract +tree +link *-->"
+   string
+   (if (and sponsor (first (sponsor-contracts sponsor)))
+       (let ((contract (first (sponsor-contracts sponsor)))
+             (node (find-contract-node *contract-tree* contract))
+             (path (node-path node))
+             (contract-id (store-object-id contract)))
+         (format nil "<href>http://~a/contract-tree-kml?rmcid=~D&amp;rmcpath=~{~D~}&amp;lang=~A</href>" 
+                 (website-host) contract-id path lang))
+       (format nil "<href>http://~A/contract-tree-kml?lang=~A</href>"
+               (website-host) lang))))
 
 (defun serve-kml-root-data (&optional sponsor)
   (with-query-params ((lang "en"))
@@ -117,7 +131,8 @@
       (let ((kml-string (kml-string kml-root-data)))
         (setq kml-string (replace-all-url-hosts kml-string (website-host))
               kml-string (replace-lang-query-params kml-string lang)
-              kml-string (replace-personalized-contract-placeholder kml-string sponsor lang))))))
+              kml-string (replace-personalized-contract-placeholder kml-string sponsor lang)
+              kml-string (replace-contract-tree-placeholder kml-string sponsor lang))))))
 
 (defmethod handle-object ((handler kml-root-handler) (object sponsor))
   (serve-kml-root-data object))
