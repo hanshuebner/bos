@@ -108,10 +108,10 @@
    #?r"<!-- +squaremetre +area +contract +tree +link *-->"
    string
    (if (and sponsor (first (sponsor-contracts sponsor)))
-       (let ((contract (first (sponsor-contracts sponsor)))
-             (node (find-contract-node *contract-tree* contract))
-             (path (node-path node))
-             (contract-id (store-object-id contract)))
+       (let* ((contract (first (sponsor-contracts sponsor)))
+              (node (find-contract-node *contract-tree* contract))
+              (path (node-path node))
+              (contract-id (store-object-id contract)))
          (format nil "<href>http://~a/contract-tree-kml?rmcid=~D&amp;rmcpath=~{~D~}&amp;lang=~A</href>" 
                  (website-host) contract-id path lang))
        (format nil "<href>http://~A/contract-tree-kml?lang=~A</href>"
