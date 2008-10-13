@@ -54,7 +54,6 @@
 						kontakt     
 					</a>
 				</div>	
-				<div>l</div>		
 			</div>
 			<div id="menue_header_right" align="right">
 				<select name="language" style="width:125px;" onchange="jumpMenu('parent', this, 0)">
