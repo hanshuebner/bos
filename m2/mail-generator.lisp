@@ -80,7 +80,7 @@ $(email)
 "))
 
 (defun mail-fiscal-certificate-to-office (contract name address country)
-  (format t "mail-fiscal-certificate-to-office: ~a name: ~a address: ~a country: ~a~%" contract name address country))
+  #+(or) (format t "mail-fiscal-certificate-to-office: ~a name: ~a address: ~a country: ~a~%" contract name address country))
 
 (defun mail-template-directory (language)
   "Return the directory where the mail templates are stored"
