@@ -359,9 +359,7 @@
   (format nil "/certificate/~A" (store-object-id contract)))
 
 (defmethod contract-certificates-generated-p (contract)
-  (and (probe-file (contract-pdf-pathname contract))
-       (or (contract-download-only-p contract)
-           (probe-file (contract-pdf-pathname contract :print t)))))
+  (probe-file (contract-pdf-pathname contract)))
 
 (defmethod contract-delete-certificate-files (contract)
   (ignore-errors

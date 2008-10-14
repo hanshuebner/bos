@@ -47,6 +47,12 @@
         (format "Error generating certificate from file ~A: ~A~%" fdf-pathname e)))))
 
 (defun generate-certs ()
+  ;; Mail certificates need to be generated first, then download-only
+  ;; certificates, because the CONTRACT-CERTIFICATES-GENERATED-P
+  ;; function only checks for the existence of the download
+  ;; certificate file.  The mail certificates are deleted after they
+  ;; have been sent by mail, so we cannot check for both files in said
+  ;; routine.
   (fill-forms *cert-mail-directory* *cert-mail-template*)
   (fill-forms *cert-download-directory* *cert-download-template*)
   (fill-forms *receipt-mail-directory* *receipt-mail-template*)
