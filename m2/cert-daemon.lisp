@@ -25,9 +25,7 @@
       (warn "While filling form ~A with ~A:~%~A" pdf-pathname fdf-pathname e))))
 
 (defun fill-forms (directory template-pathname)
-  (dolist (fdf-pathname (remove "fdf" (cl-fad:list-directory directory)
-                                :test (complement #'string-equal)
-                                :key #'pathname-type))
+  (dolist (fdf-pathname (directory (merge-pathnames "*.fdf" directory)))
     (handler-case
         (destructuring-bind (id &optional (country "en"))
             (split "-" (pathname-name fdf-pathname))
