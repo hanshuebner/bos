@@ -26,10 +26,6 @@ clean: cleancore
 start: bos.core
 	$(SBCL_RUN) --eval '(start)'
 
-.PHONY: start-cert-daemon
-start-cert-daemon: bos.core
-	$(SBCL_RUN) --eval '(bos.m2.cert-generator:cert-daemon)'
-
 # TAGS
 TAGS:
 	find . -name '*.lisp' | xargs etags -a

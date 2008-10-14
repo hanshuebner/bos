@@ -16,7 +16,7 @@ msgwait 0
 chdir /home/bknr/bknr-svn/projects/bos
 
 screen -t webserver make start
-screen -t cert-daemon make start-cert-daemon
+screen -t cert-daemon sh cert-daemon/cert-daemon-driver.sh
 screen -t wp-callback-redir perl tools/wp-callpack-redirect.pl
 
 msgminwait 1

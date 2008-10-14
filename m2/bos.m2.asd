@@ -28,5 +28,4 @@
                (:file "poi" :depends-on ("packages" "slot-strings"))
                (:file "import" :depends-on ("packages"))
                (:file "map" :depends-on ("config" "packages" "tiled-index"))
-               (:file "export" :depends-on ("packages"))
-               (:file "cert-daemon" :depends-on ("packages"))))
+               (:file "export" :depends-on ("packages"))))
