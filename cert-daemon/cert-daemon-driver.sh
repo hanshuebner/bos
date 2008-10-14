@@ -5,7 +5,7 @@ CERTS=/home/bknr/certs
 CHECKOUT=/home/bknr/bknr-svn/projects/bos/cert-daemon
 hostname=`hostname`
 
-cd $HOME
+cd $CERTS
 
 while true
 do
