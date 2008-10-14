@@ -28,11 +28,11 @@ gen_certs()
         pdftk $tmp1_file cat 1 output $tmp2_file
         pdftk $tmp1_file cat 2 output $tmp3_file
         pdftk $m2s_pdf_file background $tmp3_file output $tmp4_file
-        pdftk $tmp2ww_file $tmp4_file output $print_pdf_file
+        pdftk $tmp2_file $tmp4_file output $print_pdf_file
         echo generated $print_pdf_file
     fi
 
-    pdftk urkunde-print-$language.pdf fill_form $download_fdf_file output $tmp1_file
+    pdftk urkunde-download-$language.pdf fill_form $download_fdf_file output $tmp1_file
     pdftk $m2s_pdf_file background $tmp1_file output $download_pdf_file
     echo generated $download_pdf_file
     rm -f $tmp1_file $tmp2_file $tmp3_file $tmp4_file $print_fdf_file $download_fdf_file
