@@ -83,10 +83,3 @@
   #+(and cmu mp)
   (mp::startup-idle-and-top-level-loops))
 
-(defun start-cert-daemon ()
-  (ensure-sbcl-home)
-  (env-ascii-check)
-  (asdf:oos 'asdf:load-op :bos.web)
-  (format t "; starting certificate generation daemon~%")
-  (bos.m2.cert-generator:cert-daemon))
-

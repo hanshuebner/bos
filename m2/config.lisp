@@ -49,8 +49,6 @@ Download-Urkunden erzeugt werden sollen")
                                                        *pdf-base-directory*))
 (defparameter *receipt-download-template* (merge-pathnames #p"spendenbescheinigung-download.pdf"
                                                            *pdf-base-directory*))
-(defparameter *cert-daemon-poll-seconds* 2
-  "Wartezeit zwischen zwei Directory-Scans des Urkunden-Daemons")
 
 ;; Mail-Stuff
 (defparameter *mail-sender* "mxm-automail@create-rainforest.org"

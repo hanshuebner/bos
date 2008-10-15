@@ -52,7 +52,6 @@
            #:*receipt-mail-template*
            #:*receipt-download-template*
            #:*num-coords-per-line*
-           #:*cert-daemon-poll-seconds*
            #:*manual-contract-expiry-time*
            #:*online-contract-expiry-time*))
 
@@ -268,16 +267,6 @@
            #:queue-elements
            #:peek-queue
            ))
-
-(defpackage :bos.m2.cert-generator
-  (:use :cl
-        :bos.m2.config
-        :bknr.utils
-        :cl-ppcre
-        :cl-interpol
-        :cl-gd)
-  (:shadowing-import-from :cl-interpol #:quote-meta-chars)
-  (:export #:cert-daemon))
 
 (defpackage :bos.m2.allocation-cache
   (:use :cl
