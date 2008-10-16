@@ -12,36 +12,37 @@
   <div id="content_main">
     <div id="textbox_content_bigger">
       <table border="0" cellpadding="0" cellspacing="0">
-
+        <tr><td height="20"></td></tr>
 	<tr>
 	  <td colspan="2">
 	    <span class="headline">
 	      Satellitenkarte
 	    </span>
 	  </td>
-	  <td align="center" valign="top">
-	    <img src="../images/pfeil_back.gif" width="10" height="9" alt="" />
-	    <a href="javascript:history.back()" class="titlegray">
-	      zurück
-	    </a>  
-	  </td>		
 	</tr>
 	<tr>
 	  <td height="6">
 	  </td>
-	</tr>        
+	</tr>
 	<tr>
-	  <td colspan="3">
-	    Verschaffen Sie sich einen Überblick auf unserer
-            <a shape="rect" title="Satellitenkarte" class="titlegreen" href="javascript:window_infosys()">
-	      Satellitenkarte</a>.            
+          <td>
+            <a href="javascript:window_infosys()">
+              <img alt="" height="80" width="75" src="/images/satellite_ganzneu2.gif"/>
+            </a>
+          </td>
+          <td width="10">
+          </td>
+	  <td colspan="2">
+	    Verschaffen Sie direkt im Browser einen Überblick auf unserer<br/>
+            <a title="Satellitenkarte" class="titlegreen" href="javascript:window_infosys()">
+              <img alt="" height="9" width="10" src="/images/pfeil_link_on.gif"/> Satellitenkarte</a>.
 	  </td>
 	</tr>
         <!--         separator -->
         <tr>
 	  <td height="12">
 	  </td>
-	</tr>                                
+	</tr>
         <!--         google earth -->
         <tr>
 	  <td colspan="3">
@@ -53,40 +54,33 @@
 	<tr>
 	  <td height="6">
 	  </td>
-	</tr>        
+	</tr>
 	<tr>
-	  <td colspan="3">
-            Wenn die Google Earth Software
-            <a href='http://earth.google.de/' target='_blank' shape='rect' class='titlegreen'>http://earth.google.de/</a>
+          <td>
+            <a href="/kml-root?lang=de">
+              <img alt="" src="/static/google_earth_logo.png"/>
+            </a>
+          </td>
+          <td width="10">
+          </td>
+	  <td colspan="2">
+            Wenn die
+            <a href='http://earth.google.de/' target='_blank' shape='rect' class='titlegreen'>
+              <img alt="" height="9" width="10" src="/images/pfeil_link_on.gif"/>
+               Google Earth Software
+            </a>
             auf Ihrem Computer installiert ist, können Sie sich das
             Projektgebiet mit Satelliten-Bildern aus dem Jahr 2002 und
             2007 sowie vielen weiteren Informationen anschauen. Für
             eine optimale Darstellung, können Sie Google Earth über
-            den gleichen Link gegebenenfalls auch updaten.                    
+            den gleichen Link gegebenenfalls auch updaten.<br/> <br/>
+            Wenn Sie Google Earth installiert haben, gehen Sie direkt nach<br/>
+            <a class="titlegreen" href="/kml-root?lang=de">
+              <img alt="" height="9" width="10" src="/images/pfeil_link_on.gif"/>
+              Samboja Lestari</a>.
 	  </td>
 	</tr>
-	<tr>
-	  <td height="6">
-	  </td>
-	</tr>                
-	<tr>
-	  <td colspan="3">
-            Über diesen Link wird sich direkt Ihre Google Earth Applikation öffnen:            
-	  </td>
-	</tr>        
-	<tr>
-	  <td height="6">
-	  </td>
-	</tr>                
-	<tr>
-	  <td colspan="3">
-            <img alt="" height="9" width="10" src="/images/pfeil_link_on.gif"/>
-            <a shape="rect" class="more" href="/kml-root?lang=de">
-	      zu Google Earth
-	    </a>
-	  </td>
-	</tr>        
-      </table>	
+      </table>
     </div>	
   </div>
 </bknr:toplevel>

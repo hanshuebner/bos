@@ -12,36 +12,38 @@
   <div id="content_main">
     <div id="textbox_content_bigger">
       <table border="0" cellpadding="0" cellspacing="0">
-
+        <tr><td height="20"></td></tr>
 	<tr>
-	  <td colspan="2">
+	  <td colspan="3">
 	    <span class="headline">
 	      Satellite Map
 	    </span>
 	  </td>
-	  <td align="center" valign="top">
-	    <img src="../images/pfeil_back.gif" width="10" height="9" alt="" />
-	    <a href="javascript:history.back()" class="titlegray">
-	      back
-	    </a>  
-	  </td>		
 	</tr>
 	<tr>
 	  <td height="6">
 	  </td>
-	</tr>        
+	</tr>
 	<tr>
-	  <td colspan="3">
+          <td>
+            <a href="javascript:window_infosys()">
+              <img alt="" height="80" width="75" src="/images/satellite_ganzneu2.gif"/>
+            </a>
+          </td>
+          <td width="10">
+          </td>
+	  <td colspan="2">
 	    Take a look at our
             <a shape="rect" title="Satellitenkarte" class="titlegreen" href="javascript:window_infosys()">
-	      Satellite Map</a>.            
+              <img alt="" height="9" width="10" src="/images/pfeil_link_on.gif"/>
+	      Satellite Map</a> right in your browser.
 	  </td>
 	</tr>
         <!--         separator -->
         <tr>
 	  <td height="12">
 	  </td>
-	</tr>                                
+	</tr>
         <!--         google earth -->
         <tr>
 	  <td colspan="3">
@@ -53,38 +55,31 @@
 	<tr>
 	  <td height="6">
 	  </td>
-	</tr>        
-	<tr>
-	  <td colspan="3">
-            If the Google Earth Software
-            <a href='http://earth.google.de/' target='_blank' shape='rect' class='titlegreen'>http://earth.google.de/</a>
-            is installed on your computer, you can view the project area with
-            satellite images from 2002 and 2007 plus a lot of additional
-            information. For an optimal viewing experience, you can also use the
-            above link to upgrade your Google Earth installation if needed.
-	  </td>
 	</tr>
 	<tr>
-	  <td height="6">
+          <td>
+            <a href="/kml-root?lang=de">
+              <img alt="" src="/static/google_earth_logo.png"/>
+            </a>
+          </td>
+          <td width="10">
+          </td>
+	  <td colspan="2">
+            If
+            <a href='http://earth.google.com/' target='_blank'
+            shape='rect' class='titlegreen'>Google Earth</a> is
+            installed on your computer, you can view the project area
+            with satellite images from 2002 and 2007 plus a lot of
+            additional information. For an optimal viewing experience,
+            you can also use the above link to upgrade your Google
+            Earth installation if needed.<br/><br/> If you have Google
+            Earth installed on your computer,
+            visit <a class="titlegreen" href="/kml-root?lang=en">
+              <img alt="" height="9" width="10"
+                   src="/images/pfeil_link_on.gif"/>
+              Samboja Lestari</a>.
 	  </td>
-	</tr>                
-	<tr>
-	  <td colspan="3">
-            Your Google Earth application will be started via the following link:
-	  </td>
-	</tr>        
-	<tr>
-	  <td height="6">
-	  </td>
-	</tr>                
-	<tr>
-	  <td colspan="3">
-            <img alt="" height="9" width="10" src="/images/pfeil_link_on.gif"/>
-            <a shape="rect" class="more" href="/kml-root?lang=en">
-	      to Google Earth
-	    </a>
-	  </td>
-	</tr>        
+	</tr>
       </table>	
     </div>	
   </div>

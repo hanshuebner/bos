@@ -19,29 +19,31 @@
 	      Satellit kort
 	    </span>
 	  </td>
-	  <td align="center" valign="top">
-	    <img src="../images/pfeil_back.gif" width="10" height="9" alt="" />
-	    <a href="javascript:history.back()" class="titlegray">
-	      back
-	    </a>  
-	  </td>		
 	</tr>
 	<tr>
 	  <td height="6">
 	  </td>
-	</tr>        
+	</tr>
 	<tr>
-	  <td colspan="3">
+          <td>
+            <a href="javascript:window_infosys()">
+              <img alt="" height="80" width="75" src="/images/satellite_ganzneu2.gif"/>
+            </a>
+          </td>
+          <td width="10">
+          </td>
+	  <td colspan="2">
 	    Se vores
-            <a shape="rect" title="Satellitenkarte" class="titlegreen" href="javascript:window_infosys()">
-	      Satellit kort</a>.            
+            <a title="Satellitenkarte" class="titlegreen" href="javascript:window_infosys()">
+              <img alt="" height="9" width="10" src="/images/pfeil_link_on.gif"/>
+              Satellit kort</a>.
 	  </td>
 	</tr>
         <!--         separator -->
         <tr>
 	  <td height="12">
 	  </td>
-	</tr>                                
+	</tr>
         <!--         google earth -->
         <tr>
 	  <td colspan="3">
@@ -53,41 +55,32 @@
 	<tr>
 	  <td height="6">
 	  </td>
-	</tr>        
-	<tr>
-	  <td colspan="3">
-            Når du har installeret Google Earths software
-            <a href='http://earth.google.de/' target='_blank' shape='rect' class='titlegreen'>http://earth.google.de/</a>
-            på din computer, kan du se et
-            udvalg af satellitbilleder fra projektområdet fra perioden
-            2000 til 2007 plus en masse ekstra information. For
-            optimale oplevelse kan du, om nødtvendigt, bruge
-            ovenstående link til at opgradere din Google Earth. 
-	  </td>
 	</tr>
 	<tr>
-	  <td height="6">
-	  </td>
-	</tr>                
-	<tr>
-	  <td colspan="3">
-            Din Google Earth applikation vil starte ved hjælp af
-            flg. link:
-	  </td>
-	</tr>        
-	<tr>
-	  <td height="6">
-	  </td>
-	</tr>                
-	<tr>
-	  <td colspan="3">
-            <img alt="" height="9" width="10" src="/images/pfeil_link_on.gif"/>
+          <td>
+            <a href="/kml-root?lang=de">
+              <img alt="" src="/static/google_earth_logo.png"/>
+            </a>
+          </td>
+          <td width="10">
+          </td>
+	  <td colspan="2">
+            Når du har installeret
+            <a href='http://earth.google.com/' target='_blank'
+            shape='rect' class='titlegreen'>Google Earth</a> software
+            på din computer, kan du se et udvalg af satellitbilleder
+            fra projektområdet fra perioden 2000 til 2007 plus en
+            masse ekstra information. For optimale oplevelse kan du,
+            om nødtvendigt, bruge ovenstående link til at opgradere
+            din Google Earth.<br/><br/> Din Google Earth applikation
+            vil starte ved hjælp af flg. link: <img alt="" height="9"
+            width="10" src="/images/pfeil_link_on.gif"/>
             <a shape="rect" class="more" href="/kml-root?lang=da">
 	      to Google Earth
 	    </a>
 	  </td>
-	</tr>        
-      </table>	
-    </div>	
+	</tr>
+      </table>
+    </div>
   </div>
 </bknr:toplevel>
