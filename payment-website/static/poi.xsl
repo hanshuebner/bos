@@ -14,6 +14,7 @@
         <link href="http://createrainforest.org/rss/news" rel="alternate" title="RSS Feed"
               type="application/rss+xml">
         </link>
+        <script type="text/javascript" src="/static/bos.js"></script>
         <script type="text/javascript" src="/static/poi/prototype.js"></script>
         <script type="text/javascript" src="/static/poi/effects.js"></script>
         <script type="text/javascript" src="/static/poi/accordion.js"></script>
@@ -101,7 +102,8 @@
   <xsl:template match="entry">
     <xsl:variable name="title"><xsl:value-of select="@title"/></xsl:variable>
     <xsl:variable name="href"><xsl:value-of select="@href"/></xsl:variable>
-    <div class="menue"><a class="menuelink" href="{$href}" shape="rect" target="_blank" >
+    <xsl:variable name="onclick"><xsl:value-of select="@onclick"/></xsl:variable>
+    <div class="menue"><a class="menuelink" href="#" shape="rect" onclick="{$onclick}">
         <xsl:value-of select="$title"/></a></div>
     <div class="menue">|</div>
   </xsl:template>

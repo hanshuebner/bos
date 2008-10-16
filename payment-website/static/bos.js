@@ -1,9 +1,11 @@
 // -*- Java -*- Script
 
 // ***  extrafenster fuer impressum, kontakt etc. *** //
-function window_extra(target) { 
+function window_extra(target) {
     mywin=open(target,"detailwin","width=482,height=600,status=no,toolbar=no,menubar=no,resizable=yes,scrollbars=yes,left=100,top=100");
     mywin.focus();
+
+    return false;
 };
 
 		
@@ -11,6 +13,8 @@ function window_extra(target) {
 function window_ringdetail() { 
     mywin=open("ring-detail","ringdetail","width=492,height=450,status=no,toolbar=no,menubar=no,resizable=no,scrollbars=no,left=100,top=100");
     mywin.focus();
+
+    return false;
 };
 
 		
@@ -18,6 +22,8 @@ function window_ringdetail() {
 function window_news(target) { 
     mywin=open(target,"newswin","width=480,height=400,status=no,toolbar=no,menubar=no,resizable=yes,scrollbars=yes,left=100,top=100");
     mywin.focus();
+
+    return false;
 };
 
 // ***  extrafenster fuer satellitenkarte *** //
