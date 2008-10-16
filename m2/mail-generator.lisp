@@ -238,7 +238,7 @@ worldpay), return the common XML element name"
 
 (defun mail-contract-data (contract type mime-parts)
   (let ((parts mime-parts))
-    (unless (contract-download-only-p contract)
+    (when (probe-file (contract-pdf-pathname contract :print t))
       (setf parts (append parts
                           (list (make-instance 'mime
                                                :type "application"
