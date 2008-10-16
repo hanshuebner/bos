@@ -453,6 +453,7 @@
           (dolist (airal airals)
             (with-media ("airal" "Luftbild")
               (format-image airal)))
+          #+(or)
           (dolist (panorama panoramas)
             (with-media ("panorama" "Panorama" (store-image-name panorama))
               (format-image panorama)))
