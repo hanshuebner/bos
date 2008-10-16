@@ -516,3 +516,5 @@ ul.grey  {
 	padding-right: 3px;
 	padding-top: 6px;
 }
+
+#content img { border: none; }
