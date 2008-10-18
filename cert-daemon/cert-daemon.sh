@@ -23,7 +23,7 @@ gen_certs()
 
     trap "rm -f $tmp1_file $tmp2_file $tmp3_file $tmp4_file" EXIT
 
-    if [ -f $print_fdf_file ]; then
+    if [ $language = de -a -f $print_fdf_file ]; then
         pdftk urkunde-print-$language.pdf fill_form $print_fdf_file output $tmp1_file flatten
         pdftk $tmp1_file cat 1 output $tmp2_file
         pdftk $tmp1_file cat 2 output $tmp3_file
@@ -42,7 +42,8 @@ gen_certs()
 
 while true; do
     sleep 2
-    if [ -f download-spool/*-*.fdf ]; then
+    set download-spool/*-*.fdf
+    if [ -f $1 ]; then
         for job in download-spool/*-*.fdf
         do
           gen_certs `echo $job | perl -pe 's|.*-spool/(.*)-(.*).fdf|$1 $2|'`
