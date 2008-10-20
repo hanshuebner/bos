@@ -33,7 +33,13 @@ optionale address-Argument übergeben wird, wird die Urkunde per Post
 verschickt und entsprechend eine andere Vorlage ausgewählt als für den
 Download der Urkunde"
   (let ((sponsor (contract-sponsor contract)))
-    (make-m2-pdf contract :print print)
+    (make-m2-pdf contract
+                 :print print
+                 :template (make-pathname :name (format nil "urkunde-~A-~A"
+                                                        (if print "print" "download")
+                                                        language)
+                                          :type "pdf"
+                                          :defaults *pdf-base-directory*))
     (make-fdf-file (contract-fdf-pathname contract
                                           :language language
                                           :print print)

@@ -371,7 +371,8 @@
     (warn "re-issuing cert for ~A" contract))
   (contract-delete-certificate-files contract)
   (make-certificate contract name :address address :language language)
-  (unless (contract-download-only-p contract)
+  (when (and (equal language "de")
+             (not (contract-download-only-p contract)))
     (make-certificate contract name :address address :language language :print t))
   (change-slot-values contract 'cert-issued t))
 
