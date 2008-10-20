@@ -24,7 +24,7 @@ gen_certs()
 
     pdftk $download_m2s_pdf_file fill_form $download_fdf_file output $download_pdf_file $flatten
     echo generated $download_pdf_file
-    echo rm -f $print_m2s_pdf_file $print_fdf_file $download_m2s_pdf_file $download_fdf_file
+    rm -f $print_m2s_pdf_file $print_fdf_file $download_m2s_pdf_file $download_fdf_file
     trap "" EXIT
 
 }
