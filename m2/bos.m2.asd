@@ -5,7 +5,7 @@
 (asdf:defsystem :bos.m2
   :depends-on (:bknr.datastore :bknr.modules :cl-smtp :cl-mime
                                :kmrcl :iterate :arnesi
-                               :cl-pdf :screamer :cl-fad)
+                               :cl-pdf :cl-pdf-parser :screamer :cl-fad)
   :components ((:file "packages")
                (:file "geo-utm" :depends-on ("packages"))
                (:file "geometry" :depends-on ("packages"))

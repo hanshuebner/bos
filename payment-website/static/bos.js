@@ -267,3 +267,10 @@ function check_ueberweisung_de()
         return false;
     }
 }
+
+function maybe_show_ueberweisung_printed_cert()
+{
+    if (document.getElementById('numsqm').value >= 30) {
+        document.getElementById('mail-cert').style.visibility = 'inherit';
+    }
+}

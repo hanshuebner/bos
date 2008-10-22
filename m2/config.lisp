@@ -26,7 +26,7 @@
 
 ;; Urkunden-Erzeugung
 
-(defparameter *mail-amount* 30
+(defparameter *mail-amount* 90
   "Limit für den Versand der Urkunde per Post")
 
 (defparameter *pdf-base-directory* (merge-pathnames #p"certs/" (user-homedir-pathname)))
@@ -57,7 +57,7 @@ Download-Urkunden erzeugt werden sollen")
   "Empfänger für Office-Mails")
 
 ;; Urkundenerzeugung
-(defparameter *mail-amount* 30
+(defparameter *mail-amount* 90
   "Limit für den Versand der Urkunde per Post")
 
 (defparameter *num-coords-per-line* 6

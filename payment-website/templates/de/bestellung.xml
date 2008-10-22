@@ -1,237 +1,237 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-  title="REGENWALD für SAMBOJA LESTARI"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+   title="REGENWALD für SAMBOJA LESTARI"
+   xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:bknr="http://bknr.net"
+   xmlns:bos="http://headcraft.de/bos"
+   >
   <bos:set-cachable/>
-	<!-- content 3teilig-->
-	<div id="content">
-		<!-- content left-->
-		<div id="content_left">
-			<div id="textbox_left_form">		
-				<table border="0" cellpadding="1" cellspacing="0">
-					<tr>
-						<td></td>
-						<td colspan="2">
-							<img src="/images/step1.gif" width="120" height="20" border="0" alt="" />
-						</td>
-					</tr>
-					<tr><td colspan="4" height="40"></td></tr>
-					<tr>
-						<td> </td>
-						<td colspan="2">
-							<span class="link_titlered">
-								Regenwald schaffen
-								<br />für nur 3,- Euro pro m²
-							</span>
-							<br /><br />
-						</td>
-						<td></td>				
-					</tr>
-					<tr>
-						<td></td>
-						<td colspan="2">
-							Wir freuen uns über Ihre Entscheidung, sich mit BOS für Natur und Mensch in Indonesien zu engagieren.
-							<br /><br />
-							Mit Ihrer Unterstützung leisten Sie einen wichtigen Beitrag zur nachhaltigen Projektarbeit in Samboja Lestari
-							<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-									<a href="idea_subtitle2" class="more">
-										mehr...
-									</a>
-						</td>
-						<td></td>
-					</tr>
-				</table>
-			</div>
-			<!-- footer -->	
-			<div id="menue_footer">	
-				<a href="javascript:window_extra('privacy')" class="footer">
-					Datenschutzinfo
-				</a>
-				l
-				<a href="javascript:window_extra('impressum')" class="footer">
-					Impressum
-				</a>
-			</div>
-			<!-- /footer -->	
-		</div>
-		<!-- /content left-->
-		<!-- container content_main -->
-		<div id="content_main">
-			<div id="textbox_content_big" >
-				<form name="bestellformular" method="post" action="buy-sqm">
-					<table id="formTable" width="100%" border="0" cellspacing="0" cellpadding="0">
-							<tr>
-								<td colspan="3">
-									<span class="headline">
-										Ich bin dabei. Ich möchte sehen wie Samboja Lestari grüner wird und schaffe...
-									</span>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3" height="5"> </td>
-							</tr>
-							<tr>
-								<td colspan="3">
-									<input type="radio" name="numsqm" value="1"
-											onclick="document.bestellformular.numsqm1.value = '';" />
-									1 m² Regenwald [3 Euro],
-									<br />
-									<input type="radio" name="numsqm" value="5"
-											onclick="document.bestellformular.numsqm1.value = '';" />
-									5 m² Regenwald [15 Euro],
-									<br />
-									<input type="radio" name="numsqm" value="10" checked="checked"
-											onclick="document.bestellformular.numsqm1.value = '';" />
-									10 m²  Regenwald [30 Euro],
-									<br />
-									<input type="radio" name="numsqm" value="30"
-											onclick="document.bestellformular.numsqm1.value = '';" />
-									30 m² Regenwald [90 Euro]
-									<br />
-									<input type="radio" name="numsqm" value=""/>
-									oder
-									<input type="text" name="numsqm1" size="5" value=""
-											onfocus="document.bestellformular.numsqm[4].click()"/>
-									Quadratmeter [zu je 3 Euro].
-									<br />
-	                        				</td>
-							</tr>
-							<tr>
-								<td colspan="3" height="8"> </td>
-							</tr>
-							
-							<tr>
-								<td colspan="3">
-									<input type="checkbox" name="gift" value="1" />
-									Ich möchte die m² symbolisch verschenken.
- 									<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-									<a href="javascript:window_extra('verschenken')" class="more">
-										Info
-									</a>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3" height="10"> 
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3" height="1" bgcolor="#c0c0c0"> 
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3" height="10"> 
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3">
-									<span class="headline">Spenden sind steuerlich absetzbar!</span><br /> 
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3" height="10"> 
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3">
-									<input type="checkbox" name="donationcert-yearly" value="1" />
-									Ich möchte eine Spendenbescheinigung am Jahresende.
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3" height="10"> 
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3" height="1" bgcolor="#c0c0c0"> 
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3" height="10"> 
-								</td>
-							</tr>	
-												
-							<tr>
-								<td colspan="4">							
-									<span class="help_text">
-										Ihre Daten werden elektronisch über unseren Partner WorldPay erfasst und bearbeitet.
-										Die Bestimmungen des Datenschutzgesetzes werden eingehalten. Daten werden nicht an Dritte
-										weitergegeben.
-									</span>
-									
- 									<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-									<a href="javascript:window_extra('privacy')" class="more">
-										Datenschutzinformation
-									</a>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3" height="9"> </td>
-							</tr>
-							<tr>
-								<td colspan="3">
-									<span class="help_text">
-										Spenden Sie bequem online via Kreditkarte oder Lastschriftverfahren.
-										Sie verringern damit administrative Kosten für BOS.
-									</span>
-									<!--
-										Ich möchte den administrativen Aufwand und Kosten für BOS verringern und
-										spende deshalb bequem online via Kreditkarte oder per Lastschrift.
-									-->
-								</td>
-							</tr>
-							<tr>
-								<td colspan="3" height="15"> </td>
-							</tr>
-							<tr>
-								<td colspan="3">
-									<input type="checkbox" name="disclaimer_read" value="1" />
-									Ich habe die
- 									<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-									<a href="javascript:show_disclaimer()" class="more">
-										Verzichtsklausel
-									</a> gelesen und stimme ihr zu. <br /> 
-								</td>
-							</tr>
-							<tr>
-				                          	<td align="right" colspan="3">
-							  		<input type="submit" class="form_big_bold" name="action" value="Online Spenden"
-										onclick="return check_online();" />
-									<input type="submit" class="form_big" name="action" value="Überweisen"
-										onclick="return check_ueberweisung();" />
-								</td>
-							</tr>
-					</table>
-				</form>
-			</div>
-		</div>
-		<div id="content_right">
-			<div id="helpbox">		
-				<br /><br /><br />
-				[<strong>Regenwald-Urkunde</strong>]
-				<br />
-				Ab einer Spende von 30,- Euro senden wir Ihnen oder dem Beschenkten eine attraktive Regenwald-Urkunde zu.
-				Schon ab 1 m² erhalten Sie eine
-				<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-				<a href="javascript:window_extra('certificat')" class="more">
-					Urkunde
-				</a>
-				als pdf-Download im eigenen Sponsoren-Profil. 
-				<br /><br /><br />
-				[<strong>Spendenquittung</strong>]
-				<br />
-				Bei Spenden über 200,- Euro schicken wir Ihnen eine Spendenbescheinigung per Post zu. Bei Spenden
-				unter 200,- Euro gilt die Zahlungsbestätigung per E-Mail.
-				<br /> <br />	
-				[<strong>Vertrauensgarantie</strong>]<br />
-	        		Worldpay ist ein international anerkannter Onlinezahlungsanbieter.
-	            		Ihre Daten werden über WorldPay verschlüsselt versendet und nach erfolgreicher Transaktion sofort gelöscht.
-				<br /><br />
-	    		</div>			
-		</div>
-	</div>
+  <!-- content 3teilig-->
+  <div id="content">
+    <!-- content left-->
+    <div id="content_left">
+      <div id="textbox_left_form">		
+	<table border="0" cellpadding="1" cellspacing="0">
+	  <tr>
+	    <td></td>
+	    <td colspan="2">
+	      <img src="/images/step1.gif" width="120" height="20" border="0" alt="" />
+	    </td>
+	  </tr>
+	  <tr><td colspan="4" height="40"></td></tr>
+	  <tr>
+	    <td> </td>
+	    <td colspan="2">
+	      <span class="link_titlered">
+		Regenwald schaffen
+		<br />für nur 3,- Euro pro m²
+	      </span>
+	      <br /><br />
+	    </td>
+	    <td></td>				
+	  </tr>
+	  <tr>
+	    <td></td>
+	    <td colspan="2">
+	      Wir freuen uns über Ihre Entscheidung, sich mit BOS für Natur und Mensch in Indonesien zu engagieren.
+	      <br /><br />
+	      Mit Ihrer Unterstützung leisten Sie einen wichtigen Beitrag zur nachhaltigen Projektarbeit in Samboja Lestari
+	      <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+	      <a href="idea_subtitle2" class="more">
+		mehr...
+	      </a>
+	    </td>
+	    <td></td>
+	  </tr>
+	</table>
+      </div>
+      <!-- footer -->	
+      <div id="menue_footer">	
+	<a href="javascript:window_extra('privacy')" class="footer">
+	  Datenschutzinfo
+	</a>
+	l
+	<a href="javascript:window_extra('impressum')" class="footer">
+	  Impressum
+	</a>
+      </div>
+      <!-- /footer -->	
+    </div>
+    <!-- /content left-->
+    <!-- container content_main -->
+    <div id="content_main">
+      <div id="textbox_content_big" >
+	<form name="bestellformular" method="post" action="buy-sqm">
+	  <table id="formTable" width="100%" border="0" cellspacing="0" cellpadding="0">
+	    <tr>
+	      <td colspan="3">
+		<span class="headline">
+		  Ich bin dabei. Ich möchte sehen wie Samboja Lestari grüner wird und schaffe...
+		</span>
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3" height="5"> </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3">
+		<input type="radio" name="numsqm" value="1"
+		       onclick="document.bestellformular.numsqm1.value = '';" />
+		1 m² Regenwald [3 Euro],
+		<br />
+		<input type="radio" name="numsqm" value="5"
+		       onclick="document.bestellformular.numsqm1.value = '';" />
+		5 m² Regenwald [15 Euro],
+		<br />
+		<input type="radio" name="numsqm" value="10" checked="checked"
+		       onclick="document.bestellformular.numsqm1.value = '';" />
+		10 m²  Regenwald [30 Euro],
+		<br />
+		<input type="radio" name="numsqm" value="30"
+		       onclick="document.bestellformular.numsqm1.value = '';" />
+		30 m² Regenwald [90 Euro]
+		<br />
+		<input type="radio" name="numsqm" value=""/>
+		oder
+		<input type="text" name="numsqm1" size="5" value=""
+		       onfocus="document.bestellformular.numsqm[4].click()"/>
+		Quadratmeter [zu je 3 Euro].
+		<br />
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3" height="8"> </td>
+	    </tr>
+	    
+	    <tr>
+	      <td colspan="3">
+		<input type="checkbox" name="gift" value="1" />
+		Ich möchte die m² symbolisch verschenken.
+ 		<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+		<a href="javascript:window_extra('verschenken')" class="more">
+		  Info
+		</a>
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3" height="10"> 
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3" height="1" bgcolor="#c0c0c0"> 
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3" height="10"> 
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3">
+		<span class="headline">Spenden sind steuerlich absetzbar!</span><br /> 
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3" height="10"> 
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3">
+		<input type="checkbox" name="donationcert-yearly" value="1" />
+		Ich möchte eine Spendenbescheinigung am Jahresende.
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3" height="10"> 
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3" height="1" bgcolor="#c0c0c0"> 
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3" height="10"> 
+	      </td>
+	    </tr>	
+	    
+	    <tr>
+	      <td colspan="4">							
+		<span class="help_text">
+		  Ihre Daten werden elektronisch über unseren Partner WorldPay erfasst und bearbeitet.
+		  Die Bestimmungen des Datenschutzgesetzes werden eingehalten. Daten werden nicht an Dritte
+		  weitergegeben.
+		</span>
+		
+ 		<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+		<a href="javascript:window_extra('privacy')" class="more">
+		  Datenschutzinformation
+		</a>
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3" height="9"> </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3">
+		<span class="help_text">
+		  Spenden Sie bequem online via Kreditkarte oder Lastschriftverfahren.
+		  Sie verringern damit administrative Kosten für BOS.
+		</span>
+		<!--
+		    Ich möchte den administrativen Aufwand und Kosten für BOS verringern und
+		    spende deshalb bequem online via Kreditkarte oder per Lastschrift.
+		  -->
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3" height="15"> </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3">
+		<input type="checkbox" name="disclaimer_read" value="1" />
+		Ich habe die
+ 		<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+		<a href="javascript:show_disclaimer()" class="more">
+		  Verzichtsklausel
+		</a> gelesen und stimme ihr zu. <br /> 
+	      </td>
+	    </tr>
+	    <tr>
+	      <td align="right" colspan="3">
+		<input type="submit" class="form_big_bold" name="action" value="Online Spenden"
+		       onclick="return check_online();" />
+		<input type="submit" class="form_big" name="action" value="Überweisen"
+		       onclick="return check_ueberweisung();" />
+	      </td>
+	    </tr>
+	  </table>
+	</form>
+      </div>
+    </div>
+    <div id="content_right">
+      <div id="helpbox">		
+	<br /><br /><br />
+	[<strong>Regenwald-Urkunde</strong>]
+	<br />
+	Ab einer Spende von 90,- Euro senden wir Ihnen oder dem Beschenkten eine attraktive Regenwald-Urkunde zu.
+	Schon ab 1 m² erhalten Sie eine
+	<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+	<a href="javascript:window_extra('certificat')" class="more">
+	  Urkunde
+	</a>
+	als pdf-Download im eigenen Sponsoren-Profil. 
+	<br /><br /><br />
+	[<strong>Spendenquittung</strong>]
+	<br />
+	Bei Spenden über 200,- Euro schicken wir Ihnen eine Spendenbescheinigung per Post zu. Bei Spenden
+	unter 200,- Euro gilt die Zahlungsbestätigung per E-Mail.
+	<br /> <br />	
+	[<strong>Vertrauensgarantie</strong>]<br />
+	Worldpay ist ein international anerkannter Onlinezahlungsanbieter.
+	Ihre Daten werden über WorldPay verschlüsselt versendet und nach erfolgreicher Transaktion sofort gelöscht.
+	<br /><br />
+      </div>			
+    </div>
+  </div>
 </bknr:toplevel>
