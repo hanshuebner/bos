@@ -78,25 +78,26 @@
 	    <tr>
 	      <td colspan="3">
 		<input type="radio" name="numsqm" value="1"
-		       onclick="document.bestellformular.numsqm1.value = '';" />
+		       onclick="document.bestellformular.numsqm1.value = ''; document.getElementById('verschenken-info').style.visibility = 'hidden'" />
 		1 m² Regenwald [3 Euro],
 		<br />
 		<input type="radio" name="numsqm" value="5"
-		       onclick="document.bestellformular.numsqm1.value = '';" />
+		       onclick="document.bestellformular.numsqm1.value = ''; document.getElementById('verschenken-info').style.visibility = 'hidden'" />
 		5 m² Regenwald [15 Euro],
 		<br />
 		<input type="radio" name="numsqm" value="10" checked="checked"
-		       onclick="document.bestellformular.numsqm1.value = '';" />
+		       onclick="document.bestellformular.numsqm1.value = ''; document.getElementById('verschenken-info').style.visibility = 'hidden'" />
 		10 m²  Regenwald [30 Euro],
 		<br />
 		<input type="radio" name="numsqm" value="30"
-		       onclick="document.bestellformular.numsqm1.value = '';" />
+		       onclick="document.bestellformular.numsqm1.value = ''; document.getElementById('verschenken-info').style.visibility = 'visible'" />
 		30 m² Regenwald [90 Euro]
 		<br />
-		<input type="radio" name="numsqm" value=""/>
+		<input type="radio" name="numsqm" value="" onclick="document.bestellformular.numsqm1.value = ''; document.getElementById('verschenken-info').style.visibility = 'hidden'"/>
 		oder
 		<input type="text" name="numsqm1" size="5" value=""
-		       onfocus="document.bestellformular.numsqm[4].click()"/>
+		       onfocus="document.bestellformular.numsqm[4].click(); document.getElementById('verschenken-info').style.visibility = 'hidden'"
+                       onkeyup="document.getElementById('verschenken-info').style.visibility = (document.bestellformular.numsqm1.value &gt;= 30) ? 'visible' : 'hidden';"/>
 		Quadratmeter [zu je 3 Euro].
 		<br />
 	      </td>
@@ -105,7 +106,7 @@
 	      <td colspan="3" height="8"> </td>
 	    </tr>
 	    
-	    <tr>
+	    <tr id="verschenken-info" style="visibility: hidden">
 	      <td colspan="3">
 		<input type="checkbox" name="gift" value="1" />
 		Ich möchte die m² symbolisch verschenken.
