@@ -54,7 +54,7 @@
 				</div>
 				<div>l</div>	
 				<div>
-					<a href="javascript:window_infosys()" class="menue"
+					<a href="#" onclick="window_infosys()" class="menue"
 							title="Satellitenkarte">
 						Satellitenkarte
 					</a>
@@ -77,11 +77,11 @@
 				</div>	
 				<!-- footer -->	
 				<div id="menue_footer">	
-					<a href="javascript:window_extra('privacy')" class="footer">
+					<a href="#" onclick="window_extra('privacy')" class="footer">
 						Datenschutzinfo
 					</a>
 					l
-					<a href="javascript:window_extra('impressum')" class="footer">
+					<a href="#" onclick="window_extra('impressum')" class="footer">
 						Impressum
 					</a>
 				</div>

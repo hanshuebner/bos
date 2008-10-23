@@ -13,7 +13,7 @@
 					</td>
 					<td align="center" valign="top">
 						<img src="../images/pfeil_back.gif" width="10" height="9" alt=""></img>
-						<a href="javascript:history.back()" class="titlegray">
+						<a href="#" onclick="history.back()" class="titlegray">
 							tilbage
 						</a>  
 					</td>		

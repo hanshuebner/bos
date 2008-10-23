@@ -14,7 +14,7 @@
 						</span>
 					</td>
 					<td align="center"><img src="/images/pfeil_back.gif" width="10" height="9" alt=""></img>
-						<a href="javascript:history.back()" class="titlegray">
+						<a href="#" onclick="history.back()" class="titlegray">
 							tilbage
 						</a>
 					</td>		
@@ -52,7 +52,7 @@ BOS garanterer at købe landmændenes frugt som papaya og ananas, afsætte dem p
 				<tr>
 					<td colspan="2">
 
- En <img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img> <a href="javascript:window_ringdetail();" class="content_green">cirkel af sukkerpalme plantager bliver plantet hele vejen rundt om naturreservatet. Over 650 familier vil profitere fra hovedproduktet; sukker. Og cirklen skaber samtidig en barriere mod de meget frygtede skovbrænde. </a> 
+ En <img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img> <a href="#" onclick="window_ringdetail();" class="content_green">cirkel af sukkerpalme plantager bliver plantet hele vejen rundt om naturreservatet. Over 650 familier vil profitere fra hovedproduktet; sukker. Og cirklen skaber samtidig en barriere mod de meget frygtede skovbrænde. </a> 
 					<br></br><br></br>
 At menneskene bryder ind i natur reservatet, eller at orangutangerne bryder ud, er forhindret af en indre beskyttelsesvæg af tyktvoksende og stikkende, klæbrige palmer. Ydermere er frugten fra disse palmer en velsmagende fødekilde for både mennesker og dyr. 
 					</td>

@@ -51,11 +51,11 @@
 				</div>	
 				<!-- footer -->	
 				<div id="menue_footer">	
-					<a href="javascript:window_extra('privacy')" class="footer">
+					<a href="#" onclick="window_extra('privacy')" class="footer">
 						privacy statement
 					</a>
 					l
-					<a href="javascript:window_extra('impressum')" class="footer">
+					<a href="#" onclick="window_extra('impressum')" class="footer">
 						imprint
 					</a>
 				</div>
@@ -159,7 +159,7 @@ $(country)</textarea>
 					[<strong>Regnskovs diplom</strong>]<br></br>
 					Med bare 1 sponseret kvardratmeter vil du modtage vores  
 					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
-					<a href="javascript:window_extra('certificat')" class="more">
+					<a href="#" onclick="window_extra('certificat')" class="more">
 						Regnskovs diplom
 					</a>
 					som et pdf-download fra din personlige sponsor profil.

@@ -63,11 +63,11 @@
 				</div>	
 				<!-- footer -->	
 				<div id="menue_footer">	
-					<a href="javascript:window_extra('privacy')" class="footer">
+					<a href="#" onclick="window_extra('privacy')" class="footer">
 						Datenschutzinfo
 					</a>
 					l
-					<a href="javascript:window_extra('impressum')" class="footer">
+					<a href="#" onclick="window_extra('impressum')" class="footer">
 						Impressum
 					</a>
 				</div>
@@ -158,7 +158,7 @@
 					<br />
 					Schon ab 1 m&sup2; erhalten Sie eine
 					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-					<a href="javascript:window_extra('certificat')" class="more">
+					<a href="#" onclick="window_extra('certificat')" class="more">
 						Urkunde
 					</a>
 					als pdf-Download in Ihrem eigenen Sponsoren-Profil.

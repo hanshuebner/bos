@@ -9,7 +9,7 @@
 					<td colspan="2"><span class="headline">A square metre with a certain knack <br></br></span></td>
 					<td align="center">
 						<img src="/images/pfeil_back.gif" width="10" height="9" alt=""></img>
-						<a href="javascript:history.back()" class="titlegray">
+						<a href="#" onclick="history.back()" class="titlegray">
 							back
 						</a>
 					</td>		

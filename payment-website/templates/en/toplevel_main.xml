@@ -178,11 +178,11 @@
 				</div>
 				<!-- footer -->	
 				<div id="menue_footer">	
-					<a href="javascript:window_extra('privacy')" class="footer">
+					<a href="#" onclick="window_extra('privacy')" class="footer">
 						privacy statement
 					</a>
 					l
-					<a href="javascript:window_extra('impressum')" class="footer">
+					<a href="#" onclick="window_extra('impressum')" class="footer">
 						imprint
 					</a>
 				</div>

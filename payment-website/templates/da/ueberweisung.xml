@@ -22,11 +22,11 @@
 			</div>	
 			<!-- footer -->	
 			<div id="menue_footer">	
-				<a href="javascript:window_extra('privacy')" class="footer">
+				<a href="#" onclick="window_extra('privacy')" class="footer">
 					privacy statement
 				</a>
 				l
-				<a href="javascript:window_extra('impressum')" class="footer">
+				<a href="#" onclick="window_extra('impressum')" class="footer">
 					imprint
 				</a>
 			</div>
@@ -129,7 +129,7 @@ Vi reserverer gerne det ønskede antal m². Vi har brug for nogle personlige opl
 				<br />
 				Send os venligst denne formular direkte per e-mail, eller  
 				<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-				<a href="javascript:window.print();" class="more">
+				<a href="#" onclick="window.print();" class="more">
 					udskriv
 				</a>
 				den og send den til os per fax eller post:

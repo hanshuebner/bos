@@ -26,7 +26,7 @@
 	</tr>
 	<tr>
           <td>
-            <a href="javascript:window_infosys()">
+            <a href="#" onclick="window_infosys()">
               <img alt="" height="80" width="75" src="/images/satellite_ganzneu2.gif"/>
             </a>
           </td>

@@ -179,11 +179,11 @@
 				</div>
 				<!-- footer -->	
 				<div id="menue_footer">	
-					<a href="javascript:window_extra('/de/privacy')" class="footer">
+					<a href="#" onclick="window_extra('/de/privacy')" class="footer">
 						Datenschutzinfo
 					</a>
 					l
-					<a href="javascript:window_extra('/de/impressum')" class="footer">
+					<a href="#" onclick="window_extra('/de/impressum')" class="footer">
 						Impressum
 					</a>
 				</div>

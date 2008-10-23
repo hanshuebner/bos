@@ -63,11 +63,11 @@
 				</div>	
 				<!-- footer -->	
 				<div id="menue_footer">	
-					<a href="javascript:window_extra('privacy')" class="footer">
+					<a href="#" onclick="window_extra('privacy')" class="footer">
 						privacy statement
 					</a>
 					l
-					<a href="javascript:window_extra('impressum')" class="footer">
+					<a href="#" onclick="window_extra('impressum')" class="footer">
 						imprint
 					</a>
 				</div>
@@ -158,7 +158,7 @@ In the unexpected case that you will not receive a message please contact
 					<br />
 					Starting with 1 square metre only you receive our
 					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-					<a href="javascript:window_extra('certificat')" class="more">
+					<a href="#" onclick="window_extra('certificat')" class="more">
 						Rainforest certificate
 					</a>
 					as a pdf-download from your personal sponsor profile.

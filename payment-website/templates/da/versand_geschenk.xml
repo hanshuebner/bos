@@ -56,11 +56,11 @@
 				</div>	
 				<!-- footer -->	
 				<div id="menue_footer">	
-					<a href="javascript:window_extra('privacy')" class="footer">
+					<a href="#" onclick="window_extra('privacy')" class="footer">
 						Datenschutzinfo
 					</a>
 					l
-					<a href="javascript:window_extra('impressum')" class="footer">
+					<a href="#" onclick="window_extra('impressum')" class="footer">
 						Impressum
 					</a>
 				</div>
@@ -167,7 +167,7 @@ $(country)</textarea>
 					[<strong>Regenwald-Urkunde</strong>]<br />
 					Sie oder der Beschenkte erhalten auf dem Postweg eine attraktive
 					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-					<a href="javascript:window_extra('certificat')" class="more">
+					<a href="#" onclick="window_extra('certificat')" class="more">
 						Urkunde
 					</a>
 					von uns. Sollte diese wider Erwarten nicht innerhalb der nächsten zwei Wochen eingetroffen sein, wenden Sie sich bitte an

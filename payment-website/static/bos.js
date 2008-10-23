@@ -272,5 +272,6 @@ function maybe_show_ueberweisung_printed_cert()
 {
     if (document.getElementById('numsqm').value >= 30) {
         document.getElementById('mail-cert').style.visibility = 'inherit';
+        document.getElementById('urkunde-info').style.visibility = 'inherit';
     }
 }

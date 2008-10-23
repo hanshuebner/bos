@@ -106,7 +106,7 @@ Internet beobachten.
 		<bos:news-headlines />
 		<div id="newsarchive">
 			<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
-			<a href="javascript:window_news('archive')" class="menue">
+			<a href="#" onclick="window_news('archive')" class="menue">
 				<strong>NEWS im ARCHIV</strong>
 			</a> 
 		</div>	

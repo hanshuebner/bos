@@ -43,11 +43,11 @@
 			</div>
 			<!-- footer -->	
 			<div id="menue_footer">	
-				<a href="javascript:window_extra('privacy')" class="footer">
+				<a href="#" onclick="window_extra('privacy')" class="footer">
 					privacy statement
 				</a>
 				l
-				<a href="javascript:window_extra('impressum')" class="footer">
+				<a href="#" onclick="window_extra('impressum')" class="footer">
 					imprint
 				</a>
 			</div>
@@ -115,7 +115,7 @@
 									</span>
 									<br></br>
  									<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
-									<a href="javascript:window_extra('privacy')" class="more">
+									<a href="#" onclick="window_extra('privacy')" class="more">
 										privacy statement
 									</a>
 								</td>
@@ -151,7 +151,7 @@
 								<td colspan="3">
 									<input type="checkbox" name="disclaimer_read" value="1"></input>
 									Jeg har læst  <img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
-									<a href="javascript:show_disclaimer()" class="more">
+									<a href="#" onclick="show_disclaimer()" class="more">
 										betingelserne 
 									</a> og er enig.<br></br>
  									  <br></br> <br></br>
@@ -175,7 +175,7 @@
 				<br></br>
 				Startende med bare 1 m², modtager du     
 				<img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img>
-				<a href="javascript:window_extra('certificat')" class="more">vores regnskovs diplom</a>
+				<a href="#" onclick="window_extra('certificat')" class="more">vores regnskovs diplom</a>
 				som en pdf-fil på din personlige sponsor-profil.
 				<br></br><br></br><br></br>
 				[<strong>Donations kvittering</strong>]

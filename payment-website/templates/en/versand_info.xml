@@ -57,11 +57,11 @@
 				</div>	
 				<!-- footer -->	
 				<div id="menue_footer">	
-					<a href="javascript:window_extra('privacy')" class="footer">
+					<a href="#" onclick="window_extra('privacy')" class="footer">
 						privacy statement
 					</a>
 					l
-					<a href="javascript:window_extra('impressum')" class="footer">
+					<a href="#" onclick="window_extra('impressum')" class="footer">
 						imprint
 					</a>
 				</div>
@@ -168,7 +168,7 @@ In the unexpected case that you will not receive a message please contact
 					[<strong>Rainforest certificate</strong>]<br />
 					Starting with 1 m² only you receive   
 					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-					<a href="javascript:window_extra('certificat')" class="more">
+					<a href="#" onclick="window_extra('certificat')" class="more">
 						a Rainforest certificate
 					</a>
 					from your personal sponsor profile as a pdf-download. If you have any problems or questions please contact

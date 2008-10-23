@@ -19,7 +19,7 @@
 		</div>
 		<div style="padding:10px">
 			<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt=""></img>
-			<a href="javascript:window.close()" class="more">
+			<a href="#" onclick="window.close()" class="more">
 				luk vindue
 			</a>
 		</div>

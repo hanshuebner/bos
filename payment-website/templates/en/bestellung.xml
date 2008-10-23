@@ -49,11 +49,11 @@
 			</div>
 			<!-- footer -->	
 			<div id="menue_footer">	
-				<a href="javascript:window_extra('privacy')" class="footer">
+				<a href="#" onclick="window_extra('privacy')" class="footer">
 					privacy statement
 				</a>
 				l
-				<a href="javascript:window_extra('impressum')" class="footer">
+				<a href="#" onclick="window_extra('impressum')" class="footer">
 					imprint
 				</a>
 			</div>
@@ -128,7 +128,7 @@
 									</span>
 									<br />
  									<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-									<a href="javascript:window_extra('privacy')" class="more">
+									<a href="#" onclick="window_extra('privacy')" class="more">
 										privacy statement
 									</a>
 								</td>
@@ -154,7 +154,7 @@
 								<td colspan="3">
 									<input type="checkbox" name="disclaimer_read" value="1" />
 									I have read <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-									<a href="javascript:show_disclaimer()" class="more">
+									<a href="#" onclick="show_disclaimer()" class="more">
 										the waiver clause
 									</a> and I agree.<br />
  									  <br /> <br />
@@ -178,7 +178,7 @@
 				<br />
 				Starting with 1 m² only you receive   
 				<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-				<a href="javascript:window_extra('certificat')" class="more">our rainforest certificate</a>
+				<a href="#" onclick="window_extra('certificat')" class="more">our rainforest certificate</a>
 				as a pdf-download  from your personal sponsor profile.
 				<br /><br /><br />
 				[<strong>Donation receipt</strong>]

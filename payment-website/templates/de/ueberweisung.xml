@@ -22,11 +22,11 @@
       </div>	
       <!-- footer -->	
       <div id="menue_footer">	
-	<a href="javascript:window_extra('privacy')" class="footer">
+	<a href="#" onclick="window_extra('privacy')" class="footer">
 	  Datenschutzinfo
 	</a>
 	l
-	<a href="javascript:window_extra('impressum')" class="footer">
+	<a href="#" onclick="window_extra('impressum')" class="footer">
 	  Impressum
 	</a>
       </div>
@@ -96,7 +96,7 @@
 	    <tr>
 	      <td height="10">E-Mail:</td>
 	      <td width="10"></td>
-	      <td><input name="email" type="text" size="25" maxlength="30" /></td>
+	      <td><input name="email" type="text" size="25" maxlength="50" /></td>
 	    </tr>
 	    <tr>
 	      <td height="10">Telefon:</td>
@@ -124,7 +124,6 @@
 	</form>
       </div>
     </div>
-    <script type="text/javascript">maybe_show_ueberweisung_printed_cert()</script>
     <div id="content_right">
       <div id="helpbox">		
 	<strong>[Persönliche Daten]</strong>
@@ -135,16 +134,18 @@
         erfolgter Überweisung melden wir uns schriftlich und
         per E-Mail.
 	<br /><br />
+        <span id="urkunde-info" style="visibility: hidden">
 	<strong>[Urkunde]</strong>
 	<br />
 	Sie können Ihre Regenwaldurkunde in jedem Fall als PDF von unserem System herunterladen, auch
 	wenn Sie es nicht per Post zugeschickt bekommen möchten.
 	<br /><br />
+        </span>
 	<strong>[Dieses Formular]</strong>
 	<br />
 	Bitte senden Sie dieses Formular per E-Mail direkt an uns. Sie können es auch
 	<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-	<a href="javascript:window.print();" class="more">
+	<a href="#" onclick="window.print();" class="more">
 	  ausdrucken
 	</a>
 	und per Fax oder Post an unsere
@@ -159,5 +160,6 @@
 	Fax: (030) 2636 7815
       </div>		
     </div>
+    <script type="text/javascript">maybe_show_ueberweisung_printed_cert()</script>
   </div>
 </bknr:toplevel>
