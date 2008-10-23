@@ -75,29 +75,35 @@
 	    <tr>
 	      <td colspan="3" height="5"> </td>
 	    </tr>
+            <script type="text/javascript">
+              function verschenken(state) {
+                document.bestellformular.gift.disabled = !state;
+                document.bestellformular.gift.checked = false;
+              }
+            </script>
 	    <tr>
 	      <td colspan="3">
 		<input type="radio" name="numsqm" value="1"
-		       onclick="document.bestellformular.numsqm1.value = ''; document.getElementById('verschenken-info').style.visibility = 'hidden'" />
+		       onclick="document.bestellformular.numsqm1.value = ''; verschenken(false)" />
 		1 m² Regenwald [3 Euro],
 		<br />
 		<input type="radio" name="numsqm" value="5"
-		       onclick="document.bestellformular.numsqm1.value = ''; document.getElementById('verschenken-info').style.visibility = 'hidden'" />
+		       onclick="document.bestellformular.numsqm1.value = ''; verschenken(false)" />
 		5 m² Regenwald [15 Euro],
 		<br />
 		<input type="radio" name="numsqm" value="10" checked="checked"
-		       onclick="document.bestellformular.numsqm1.value = ''; document.getElementById('verschenken-info').style.visibility = 'hidden'" />
+		       onclick="document.bestellformular.numsqm1.value = ''; verschenken(false)" />
 		10 m²  Regenwald [30 Euro],
 		<br />
 		<input type="radio" name="numsqm" value="30"
-		       onclick="document.bestellformular.numsqm1.value = ''; document.getElementById('verschenken-info').style.visibility = 'visible'" />
+		       onclick="document.bestellformular.numsqm1.value = ''; verschenken(true)" />
 		30 m² Regenwald [90 Euro]
 		<br />
-		<input type="radio" name="numsqm" value="" onclick="document.bestellformular.numsqm1.value = ''; document.getElementById('verschenken-info').style.visibility = 'hidden'"/>
+		<input type="radio" name="numsqm" value="" onclick="document.bestellformular.numsqm1.value = ''; verschenken(false)"/>
 		oder
 		<input type="text" name="numsqm1" size="5" value=""
-		       onfocus="document.bestellformular.numsqm[4].click(); document.getElementById('verschenken-info').style.visibility = 'hidden'"
-                       onkeyup="document.getElementById('verschenken-info').style.visibility = (document.bestellformular.numsqm1.value &gt;= 30) ? 'visible' : 'hidden';"/>
+		       onfocus="document.bestellformular.numsqm[4].click(); verschenken(false)"
+                       onkeyup="verschenken(document.bestellformular.numsqm1.value &gt;= 30)"/>
 		Quadratmeter [zu je 3 Euro].
 		<br />
 	      </td>
@@ -106,9 +112,9 @@
 	      <td colspan="3" height="8"> </td>
 	    </tr>
 	    
-	    <tr id="verschenken-info" style="visibility: hidden">
+	    <tr>
 	      <td colspan="3">
-		<input type="checkbox" name="gift" value="1" />
+		<input type="checkbox" name="gift" value="1" disabled="1"/>
 		Ich möchte die m² symbolisch verschenken.
  		<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
 		<a href="#" onclick="window_extra('verschenken')" class="more">
