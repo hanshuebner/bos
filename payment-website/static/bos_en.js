@@ -61,9 +61,9 @@ function check_online() {
 	&& (document.bestellformular.numsqm[0].checked
 	    || document.bestellformular.numsqm[1].checked
 	    || (document.bestellformular.numsqm[4].checked
-		&& (document.bestellformular.numsqm1.value < 10)))) {
+		&& (document.bestellformular.numsqm1.value < 30)))) {
 
-	alert("Das Verschenken von Quadratmetern ist erst ab einer Summe von 30 Euro möglich");
+	alert("Das Verschenken von Quadratmetern ist erst ab einer Summe von 90 Euro möglich");
 	return false;
     }
 

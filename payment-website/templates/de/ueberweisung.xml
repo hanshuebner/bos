@@ -134,13 +134,18 @@
         erfolgter Überweisung melden wir uns schriftlich und
         per E-Mail.
 	<br /><br />
-        <span id="urkunde-info" style="visibility: hidden">
 	<strong>[Urkunde]</strong>
-	<br />
-	Sie können Ihre Regenwaldurkunde in jedem Fall als PDF von unserem System herunterladen, auch
-	wenn Sie es nicht per Post zugeschickt bekommen möchten.
-	<br /><br />
+        <br />
+        <span id="urkunde-print-info" style="display: none">
+          Ihre persönliche Urkunde können Sie sich jederzeit bei
+	  schafft-lebenswald.de als PDF herunterladen, auch wenn Sie
+	  diese nicht per Post zugeschickt bekommen wollen.
         </span>
+        <span id="urkunde-download-info" style="display: none">
+          Ihre persönliche Urkunde können Sie sich jederzeit bei
+          schafft-lebenswald.de als PDF herunterladen.
+        </span>
+        <br /><br />
 	<strong>[Dieses Formular]</strong>
 	<br />
 	Bitte senden Sie dieses Formular per E-Mail direkt an uns. Sie können es auch

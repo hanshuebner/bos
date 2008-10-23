@@ -14,16 +14,11 @@
 		<div id="textbox_content_bigger">
 			<table border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td colspan="2">
+					<td colspan="3">
 						<span class="headline">
 							Landwirtschaft, Aufforstung und Schutz <br /> - eine gute Kombination
 						</span>
 					</td>
-					<td align="center"><img src="/images/pfeil_back.gif" width="10" height="9" alt="" />
-						<a href="#" onclick="history.back()" class="titlegray">
-							zurück
-						</a>
-					</td>		
 				</tr>
 				<tr>
 					<td height="6" width="150"><img src="/images/trans.gif" width="160" height="6" alt="" /> </td>

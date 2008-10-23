@@ -123,9 +123,9 @@ function check_online() {
 	&& (document.bestellformular.numsqm[0].checked
 	    || document.bestellformular.numsqm[1].checked
 	    || (document.bestellformular.numsqm[4].checked
-		&& (document.bestellformular.numsqm1.value < 10)))) {
+		&& (document.bestellformular.numsqm1.value < 30)))) {
 
-	alert("Das Verschenken von Quadratmetern ist erst ab einer Summe von 30 Euro möglich");
+	alert("Das Verschenken von Quadratmetern ist erst ab einer Summe von 90 Euro möglich");
 	return false;
     }
 
@@ -272,6 +272,8 @@ function maybe_show_ueberweisung_printed_cert()
 {
     if (document.getElementById('numsqm').value >= 30) {
         document.getElementById('mail-cert').style.visibility = 'inherit';
-        document.getElementById('urkunde-info').style.visibility = 'inherit';
+        document.getElementById('urkunde-print-info').style.display = 'inline';
+    } else {
+        document.getElementById('urkunde-download-info').style.display = 'inline';
     }
 }
