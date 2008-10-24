@@ -117,6 +117,7 @@
                                     :download-only (not want-print))))
       (contract-issue-cert contract name :address address :language language)
       (send-to-postmaster #'mail-backoffice-sponsor-data contract numsqm country email name address language (all-request-params))
+      (mail-instructions-to-sponsor contract email)
       (redirect (format nil "/edit-sponsor/~D" (store-object-id sponsor))))))
 
 (defun contract-checkbox-name (contract)
