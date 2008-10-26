@@ -621,7 +621,7 @@ neighbours."
 
 (defun initialize-contract-stats ()
   (setq *contract-stats* (make-contract-stats))
-  (dolist (contract (class-instances 'contract))
+  (dolist (contract (remove-if-not #'contract-paidp (class-instances 'contract)))
     (add-to-contract-stats contract)))
 
 (defun add-to-contract-stats (contract)
