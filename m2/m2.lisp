@@ -325,8 +325,7 @@
   (* (length (contract-m2s contract)) +price-per-m2+))
 
 (defmethod contract-download-only-p ((contract contract))
-  (or (contract-download-only contract)
-      (< (contract-price contract) *mail-amount*)))
+  (contract-download-only contract))
 
 (deftransaction contract-set-download-only-p (contract newval)
   (setf (contract-download-only contract) newval))

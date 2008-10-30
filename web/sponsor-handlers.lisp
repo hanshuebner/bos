@@ -114,7 +114,8 @@
                                                    (format-date-time (get-universal-time))
                                                    (user-login (bknr.web:bknr-session-user)))
                                     :date (date-to-universal date)
-                                    :download-only (not want-print))))
+                                    :download-only (or (< (* +price-per-m2+ numsqm) *mail-amount*)
+                                                       (not want-print)))))
       (contract-issue-cert contract name :address address :language language)
       (send-to-postmaster #'mail-backoffice-sponsor-data contract numsqm country email name address language (all-request-params))
       (when (and email

@@ -81,7 +81,8 @@
                (language (request-language))
                (sponsor (make-sponsor :language language))
                (contract (make-contract sponsor numsqm
-                                        :download-only download-only
+                                        :download-only (or (< (* +price-per-m2+ numsqm) *mail-amount*)
+                                                           download-only)
                                         :expires (+ (if manual-transfer
                                                         bos.m2::*manual-contract-expiry-time*
                                                         bos.m2::*online-contract-expiry-time*)
