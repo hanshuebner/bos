@@ -109,7 +109,8 @@
 (defmethod handle-object-form ((handler edit-sponsor-handler) (action (eql :create)) (sponsor (eql nil)))
   (with-query-params (numsqm country email name address date language want-print)
     (let* ((sponsor (make-sponsor :email email :country country :language language))
-           (contract (make-contract sponsor (parse-integer numsqm)
+           (numsqm (parse-integer numsqm))
+           (contract (make-contract sponsor numsqm
                                     :paidp (format nil "~A: manually created by ~A"
                                                    (format-date-time (get-universal-time))
                                                    (user-login (bknr.web:bknr-session-user)))
