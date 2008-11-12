@@ -446,8 +446,9 @@
             (with-element "entry" (attribute "title" "Impressum")
                           (attribute "onclick" (format nil "window_extra('/~A/impressum')" language)))
             (with-element "entry" (attribute "title" "Spenden")
-                          (attribute "onclick" (format nil "window.location.href = '/~A/bestellung'; return false;"
-                                                       language))))
+                          (attribute "onclick"
+                                     (format nil "window.location.href = '/~A/bestellung'; return false;"
+                                             language))))
           (with-element "description" (text (poi-string 'description)))
           (with-media ("image_gallery" "Bildergalerie")
             (mapc #'format-image images))
