@@ -290,6 +290,7 @@ worldpay), return the common XML element name"
 
 (defun mail-backoffice-sponsor-data (contract numsqm country email name address language request-params)
   (let* ((contract-id (store-object-id contract))
+         (numsqm (if (stringp numsqm) (parse-integer numsqm) numsqm))
          (parts (list (make-html-part (format nil "
 <html>
  <body>
@@ -324,7 +325,7 @@ Amount: EUR~A.00
                                                                  (store-object-id contract)
                                                                  (store-object-id (contract-sponsor contract))
                                                                  numsqm
-                                                                 (* 3 (parse-integer numsqm)))
+                                                                 (* 3 numsqm))
                                                    :name name
                                                    :address address
                                                    :email email)))))
