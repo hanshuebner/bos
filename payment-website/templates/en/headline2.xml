@@ -1,83 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-  template="toplevel_main"
-  title="RAINFOREST for SAMBOJA LESTARI"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+   template="toplevel_main"
+   title="RAINFOREST for SAMBOJA LESTARI"
+   xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:bknr="http://bknr.net"
+   xmlns:bos="http://headcraft.de/bos"
+   >
   <bos:set-cachable/>
-	<div id="content_main">
-		<div id="textbox_content_bigger">
-			<table border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td colspan="2">
-						<span class="headline">
-							The key to success - the local population
-						</span>
-					</td>
-					<td align="center" valign="top">
-						<img src="../images/pfeil_back.gif" width="10" height="9" alt="" />
-						<a href="#" onclick="history.back()" class="titlegray">
-							back
-						</a>  
-					</td>		
-				</tr>
-				<tr>
-					<td height="6"><img src="../images/trans.gif" width="120" height="10" alt="" />
-					</td>
-					<td><img src="../images/trans.gif" width="130" height="6" alt="" />
-					</td>
- 					<td width="150"><img src="../images/trans.gif" width="140" height="6" alt="" />
-					</td>
-				</tr>		
-				<tr>
-					<td  valign="top">
-						 Nature conservation and the needs of the population must not be in conflict with each other.
-						<br /><br />
-						The nature reserve Samboja Lestari offers a safe income, health and education to the local population. The people will be included into all phases of the project. Agriculture, nursery, production of compost, reforestation and the creation of infrastructure provide safe workplaces. 
-						<br />
-					</td>
-					<td align="right" colspan="2"><img src="../images/pic_headline2_big.jpg" width="256" height="150" border="0" alt="" /></td>
-				</tr>
-				<tr>
-					<td height="10">
-					</td>
-				</tr>	
-				<tr>
-					<td colspan="3">
-						<b>"This offers an alternative to the people, so that they don't have to clear the forest any more. Thus we can show the world, that nature and humans are able to coexist and don't have to exclude each other."</b>
-						<br />
-						 says Dr. Willie Smits, chairman of BOS Indonesia.
-						<br />
-					</td>
-					<td></td>			
-				</tr>
-				<tr>
-					<td height="6">
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3">				
-					</td>			
-				</tr>				
-				<tr>
-					<td height="6">
-					</td>
-				</tr>				
-				<tr>
-					<td height="6">
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3">
-						The safety of the nature reserve is guaranteed by the acceptance through the Indonesian population. The success of the project guarantees a better standard of living and vice versa.
-					</td>
-				</tr>
-				<tr><td height="16"></td></tr>	
-			</table>	
-		</div>	
-	</div>
+  <div id="content_main">
+    <div id="textbox_content_bigger">
+      <table border="0" cellpadding="0" cellspacing="0">
+	<tr>
+	  <td colspan="2">
+	    <span class="headline">
+	      The key to success - the local population
+	    </span>
+	  </td>
+	  <td align="center" valign="top">
+	    <img src="../images/pfeil_back.gif" width="10" height="9" alt="" />
+	    <a href="#" onclick="history.back()" class="titlegray">
+	      back
+	    </a>  
+	  </td>		
+	</tr>
+	<tr>
+	  <td height="6"><img src="../images/trans.gif" width="120" height="10" alt="" />
+	  </td>
+	  <td><img src="../images/trans.gif" width="130" height="6" alt="" />
+	  </td>
+ 	  <td width="150"><img src="../images/trans.gif" width="140" height="6" alt="" />
+	  </td>
+	</tr>		
+	<tr>
+	  <td  valign="top">
+	    Nature conservation and the needs of the population must not be in conflict with each other.
+	    <br /><br />
+	    The nature reserve Samboja Lestari offers a safe income, health and education to the local population. The people will be included into all phases of the project. Agriculture, nursery, production of compost, reforestation and the creation of infrastructure provide safe workplaces. 
+	    <br />
+	  </td>
+	  <td align="right" colspan="2"><img src="../images/pic_headline2_big.jpg" width="256" height="150" border="0" alt="" /></td>
+	</tr>
+	<tr>
+	  <td height="10">
+	  </td>
+	</tr>	
+	<tr>
+	  <td colspan="3">
+	    <b>
+              "This offers an alternative to the people, so that they
+	      don't have to clear the forest any more. Thus we can show
+	      the world, that nature and humans are able to coexist and
+	      don't have to exclude each other."
+            </b> <br /> says Dr. Willie Smits, founder of BOS
+	    Indonesia.  <br />
+	  </td>
+	  <td></td>			
+	</tr>
+	<tr>
+	  <td height="6">
+	  </td>
+	</tr>
+	<tr>
+	  <td colspan="3">				
+	  </td>			
+	</tr>				
+	<tr>
+	  <td height="6">
+	  </td>
+	</tr>				
+	<tr>
+	  <td height="6">
+	  </td>
+	</tr>
+	<tr>
+	  <td colspan="3">
+	    The safety of the nature reserve is guaranteed by the acceptance through the Indonesian population. The success of the project guarantees a better standard of living and vice versa.
+	  </td>
+	</tr>
+	<tr><td height="16"></td></tr>	
+      </table>	
+    </div>	
+  </div>
 </bknr:toplevel>
