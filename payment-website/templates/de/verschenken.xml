@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-  template="toplevel_extra"
-  title="REGENWALD für SAMBOJA LESTARI - Verschenken"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
-	<p class="text_content">
+   template="toplevel_extra"
+   title="REGENWALD für SAMBOJA LESTARI - Verschenken"
+   xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:bknr="http://bknr.net"
+   xmlns:bos="http://headcraft.de/bos"
+   >
+  <p class="text_content">
 
-		<p>Suchen Sie ein sinnvolles Geschenk?</p>
+    <p>Suchen Sie ein sinnvolles Geschenk?</p>
 
-		<p><b>Verschenken Sie Quadratmeter wiederentstehenden Regenwaldes!</b></p>
+    <p><b>Verschenken Sie Quadratmeter wiederentstehenden Regenwaldes!</b></p>
 
-<p>
-Der/Die Beschenkte erhält eine attraktive Urkunde und persönliche
-Zugangscodes, um "seine/ihre" Quadratmeter in Borneo leicht orten zu
-können. Zudem kann er/sie den Quadratmetern einen Grußtext anhängen,
-der für jeden Besucher einsehbar ist.
-</p>
-<p>
-Auch Sie erhalten die gleichen Zugangscodes und können z.B. einen
-Geburtstagsgruß "auf" den verschenkten Quadratmetern
-hinterlassen.
-</p>
-<p>
-Setzen Sie das Häckchen und fahren Sie wie gewünscht fort. 
-</p>
-<p>
-Unmittelbar nach erfolgter Zahlung (wenige Sekunden später) werden Sie
-nach Namen und Versandadresse der zu Beschenkenden Person gefragt.
-</p>
-<p> 
-Der Geschenkservice ist aus administrativen Gründen leider nur bei Online-Spenden ab 90 Euro möglich.
-</p>
-	</p>					
+    <p>
+      Der/Die Beschenkte erhält eine attraktive Urkunde und persönliche
+      Zugangscodes, um "seine/ihre" Quadratmeter in Borneo leicht orten zu
+      können. Zudem kann er/sie den Quadratmetern einen Grußtext anhängen,
+      der für jeden Besucher einsehbar ist.
+    </p>
+    <p>
+      Auch Sie erhalten die gleichen Zugangscodes und können z.B. einen
+      Geburtstagsgruß "auf" den verschenkten Quadratmetern
+      hinterlassen.
+    </p>
+    <p>
+      Setzen Sie das Häkchen und fahren Sie wie gewünscht fort. 
+    </p>
+    <p>
+      Unmittelbar nach erfolgter Zahlung (wenige Sekunden später)
+      werden Sie nach Namen und Versandadresse der zu beschenkenden
+      Person gefragt.
+    </p>
+    <p>
+      Der Geschenkservice ist aus administrativen Gründen leider nur
+      bei Online-Spenden ab 90 Euro möglich.
+    </p>
+  </p>					
 </bknr:toplevel>
