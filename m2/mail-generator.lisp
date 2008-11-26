@@ -202,8 +202,10 @@ Gift: ~A
 (defun lookup-element-name (element-name)
   "Given an ELEMENT-NAME (which may be either a form field name or a name of a post parameter from
 worldpay), return the common XML element name"
-  (or (cdr (find element-name *common-element-names* :key #'car :test #'equal))
-      element-name))
+  (cl-ppcre:regex-replace-all "(?i)[^-a-z0-9]"
+                              (or (cdr (find element-name *common-element-names* :key #'car :test #'equal))
+                                  element-name)
+                              ""))
 
 (defun make-contract-xml-part (id params)
   (make-instance 'text-mime

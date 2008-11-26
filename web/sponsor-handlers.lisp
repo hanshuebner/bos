@@ -83,8 +83,6 @@
                                  "Download complete sponsor DB in XML format")))
              (:tr ((:th :colspan "2" :align "left")
                    (:h2 "Create sponsor")))
-             (:tr (:td "Date (DD.MM.YYYY)")
-                  (:td (text-field "date" :size 10 :value (format-date-time (get-universal-time) :show-time nil))))
              (:tr (:td "Number of square meters")
                   (:td (text-field "numsqm" :size 5)))
              (:tr (:td "Country code (2 chars)")
