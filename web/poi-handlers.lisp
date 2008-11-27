@@ -346,7 +346,7 @@
   (flet ((make-new-medium (new-medium-type poi)
            (case new-medium-type
              (poi-movie
-              (make-instance 'poi-movie :poi poi :url (query-param "url")))
+              (make-instance 'poi-movie :poi poi :url (query-param "url") :created (get-universal-time)))
              (otherwise
               (let ((upload (request-uploaded-file "image-file")))
                 (unless upload
@@ -683,3 +683,4 @@
                             (store-object-id (nth image-index (poi-sat-images poi)))
                             imageproc-arguments))
           (error "image index ~a out of bounds for poi ~a" image-index poi)))))
+

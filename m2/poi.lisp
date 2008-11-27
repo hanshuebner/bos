@@ -84,7 +84,9 @@ FROM and TO must not both continue to exist."
 ;;; poi-movie
 (defpersistent-class poi-movie (poi-medium)
   ((url :accessor poi-movie-url :initarg :url :initform nil)
-   (created :initform (get-universal-time) :reader poi-medium-creation-time)))
+   (created :initform (error "need :created initarg when creating poi-medium")
+            :initarg :created
+            :reader poi-medium-creation-time)))
 
 ;;; poi
 (defpersistent-class poi (textual-attributes-mixin)
@@ -294,3 +296,55 @@ var poi = { id: ~S,
                  (warn "~s has a url of ~s" movie (poi-movie-url movie))))))
     (mapc #'poi-sanity-check (class-instances 'poi))
     (values)))
+
+(defvar *language* "en"
+  "Current language for JSON encoding")
+
+(defmethod json:encode ((object symbol) &optional stream)
+  (json:encode (string-downcase (symbol-name object)) stream))
+
+(defgeneric json-encode (object)
+  (:method-combination progn))
+
+(defmethod json-encode progn ((object store-object))
+  (json:encode-object-element "id" (store-object-id object)))
+
+(defmethod json-encode progn ((blob blob))
+  (json:encode-object-elements
+   "type" (blob-type blob)
+   "timestamp" (format-date-time (blob-timestamp blob) :mail-style t)))
+
+(defmethod json-encode progn ((image store-image))
+  (json:encode-object-elements
+   "name" (store-image-name image)
+   "width" (store-image-width image)
+   "height" (store-image-height image)))
+
+(defmethod json-encode progn ((object bos.m2::textual-attributes-mixin))
+  (dolist (field '(title subtitle description))
+    (let ((string (slot-string object field *language*)))
+      (unless (equal "" string)
+        (json:encode-object-element field string)))))
+
+(defmethod json-encode progn ((medium poi-medium))
+  (json:encode-object-element
+   "mediumType"
+   (cl-ppcre:regex-replace "^poi-" (string-downcase (class-name (class-of medium))) "")))
+
+(defmethod json-encode progn ((movie poi-movie))
+  (json:encode-object-elements
+   "url" (poi-movie-url movie)
+   "timestamp" (format-date-time (poi-medium-creation-time movie) :mail-style t)))
+
+(defun pois-as-json (language)
+  (let ((*language* language))
+    (json:with-array ()
+      (dolist (poi (class-instances 'poi))
+        (when (poi-complete poi language)
+          (json:with-object ()
+            (json-encode poi)
+            (json:with-object-element ("media")
+              (json:with-array ()
+                (dolist (medium (poi-media poi))
+                  (json:with-object ()
+                    (json-encode medium)))))))))))
