@@ -184,6 +184,7 @@
                                         ("/map-browser" map-browser-handler)
                                         ("/poi-javascript" poi-javascript-handler)
                                         ("/m2-javascript" m2-javascript-handler)
+                                        ("/poi-json" poi-json-handler)
                                         ("/sponsor-login" sponsor-login-handler)
                                         ("/create-allocation-area" create-allocation-area-handler)
                                         ("/allocation-area" allocation-area-handler)

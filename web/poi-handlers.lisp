@@ -684,3 +684,11 @@
                             imageproc-arguments))
           (error "image index ~a out of bounds for poi ~a" image-index poi)))))
 
+;;; poi-json-handler
+(defclass poi-json-handler (page-handler)
+  ())
+
+(defmethod handle ((handler poi-json-handler))
+  (with-json-response ()
+    (json:with-object-element ("pois")
+      (bos.m2:pois-as-json (request-language)))))

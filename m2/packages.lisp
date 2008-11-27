@@ -239,6 +239,8 @@
            #:poi-panoramas
            #:poi-movies
            #:make-poi-javascript
+           #:poi-as-json
+           #:pois-as-json
 
            ;; news
            #:news-item
