@@ -1,0 +1,15 @@
+h1 { font-size: 200% }
+h2 { font-size: 160% }
+h3 { font-size: 120% }
+
+ul.media-list li {
+    position: relative;
+    height: 44px;
+    margin-left: 42px;
+}
+
+ul.media-list li img {
+    position: absolute;
+    left: -42px;
+    top: 2px;
+}
