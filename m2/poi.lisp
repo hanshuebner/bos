@@ -309,6 +309,13 @@ var poi = { id: ~S,
 (defmethod json-encode progn ((object store-object))
   (json:encode-object-element "id" (store-object-id object)))
 
+(defmethod json-encode progn ((poi poi))
+  (json:encode-object-elements
+   "name" (poi-name poi)
+   "icon" (poi-icon poi)
+   "x" (poi-center-x poi)
+   "y" (poi-center-y poi)))
+
 (defmethod json-encode progn ((blob blob))
   (json:encode-object-elements
    "type" (blob-type blob)

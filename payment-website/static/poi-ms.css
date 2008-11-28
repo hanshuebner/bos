@@ -13,3 +13,15 @@ ul#media-list li img {
     left: -42px;
     top: 2px;
 }
+
+ul#media-list .active {
+    background-color: #0f0;
+}
+
+.map {
+    position: relative;
+}
+
+.map .icon {
+    position: absolute;
+}
