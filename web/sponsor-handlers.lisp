@@ -101,18 +101,15 @@
                   (:td (checkbox-field "want-print" "" :checked nil)))
              (:tr (:td (submit-button "create" "create" :formcheck "javascript:return check_complete_sale()"))))))))))
 
-(defun date-to-universal (date-string)
-  (apply #'encode-universal-time 0 0 0 (mapcar #'parse-integer (split #?r"\." date-string))))
-
 (defmethod handle-object-form ((handler edit-sponsor-handler) (action (eql :create)) (sponsor (eql nil)))
-  (with-query-params (numsqm country email name address date language want-print)
+  (with-query-params (numsqm country email name address language want-print)
     (let* ((sponsor (make-sponsor :email email :country country :language language))
            (numsqm (parse-integer numsqm))
            (contract (make-contract sponsor numsqm
                                     :paidp (format nil "~A: manually created by ~A"
                                                    (format-date-time (get-universal-time))
                                                    (user-login (bknr.web:bknr-session-user)))
-                                    :date (date-to-universal date)
+                                    :date (get-universal-time)
                                     :download-only (or (< (* +price-per-m2+ numsqm) *mail-amount*)
                                                        (not want-print)))))
       (contract-issue-cert contract name :address address :language language)
