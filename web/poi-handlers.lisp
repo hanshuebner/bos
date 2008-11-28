@@ -388,15 +388,20 @@
           (or (sponsor-country (contract-sponsor contract)) "de")
           (length (contract-m2s contract))))
 
-(defmethod handle ((handler poi-javascript-handler))
-  (let* ((last-paid-contracts (last-paid-contracts))
-         (timestamp (max (reduce #'max (class-instances 'poi)
-                                 :key (lambda (poi) (store-object-last-change poi 1)))
-                         (reduce #'max last-paid-contracts
-                                 :key (lambda (contract) (store-object-last-change contract 0))))))
-    (hunchentoot:handle-if-modified-since timestamp)
+(defun poi-handle-if-modified-since (&optional (pois (class-instances 'poi)))
+  (let ((pois-last-change (reduce #'max pois
+                                  :key (lambda (poi) (store-object-last-change poi 1))
+                                  :initial-value 0)))
+    (hunchentoot:handle-if-modified-since pois-last-change)
     (setf (hunchentoot:header-out :last-modified)
-          (hunchentoot:rfc-1123-date timestamp))
+          (hunchentoot:rfc-1123-date pois-last-change))))
+
+(defmethod handle ((handler poi-javascript-handler))
+  (poi-handle-if-modified-since)
+  (let* ((last-paid-contracts (last-paid-contracts))
+         (timestamp (reduce #'max last-paid-contracts
+                            :key (lambda (contract) (store-object-last-change contract 0)))))
+    (hunchentoot:handle-if-modified-since timestamp)
     (with-http-response (:content-type "text/html; charset=UTF-8")
       (with-http-body ()
         (html
@@ -617,13 +622,10 @@
   ())
 
 (defmethod handle ((handler poi-kml-all-handler))
+
   (let* ((relevant-pois (remove-if-not #'(lambda (poi) (and (poi-area poi) (poi-published-earth poi)))
-                                       (class-instances 'poi)))
-         (pois-last-change (reduce #'max relevant-pois :key (lambda (poi) (store-object-last-change poi 1))
-                                   :initial-value 0)))
-    (hunchentoot:handle-if-modified-since pois-last-change)
-    (setf (hunchentoot:header-out :last-modified)
-          (hunchentoot:rfc-1123-date pois-last-change))
+                                       (class-instances 'poi))))
+    (poi-handle-if-modified-since relevant-pois)
     (with-query-params ((lang "en"))
       (with-xml-response ()
         ;; (sax:processing-instruction cxml::*sink* "xml-stylesheet" "href=\"/static/tri.xsl\" type=\"text/xsl\"")
@@ -689,6 +691,7 @@
   ())
 
 (defmethod handle ((handler poi-json-handler))
+  (poi-handle-if-modified-since)
   (with-json-response ()
     (json:with-object-element ("pois")
       (bos.m2:pois-as-json (request-language)))))
