@@ -2,8 +2,7 @@ $ = jQuery;
 
 $(document).ready(init);
 
-var poi_id;
-var poi;
+var pois = {};
 
 Date.prototype.renderDate = function() {
     return this.getDate() + '.' + this.getMonth() + '.' + (1900 + this.getYear());
@@ -17,55 +16,52 @@ var APPLET = createDOMFunc('applet');
 
 var mediaHandlers = {
     image: {
-        icon: function (medium) { return IMG({ src: '/image/' + medium.id, width: 40, height: 40 }) },
-        action: function (medium) {
-            $('#content')
-            .empty()
-            .append(H2(null, medium.title),
-                    IMG({ src: '/image/' + medium.id }), BR(),
-                    H3(null, medium.subtitle),
-                    P(null, medium.description));
+        icon: function (medium) {
+            return IMG({ src: '/image/' + medium.id + '/thumbnail,,40,40', width: 40, height: 40 })
+        },
+        makeViewer: function (medium) {
+            return IMG({ src: '/image/' + medium.id });
         }
     },
     panorama: {
-        icon: function (medium) { return IMG({ src: '/static/panorama-icon.gif', width: 40, height: 40 }) },
-        action: function (medium) {
-            $('#content')
-            .empty()
-            .append(H2(null, medium.title),
-                    APPLET({ archive: '/static/ptviewer.jar',
-                             code: 'ptviewer.class',
-                             width: 400,
-                             height: 300},
-                           PARAM({ name: 'file', value: '/image/' + medium.id}),
-                           PARAM({ name: 'cursor', value: 'MOVE' })),
-                    H3(null, medium.subtitle),
-                    P(null, medium.description));
+        icon: function (medium) {
+            return IMG({ src: '/static/panorama-icon.gif', width: 40, height: 40 })
+        },
+        makeViewer: function (medium) {
+            return APPLET({ archive: '/static/ptviewer.jar',
+                            code: 'ptviewer.class',
+                            width: 400,
+                            height: 300},
+                          PARAM({ name: 'file', value: '/image/' + medium.id}),
+                          PARAM({ name: 'cursor', value: 'MOVE' }));
         }
     },
     movie: {
-        icon: function (medium) { return IMG({ src: '/static/movie-icon.gif', width: 40, height: 40 }) },
-        action: function (medium) {
-            $('#content')
-            .empty()
-            .append(H2(null, medium.title),
-                    OBJECT({ width: 360, height: 360 },
-                           PARAM({ name: "movie", value: medium.url }),
-                           EMBED({ src: medium.url, type: 'application/x-shockwave-flash',
-                                   width: 400, height: 300 })), BR(),
-                    H3(null, medium.subtitle),
-                    P(null, medium.description));
+        icon: function (medium) {
+            return IMG({ src: '/static/movie-icon.gif', width: 40, height: 40 })
+        },
+        makeViewer: function (medium) {
+            return OBJECT({ width: 360, height: 360 },
+                          PARAM({ name: "movie", value: medium.url }),
+                          EMBED({ src: medium.url, type: 'application/x-shockwave-flash',
+                                  width: 400, height: 300 }));
         }
     }
 };
 
-function selectMedium(fn, e) {
+function showMedium(e) {
+    var medium = e.data;
     $('#media-list *').removeClass('active');
     $(e.target).addClass('active');
-    fn();
+    $('#content')
+    .empty()
+    .append(H2(null, medium.title),
+            mediaHandlers[medium.mediumType].makeViewer(medium),
+            H3(null, medium.subtitle),
+            P(null, medium.description));
 }
 
-function loadMainInfo() {
+function loadMainInfo(poi) {
     var map = [];
     for (var y = -1; y < 3; y++) {
         var tiles = [];
@@ -81,6 +77,7 @@ function loadMainInfo() {
     }
     map.push(IMG({ 'class': 'icon',
                    src: '/images/' + poi.icon + '.gif',
+                   width: 16, height: 16,
                    style: 'left: ' + (poi.x - ((Math.floor(poi.x / 90) - 1) * 90) - 8) + 'px; '
                                    + 'top: ' + (poi.y - ((Math.floor(poi.y / 90) - 1) * 90) - 8) + 'px'}));
 
@@ -89,40 +86,69 @@ function loadMainInfo() {
                                  P(null, poi.description));
 }
 
-var B = createDOMFunc('b', null);
+function showPOI(e) {
+    var poi = pois[(e.target && e.target.value) || e.data];
 
-function loadPoi() {
-    document.title = poi.title;
-    $('.yui-b h1').html(poi.title);
-    loadMainInfo();
     $('#media-list').empty();
-    map(function (medium) {
-        if (mediaHandlers[medium.mediumType]) {
-            $('#media-list')
-            .append($(A({ href: '#' },
-                        LI(null,
-                           mediaHandlers[medium.mediumType].icon(medium),
-                           (new Date(medium.timestamp)).renderDate(),
-                           BR(),
-                           B(null, medium.title || medium.name))))
-                    .bind('click', null, partial(selectMedium, partial(mediaHandlers[medium.mediumType].action, medium))));
-        }
-    }, poi.media);
+    if (!poi) {
+        showOverview();
+    } else {
+        document.title = poi.title;
+        $('.yui-b h1').html(poi.title);
+        loadMainInfo(poi);
+        map(function (medium) {
+            if (mediaHandlers[medium.mediumType]) {
+                $('#media-list')
+                .append($(A({ href: '#' },
+                            LI(null,
+                               mediaHandlers[medium.mediumType].icon(medium),
+                               (new Date(medium.timestamp)).renderDate(),
+                               BR(),
+                               B(null, medium.title || medium.name))))
+                        .bind('click', medium, showMedium));
+            }
+        }, poi.media);
+    }
+}
+
+function showOverview() {
+
+    var elements = [];
+    elements.push(IMG({ src: '/infosystem/bilder/karte_uebersicht.jpg', width: 360, height: 360 }));
+    for (var i in pois) {
+        var poi = pois[i];
+        var link = A({ href: '#' },
+                     IMG({ 'class': 'icon',
+                            src: '/images/' + poi.icon + '.gif',
+                            width: 16, height: 16,
+                            title: poi.title,
+                            style: 'left: ' + (Math.round(poi.x / 30) - 8) + 'px; '
+                                   + 'top: ' + (Math.round(poi.y / 30) - 8) + 'px' }));
+        $(link).bind('click', poi.id, showPOI);
+        elements.push(link);
+    }
+
+    $('#content')
+    .empty()
+    .append(H2(null, 'XXuebersichtXX'),
+            DIV({ 'class': 'map' }, elements));
 }
 
 function loadData(data) {
     try {
-        var pois = data.pois;
-
-        for (var i in pois) {
-            if (pois[i].id == poi_id) {
-                poi = pois[i];
-                loadPoi();
-                return;
-            }
+        for (var i in data.pois) {
+            var poi = data.pois[i];
+            pois[poi.id] = poi;
+            $('#poi-selector').append(OPTION({ value: poi.id }, poi.title));
         }
+        $('#poi-selector').bind('change', null, showPOI);
 
-        alert('invalid poi id (not found)');
+        var poi_id = document.location.hash.replace(/#/, "");
+        if (poi_id) {
+            showPOI({ data: poi_id });
+        } else {
+            showOverview();
+        }
     }
     catch (e) {
         alert(e);
@@ -130,11 +156,5 @@ function loadData(data) {
 }
 
 function init() {
-    poi_id = document.location.hash.replace(/#/, "");
-
-    if (poi_id.match(/^[0-9]+$/)) {
-        loadJSONDoc('/poi-json').addCallback(loadData);
-    } else {
-        alert('invalid poi id');
-    }
+    loadJSONDoc('/poi-json').addCallback(loadData);
 }

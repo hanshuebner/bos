@@ -2,6 +2,10 @@ h1 { font-size: 200% }
 h2 { font-size: 160% }
 h3 { font-size: 120% }
 
+ul#media-list {
+    margin: 2em 0em 2em 0em;
+}
+
 ul#media-list li {
     position: relative;
     height: 44px;
@@ -16,6 +20,11 @@ ul#media-list li img {
 
 ul#media-list .active {
     background-color: #0f0;
+}
+
+#poi-selector {
+    width: 300px;
+    font-size: 180%;
 }
 
 .map {
