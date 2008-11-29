@@ -19,33 +19,31 @@ var mediaHandlers = {
         icon: function (medium) {
             return IMG({ src: '/image/' + medium.id + '/thumbnail,,40,40', width: 40, height: 40 })
         },
-        makeViewer: function (medium, container) {
-            replaceChildNodes(container,
-                              IMG({ src: '/image/' + medium.id,
-                                    width: medium.width,
-                                    height: medium.height }));
+        makeViewer: function (medium) {
+            return IMG({ src: '/image/' + medium.id,
+                         width: medium.width,
+                         height: medium.height });
         }
     },
     panorama: {
         icon: function (medium) {
             return IMG({ src: '/static/panorama-icon.gif', width: 40, height: 40 })
         },
-        makeViewer: function (medium, container) {
-            replaceChildNodes(container,
-                              APPLET({ id: 'applet',
-                                       archive: '/static/ptviewer.jar',
-                                       code: 'ptviewer.class',
-                                       width: 400,
-                                       height: 300},
-                                     PARAM({ name: 'file', value: '/image/' + medium.id}),
-                                     PARAM({ name: 'cursor', value: 'MOVE' })));
+        makeViewer: function (medium) {
+            return APPLET({ id: 'applet',
+                            archive: '/static/ptviewer.jar',
+                            code: 'ptviewer.class',
+                            width: 400,
+                            height: 300},
+                          PARAM({ name: 'file', value: '/image/' + medium.id}),
+                          PARAM({ name: 'cursor', value: 'MOVE' }));
         }
     },
     movie: {
         icon: function (medium) {
             return IMG({ src: '/static/movie-icon.gif', width: 40, height: 40 })
         },
-        makeViewer: function (medium, container) {
+        makeViewer: function (medium) {
             /* can't use DOM objects like below because IE does not grok it
              * return OBJECT({ id: 'applet',
              *                 width: 360, height: 360,
@@ -54,11 +52,13 @@ var mediaHandlers = {
              *               PARAM({ name: "movie",
              *                       value: "c.swf?path=" + medium.url }));
              */
-            container.innerHTML =
+            var div = DIV();
+            div.innerHTML =
                 "<object id='applet' width='360' height='360' type='application/x-shockwave-flash' "
                 + "data='c.swf?path=" + medium.url + "'>"
                 + "<param name='movie' value='" + medium.url + "'/>"
                 + "</object>";
+            return div;
 
         }
     }
@@ -76,13 +76,10 @@ function showMedium(e) {
     $('#media-list *').removeClass('active');
     $(e.target).addClass('active');
 
-    var container = DIV();
-    mediaHandlers[medium.mediumType].makeViewer(medium, container);
-
     $('#content')
     .empty()
     .append(H2(null, medium.title),
-            container,
+            mediaHandlers[medium.mediumType].makeViewer(medium),
             H3(null, medium.subtitle),
             P(null, medium.description));
 }
