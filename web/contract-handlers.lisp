@@ -44,3 +44,4 @@
                        (not (contract-tree-needs-update-p)))
                   "READY"
                   "PROCESSING")))))
+

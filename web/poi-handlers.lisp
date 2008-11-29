@@ -396,20 +396,22 @@
     (setf (hunchentoot:header-out :last-modified)
           (hunchentoot:rfc-1123-date pois-last-change))))
 
+(defun last-contracts-handle-if-modified-since ()
+  (hunchentoot:handle-if-modified-since
+   (reduce #'max (last-paid-contracts)
+           :key (lambda (contract) (store-object-last-change contract 0)))))
+
 (defmethod handle ((handler poi-javascript-handler))
   (poi-handle-if-modified-since)
-  (let* ((last-paid-contracts (last-paid-contracts))
-         (timestamp (reduce #'max last-paid-contracts
-                            :key (lambda (contract) (store-object-last-change contract 0)))))
-    (hunchentoot:handle-if-modified-since timestamp)
-    (with-http-response (:content-type "text/html; charset=UTF-8")
-      (with-http-body ()
-        (html
-         ((:script :language "JavaScript")
-          (:princ (make-poi-javascript (request-language)))
-          (:princ "parent.poi_fertig(pois, anzahlSponsoren, anzahlVerkauft);")
-          (:princ (format nil "parent.last_sponsors([~{~A~^,~%~}]);"
-                          (mapcar #'contract-js last-paid-contracts)))))))))
+  (last-contracts-handle-if-modified-since)
+  (with-http-response (:content-type "text/html; charset=UTF-8")
+    (with-http-body ()
+      (html
+       ((:script :language "JavaScript")
+        (:princ (make-poi-javascript (request-language)))
+        (:princ "parent.poi_fertig(pois, anzahlSponsoren, anzahlVerkauft);")
+        (:princ (format nil "parent.last_sponsors([~{~A~^,~%~}]);"
+                        (mapcar #'contract-js (last-paid-contracts)))))))))
 
 ;;; poi-xml-handler
 (defun write-poi-xml (poi language)

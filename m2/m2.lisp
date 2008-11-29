@@ -173,6 +173,9 @@
   (or (call-next-method)
       "en"))
 
+(defun sponsor-paid-contracts (sponsor)
+  (remove-if-not #'contract-paidp (sponsor-contracts sponsor)))
+
 (defvar *sponsor-counter-lock* (bknr.datastore::mp-make-lock "Sponsor Counter Lock"))
 
 (defvar *sponsor-counter* 0)
@@ -494,10 +497,6 @@ Note that this function takes also diagonally connected m2s into account."
     (with-points (center)
       (geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ center-x) (- +nw-utm-y+ center-y) +utm-zone+ t))))
 
-(defun tx-make-contract (sponsor m2-count &key date paidp expires)
-  (warn "Old tx-make-contract transaction used, contract dates may be wrong")
-  (tx-do-make-contract sponsor m2-count :date date :paidp paidp :expires expires))
-
 (define-condition allocation-areas-exhausted (simple-error)
   ((numsqm :initarg :numsqm :reader numsqm))
   (:report (lambda (condition stream)
@@ -684,21 +683,52 @@ neighbours."
 (defun make-m2-javascript (sponsor)
   "Erzeugt das Quadratmeter-Javascript für die angegebenen Contracts"
   (with-output-to-string (*standard-output*)
-    (let ((paid-contracts (remove nil (sponsor-contracts sponsor) :key #'contract-paidp)))
-      (format t "profil = {};~%")
-      (format t "profil.id = ~D;~%" (store-object-id sponsor))
-      (format t "profil.name = ~S;~%" (string-safe (or (user-full-name sponsor) "[anonym]")))
-      (format t "profil.country = ~S;~%" (or (sponsor-country sponsor) "[unbekannt]"))
-      (format t "profil.anzahl = ~D;~%" (loop for contract in paid-contracts
-                                           sum (length (contract-m2s contract))))
-      (format t "profil.nachricht = \"~A\";~%" (string-safe (sponsor-info-text sponsor)))
-      (format t "profil.contracts = [ ];~%")
-      (loop for contract in paid-contracts
-         do (destructuring-bind (left top width height) (contract-bounding-box contract)
-              (format t "profil.contracts.push({ id: ~A, left: ~A, top: ~A, width: ~A, height: ~A, date: ~S });~%"
-                      (store-object-id contract)
-                      left top width height
-                      (format-date-time (contract-date contract) :show-time nil)))))))
+    (format t "profil = {};~%")
+    (format t "profil.id = ~D;~%" (store-object-id sponsor))
+    (format t "profil.name = ~S;~%" (string-safe (or (user-full-name sponsor) "[anonym]")))
+    (format t "profil.country = ~S;~%" (or (sponsor-country sponsor) "[unbekannt]"))
+    (format t "profil.anzahl = ~D;~%" (loop for contract in (sponsor-paid-contracts sponsor)
+                                         sum (length (contract-m2s contract))))
+    (format t "profil.nachricht = \"~A\";~%" (string-safe (sponsor-info-text sponsor)))
+    (format t "profil.contracts = [ ];~%")
+    (dolist (contract (sponsor-paid-contracts sponsor))
+      (destructuring-bind (left top width height) (contract-bounding-box contract)
+        (format t "profil.contracts.push({ id: ~A, left: ~A, top: ~A, width: ~A, height: ~A, date: ~S });~%"
+                (store-object-id contract)
+                left top width height
+                (format-date-time (contract-date contract) :show-time nil))))))
+
+(defmethod json-encode progn ((contract contract))
+  (destructuring-bind (left top width height) (contract-bounding-box contract)
+    (json:encode-object-elements
+     "timestamp" (format-date-time (contract-date contract) :mail-style t)
+     "count" (length (contract-m2s contract))
+     "top" top
+     "left" left
+     "width" width
+     "height" height)))
+
+(defmethod json-encode progn ((sponsor sponsor))
+  (json:encode-object-elements
+   "name" (user-full-name sponsor)
+   "country" (or (sponsor-country sponsor) "sponsor-country-unknown")
+   "sqmCount" (reduce #'+ (mapcar (alexandria:compose #'length #'contract-m2s) (sponsor-contracts sponsor))
+                      :initial-value 0)
+   "infoText" (sponsor-info-text sponsor))
+  (unless (user-full-name sponsor)
+    (json:encode-object-element "anonymous" t))
+  (json:with-object-element ("contracts")
+    (json:with-array ()
+      (dolist (contract (sponsor-paid-contracts sponsor))
+        (json:with-object ()
+          (json-encode contract))))))
+
+(defun last-sponsors-as-json ()
+  "Render the last sponsors as JSON"
+  (json:with-array ()
+    (dolist (sponsor (mapcar #'contract-sponsor (last-paid-contracts)))
+      (json:with-object ()
+        (json-encode sponsor)))))
 
 (defun delete-directory (pathname)
   (cl-fad:delete-directory-and-files pathname :if-does-not-exist :ignore))

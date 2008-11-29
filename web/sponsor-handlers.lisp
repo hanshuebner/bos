@@ -346,3 +346,14 @@
           (html "The print certificate has been sent to the relevant BOS office address by email." :br))
         (let ((sponsor (contract-sponsor contract)))
           (cmslink #?"edit-sponsor/$((store-object-id sponsor))" "return to sponsor")))))
+
+
+;;; last-sponsors-json-handler
+(defclass last-sponsors-json-handler (page-handler)
+  ())
+
+(defmethod handle ((handler last-sponsors-json-handler))
+  (last-contracts-handle-if-modified-since)
+  (with-json-response ()
+    (json:with-object-element ("sponsors")
+      (bos.m2:last-sponsors-as-json))))

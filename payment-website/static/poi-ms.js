@@ -3,9 +3,14 @@ $ = jQuery;
 $(document).ready(init);
 
 var pois = {};
+var sponsors = [];
 
 Date.prototype.renderDate = function() {
     return this.getDate() + '.' + this.getMonth() + '.' + (this.getYear() > 2000 ? this.getYear() : (1900 + this.getYear()));
+}
+
+function NLS(key) {
+    return key;                 // for now
 }
 
 var B = createDOMFunc('b', null);
@@ -84,20 +89,28 @@ function showMedium(e) {
             P(null, medium.description));
 }
 
-function loadMainInfo(poi) {
-    var map = [];
+function makeMap(centerX, centerY) {
+    var rows = [];
+    
     for (var y = -1; y < 3; y++) {
         var tiles = [];
         for (var x = -1; x < 3; x++) {
             tiles.push(IMG({ 'class': 'map-tile',
                              src: '/overview/'
-                             + (Math.floor(poi.x / 90) + x) * 90
+                             + (Math.floor(centerX / 90) + x) * 90
                              + '/'
-                             + (Math.floor(poi.y / 90) + y) * 90,
+                             + (Math.floor(centerY / 90) + y) * 90,
                              width: 90, height: 90 }));
         }
-        map.push(DIV(null, tiles));
+        rows.push(DIV(null, tiles));
     }
+
+    return DIV({ 'class': 'map' }, rows);
+}
+
+function loadMainInfo(poi) {
+    var map = [];
+    map.push(makeMap(poi.x, poi.y));
     map.push(IMG({ 'class': 'icon',
                    src: '/images/' + poi.icon + '.gif',
                    width: 16, height: 16,
@@ -112,10 +125,13 @@ function loadMainInfo(poi) {
 function showPOI(e) {
     var poi = pois[(e.target && e.target.value) || e.data];
 
-    $('#media-list').empty();
+
+    $('#left-bar').empty().append(UL({ id: 'media-list' }));
     if (!poi) {
         showOverview();
     } else {
+        $('#poi-selector').val(poi.id);
+
         document.title = poi.title;
         $('.yui-b h1').html(poi.title);
         loadMainInfo(poi);
@@ -134,8 +150,18 @@ function showPOI(e) {
     }
 }
 
+function showSponsor(e) {
+    var sponsor = e.data;
+    $('#content')
+    .empty()
+    .append(H2(null, sponsor.name),
+            makeMap(sponsor.contracts[0].left, sponsor.contracts[0].top));
+}
+
 function showOverview() {
 
+    $('#poi-selector').val('overview');
+    
     var elements = [];
     elements.push(IMG({ src: '/infosystem/bilder/karte_uebersicht.jpg', width: 360, height: 360 }));
     for (var i in pois) {
@@ -153,18 +179,33 @@ function showOverview() {
 
     $('#content')
     .empty()
-    .append(H2(null, 'XXuebersichtXX'),
+    .append(H2(null, NLS('Übersicht')),
             DIV({ 'class': 'map' }, elements));
+
+    $('#left-bar')
+    .empty()
+    .append(H3(NLS("Letzte Sponsoren")),
+            UL({ id: 'sponsor-list' }));
+
+    map(function (sponsor) {
+        $('#sponsor-list')
+        .append($(A({ href: '#' },
+                    LI(null,
+                       IMG({ src: '/images/flags/' + sponsor.country.toLowerCase() + '.gif'}),
+                       (new Date(sponsor.contracts[0].timestamp)).renderDate(),
+                       BR(),
+                       B(null, sponsor.anonymous ? NLS('anonym') : sponsor.name),
+                       " ", sponsor.contracts[0].count, " m²")))
+                .bind('click', sponsor, showSponsor));
+    }, sponsors.slice(0, 10));
 }
 
-function loadData(data) {
+function loadSponsors(data) {
     try {
-        for (var i in data.pois) {
-            var poi = data.pois[i];
-            pois[poi.id] = poi;
-            $('#poi-selector').append(OPTION({ value: poi.id }, poi.title));
+        for (var i in data.sponsors) {
+            var sponsor = data.sponsors[i];
+            sponsors.push(sponsor);
         }
-        $('#poi-selector').bind('change', null, showPOI);
 
         var poi_id = document.location.hash.replace(/#/, "");
         if (poi_id) {
@@ -178,6 +219,24 @@ function loadData(data) {
     }
 }
 
+function loadPOIs(data) {
+    try {
+        for (var i in data.pois) {
+            var poi = data.pois[i];
+            pois[poi.id] = poi;
+            $('#poi-selector').append(OPTION({ value: poi.id }, poi.title));
+        }
+        $('#poi-selector').bind('change', null, showPOI);
+
+        loadJSONDoc('/last-sponsors-json').addCallback(loadSponsors);
+    }
+    catch (e) {
+        alert(e);
+    }
+}
+
 function init() {
-    loadJSONDoc('/poi-json').addCallback(loadData);
+    $('#small-map a').bind('click', showPOI);
+
+    loadJSONDoc('/poi-json').addCallback(loadPOIs);
 }
