@@ -5,7 +5,7 @@ $(document).ready(init);
 var pois = {};
 
 Date.prototype.renderDate = function() {
-    return this.getDate() + '.' + this.getMonth() + '.' + (1900 + this.getYear());
+    return this.getDate() + '.' + this.getMonth() + '.' + (this.getYear() > 2000 ? this.getYear() : (1900 + this.getYear()));
 }
 
 var B = createDOMFunc('b', null);
@@ -19,46 +19,70 @@ var mediaHandlers = {
         icon: function (medium) {
             return IMG({ src: '/image/' + medium.id + '/thumbnail,,40,40', width: 40, height: 40 })
         },
-        makeViewer: function (medium) {
-            return IMG({ src: '/image/' + medium.id,
-                         width: medium.width,
-                         height: medium.height });
+        makeViewer: function (medium, container) {
+            replaceChildNodes(container,
+                              IMG({ src: '/image/' + medium.id,
+                                    width: medium.width,
+                                    height: medium.height }));
         }
     },
     panorama: {
         icon: function (medium) {
             return IMG({ src: '/static/panorama-icon.gif', width: 40, height: 40 })
         },
-        makeViewer: function (medium) {
-            return APPLET({ archive: '/static/ptviewer.jar',
-                            code: 'ptviewer.class',
-                            width: 400,
-                            height: 300},
-                          PARAM({ name: 'file', value: '/image/' + medium.id}),
-                          PARAM({ name: 'cursor', value: 'MOVE' }));
+        makeViewer: function (medium, container) {
+            replaceChildNodes(container,
+                              APPLET({ id: 'applet',
+                                       archive: '/static/ptviewer.jar',
+                                       code: 'ptviewer.class',
+                                       width: 400,
+                                       height: 300},
+                                     PARAM({ name: 'file', value: '/image/' + medium.id}),
+                                     PARAM({ name: 'cursor', value: 'MOVE' })));
         }
     },
     movie: {
         icon: function (medium) {
             return IMG({ src: '/static/movie-icon.gif', width: 40, height: 40 })
         },
-        makeViewer: function (medium) {
-            return OBJECT({ width: 360, height: 360 },
-                          PARAM({ name: "movie", value: medium.url }),
-                          EMBED({ src: medium.url, type: 'application/x-shockwave-flash',
-                                  width: 400, height: 300 }));
+        makeViewer: function (medium, container) {
+            /* can't use DOM objects like below because IE does not grok it
+             * return OBJECT({ id: 'applet',
+             *                 width: 360, height: 360,
+             *                 type: "application/x-shockwave-flash",
+             *                 data: "c.swf?path=" + medium.url },
+             *               PARAM({ name: "movie",
+             *                       value: "c.swf?path=" + medium.url }));
+             */
+            container.innerHTML =
+                "<object id='applet' width='360' height='360' type='application/x-shockwave-flash' "
+                + "data='c.swf?path=" + medium.url + "'>"
+                + "<param name='movie' value='" + medium.url + "'/>"
+                + "</object>";
+
         }
     }
 };
 
 function showMedium(e) {
     var medium = e.data;
+
+    /* work around jQuery bug when trying to remove applet from dom with IE */
+    var applet = $("#applet")[0];
+    if (applet) {
+        applet.parentNode.removeChild(applet);
+    }
+
     $('#media-list *').removeClass('active');
     $(e.target).addClass('active');
+
+    var container = DIV();
+    mediaHandlers[medium.mediumType].makeViewer(medium, container);
+
     $('#content')
     .empty()
     .append(H2(null, medium.title),
-            mediaHandlers[medium.mediumType].makeViewer(medium),
+            container,
             H3(null, medium.subtitle),
             P(null, medium.description));
 }

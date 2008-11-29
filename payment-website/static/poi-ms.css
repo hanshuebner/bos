@@ -2,10 +2,6 @@ h1 { font-size: 200% }
 h2 { font-size: 160% }
 h3 { font-size: 120% }
 
-ul#media-list {
-    margin: 2em 0em 2em 0em;
-}
-
 ul#media-list li {
     position: relative;
     height: 44px;
