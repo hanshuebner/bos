@@ -20,7 +20,9 @@ var mediaHandlers = {
             return IMG({ src: '/image/' + medium.id + '/thumbnail,,40,40', width: 40, height: 40 })
         },
         makeViewer: function (medium) {
-            return IMG({ src: '/image/' + medium.id });
+            return IMG({ src: '/image/' + medium.id,
+                         width: medium.width,
+                         height: medium.height });
         }
     },
     panorama: {
