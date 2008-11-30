@@ -171,7 +171,7 @@
            #:contract-stats-for-country
            #:last-paid-contracts
            #:do-sponsor-countries
-           #:last-sponsors-as-json
+           #:sponsors-as-json
 
            #:make-m2-javascript
            #:recolorize-contracts

@@ -348,12 +348,32 @@
           (cmslink #?"edit-sponsor/$((store-object-id sponsor))" "return to sponsor")))))
 
 
-;;; last-sponsors-json-handler
-(defclass last-sponsors-json-handler (page-handler)
+;;; sponsors-json-handler
+(defclass sponsors-json-handler (page-handler)
   ())
 
-(defmethod handle ((handler last-sponsors-json-handler))
+(defun sponsors-matching (query)
+  (when (< 2 (length query))
+    (remove-if-not (curry #'search (string-downcase query))
+                   (class-instances 'sponsor)
+                   :key (compose #'string-downcase #'user-full-name))))
+
+(defun largest-sponsors ()
+  (mapcar #'contract-sponsor
+          (subseq (sort (copy-list (class-instances 'contract))
+                        #'>
+                        :key (compose #'length #'contract-m2s))
+                  0 20)))
+
+(defmethod handle ((handler sponsors-json-handler))
   (last-contracts-handle-if-modified-since)
   (with-json-response ()
     (json:with-object-element ("sponsors")
-      (bos.m2:last-sponsors-as-json))))
+      (bos.m2:sponsors-as-json
+       (cond
+         ((query-param "q")
+          (sponsors-matching (query-param "q")))
+         ((query-param "largest")
+          (largest-sponsors))
+         (t
+          (mapcar #'contract-sponsor (last-paid-contracts))))))))

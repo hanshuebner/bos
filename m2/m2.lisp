@@ -712,8 +712,6 @@ neighbours."
   (json:encode-object-elements
    "name" (user-full-name sponsor)
    "country" (or (sponsor-country sponsor) "sponsor-country-unknown")
-   "sqmCount" (reduce #'+ (mapcar (alexandria:compose #'length #'contract-m2s) (sponsor-contracts sponsor))
-                      :initial-value 0)
    "infoText" (sponsor-info-text sponsor))
   (unless (user-full-name sponsor)
     (json:encode-object-element "anonymous" t))
@@ -723,10 +721,10 @@ neighbours."
         (json:with-object ()
           (json-encode contract))))))
 
-(defun last-sponsors-as-json ()
-  "Render the last sponsors as JSON"
+(defun sponsors-as-json (sponsors)
+  "Render the SPONSORS as JSON"
   (json:with-array ()
-    (dolist (sponsor (mapcar #'contract-sponsor (last-paid-contracts)))
+    (dolist (sponsor sponsors)
       (json:with-object ()
         (json-encode sponsor)))))
 

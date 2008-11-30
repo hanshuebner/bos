@@ -72,7 +72,7 @@ var mediaHandlers = {
 function showMedium(e) {
     var medium = e.data;
 
-    /* work around jQuery bug when trying to remove applet from dom with IE */
+    /* Work around jQuery bug when trying to remove applet from DOM with IE. */
     var applet = $("#applet")[0];
     if (applet) {
         applet.parentNode.removeChild(applet);
@@ -105,28 +105,36 @@ function makeMap(centerX, centerY) {
         rows.push(DIV(null, tiles));
     }
 
-    return DIV({ 'class': 'map' }, rows);
+    return DIV(null, rows);
+}
+
+function positionMapIcon(img, x, y) {
+    img.style.left = (x - (Math.floor(x / 90) - 1) * 90) + 'px';
+    img.style.top = (y - (Math.floor(y / 90) - 1) * 90) + 'px';
+    return img;
 }
 
 function loadMainInfo(poi) {
-    var map = [];
-    map.push(makeMap(poi.x, poi.y));
-    map.push(IMG({ 'class': 'icon',
-                   src: '/images/' + poi.icon + '.gif',
-                   width: 16, height: 16,
-                   style: 'left: ' + (poi.x - ((Math.floor(poi.x / 90) - 1) * 90) - 8) + 'px; '
-                                   + 'top: ' + (poi.y - ((Math.floor(poi.y / 90) - 1) * 90) - 8) + 'px'}));
 
-    $('#content').empty().append(H2(null, poi.subtitle),
-                                 DIV({ 'class': 'map' }, map),
-                                 P(null, poi.description));
+    $('#content')
+    .empty()
+    .append(H2(null, poi.subtitle),
+            DIV({ 'class': 'map' },
+                makeMap(poi.x, poi.y),
+                positionMapIcon(IMG({ 'class': 'icon',
+                                      src: '/images/' + poi.icon + '.gif',
+                                      width: 16, height: 16}),
+                                poi.x - 8, poi.y - 8)),
+            P(null, poi.description));
 }
 
 function showPOI(e) {
     var poi = pois[(e.target && e.target.value) || e.data];
 
 
-    $('#left-bar').empty().append(UL({ id: 'media-list' }));
+    $('#left-bar')
+    .empty()
+    .append(UL({ id: 'media-list' }));
     if (!poi) {
         showOverview();
     } else {
@@ -152,10 +160,17 @@ function showPOI(e) {
 
 function showSponsor(e) {
     var sponsor = e.data;
+    var contract = sponsor.contracts[0];
     $('#content')
     .empty()
     .append(H2(null, sponsor.name),
-            makeMap(sponsor.contracts[0].left, sponsor.contracts[0].top));
+            DIV({ 'class': 'map' },
+                makeMap(contract.left, contract.top),
+                positionMapIcon(IMG({ 'class': 'contract',
+                                      src: '/contract-image/' + contract.id,
+                                      width: contract.width, height: contract.height}),
+                                contract.left, contract.top))
+           );
 }
 
 function showOverview() {
@@ -228,7 +243,7 @@ function loadPOIs(data) {
         }
         $('#poi-selector').bind('change', null, showPOI);
 
-        loadJSONDoc('/last-sponsors-json').addCallback(loadSponsors);
+        loadJSONDoc('/sponsors-json').addCallback(loadSponsors);
     }
     catch (e) {
         alert(e);

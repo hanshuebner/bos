@@ -23,10 +23,14 @@ ul#media-list .active {
     font-size: 180%;
 }
 
+.map img {
+     vertical-align: bottom; /* align images without space for character descenders */
+}
+
 .map {
     position: relative;
 }
 
-.map .icon {
+.map .icon, .map .contract {
     position: absolute;
 }

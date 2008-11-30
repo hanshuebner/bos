@@ -7,6 +7,7 @@
         :cl-user
         :cl-interpol
         :cl-ppcre
+        :alexandria
         :xhtml-generator
         :cxml
         :puri
@@ -22,4 +23,5 @@
         :bos.m2
         :bos.m2.config)
   (:shadowing-import-from :cl-interpol #:quote-meta-chars)
+  (:shadowing-import-from :alexandria #:array-index)
   (:export))
