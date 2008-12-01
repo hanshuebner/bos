@@ -294,3 +294,12 @@
            #:count-cache-entries
            #:pprint-cache
            #:allocation-cache-subsystem))
+
+(defpackage :simple-sat-map
+  (:use :cl
+        :bknr.indices
+        :bknr.datastore
+        :alexandria)
+  (:shadowing-import-from :alexandria #:array-index)
+  (:nicknames :ssm)
+  )
