@@ -303,55 +303,50 @@ var poi = { id: ~S,
 (defmethod json:encode ((object symbol) &optional stream)
   (json:encode (string-downcase (symbol-name object)) stream))
 
-(defgeneric json-encode (object)
-  (:method-combination progn))
-
-(defmethod json-encode progn ((object store-object))
+(defmethod json:encode-slots progn ((object store-object))
   (json:encode-object-element "id" (store-object-id object)))
 
-(defmethod json-encode progn ((poi poi))
+(defmethod json:encode-slots progn ((poi poi))
   (json:encode-object-elements
    "name" (poi-name poi)
    "icon" (poi-icon poi)
    "x" (poi-center-x poi)
-   "y" (poi-center-y poi)))
+   "y" (poi-center-y poi))
+  (json:with-object-element ("media")
+    (json:with-array ()
+      (dolist (medium (poi-media poi))
+        (json:encode-object medium)))))
 
-(defmethod json-encode progn ((blob blob))
+(defmethod json:encode-slots progn ((blob blob))
   (json:encode-object-elements
    "type" (blob-type blob)
    "timestamp" (format-date-time (blob-timestamp blob) :mail-style t)))
 
-(defmethod json-encode progn ((image store-image))
+(defmethod json:encode-slots progn ((image store-image))
   (json:encode-object-elements
    "name" (store-image-name image)
    "width" (store-image-width image)
    "height" (store-image-height image)))
 
-(defmethod json-encode progn ((object bos.m2::textual-attributes-mixin))
+(defmethod json:encode-slots progn ((object bos.m2::textual-attributes-mixin))
   (dolist (field '(title subtitle description))
     (let ((string (slot-string object field *language*)))
       (unless (equal "" string)
         (json:encode-object-element field string)))))
 
-(defmethod json-encode progn ((medium poi-medium))
+(defmethod json:encode-slots progn ((medium poi-medium))
   (json:encode-object-element
    "mediumType"
    (cl-ppcre:regex-replace "^poi-" (string-downcase (class-name (class-of medium))) "")))
 
-(defmethod json-encode progn ((movie poi-movie))
+(defmethod json:encode-slots progn ((movie poi-movie))
   (json:encode-object-elements
    "url" (poi-movie-url movie)
    "timestamp" (format-date-time (poi-medium-creation-time movie) :mail-style t)))
 
 (defun poi-as-json (poi language)
   (let ((*language* language))
-    (json:with-object ()
-      (json-encode poi)
-      (json:with-object-element ("media")
-        (json:with-array ()
-          (dolist (medium (poi-media poi))
-            (json:with-object ()
-              (json-encode medium))))))))
+    (json:encode-object poi)))
 
 (defun pois-as-json (language)
   (json:with-array ()

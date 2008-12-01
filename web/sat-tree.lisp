@@ -3,6 +3,16 @@
 (defclass sat-node (node-extension)
   ((image :accessor image :initarg :image)))
 
+(defmethod json:encode-slots progn ((sat-node sat-node))
+  (json:with-object-element ("satImage")
+    (json:encode-object (image sat-node)))
+  (json:with-object-element ("children")
+    (json:with-array ()
+      (dotimes (i 4)
+        (json:encode-array-element
+         (when (child sat-node i)
+           (store-object-id (image (child sat-node i)))))))))
+
 (defpersistent-class sat-layer ()
   ((name :reader name :initarg :name
                                :index-type unique-index
@@ -65,6 +75,16 @@
                   :initarg :image-geo-box
                   :type geo-box
                   :documentation "can be different from base-node's geo-box")))
+
+(defmethod json:encode-slots progn ((sat-image sat-image))
+  (json:encode-object-element "path" (path sat-image))
+  (json:with-object-element ("geoBox")
+    (json:with-array ()
+      (json:encode-array-elements
+       (aref (image-geo-box sat-image) 0)
+       (aref (image-geo-box sat-image) 1)
+       (aref (image-geo-box sat-image) 2)
+       (aref (image-geo-box sat-image) 3)))))
 
 (defmethod print-object ((obj sat-image) stream)
   (print-unreadable-object (obj stream :type t :identity t)
@@ -202,42 +222,56 @@
 
 ;;; handlers
 
-(defclass sat-tree-kml-handler (page-handler)
+(defclass sat-node-handler (object-handler)
   ())
 
-(defmethod handle ((handler sat-tree-kml-handler))
-  (with-query-params ((path) (name))
-    (let ((path (parse-path path))
-          (layer (find-sat-layer (intern (string-upcase name) #.(find-package "KEYWORD")))))
-      (assert layer nil "Cannnot find layer of name ~s." name)
-      (let* ((quad-node (find-node-with-path *quad-tree* path))
-             (sat-node (find-if (lambda (e) (and (eql (name e) (name layer))
-                                                 (typep e 'sat-node)))
-                                (extensions quad-node))))
-        (assert sat-node nil "There is no sat-node of name ~s at path ~s." name path)
-        (let ((sat-image (image sat-node)))
-          (hunchentoot:handle-if-modified-since (blob-timestamp sat-image))
-          (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
-                                            :root-element "kml")
-            (setf (hunchentoot:header-out :last-modified)
-                  (hunchentoot:rfc-1123-date (blob-timestamp sat-image)))
-            (let ((lod (node-lod sat-node))
-                  (rect (geo-box-rectangle (geo-box sat-node))))
-              (with-element "Document"
-                (kml-region rect lod)
-                (kml-overlay (format nil "http://~a/image/~d" (website-host) (store-object-id sat-image))
-                             (geo-box-rectangle (image-geo-box sat-image))
-                             :draw-order (compute-draw-order sat-node (local-draw-order layer))
-                             ;; :absolute 0
-                             )
-                (let ((*print-case* :downcase))
-                  (dotimes (i 4)
-                    (let ((child (child sat-node i)))
-                      (when child
-                        (kml-network-link (format nil "http://~A/sat-tree-kml?name=~A&path=~{~D~}"
-                                                  (website-host) (name layer) (append path (list i)))
-                                          :rect (geo-box-rectangle (geo-box child))
-                                          :lod (node-lod child))))))))))))))
+(defmethod object-handler-get-object ((handler sat-node-handler))
+  (with-query-params (path name)
+    (let* ((path (parse-path path))
+           (layer (or (find-sat-layer (make-keyword-from-string name))
+                      (error "Cannnot find layer of name ~s." name)))
+           (quad-node (find-node-with-path *quad-tree* path))
+           (sat-node (find-if (lambda (e)
+                                (and (eql (name e) (name layer))
+                                     (typep e 'sat-node)))
+                              (extensions quad-node))))
+      (assert sat-node nil "There is no sat-node of name ~s at path ~s." name path)
+      sat-node)))
+
+(defmethod handle-object :before ((handler sat-node-handler) sat-node)
+  (hunchentoot:handle-if-modified-since (blob-timestamp (image sat-node)))
+  (setf (hunchentoot:header-out :last-modified)
+        (hunchentoot:rfc-1123-date (blob-timestamp (image sat-node)))))
+
+(defclass sat-tree-kml-handler (sat-node-handler)
+  ())
+
+(defmethod handle-object ((handler sat-tree-kml-handler) sat-node)
+  (with-query-params (path name)
+    (with-xml-response (:content-type "text/xml" #+nil"application/vnd.google-earth.kml+xml"
+                                      :root-element "kml")
+      (with-element "Document"
+        (kml-region (geo-box-rectangle (geo-box sat-node)) (node-lod sat-node))
+        (kml-overlay (format nil "http://~a/image/~d" (website-host) (store-object-id (image sat-node)))
+                     (geo-box-rectangle (image-geo-box (image sat-node)))
+                     :draw-order (compute-draw-order sat-node
+                                                     (local-draw-order (find-sat-layer (make-keyword-from-string name))))
+                     ;; :absolute 0
+                     )
+        (dotimes (i 4)
+          (when-let (child (child sat-node i))
+            (kml-network-link (format nil "~(http://~A/sat-tree-kml?name=~A&path=~A~A~)"
+                                      (website-host) name path i)
+                              :rect (geo-box-rectangle (geo-box child))
+                              :lod (node-lod child))))))))
+
+(defclass sat-tree-json-handler (sat-node-handler)
+  ())
+
+(defmethod handle-object ((handler sat-tree-json-handler) sat-node)
+  (with-json-response ()
+    (json:with-object-element ("satNode")
+      (json:encode-object sat-node))))
 
 (defclass sat-root-kml-handler (page-handler)
   ())
@@ -245,7 +279,7 @@
 (defmethod handle ((handler sat-root-kml-handler))
   (with-query-params ((name))
     (let ((*print-case* :downcase)
-          (layer (find-sat-layer (intern (string-upcase name) #.(find-package "KEYWORD")))))
+          (layer (find-sat-layer (make-keyword-from-string name))))
       (assert layer nil "Cannnot find layer of name ~s." name)
       (let ((top-level-nodes (sat-layer-top-level-nodes layer)))
         (assert top-level-nodes)

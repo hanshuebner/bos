@@ -698,7 +698,7 @@ neighbours."
                 left top width height
                 (format-date-time (contract-date contract) :show-time nil))))))
 
-(defmethod json-encode progn ((contract contract))
+(defmethod json:encode-slots progn ((contract contract))
   (destructuring-bind (left top width height) (contract-bounding-box contract)
     (json:encode-object-elements
      "timestamp" (format-date-time (contract-date contract) :mail-style t)
@@ -708,7 +708,7 @@ neighbours."
      "width" width
      "height" height)))
 
-(defmethod json-encode progn ((sponsor sponsor))
+(defmethod json:encode-slots progn ((sponsor sponsor))
   (json:encode-object-elements
    "name" (user-full-name sponsor)
    "country" (or (sponsor-country sponsor) "sponsor-country-unknown")
@@ -718,15 +718,13 @@ neighbours."
   (json:with-object-element ("contracts")
     (json:with-array ()
       (dolist (contract (sponsor-paid-contracts sponsor))
-        (json:with-object ()
-          (json-encode contract))))))
+        (json:encode-object contract)))))
 
 (defun sponsors-as-json (sponsors)
   "Render the SPONSORS as JSON"
   (json:with-array ()
     (dolist (sponsor sponsors)
-      (json:with-object ()
-        (json-encode sponsor)))))
+      (json:encode-object sponsor))))
 
 (defun delete-directory (pathname)
   (cl-fad:delete-directory-and-files pathname :if-does-not-exist :ignore))

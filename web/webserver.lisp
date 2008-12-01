@@ -170,6 +170,7 @@
                                         ("/contract-image" contract-image-handler)
                                         ("/contract" contract-handler)
                                         ("/sat-tree-kml" sat-tree-kml-handler)
+                                        ("/sat-tree-json" sat-tree-json-handler)
                                         ("/sat-root-kml" sat-root-kml-handler)
                                         ("/look-at-allocation-area" look-at-allocation-area-handler)
                                         ("/reports-xml" reports-xml-handler)

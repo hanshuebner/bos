@@ -13,6 +13,10 @@ function NLS(key) {
     return key;                 // for now
 }
 
+function log2(x) {
+    return Math.log(x) / Math.LN2;
+}
+
 var B = createDOMFunc('b', null);
 var OBJECT = createDOMFunc('object');
 var PARAM = createDOMFunc('param');
@@ -87,6 +91,30 @@ function showMedium(e) {
             mediaHandlers[medium.mediumType].makeViewer(medium),
             H3(null, medium.subtitle),
             P(null, medium.description));
+}
+
+var SAT_MAP_SIZE = 28800;
+
+function makePath(size, x, y) {
+    var depth = log2(SAT_MAP_SIZE / size);
+    var path = '';
+    var xPos = 0;
+    var yPos = 0;
+    var currentSize = SAT_MAP_SIZE;
+    for (var i = 0; i < Math.min(depth, 6); i++) {
+        currentSize /= 2;
+        var index
+            = ((x > (xPos + currentSize)) ? 1 : 0)
+            + ((y > (yPos + currentSize)) ? 2 : 0);
+        if (index & 1) {
+            xPos += currentSize;
+        }
+        if (index & 2) {
+            yPos += currentSize;
+        }
+        path += index;
+    }
+    return path;
 }
 
 function makeMap(centerX, centerY) {
@@ -196,6 +224,12 @@ function showOverview() {
     .empty()
     .append(H2(null, NLS('Übersicht')),
             DIV({ 'class': 'map' }, elements));
+
+    $('#left-bar')
+    .empty();
+}
+
+function showSponsors() {
 
     $('#left-bar')
     .empty()
