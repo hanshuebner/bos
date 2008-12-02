@@ -34,3 +34,8 @@ ul#media-list .active {
 .map .icon, .map .contract {
     position: absolute;
 }
+
+#google-map {
+    width: 400px;
+    height: 300px;
+}

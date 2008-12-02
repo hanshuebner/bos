@@ -2,6 +2,7 @@ $ = jQuery;
 
 $(document).ready(init);
 
+var googleMapKey = "ABQIAAAA5meUSZ1F7u46UjJHEXSlJhQkkdysj0TmG3bX_n9aMEXHvIwNeRQLmdjbjYpAetJRis7naMxi-fqMRQ";
 var pois = {};
 var sponsors = [];
 
@@ -163,26 +164,87 @@ function showPOI(e) {
     $('#left-bar')
     .empty()
     .append(UL({ id: 'media-list' }));
-    if (!poi) {
-        showOverview();
-    } else {
-        $('#poi-selector').val(poi.id);
+    $('#poi-selector').val(poi.id);
 
-        document.title = poi.title;
-        $('.yui-b h1').html(poi.title);
-        loadMainInfo(poi);
-        map(function (medium) {
-            if (mediaHandlers[medium.mediumType]) {
-                $('#media-list')
-                .append($(A({ href: '#' },
-                            LI(null,
-                               mediaHandlers[medium.mediumType].icon(medium),
-                               (new Date(medium.timestamp)).renderDate(),
-                               BR(),
-                               B(null, medium.title || medium.name))))
-                        .bind('click', medium, showMedium));
-            }
-        }, poi.media);
+    document.title = poi.title;
+    $('.yui-b h1').html(poi.title);
+    loadMainInfo(poi);
+    map(function (medium) {
+        if (mediaHandlers[medium.mediumType]) {
+            $('#media-list')
+            .append($(A({ href: '#' },
+                        LI(null,
+                           mediaHandlers[medium.mediumType].icon(medium),
+                           (new Date(medium.timestamp)).renderDate(),
+                           BR(),
+                           B(null, medium.title || medium.name))))
+                    .bind('click', medium, showMedium));
+        }
+    }, poi.media);
+}
+
+function pointToPath(point, level) {
+    var x = point.x;
+    var y = point.y;
+    var path = '';
+    for (var i = 0; i < level; i++) {
+        path = ((x & 1) + ((y & 1) << 1)) + path;
+        x >>= 1;
+        y >>= 1;
+    }
+    return path;
+}
+
+function showGoogleMap() {
+    var mapDiv = DIV({ id: 'google-map' });
+    $('#content')
+
+    .empty()
+    .append(H2(null, NLS('Google Map')),
+            mapDiv);
+
+    $('#left-bar')
+    .empty();
+
+    var map = new GMap2(mapDiv);
+
+    var copyright
+        = new GCopyright(1,
+                         new GLatLngBounds(new GLatLng(-90, -180), new GLatLng(90, 180)),
+                         3,
+                         "Copyright BOS Deutschland e.V.");
+    var copyrightCollection = new GCopyrightCollection('Map');
+    copyrightCollection.addCopyright(copyright);
+    var tileLayers = [new GTileLayer(copyrightCollection, 0, 7)];
+    var projection = new GMercatorProjection(7);
+    tileLayers[0].getTileUrl = function(point, level) {
+        if (level < 7) {
+            var path = pointToPath(point, level);
+            log('getTileUrl: x:' + point.x + ' y:' + point.y + ' level:' + level + ' path: ' + path);
+            return '/simple-map/sl_utm50s-0?path=' + path;
+        } else {
+            return null;
+        }
+    }
+    var customMap = new GMapType(tileLayers, projection, 'Map', { errorMessage: NLS("Keine Daten in dieser Zoomstufe") });
+    map.addMapType(customMap);
+    map.addControl(new GLargeMapControl());
+
+    map.setCenter(new GLatLng(0, 0), 1, customMap);
+}
+
+var pages = {
+    overview: showOverview,
+    map: showGoogleMap
+}
+
+function selectPage(e) {
+    var value = e.target.value;
+
+    if (value.match(/^\d+/)) {
+        showPOI(e);
+    } else if (pages[value]) {
+        pages[value](e);
     }
 }
 
@@ -275,7 +337,7 @@ function loadPOIs(data) {
             pois[poi.id] = poi;
             $('#poi-selector').append(OPTION({ value: poi.id }, poi.title));
         }
-        $('#poi-selector').bind('change', null, showPOI);
+        $('#poi-selector').bind('change', null, selectPage);
 
         loadJSONDoc('/sponsors-json').addCallback(loadSponsors);
     }

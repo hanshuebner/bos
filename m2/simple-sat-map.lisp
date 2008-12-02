@@ -39,7 +39,7 @@
              (cl-gd:with-image (tile tile-size tile-size t)
                (let ((tile-source-size (/ size (expt 2 level))))
                  (cl-gd:copy-image map-image tile
-                                   (* x tile-source-size) (* y tile-source-size)
+                                   x y
                                    0 0
                                    tile-source-size tile-source-size
                                    :dest-width tile-size :dest-height tile-size
@@ -59,3 +59,14 @@
         (make-instance 'tree
                        :name basename
                        :root (write-quad 0 0 0))))))
+
+(defclass simple-map-handler (bknr.images::imageproc-handler)
+  ())
+
+(defmethod bknr.web:object-handler-get-object ((handler simple-map-handler))
+  (let ((node (tree-root (tree-with-name (bknr.web:parse-url))))
+        (path (or (bknr.web:query-param "path") "")))
+      (dotimes (i (length path))
+        (setf node (nth (parse-integer path :start i :end (1+ i))
+                        (node-children node))))
+    (node-image node)))

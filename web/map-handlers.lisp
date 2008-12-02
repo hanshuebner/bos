@@ -4,7 +4,8 @@
 
 (defun map-navigator (x y base-url &key formcheck)
   (labels ((pfeil-image (name)
-             (html ((:img :border "0" :width "16" :height "16" :src (format nil "/images/~:[trans.gif~;~:*pfeil-~A.gif~]" name)))))
+             (html ((:img :border "0" :width "16" :height "16"
+                                                  :src (format nil "/images/~:[trans.gif~;~:*pfeil-~A.gif~]" name)))))
            (td-link-to (x y name &optional (link-format (concatenate 'string base-url "~D/~D")))
              (html (:td (if (or (minusp x)
                                 (minusp y)
