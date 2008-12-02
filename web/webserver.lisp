@@ -183,7 +183,7 @@
                                         ("/poi-kml-look-at" poi-kml-look-at-handler)
                                         ("/poi-kml" poi-kml-handler)
                                         ("/map-browser" map-browser-handler)
-                                        ("/simple-map" ssm::simple-map-handler)
+                                        ("/simple-map" ssm:simple-map-handler)
                                         ("/poi-javascript" poi-javascript-handler)
                                         ("/m2-javascript" m2-javascript-handler)
                                         ("/poi-json" poi-json-handler)

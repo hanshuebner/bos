@@ -16,7 +16,10 @@
   :description "worldpay test web server"
   :long-description ""
 
-  :depends-on (:bknr.web :bknr.modules :bos.m2 :cxml)
+  :depends-on (:bknr.web
+               :bknr.modules
+               :bos.m2
+               :cxml)
 
   :components ((:file "packages")
                (:file "utf-8" :depends-on ("packages"))
@@ -25,6 +28,7 @@
                (:file "web-macros" :depends-on ("packages"))
                (:file "web-utils" :depends-on ("packages"))
                (:file "cms-links" :depends-on ("packages"))
+               (:file "simple-sat-map" :depends-on ("packages"))
                (:file "map-handlers" :depends-on ("packages" "web-macros"))
                (:file "map-browser-handler" :depends-on ("packages" "web-macros"))
                (:file "poi-handlers" :depends-on ("dictionary" "packages" "web-macros"))

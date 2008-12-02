@@ -25,3 +25,13 @@
   (:shadowing-import-from :cl-interpol #:quote-meta-chars)
   (:shadowing-import-from :alexandria #:array-index)
   (:export))
+
+(defpackage :simple-sat-map
+  (:use :cl
+        :bknr.indices
+        :bknr.datastore
+        :alexandria)
+  (:shadowing-import-from :alexandria #:array-index)
+  (:nicknames :ssm)
+  (:export #:simple-map-handler
+           #:import))
