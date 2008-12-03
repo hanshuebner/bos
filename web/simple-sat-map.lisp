@@ -10,12 +10,20 @@
 
 (define-persistent-class tree ()
   ((name :read)
+   (size :read)
    (root :read)))
 
 (defun tree-with-name (name)
   (find name (class-instances 'tree)
         :key #'tree-name
         :test #'string-equal))
+
+(defun tree-depth (tree)
+  (values (- (ceiling (log (tree-size tree) 2)) 8)))
+
+(defmethod print-object ((tree tree) stream)
+  (print-store-object (tree stream :type t)
+    (format stream "name ~S size ~D" (tree-name tree) (tree-size tree))))
 
 (define-persistent-class node ()
   ((image :read)
@@ -64,9 +72,41 @@
   ())
 
 (defmethod bknr.web:object-handler-get-object ((handler simple-map-handler))
-  (let ((node (tree-root (tree-with-name (bknr.web:parse-url))))
-        (path (or (bknr.web:query-param "path") "")))
-      (dotimes (i (length path))
+  (let* ((tree (tree-with-name (bknr.web:parse-url)))
+         (node (tree-root tree))
+         (path (or (bknr.web:query-param "path") "")))
+      (dotimes (i (min (length path)
+                       (tree-depth tree)))
         (setf node (nth (parse-integer path :start i :end (1+ i))
                         (node-children node))))
-    (node-image node)))
+      (when (> (length path) (tree-depth tree))
+        (setf (hunchentoot:aux-request-value 'zoom-path)
+              (subseq path (tree-depth tree))))
+      (node-image node)))
+
+(defun zoom-image (store-image zoom-path)
+  (let ((source-size (expt 2 (- 8 (length zoom-path))))
+        (x 0)
+        (y 0)
+        (bit 128))
+    (dotimes (i (length zoom-path))
+      (let ((path-bits (- (char-code (aref zoom-path i)) #.(char-code #\0))))
+        (when (plusp (logand 1 path-bits))
+          (incf x bit))
+        (when (plusp (logand 2 path-bits))
+          (incf y bit))
+        (setf bit (/ bit 2))))
+    (bknr.images:with-store-image (source-image store-image)
+      (cl-gd:with-image (zoomed-image 256 256 t)
+        (cl-gd:copy-image source-image zoomed-image
+                          x y
+                          0 0
+                          source-size source-size
+                          :resize t
+                          :dest-width 256 :dest-height 256)
+        (bknr.images:emit-image-to-browser zoomed-image :png)))))
+
+(defmethod bknr.web:handle-object ((handler simple-map-handler) image)
+  (if-let (zoom-path (hunchentoot:aux-request-value 'zoom-path))
+    (zoom-image image zoom-path)
+    (call-next-method)))

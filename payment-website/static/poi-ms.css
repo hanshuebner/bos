@@ -35,7 +35,15 @@ ul#media-list .active {
     position: absolute;
 }
 
-#google-map {
+#map {
+}
+
+#map.large {
+    width: 600px;
+    height: 600px;
+}
+
+#map.small {
     width: 400px;
-    height: 300px;
+    height: 150px;
 }

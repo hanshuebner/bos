@@ -5,6 +5,7 @@ $(document).ready(init);
 var googleMapKey = "ABQIAAAA5meUSZ1F7u46UjJHEXSlJhQkkdysj0TmG3bX_n9aMEXHvIwNeRQLmdjbjYpAetJRis7naMxi-fqMRQ";
 var pois = {};
 var sponsors = [];
+var mainMap;
 
 Date.prototype.renderDate = function() {
     return this.getDate() + '.' + this.getMonth() + '.' + (this.getYear() > 2000 ? this.getYear() : (1900 + this.getYear()));
@@ -86,7 +87,7 @@ function showMedium(e) {
     $('#media-list *').removeClass('active');
     $(e.target).addClass('active');
 
-    $('#content')
+    $('#content-body')
     .empty()
     .append(H2(null, medium.title),
             mediaHandlers[medium.mediumType].makeViewer(medium),
@@ -118,48 +119,15 @@ function makePath(size, x, y) {
     return path;
 }
 
-function makeMap(centerX, centerY) {
-    var rows = [];
-    
-    for (var y = -1; y < 3; y++) {
-        var tiles = [];
-        for (var x = -1; x < 3; x++) {
-            tiles.push(IMG({ 'class': 'map-tile',
-                             src: '/overview/'
-                             + (Math.floor(centerX / 90) + x) * 90
-                             + '/'
-                             + (Math.floor(centerY / 90) + y) * 90,
-                             width: 90, height: 90 }));
-        }
-        rows.push(DIV(null, tiles));
-    }
-
-    return DIV(null, rows);
-}
-
-function positionMapIcon(img, x, y) {
-    img.style.left = (x - (Math.floor(x / 90) - 1) * 90) + 'px';
-    img.style.top = (y - (Math.floor(y / 90) - 1) * 90) + 'px';
-    return img;
-}
-
 function loadMainInfo(poi) {
 
-    $('#content')
+    $('#content-body')
     .empty()
     .append(H2(null, poi.subtitle),
-            DIV({ 'class': 'map' },
-                makeMap(poi.x, poi.y),
-                positionMapIcon(IMG({ 'class': 'icon',
-                                      src: '/images/' + poi.icon + '.gif',
-                                      width: 16, height: 16}),
-                                poi.x - 8, poi.y - 8)),
             P(null, poi.description));
 }
 
-function showPOI(e) {
-    var poi = pois[(e.target && e.target.value) || e.data];
-
+function showPOI(poi) {
 
     $('#left-bar')
     .empty()
@@ -181,6 +149,8 @@ function showPOI(e) {
                     .bind('click', medium, showMedium));
         }
     }, poi.media);
+
+    mainMap.zoomTo(poi.x, poi.y);
 }
 
 function pointToPath(point, level) {
@@ -195,18 +165,19 @@ function pointToPath(point, level) {
     return path;
 }
 
-function showGoogleMap() {
-    var mapDiv = DIV({ id: 'google-map' });
-    $('#content')
-
+function showOverview() {
+    $('#content-body')
     .empty()
-    .append(H2(null, NLS('Google Map')),
-            mapDiv);
+    .append(H2(null, NLS('Google Map')));
 
     $('#left-bar')
     .empty();
 
-    var map = new GMap2(mapDiv);
+    mainMap.overview();
+}
+
+function Map() {
+    this.map = new GMap2($('#map')[0]);
 
     var copyright
         = new GCopyright(1,
@@ -215,10 +186,10 @@ function showGoogleMap() {
                          "Copyright BOS Deutschland e.V.");
     var copyrightCollection = new GCopyrightCollection('Map');
     copyrightCollection.addCopyright(copyright);
-    var tileLayers = [new GTileLayer(copyrightCollection, 0, 7)];
-    var projection = new GMercatorProjection(7);
+    var tileLayers = [new GTileLayer(copyrightCollection, 0, 12)];
+    var projection = new GMercatorProjection(12);
     tileLayers[0].getTileUrl = function(point, level) {
-        if (level < 7) {
+        if (level < 15) {
             var path = pointToPath(point, level);
             log('getTileUrl: x:' + point.x + ' y:' + point.y + ' level:' + level + ' path: ' + path);
             return '/simple-map/sl_utm50s-0?path=' + path;
@@ -227,22 +198,63 @@ function showGoogleMap() {
         }
     }
     var customMap = new GMapType(tileLayers, projection, 'Map', { errorMessage: NLS("Keine Daten in dieser Zoomstufe") });
-    map.addMapType(customMap);
-    map.addControl(new GLargeMapControl());
 
-    map.setCenter(new GLatLng(0, 0), 1, customMap);
+    this.map.addMapType(customMap);
+
+    this.controls = [ new GLargeMapControl() ];
+
+    this.addControls = function() {
+        for (var i in this.controls) {
+            this.map.addControl(this.controls[i]);
+        }
+    }
+    this.removeControls = function() {
+        for (var i in this.controls) {
+            this.map.removeControl(this.controls[i]);
+        }
+    }
+
+    this.map.enableContinuousZoom();
+    this.map.enableScrollWheelZoom();
+
+    this.overview = function() {
+        $('#map').removeClass('small');
+        $('#map').addClass('large');
+        this.addControls();
+        this.map.setCenter(projection.fromPixelToLatLng(new GPoint(7000, 6350), 6), 2, customMap);
+        this.map.checkResize();
+    }
+
+    this.zoomTo = function (x, y) {
+        $('#map').removeClass('large');
+        $('#map').addClass('small');
+        this.removeControls();
+        this.map.setCenter(projection.fromPixelToLatLng(new GPoint(x, y), 6), 6);
+        this.map.checkResize();
+    }
+
+    this.overview();
+
+    function pointToLatLng(x, y) {
+        return projection.fromPixelToLatLng(new GPoint(x, y), 6);
+    }
+
+    for (var i in pois) {
+        var marker = new GMarker(pointToLatLng(pois[i].x, pois[i].y));
+        GEvent.addListener(marker, "click", partial(showPOI, pois[i]));
+        this.map.addOverlay(marker);
+    }
 }
 
 var pages = {
     overview: showOverview,
-    map: showGoogleMap
 }
 
 function selectPage(e) {
     var value = e.target.value;
 
     if (value.match(/^\d+/)) {
-        showPOI(e);
+        showPOI(pois[value]);
     } else if (pages[value]) {
         pages[value](e);
     }
@@ -251,44 +263,9 @@ function selectPage(e) {
 function showSponsor(e) {
     var sponsor = e.data;
     var contract = sponsor.contracts[0];
-    $('#content')
+    $('#content-body')
     .empty()
-    .append(H2(null, sponsor.name),
-            DIV({ 'class': 'map' },
-                makeMap(contract.left, contract.top),
-                positionMapIcon(IMG({ 'class': 'contract',
-                                      src: '/contract-image/' + contract.id,
-                                      width: contract.width, height: contract.height}),
-                                contract.left, contract.top))
-           );
-}
-
-function showOverview() {
-
-    $('#poi-selector').val('overview');
-    
-    var elements = [];
-    elements.push(IMG({ src: '/infosystem/bilder/karte_uebersicht.jpg', width: 360, height: 360 }));
-    for (var i in pois) {
-        var poi = pois[i];
-        var link = A({ href: '#' },
-                     IMG({ 'class': 'icon',
-                            src: '/images/' + poi.icon + '.gif',
-                            width: 16, height: 16,
-                            title: poi.title,
-                            style: 'left: ' + (Math.round(poi.x / 30) - 8) + 'px; '
-                                   + 'top: ' + (Math.round(poi.y / 30) - 8) + 'px' }));
-        $(link).bind('click', poi.id, showPOI);
-        elements.push(link);
-    }
-
-    $('#content')
-    .empty()
-    .append(H2(null, NLS('Übersicht')),
-            DIV({ 'class': 'map' }, elements));
-
-    $('#left-bar')
-    .empty();
+    .append(H2(null, sponsor.name));
 }
 
 function showSponsors() {
@@ -320,7 +297,7 @@ function loadSponsors(data) {
 
         var poi_id = document.location.hash.replace(/#/, "");
         if (poi_id) {
-            showPOI({ data: poi_id });
+            showPOI(pois[poi_id]);
         } else {
             showOverview();
         }
@@ -339,6 +316,8 @@ function loadPOIs(data) {
         }
         $('#poi-selector').bind('change', null, selectPage);
 
+        mainMap = new Map();
+
         loadJSONDoc('/sponsors-json').addCallback(loadSponsors);
     }
     catch (e) {
@@ -347,7 +326,7 @@ function loadPOIs(data) {
 }
 
 function init() {
-    $('#small-map a').bind('click', showPOI);
+    $('#small-map a').bind('click', showOverview);
 
     loadJSONDoc('/poi-json').addCallback(loadPOIs);
 }
