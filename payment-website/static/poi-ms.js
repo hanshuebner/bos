@@ -150,7 +150,8 @@ function showPOI(poi) {
         }
     }, poi.media);
 
-    mainMap.zoomTo(poi.x, poi.y);
+    mainMap.hide();
+//    mainMap.zoomTo(poi.x, poi.y);
 }
 
 function pointToPath(point, level) {
@@ -192,7 +193,7 @@ function Map() {
         if (level < 15) {
             var path = pointToPath(point, level);
             log('getTileUrl: x:' + point.x + ' y:' + point.y + ' level:' + level + ' path: ' + path);
-            return '/simple-map/sl_utm50s-0?path=' + path;
+            return '/simple-map/sat-2002?path=' + path;
         } else {
             return null;
         }
@@ -217,7 +218,8 @@ function Map() {
     this.map.enableContinuousZoom();
     this.map.enableScrollWheelZoom();
 
-    this.overview = function() {
+    this.overview = function () {
+        this.show();
         $('#map').removeClass('small');
         $('#map').addClass('large');
         this.addControls();
@@ -231,6 +233,14 @@ function Map() {
         this.removeControls();
         this.map.setCenter(projection.fromPixelToLatLng(new GPoint(x, y), 6), 6);
         this.map.checkResize();
+    }
+
+    this.hide = function () {
+        $('#map').css('display', 'none');
+    }
+
+    this.show = function () {
+        $('#map').css('display', 'block');
     }
 
     this.overview();

@@ -9,83 +9,114 @@
 ;; having one image and four children.
 
 (define-persistent-class tree ()
-  ((name :read)
-   (size :read)
-   (root :read)))
+  ((root :read)))
 
-(defun tree-with-name (name)
-  (find name (class-instances 'tree)
-        :key #'tree-name
-        :test #'string-equal))
+(defmethod destroy-object :before ((tree tree))
+  (labels
+      ((descend (node)
+         (when (node-children node)
+           (dolist (child (node-children node))
+             (descend child)))
+         (delete-object node)))
+    (descend (tree-root tree))))
 
-(defun tree-depth (tree)
-  (values (- (ceiling (log (tree-size tree) 2)) 8)))
+(defparameter *levels* 6)
+(defparameter *tree-size* 16384)
+(defparameter *tile-size* 256)
 
-(defmethod print-object ((tree tree) stream)
-  (print-store-object (tree stream :type t)
-    (format stream "name ~S size ~D" (tree-name tree) (tree-size tree))))
+(defun make-tree ()
+  (labels
+      ((make-quad (level)
+         (apply #'make-instance 'node
+                (when (< level *levels*)
+                  (let ((next-level (1+ level)))
+                    (list :children
+                          (list (make-quad next-level)
+                                (make-quad next-level)
+                                (make-quad next-level)
+                                (make-quad next-level))))))))
+        (make-instance 'tree
+                       :root (make-quad 0))))
+
+(defun get-tree ()
+  (or (first (class-instances 'tree))
+      (make-tree)))
 
 (define-persistent-class node ()
-  ((image :read)
+  ((images :read :initform (make-hash-table :test #'equal))
    (children :read :initform nil)))
 
-(defun import-image (image-filename &key (tile-size 256))
-  (assert (= (log tile-size 2) (round (log tile-size 2)))
-          () "TILE-SIZE needs to be power of two")
+(defmethod destroy-object :before ((node node))
+  (loop
+     for image being the hash-values of (node-images node)
+     do (unless (object-destroyed-p image)
+          (delete-object image))))
+
+(defun node-image (node layer-name)
+  (gethash layer-name (node-images node)))
+
+(defun (setf node-image) (new-image node layer-name)
+  (setf (gethash layer-name (node-images node)) new-image))
+
+(defun import-image (image-filename layer-name)
   (cl-gd:with-image-from-file (map-image image-filename)
     (format t "~&; read image ~A, width ~A height ~A~%"
             image-filename (cl-gd:image-width map-image) (cl-gd:image-height map-image))
-    (let* ((basename (pathname-name image-filename))
-           (pow (ceiling (log (max (cl-gd:image-height map-image)
-                                   (cl-gd:image-width map-image)) 2)))
-           (size (expt 2 pow))
-           (levels (floor (- pow (log tile-size 2)))))
-      (format t "~&; pow ~A size ~A levels ~A~%" pow size levels)
+    (let* ((basename (pathname-name image-filename)))
       (labels
-          ((write-quad (x y level)
+          ((make-image (node x y level)
              (format t "; ~A ~A ~A~%" x y level)
-             (cl-gd:with-image (tile tile-size tile-size t)
-               (let ((tile-source-size (/ size (expt 2 level))))
+             (cl-gd:with-image (tile *tile-size* *tile-size* t)
+               (let ((tile-source-size (/ *tree-size* (expt 2 level)))
+                     (image-name (format nil "~A-~A-~A-~A" basename level x y)))
                  (cl-gd:copy-image map-image tile
                                    x y
                                    0 0
                                    tile-source-size tile-source-size
-                                   :dest-width tile-size :dest-height tile-size
+                                   :dest-width *tile-size* :dest-height *tile-size*
                                    :resample t :resize t)
-                 (apply #'make-instance 'node
-                        :image (bknr.images:make-store-image :image tile
-                                                             :name (format nil "~A-~A-~A-~A"
-                                                                           basename level x y))
-                        (when (< level levels)
-                          (let ((next-tile-source-size (/ tile-source-size 2))
-                                (next-level (1+ level)))
-                            (list :children
-                                  (list (write-quad x y next-level)
-                                        (write-quad (+ x next-tile-source-size) y next-level)
-                                        (write-quad x (+ y next-tile-source-size) next-level)
-                                        (write-quad (+ x next-tile-source-size) (+ y next-tile-source-size) next-level))))))))))
-        (make-instance 'tree
-                       :name basename
-                       :root (write-quad 0 0 0))))))
+                 (when-let (old-image (bknr.images:store-image-with-name image-name))
+                   (delete-object old-image))
+                 (setf (node-image node layer-name)
+                       (bknr.images:make-store-image :image tile
+                                                     :name image-name))
+                 (when (< level *levels*)
+                   (let ((next-tile-source-size (/ tile-source-size 2))
+                         (next-level (1+ level)))
+                     (destructuring-bind (one two three four) (node-children node)
+                       (make-image one x y next-level)
+                       (make-image two (+ x next-tile-source-size) y next-level)
+                       (make-image three x (+ y next-tile-source-size) next-level)
+                       (make-image four (+ x next-tile-source-size) (+ y next-tile-source-size) next-level))))))))
+        (make-image (tree-root (get-tree)) 0 0 0)))))
+
+(defun transparent-image ()
+  (or (bknr.images:store-image-with-name "transparent")
+      (cl-gd:with-image* (*tile-size* *tile-size* nil)
+        (setf (cl-gd:transparent-color)
+              (cl-gd:allocate-color 0 0 0 :alpha 127))
+        (bknr.images:make-store-image :name "transparent" :type :gif))))
 
 (defclass simple-map-handler (bknr.images::imageproc-handler)
   ())
 
 (defmethod bknr.web:object-handler-get-object ((handler simple-map-handler))
-  (let* ((tree (tree-with-name (bknr.web:parse-url)))
+  (let* ((layer (bknr.web:parse-url))
+         (tree (get-tree))
          (node (tree-root tree))
          (path (or (bknr.web:query-param "path") "")))
-      (dotimes (i (min (length path)
-                       (tree-depth tree)))
-        (setf node (nth (parse-integer path :start i :end (1+ i))
-                        (node-children node))))
-      (when (> (length path) (tree-depth tree))
-        (setf (hunchentoot:aux-request-value 'zoom-path)
-              (subseq path (tree-depth tree))))
-      (node-image node)))
+    (dotimes (i (min (length path)
+                     *levels*))
+      (setf node (nth (parse-integer path :start i :end (1+ i))
+                      (node-children node))))
+    (when (> (length path) *levels*)
+      (setf (hunchentoot:aux-request-value 'zoom-path)
+            (subseq path *levels*)))
+    (or (node-image node layer)
+        (transparent-image))))
 
 (defun zoom-image (store-image zoom-path)
-  (let ((source-size (expt 2 (- 8 (length zoom-path))))
+  (let ((source-size (floor (expt 2 (- (log *tile-size* 2) (length zoom-path)))))
         (x 0)
         (y 0)
         (bit 128))
@@ -97,16 +128,17 @@
           (incf y bit))
         (setf bit (/ bit 2))))
     (bknr.images:with-store-image (source-image store-image)
-      (cl-gd:with-image (zoomed-image 256 256 t)
+      (cl-gd:with-image (zoomed-image *tile-size* *tile-size* t)
         (cl-gd:copy-image source-image zoomed-image
                           x y
                           0 0
                           source-size source-size
                           :resize t
-                          :dest-width 256 :dest-height 256)
+                          :dest-width *tile-size* :dest-height *tile-size*)
         (bknr.images:emit-image-to-browser zoomed-image :png)))))
 
-(defmethod bknr.web:handle-object ((handler simple-map-handler) image)
+(defmethod bknr.web:handle-object ((handler simple-map-handler) (image bknr.images:store-image))
   (if-let (zoom-path (hunchentoot:aux-request-value 'zoom-path))
     (zoom-image image zoom-path)
     (call-next-method)))
+
