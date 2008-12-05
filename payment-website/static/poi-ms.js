@@ -151,7 +151,6 @@ function showPOI(poi) {
     }, poi.media);
 
     mainMap.hide();
-//    mainMap.zoomTo(poi.x, poi.y);
 }
 
 function pointToPath(point, level) {
@@ -180,25 +179,34 @@ function showOverview() {
 function Map() {
     this.map = new GMap2($('#map')[0]);
 
-    var copyright
-        = new GCopyright(1,
-                         new GLatLngBounds(new GLatLng(-90, -180), new GLatLng(90, 180)),
-                         3,
-                         "Copyright BOS Deutschland e.V.");
     var copyrightCollection = new GCopyrightCollection('Map');
-    copyrightCollection.addCopyright(copyright);
-    var tileLayers = [new GTileLayer(copyrightCollection, 0, 12)];
-    var projection = new GMercatorProjection(12);
-    tileLayers[0].getTileUrl = function(point, level) {
-        if (level < 15) {
-            var path = pointToPath(point, level);
-            log('getTileUrl: x:' + point.x + ' y:' + point.y + ' level:' + level + ' path: ' + path);
-            return '/simple-map/contracts?path=' + path;
-        } else {
-            return null;
+    copyrightCollection.addCopyright(new GCopyright(1,
+                                                    new GLatLngBounds(new GLatLng(-90, -180), new GLatLng(90, 180)),
+                                                    3,
+                                                    "Copyright BOS Deutschland e.V."));
+
+    this.layers = {};
+
+    this.makeLayer = function (name) {
+        var tileLayer = new GTileLayer(copyrightCollection, 0, 12);
+        tileLayer.getTileUrl = function(point, level) {
+            if (level < 15) {
+                var path = pointToPath(point, level);
+//                log('getTileUrl: x:' + point.x + ' y:' + point.y + ' level:' + level + ' path: ' + path);
+                return '/simple-map/' + name + '?path=' + path;
+            } else {
+                return null;
+            }
         }
+        this.layers[name] = tileLayer;
+        return tileLayer;
     }
-    var customMap = new GMapType(tileLayers, projection, 'Map', { errorMessage: NLS("Keine Daten in dieser Zoomstufe") });
+
+    var projection = new GMercatorProjection(12);
+    var customMap = new GMapType(
+        [ this.makeLayer('sat-2002'),
+          this.makeLayer('contracts') ],
+        projection, 'Map', { errorMessage: NLS("Keine Daten in dieser Zoomstufe") });
 
     this.map.addMapType(customMap);
 
@@ -218,6 +226,17 @@ function Map() {
     this.map.enableContinuousZoom();
     this.map.enableScrollWheelZoom();
 
+    this.mapClicked = function (overlay, latlng, overlaylatlng) {
+        log('map clicked, overlay: ' + overlay + ' latlng: ' + latlng + ' overlaylatlng: ' + overlaylatlng);
+    }
+
+    this.moveEnd = function () {
+        log('map has moved');
+    }
+
+    GEvent.addListener(this.map, "click", bind(this.mapClicked, this));
+    GEvent.addListener(this.map, "moveend", bind(this.moveEnd, this));
+
     this.overview = function () {
         this.show();
         $('#map').removeClass('small');
@@ -227,12 +246,16 @@ function Map() {
         this.map.checkResize();
     }
 
-    this.zoomTo = function (x, y) {
+    this.poiDetail = function (x, y) {
         $('#map').removeClass('large');
         $('#map').addClass('small');
         this.removeControls();
         this.map.setCenter(projection.fromPixelToLatLng(new GPoint(x, y), 6), 6);
         this.map.checkResize();
+    }
+
+    this.zoomTo = function (x, y, level) {
+        this.map.setCenter(projection.fromPixelToLatLng(new GPoint(x, y), 6), level);
     }
 
     this.hide = function () {
@@ -254,10 +277,21 @@ function Map() {
         GEvent.addListener(marker, "click", partial(showPOI, pois[i]));
         this.map.addOverlay(marker);
     }
+
+    this.setSponsorMarker = function (sponsor) {
+        var position = pointToLatLng(sponsor.contracts[0].centerX, sponsor.contracts[0].centerY);
+        if (this.sponsorMarker) {
+            this.sponsorMarker.setLatLng(position);
+        } else {
+            this.sponsorMarker = new GMarker(position);
+            this.map.addOverlay(this.sponsorMarker);
+        }
+    }
 }
 
 var pages = {
     overview: showOverview,
+    sponsors: showSponsors
 }
 
 function selectPage(e) {
@@ -276,6 +310,11 @@ function showSponsor(e) {
     $('#content-body')
     .empty()
     .append(H2(null, sponsor.name));
+
+    mainMap.zoomTo(contract.left, contract.top, 8);
+    mainMap.setSponsorMarker(sponsor);
+    
+    // Math.max(contract.width, contract.height)
 }
 
 function showSponsors() {
@@ -296,6 +335,8 @@ function showSponsors() {
                        " ", sponsor.contracts[0].count, " m²")))
                 .bind('click', sponsor, showSponsor));
     }, sponsors.slice(0, 10));
+
+    mainMap.overview();
 }
 
 function loadSponsors(data) {

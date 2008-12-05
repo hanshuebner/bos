@@ -700,13 +700,16 @@ neighbours."
 
 (defmethod json:encode-slots progn ((contract contract))
   (destructuring-bind (left top width height) (contract-bounding-box contract)
-    (json:encode-object-elements
-     "timestamp" (format-date-time (contract-date contract) :mail-style t)
-     "count" (length (contract-m2s contract))
-     "top" top
-     "left" left
-     "width" width
-     "height" height)))
+    (destructuring-bind (center-x center-y) (contract-center contract)
+      (json:encode-object-elements
+       "timestamp" (format-date-time (contract-date contract) :mail-style t)
+       "count" (length (contract-m2s contract))
+       "top" top
+       "left" left
+       "width" width
+       "height" height
+       "centerX" center-x
+       "centerY" center-y))))
 
 (defmethod json:encode-slots progn ((sponsor sponsor))
   (json:encode-object-elements
