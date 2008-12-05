@@ -193,7 +193,7 @@ function Map() {
         if (level < 15) {
             var path = pointToPath(point, level);
             log('getTileUrl: x:' + point.x + ' y:' + point.y + ' level:' + level + ' path: ' + path);
-            return '/simple-map/sat-2002?path=' + path;
+            return '/simple-map/contracts?path=' + path;
         } else {
             return null;
         }
@@ -223,7 +223,7 @@ function Map() {
         $('#map').removeClass('small');
         $('#map').addClass('large');
         this.addControls();
-        this.map.setCenter(projection.fromPixelToLatLng(new GPoint(7000, 6350), 6), 2, customMap);
+        this.map.setCenter(projection.fromPixelToLatLng(new GPoint(7000, 6350), 6), 3, customMap);
         this.map.checkResize();
     }
 

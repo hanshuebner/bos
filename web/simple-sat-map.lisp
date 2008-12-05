@@ -8,8 +8,18 @@
 ;; directions.  It is then stored in a quad tree, with each node
 ;; having one image and four children.
 
+(defparameter *levels* 6)
+(defparameter *tree-size* 16384)
+(defparameter *tile-size* 256)
+(defparameter *tile-pow* (floor (log *tile-size* 2)))
+
 (define-persistent-class tree ()
-  ((root :read)))
+  ((root :read)
+   (layers :read :initform nil)))
+
+(defmethod print-object ((tree tree) stream)
+  (print-store-object (tree stream :type t)
+    (format stream "LAYERS: ~S" (tree-layers tree))))
 
 (defmethod destroy-object :before ((tree tree))
   (labels
@@ -20,31 +30,46 @@
          (delete-object node)))
     (descend (tree-root tree))))
 
-(defparameter *levels* 6)
-(defparameter *tree-size* 16384)
-(defparameter *tile-size* 256)
-
 (defun make-tree ()
   (labels
-      ((make-quad (level)
+      ((make-quad (x y level)
          (apply #'make-instance 'node
+                :x x :y y :level level
                 (when (< level *levels*)
-                  (let ((next-level (1+ level)))
+                  (let* ((next-level (1+ level))
+                         (next-tile-size (/ *tree-size* (expt 2 next-level))))
                     (list :children
-                          (list (make-quad next-level)
-                                (make-quad next-level)
-                                (make-quad next-level)
-                                (make-quad next-level))))))))
+                          (list (make-quad x y next-level)
+                                (make-quad (+ x next-tile-size) y next-level)
+                                (make-quad x (+ y next-tile-size) next-level)
+                                (make-quad (+ x next-tile-size) (+ y next-tile-size) next-level))))))))
         (make-instance 'tree
-                       :root (make-quad 0))))
+                       :root (make-quad 0 0 0))))
 
 (defun get-tree ()
   (or (first (class-instances 'tree))
       (make-tree)))
 
 (define-persistent-class node ()
-  ((images :read :initform (make-hash-table :test #'equal))
+  ((x :read)
+   (y :read)
+   (level :read)
+   (images :read :initform (make-hash-table))
    (children :read :initform nil)))
+
+(defun node-pixel-size (node)
+  (/ *tree-size* (expt 2 (node-level node)) 256))
+
+(defun node-size (node)
+  (/ *tree-size* (expt 2 (node-level node))))
+
+(defmethod print-object ((node node) stream)
+  (print-store-object (node stream :type t)
+    (format stream "X: ~A Y: ~A LEVEL: ~A IMAGES: ~A CHILDREN: ~:[NO~;YES~]"
+            (node-x node) (node-y node) (node-level node)
+            (loop for layer being the hash-keys of (node-images node)
+                 collect layer)
+            (node-children node))))
 
 (defmethod destroy-object :before ((node node))
   (loop
@@ -52,11 +77,44 @@
      do (unless (object-destroyed-p image)
           (delete-object image))))
 
-(defun node-image (node layer-name)
-  (gethash layer-name (node-images node)))
+(defun find-m2 (x y)
+  (when (and (< x bos.m2.config:+width+)
+             (< y bos.m2.config:+width+))
+    (bos.m2:get-m2 x y)))
+
+(defun generate-contract-image (node)
+  (cl-gd:with-image* (256 256 t)
+    (setf (cl-gd:save-alpha-p) t)
+    (let ((transparent (cl-gd:find-color 255 255 255 :alpha 127))
+          (factor (expt 2 (- *levels* (node-level node)))))
+      (cl-gd:do-rows (y)
+        (cl-gd:do-pixels-in-row (x)
+          (let ((m2 (find-m2 (+ (node-x node)
+                                (* x factor))
+                             (+ (node-y node)
+                                (* y factor)))))
+            (setf (cl-gd:raw-pixel)
+                  (if (and m2 (bos.m2:m2-contract m2))
+                      (apply #'cl-gd:find-color (bos.m2:contract-color (bos.m2:m2-contract m2)))
+                      transparent))))))
+    (with-transaction (:generate-contract-image)
+      (setf (node-image node :contracts)
+            (bknr.images:make-store-image :name (format nil "contracts-~A-~A-~A"
+                                                        (node-level node)
+                                                        (node-x node)
+                                                        (node-y node))
+                                          :if-exists :kill)))))
+
+(defgeneric node-image (node layer-name)
+  (:method (node layer-name)
+    (gethash (find-keyword layer-name) (node-images node)))
+  (:method (node (layer-name (eql :contracts)))
+    (or (call-next-method)
+        (generate-contract-image node))))
 
 (defun (setf node-image) (new-image node layer-name)
-  (setf (gethash layer-name (node-images node)) new-image))
+  (pushnew layer-name (slot-value (get-tree) 'layers))
+  (setf (gethash (find-keyword layer-name) (node-images node)) new-image))
 
 (defun import-image (image-filename layer-name)
   (cl-gd:with-image-from-file (map-image image-filename)
@@ -75,11 +133,11 @@
                                    tile-source-size tile-source-size
                                    :dest-width *tile-size* :dest-height *tile-size*
                                    :resample t :resize t)
-                 (when-let (old-image (bknr.images:store-image-with-name image-name))
-                   (delete-object old-image))
-                 (setf (node-image node layer-name)
-                       (bknr.images:make-store-image :image tile
-                                                     :name image-name))
+                 (with-transaction (:make-tile)
+                   (setf (node-image node layer-name)
+                         (bknr.images:make-store-image :image tile
+                                                       :name image-name
+                                                       :if-exists :kill)))
                  (when (< level *levels*)
                    (let ((next-tile-source-size (/ tile-source-size 2))
                          (next-level (1+ level)))
@@ -100,8 +158,11 @@
 (defclass simple-map-handler (bknr.images::imageproc-handler)
   ())
 
+(defun find-keyword (name)
+  (find-symbol (string-upcase (string name)) :keyword))
+
 (defmethod bknr.web:object-handler-get-object ((handler simple-map-handler))
-  (let* ((layer (bknr.web:parse-url))
+  (let* ((layer (find-keyword (bknr.web:parse-url)))
          (tree (get-tree))
          (node (tree-root tree))
          (path (or (bknr.web:query-param "path") "")))
@@ -113,7 +174,8 @@
       (setf (hunchentoot:aux-request-value 'zoom-path)
             (subseq path *levels*)))
     (or (node-image node layer)
-        (transparent-image))))
+        (when (find layer (tree-layers tree))
+          (transparent-image)))))
 
 (defun zoom-image (store-image zoom-path)
   (let ((source-size (floor (expt 2 (- (log *tile-size* 2) (length zoom-path)))))
@@ -128,17 +190,47 @@
           (incf y bit))
         (setf bit (/ bit 2))))
     (bknr.images:with-store-image (source-image store-image)
-      (cl-gd:with-image (zoomed-image *tile-size* *tile-size* t)
-        (cl-gd:copy-image source-image zoomed-image
+      (cl-gd:with-image* (*tile-size* *tile-size* t)
+        (setf (cl-gd:save-alpha-p) t)
+        (cl-gd:fill-image 0 0 :color (cl-gd:find-color 255 255 255 :alpha 127))
+        (cl-gd:copy-image source-image cl-gd:*default-image*
                           x y
                           0 0
                           source-size source-size
                           :resize t
                           :dest-width *tile-size* :dest-height *tile-size*)
-        (bknr.images:emit-image-to-browser zoomed-image :png)))))
+        (bknr.images:emit-image-to-browser cl-gd:*default-image* :png)))))
 
 (defmethod bknr.web:handle-object ((handler simple-map-handler) (image bknr.images:store-image))
   (if-let (zoom-path (hunchentoot:aux-request-value 'zoom-path))
     (zoom-image image zoom-path)
     (call-next-method)))
 
+(defun contracts-changed (tree contract &key type)
+  (declare (ignore type tree))
+  (destructuring-bind (width height) (cddr (bos.m2:contract-bounding-box contract))
+    (let ((contract-size (max width height)))
+      (labels
+          ((recur (node)
+             (when (>= contract-size (node-pixel-size node))
+               ;; contract is likely to be visible at this resolution, remove tile images so that they are regenerated
+               (when-let (image (gethash :contracts (node-images node)))
+                 (format t "; contract image of ~A deleted~%" node)
+                 (delete-file (blob-pathname image))
+                 (delete-object image)
+                 (setf (node-image node :contracts) nil)))
+             (dolist (child (node-children node))
+               (when (geometry:rectangle-intersects-p (bos.m2:contract-bounding-box contract)
+                                                      (list (node-x child) (node-y child)
+                                                            (node-size child) (node-size child)))
+                 (recur child)))))
+        (recur (tree-root (get-tree)))))))
+
+(defun init-simple-sat-map ()
+  (geometry:register-rect-subscriber geometry:*rect-publisher*
+                                     'tree
+                                     (list 0 0 bos.m2.config:+width+ bos.m2.config:+width+)
+                                     'contracts-changed))
+
+(bos.m2:register-transient-init-function 'init-simple-sat-map
+                                         'geometry:make-rect-publisher)
