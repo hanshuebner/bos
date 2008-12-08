@@ -4,17 +4,29 @@ h3 { font-size: 120% }
 
 ul#media-list li {
     position: relative;
+    height: 64px;
+    margin-left: 62px;
+}
+
+ul#media-list li img {
+    position: absolute;
+    left: -62px;
+    top: 2px;
+}
+
+ul#poi-list li {
+    position: relative;
     height: 44px;
     margin-left: 42px;
 }
 
-ul#media-list li img {
+ul#poi-list li img {
     position: absolute;
     left: -42px;
     top: 2px;
 }
 
-ul#media-list .active {
+ul#media-list .active, ul#poi-list .active {
     background-color: #0f0;
 }
 

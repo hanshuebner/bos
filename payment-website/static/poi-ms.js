@@ -28,7 +28,7 @@ var APPLET = createDOMFunc('applet');
 var mediaHandlers = {
     image: {
         icon: function (medium) {
-            return IMG({ src: '/image/' + medium.id + '/thumbnail,,40,40', width: 40, height: 40 })
+            return IMG({ src: '/image/' + medium.id + '/thumbnail,,60,60', width: 60, height: 60 })
         },
         makeViewer: function (medium) {
             return IMG({ src: '/image/' + medium.id,
@@ -38,7 +38,7 @@ var mediaHandlers = {
     },
     panorama: {
         icon: function (medium) {
-            return IMG({ src: '/static/panorama-icon.gif', width: 40, height: 40 })
+            return IMG({ src: '/static/panorama-icon.gif', width: 60, height: 60 })
         },
         makeViewer: function (medium) {
             return APPLET({ id: 'applet',
@@ -52,7 +52,7 @@ var mediaHandlers = {
     },
     movie: {
         icon: function (medium) {
-            return IMG({ src: '/static/movie-icon.gif', width: 40, height: 40 })
+            return IMG({ src: '/static/movie-icon.gif', width: 60, height: 60 })
         },
         makeViewer: function (medium) {
             /* can't use DOM objects like below because IE does not grok it
@@ -128,6 +128,9 @@ function loadMainInfo(poi) {
 }
 
 function showPOI(poi) {
+    if (poi.data) {
+        poi = poi.data;
+    }
 
     $('#left-bar')
     .empty()
@@ -140,11 +143,9 @@ function showPOI(poi) {
     map(function (medium) {
         if (mediaHandlers[medium.mediumType]) {
             $('#media-list')
-            .append($(A({ href: '#' },
-                        LI(null,
+            .append($(LI(null,
+                        A({ href: '#' },
                            mediaHandlers[medium.mediumType].icon(medium),
-                           (new Date(medium.timestamp)).renderDate(),
-                           BR(),
                            B(null, medium.title || medium.name))))
                     .bind('click', medium, showMedium));
         }
@@ -168,11 +169,22 @@ function pointToPath(point, level) {
 function showOverview() {
     $('#content-body')
     .empty()
-    .append(H2(null, NLS('Google Map')));
+    .append(H2(null, NLS('Übersicht')));
 
     $('#left-bar')
-    .empty();
+    .empty()
+    .append(UL({ id: 'poi-list' }));
 
+    for (var i in pois) {
+        var poi = pois[i];
+        $('#poi-list')
+        .append($(LI(null,
+                     A({ href: '#' },
+                       IMG({ src: poi.mapIcon }),
+                       B(poi.title))))
+                .bind('click', poi, showPOI));
+    }
+    
     mainMap.overview();
 }
 
@@ -188,7 +200,7 @@ function Map() {
     this.layers = {};
 
     this.makeLayer = function (name) {
-        var tileLayer = new GTileLayer(copyrightCollection, 0, 12);
+        var tileLayer = new GTileLayer(copyrightCollection, 0, 14);
         tileLayer.getTileUrl = function(point, level) {
             if (level < 15) {
                 var path = pointToPath(point, level);
@@ -202,7 +214,7 @@ function Map() {
         return tileLayer;
     }
 
-    var projection = new GMercatorProjection(12);
+    var projection = new GMercatorProjection(14);
     var customMap = new GMapType(
         [ this.makeLayer('sat-2002'),
           this.makeLayer('contracts') ],
@@ -223,8 +235,8 @@ function Map() {
         }
     }
 
-    this.map.enableContinuousZoom();
-    this.map.enableScrollWheelZoom();
+//    this.map.enableContinuousZoom();
+//    this.map.enableScrollWheelZoom();
 
     this.mapClicked = function (overlay, latlng, overlaylatlng) {
         log('map clicked, overlay: ' + overlay + ' latlng: ' + latlng + ' overlaylatlng: ' + overlaylatlng);
@@ -241,7 +253,7 @@ function Map() {
         this.show();
         $('#map').removeClass('small');
         $('#map').addClass('large');
-        this.addControls();
+//        this.addControls();
         this.map.setCenter(projection.fromPixelToLatLng(new GPoint(7000, 6350), 6), 3, customMap);
         this.map.checkResize();
     }
@@ -272,9 +284,25 @@ function Map() {
         return projection.fromPixelToLatLng(new GPoint(x, y), 6);
     }
 
+    var poiBaseIcon = new GIcon(G_DEFAULT_ICON);
+
+    poiBaseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+    poiBaseIcon.iconSize = new GSize(20, 34);
+    poiBaseIcon.shadowSize = new GSize(37, 34);
+    poiBaseIcon.iconAnchor = new GPoint(9, 34);
+    poiBaseIcon.infoWindowAnchor = new GPoint(9, 2);
+
+    var index = 0;
     for (var i in pois) {
-        var marker = new GMarker(pointToLatLng(pois[i].x, pois[i].y));
-        GEvent.addListener(marker, "click", partial(showPOI, pois[i]));
+        var poi = pois[i];
+        var letter = String.fromCharCode("A".charCodeAt(0) + index++);
+        var letteredIcon = new GIcon(poiBaseIcon);
+
+        poi.mapIcon = 
+        letteredIcon.image = "http://www.google.com/mapfiles/marker" + letter + ".png";
+
+        var marker = new GMarker(pointToLatLng(poi.x, poi.y), { icon: letteredIcon });
+        GEvent.addListener(marker, "click", partial(showPOI, poi));
         this.map.addOverlay(marker);
     }
 
@@ -326,8 +354,8 @@ function showSponsors() {
 
     map(function (sponsor) {
         $('#sponsor-list')
-        .append($(A({ href: '#' },
-                    LI(null,
+        .append($(LI(null,
+                     A({ href: '#' },
                        IMG({ src: '/images/flags/' + sponsor.country.toLowerCase() + '.gif'}),
                        (new Date(sponsor.contracts[0].timestamp)).renderDate(),
                        BR(),
@@ -363,9 +391,7 @@ function loadPOIs(data) {
         for (var i in data.pois) {
             var poi = data.pois[i];
             pois[poi.id] = poi;
-            $('#poi-selector').append(OPTION({ value: poi.id }, poi.title));
         }
-        $('#poi-selector').bind('change', null, selectPage);
 
         mainMap = new Map();
 

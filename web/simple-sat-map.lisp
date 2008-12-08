@@ -8,9 +8,18 @@
 ;; directions.  It is then stored in a quad tree, with each node
 ;; having one image and four children.
 
-(defparameter *levels* 6)
-(defparameter *tree-size* 16384)
-(defparameter *tile-size* 256)
+(defparameter *tree-levels* 12
+  "Total number of levels in the tree.")
+
+(defparameter *tree-size* 16384
+  "Width and height of the tree's base image.")
+
+(defparameter *tile-size* 256
+  "Width and height of the tiles in the tree.")
+
+(defvar *image-levels* (floor (- (log *tree-size* 2) (log *tile-size* 2)))
+  "Number of levels in the tree with images attached.  Below that, images are zoomed.")
+
 (defparameter *tile-pow* (floor (log *tile-size* 2)))
 
 (define-persistent-class tree ()
@@ -35,7 +44,7 @@
       ((make-quad (x y level)
          (apply #'make-instance 'node
                 :x x :y y :level level
-                (when (< level *levels*)
+                (when (< level *image-levels*)
                   (let* ((next-level (1+ level))
                          (next-tile-size (/ *tree-size* (expt 2 next-level))))
                     (list :children
@@ -55,6 +64,7 @@
    (y :read)
    (level :read)
    (images :read :initform (make-hash-table))
+   (contracts :read :initform nil)
    (children :read :initform nil)))
 
 (defun node-pixel-size (node)
@@ -86,7 +96,7 @@
   (cl-gd:with-image* (256 256 t)
     (setf (cl-gd:save-alpha-p) t)
     (let ((transparent (cl-gd:find-color 255 255 255 :alpha 127))
-          (factor (expt 2 (- *levels* (node-level node)))))
+          (factor (expt 2 (- *image-levels* (node-level node)))))
       (cl-gd:do-rows (y)
         (cl-gd:do-pixels-in-row (x)
           (let ((m2 (find-m2 (+ (node-x node)
@@ -138,7 +148,7 @@
                          (bknr.images:make-store-image :image tile
                                                        :name image-name
                                                        :if-exists :kill)))
-                 (when (< level *levels*)
+                 (when (< level *image-levels*)
                    (let ((next-tile-source-size (/ tile-source-size 2))
                          (next-level (1+ level)))
                      (destructuring-bind (one two three four) (node-children node)
@@ -167,12 +177,12 @@
          (node (tree-root tree))
          (path (or (bknr.web:query-param "path") "")))
     (dotimes (i (min (length path)
-                     *levels*))
+                     *image-levels*))
       (setf node (nth (parse-integer path :start i :end (1+ i))
                       (node-children node))))
-    (when (> (length path) *levels*)
+    (when (> (length path) *image-levels*)
       (setf (hunchentoot:aux-request-value 'zoom-path)
-            (subseq path *levels*)))
+            (subseq path *image-levels*)))
     (or (node-image node layer)
         (when (find layer (tree-layers tree))
           (transparent-image)))))
