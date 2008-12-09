@@ -188,6 +188,25 @@ function showOverview() {
     mainMap.overview();
 }
 
+function FakeMap() {
+
+    this.hide = function () {
+        $('#map').css('display', 'none');
+    }
+
+    this.overview = function () {
+        $('#map').css('display', 'block');
+    }
+
+    var index = 0;
+    for (var i in pois) {
+        var poi = pois[i];
+        var letter = String.fromCharCode("A".charCodeAt(0) + index++);
+
+        poi.mapIcon = "http://www.google.com/mapfiles/marker" + letter + ".png";
+    }
+}
+
 function Map() {
     this.map = new GMap2($('#map')[0]);
 
@@ -393,7 +412,7 @@ function loadPOIs(data) {
             pois[poi.id] = poi;
         }
 
-        mainMap = new Map();
+        mainMap = new FakeMap();
 
         loadJSONDoc('/sponsors-json').addCallback(loadSponsors);
     }
