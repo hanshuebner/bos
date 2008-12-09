@@ -121,6 +121,14 @@ function makePath(size, x, y) {
     return path;
 }
 
+function compareMedia (a, b) {
+    if (a.mediumType == b.mediumType) {
+        return (b.timestamp < a.timestamp) ? -1 : 1;
+    } else {
+        return (a.mediumType < b.mediumType) ? -1 : 1;
+    }
+}
+
 function showPOI(poi) {
     if (poi.data) {
         poi = poi.data;
@@ -148,7 +156,7 @@ function showPOI(poi) {
                            B(null, medium.title || medium.name))))
                     .bind('click', [ poi, medium ], showMedium));
         }
-    }, poi.media);
+    }, poi.media.sort(compareMedia));
 
     mainMap.hide();
 }

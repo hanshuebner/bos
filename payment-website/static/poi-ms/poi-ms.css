@@ -7,6 +7,7 @@ body {
 	background-image: url(bg.gif);
 	background-repeat: repeat-y;
 }
+
 h1 {
 	font-size: 19px;
 	font-weight: bold;
@@ -14,37 +15,41 @@ h1 {
 	height:62px;
 	margin:0px;
 }
+
 h2 {
 	font-size:15px;
 	margin:0px;
 	font-weight: bold;
 }
+
 h3 {
 	font-size:12px;
 	font-weight:bold;
 	margin:0px;
 }
 
-.yui-t3 {
+#doc {
 	float:left;
 	width:740px;
 }
+
 #left-bar {
 	background-color:#B2B774;
 	padding-top:10px;
 	height:500px;
 }
-.yui-b {
+
+.navigation {
 	float:left;
 	width:190px;
 	margin-right:20px;
 }
 
-
-.yui-main {
+#content {
 	float:left;
 	width:506px;
 }
+
 #content-body {
 	width:506px;
 	float:left;
@@ -55,6 +60,7 @@ h3 {
 #content-body img {
 	padding-top:15px;
 }
+
 a#back  {
 	color:#AFAFAF;
 	text-decoration: none;
@@ -90,6 +96,7 @@ ul#media-list li a:hover {
 	height:37px;
 	background-color:#FFFFFF
 }
+
 ul#poi-list li {
 	position: relative;
 	height: 44px;
