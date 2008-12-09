@@ -79,6 +79,8 @@ function showMedium(e) {
     var poi = e.data[0];
     var medium = e.data[1];
 
+    mainMap.hide();
+
     /* Work around jQuery bug when trying to remove applet from DOM with IE. */
     var applet = $("#applet")[0];
     if (applet) {
@@ -88,10 +90,10 @@ function showMedium(e) {
     $('#media-list *').removeClass('active');
     $(e.target).addClass('active');
 
+    $('#title').text(poi.title);
     $('#content-body')
     .empty()
-    .append(H1(null, poi.title),
-            H2(null, medium.title),
+    .append(H2(null, medium.title),
             mediaHandlers[medium.mediumType].makeViewer(medium),
             H3(null, medium.subtitle),
             P(null, medium.description));
@@ -134,6 +136,8 @@ function showPOI(poi) {
         poi = poi.data;
     }
 
+    mainMap.poiDetail(poi.x, poi.y);
+
     $('#back').css('visibility', 'inherit');
     $('#left-bar')
     .empty()
@@ -142,10 +146,11 @@ function showPOI(poi) {
 
     document.title = poi.title;
 
+    $('#title').text(poi.title);
+            
     $('#content-body')
     .empty()
-    .append(H1(null, poi.title),
-            H2(null, poi.subtitle),
+    .append(H2(null, poi.subtitle),
             P(null, poi.description));
     map(function (medium) {
         if (mediaHandlers[medium.mediumType]) {
@@ -158,7 +163,6 @@ function showPOI(poi) {
         }
     }, poi.media.sort(compareMedia));
 
-    mainMap.hide();
 }
 
 function pointToPath(point, level) {
@@ -175,9 +179,11 @@ function pointToPath(point, level) {
 
 function showOverview() {
     $('#back').css('visibility', 'hidden');
+
+    $('#title').text(NLS('Übersicht'));
+
     $('#content-body')
-    .empty()
-    .append(H1(null, NLS('Übersicht')));
+    .empty();
 
     $('#left-bar')
     .empty()
@@ -282,16 +288,16 @@ function Map() {
         $('#map').removeClass('small');
         $('#map').addClass('large');
         this.addControls();
-        this.map.setCenter(projection.fromPixelToLatLng(new GPoint(6500, 6350), 6), 2, customMap);
         this.map.checkResize();
+        this.map.setCenter(projection.fromPixelToLatLng(new GPoint(6500, 6350), 6), 2, customMap);
     }
 
     this.poiDetail = function (x, y) {
         $('#map').removeClass('large');
         $('#map').addClass('small');
         this.removeControls();
-        this.map.setCenter(projection.fromPixelToLatLng(new GPoint(x, y), 6), 6);
         this.map.checkResize();
+        this.map.setCenter(projection.fromPixelToLatLng(new GPoint(x, y), 6), 6);
     }
 
     this.zoomTo = function (x, y, level) {
