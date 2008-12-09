@@ -219,10 +219,11 @@ function Map() {
     this.map = new GMap2($('#map')[0]);
 
     var copyrightCollection = new GCopyrightCollection('Map');
-    copyrightCollection.addCopyright(new GCopyright(1,
-                                                    new GLatLngBounds(new GLatLng(-90, -180), new GLatLng(90, 180)),
-                                                    3,
-                                                    "Copyright BOS Deutschland e.V."));
+    copyrightCollection
+    .addCopyright(new GCopyright(1,
+                                 new GLatLngBounds(new GLatLng(-90, -180), new GLatLng(90, 180)),
+                                 3,
+                                 "Copyright BOS Deutschland e.V."));
 
     this.layers = {};
 
@@ -280,8 +281,8 @@ function Map() {
         this.show();
         $('#map').removeClass('small');
         $('#map').addClass('large');
-//        this.addControls();
-        this.map.setCenter(projection.fromPixelToLatLng(new GPoint(7000, 6350), 6), 3, customMap);
+        this.addControls();
+        this.map.setCenter(projection.fromPixelToLatLng(new GPoint(6500, 6350), 6), 2, customMap);
         this.map.checkResize();
     }
 
@@ -420,7 +421,7 @@ function loadPOIs(data) {
             pois[poi.id] = poi;
         }
 
-        mainMap = new FakeMap();
+        mainMap = new Map();
 
         loadJSONDoc('/sponsors-json').addCallback(loadSponsors);
     }

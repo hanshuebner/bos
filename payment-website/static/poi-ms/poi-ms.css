@@ -139,8 +139,8 @@ ul#media-list .active, ul#poi-list .active {
 	float:left;
 }
 #map.large {
-	width: 600px;
-	height: 600px;
+	width: 505px;
+	height: 505px;
 }
 #map.small {
 	width: 400px;
