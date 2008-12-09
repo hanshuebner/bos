@@ -28,7 +28,7 @@ var APPLET = createDOMFunc('applet');
 var mediaHandlers = {
     image: {
         icon: function (medium) {
-            return IMG({ src: '/image/' + medium.id + '/thumbnail,,60,60', width: 60, height: 60 })
+            return IMG({ src: '/image/' + medium.id + '/thumbnail,,40,40', width: 40, height: 40 })
         },
         makeViewer: function (medium) {
             return IMG({ src: '/image/' + medium.id,
@@ -38,7 +38,7 @@ var mediaHandlers = {
     },
     panorama: {
         icon: function (medium) {
-            return IMG({ src: '/static/panorama-icon.gif', width: 60, height: 60 })
+            return IMG({ src: 'panorama-icon.jpg', width: 40, height: 40 })
         },
         makeViewer: function (medium) {
             return APPLET({ id: 'applet',
@@ -52,7 +52,7 @@ var mediaHandlers = {
     },
     movie: {
         icon: function (medium) {
-            return IMG({ src: '/static/movie-icon.gif', width: 60, height: 60 })
+            return IMG({ src: 'film-icon.jpg', width: 40, height: 40 })
         },
         makeViewer: function (medium) {
             /* can't use DOM objects like below because IE does not grok it
@@ -76,7 +76,8 @@ var mediaHandlers = {
 };
 
 function showMedium(e) {
-    var medium = e.data;
+    var poi = e.data[0];
+    var medium = e.data[1];
 
     /* Work around jQuery bug when trying to remove applet from DOM with IE. */
     var applet = $("#applet")[0];
@@ -89,7 +90,8 @@ function showMedium(e) {
 
     $('#content-body')
     .empty()
-    .append(H2(null, medium.title),
+    .append(H1(null, poi.title),
+            H2(null, medium.title),
             mediaHandlers[medium.mediumType].makeViewer(medium),
             H3(null, medium.subtitle),
             P(null, medium.description));
@@ -119,27 +121,24 @@ function makePath(size, x, y) {
     return path;
 }
 
-function loadMainInfo(poi) {
-
-    $('#content-body')
-    .empty()
-    .append(H2(null, poi.subtitle),
-            P(null, poi.description));
-}
-
 function showPOI(poi) {
     if (poi.data) {
         poi = poi.data;
     }
 
+    $('#back').css('visibility', 'inherit');
     $('#left-bar')
     .empty()
     .append(UL({ id: 'media-list' }));
     $('#poi-selector').val(poi.id);
 
     document.title = poi.title;
-    $('.yui-b h1').html(poi.title);
-    loadMainInfo(poi);
+
+    $('#content-body')
+    .empty()
+    .append(H1(null, poi.title),
+            H2(null, poi.subtitle),
+            P(null, poi.description));
     map(function (medium) {
         if (mediaHandlers[medium.mediumType]) {
             $('#media-list')
@@ -147,7 +146,7 @@ function showPOI(poi) {
                         A({ href: '#' },
                            mediaHandlers[medium.mediumType].icon(medium),
                            B(null, medium.title || medium.name))))
-                    .bind('click', medium, showMedium));
+                    .bind('click', [ poi, medium ], showMedium));
         }
     }, poi.media);
 
@@ -167,9 +166,10 @@ function pointToPath(point, level) {
 }
 
 function showOverview() {
+    $('#back').css('visibility', 'hidden');
     $('#content-body')
     .empty()
-    .append(H2(null, NLS('Übersicht')));
+    .append(H1(null, NLS('Übersicht')));
 
     $('#left-bar')
     .empty()
