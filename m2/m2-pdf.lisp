@@ -21,14 +21,14 @@
                       (last-m2 (first (last m2s)))
                       (scale (/ 80 (max bb-width bb-height))))
 
-                 (draw-coordinate 110 160 (m2-lon-lat first-m2))
+                 (draw-coordinate 140 240 (m2-lon-lat first-m2))
 
                  (unless (eq first-m2 last-m2)
-                   (draw-coordinate 190 40 (m2-lon-lat last-m2)))
+                   (draw-coordinate 220 120 (m2-lon-lat last-m2)))
 
-                 (pdf:translate (+ 65.0 (if (>= bb-width bb-height) 0
+                 (pdf:translate (+ 95.0 (if (>= bb-width bb-height) 0
                                             (* 0.5 (abs (- bb-width bb-height)) scale)))
-                                (+ 65.0 (if (>= bb-height bb-width) 0
+                                (+ 145.0 (if (>= bb-height bb-width) 0
                                             (* 0.5 (abs (- bb-width bb-height)) scale))))
 
                  (pdf:scale scale scale)
