@@ -358,6 +358,18 @@
                    (class-instances 'sponsor)
                    :key (compose #'string-downcase #'user-full-name))))
 
+(defun sponsors-at (query)
+  (when (cl-ppcre:scan "^[0-9,]+$" query)
+    (destructuring-bind (east north west south) (mapcar #'parse-integer (cl-ppcre:split "," query))
+      (labels
+          ((x-y-to-lon-lat (x y)
+             (geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ x) (- +nw-utm-y+ y) +utm-zone+ t)))
+        (mapcar #'contract-sponsor
+                (contracts-in-geo-box (coerce (append (x-y-to-lon-lat east north)
+                                                      (x-y-to-lon-lat west south))
+                                              '(vector double-float))
+                                      :limit 10))))))
+
 (defun largest-sponsors ()
   (mapcar #'contract-sponsor
           (subseq (sort (copy-list (class-instances 'contract))
@@ -373,6 +385,8 @@
        (cond
          ((query-param "q")
           (sponsors-matching (query-param "q")))
+         ((query-param "at")
+          (sponsors-at (query-param "at")))
          ((query-param "largest")
           (largest-sponsors))
          (t

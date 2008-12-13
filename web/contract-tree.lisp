@@ -126,10 +126,10 @@ bulk-insertions contracts with larger area are inserted first."
            (insert-contract contract-tree contract)
            (remove-contract contract-tree contract)))))
 
-(defmacro handle-if-node-modified (&body body)
+(defmacro handle-if-node-modified ((node) &body body)
   `(let* ((path (parse-path path))
-          (node (find-node-with-path *contract-tree* path)))
-     (hunchentoot:handle-if-modified-since (timestamp node))
+          (,node (find-node-with-path *contract-tree* path)))
+     (hunchentoot:handle-if-modified-since (timestamp ,node))
      ,@body))
 
 ;;; contract-placemark-handler
@@ -218,7 +218,7 @@ links are created."))
                                     :root-element "kml")
     (with-query-params ((lang "en") (path)
                         (rmcpath) (rmcid))
-      (handle-if-node-modified
+      (handle-if-node-modified (node)
         (setf (hunchentoot:header-out :last-modified)
               (hunchentoot:rfc-1123-date (timestamp node)))
         (let* ((lod (node-lod node))
@@ -442,6 +442,37 @@ has to be unique."
                                      (list 0 0 +width+ +width+)
                                      #'contract-tree-changed))
 
-(register-transient-init-function 'make-contract-tree-from-m2
+(defun contract-size (contract)
+  (length (contract-m2s contract)))
+
+(defun contracts-in-geo-box (geo-box &key limit)
+  "Return all contracts that intersect the given GEO-BOX.  If LIMIT is
+specified, the LIMIT largest contracts are returned."
+  (let ((return-count 0)
+        (contracts (list nil)))
+    (ensure-intersecting-children *contract-tree*
+                                  geo-box
+                                  (lambda (node)
+                                    (dolist (contract (placemark-contracts node))
+                                      (when (geo-box-encloses-p geo-box (contract-geo-box contract))
+                                        (when (and limit
+                                                   (>= return-count limit))
+                                          (if (<= (contract-size contract)
+                                                  (contract-size (cadr contracts)))
+                                              (return)
+                                              (setf contracts (cons nil (cddr contracts)))))
+                                        (incf return-count)
+                                        (do ((point contracts (cdr point)))
+                                            ((or (null (cddr point))
+                                                 (< (contract-size contract)
+                                                    (contract-size (cadr point))))
+                                             (setf (cdr point) (cons contract (cdr point))))))))
+                                  (lambda (node)
+                                    (or (and limit
+                                             (>= return-count limit))
+                                        (leaf-node-p node))))
+    (cdr contracts)))
+
+y(register-transient-init-function 'make-contract-tree-from-m2
                                   'make-quad-tree
                                   'geometry:make-rect-publisher)
