@@ -351,36 +351,43 @@ function Map() {
 
     this.sponsorMarkers = [];
 
+    function makeTable(rows) {
+        return TABLE({ 'class': 'sponsor-info-popup' },
+                     TBODY(null,
+                           map(function (row) {
+                               return TR(null,
+                                         TH(null, NLS(row[0])),
+                                         TD(null, row[1]));
+                           }, rows)));
+    }
+
     this.setSponsorMarker = function (sponsor) {
         var position = pointToLatLng(sponsor.contracts[0].centerX, sponsor.contracts[0].centerY);
         var sponsorMarker = new GMarker(position);
+        log('sponsor: ' + serializeJSON(sponsor));
+        var info = [
+            [ "Name", sponsor.name || NLS("[anonym]") ],
+            [ "Country", sponsor.country ],
+            [ "Anzahl m²", sponsor.contracts[0].count ]
+        ];
+        if (sponsor.infoText && !sponsor.infoText.match(/^ *$/)) {
+            info.push([ "Info", sponsor.infoText ]);
+        }
+        sponsorMarker.bindInfoWindow(makeTable(info));
         this.map.addOverlay(sponsorMarker);
         this.sponsorMarkers.push(sponsorMarker);
     }
 
     this.removeSponsorMarkers = function () {
-        try {
-            map(bind(this.map.removeOverlay, this.map), this.sponsorMarkers);
-            this.sponsorMarkers = [];
-        }
-        catch (e) {
-            log('error removing sponsor markers: ' + e);
-        }
-    }
-
-    this.startMapMovedChecker = function () {
+        map(bind(this.map.removeOverlay, this.map), this.sponsorMarkers);
+        this.sponsorMarkers = [];
     }
 
     this.putSponsorPlacemarks = function(data) {
         log('got ' + data.sponsors.length + ' sponsors to display');
         this.removeSponsorMarkers();
-        try {
-            map(bind(this.setSponsorMarker, this), data.sponsors);
-            this.checkMapMoved();
-        }
-        catch (e) {
-            log('error removing sponsor markers: ' + e);
-        }
+        map(bind(this.setSponsorMarker, this), data.sponsors);
+        this.checkMapMoved();
     }
 
     this.checkMapMoved = function() {

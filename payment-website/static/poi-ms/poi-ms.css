@@ -146,3 +146,6 @@ ul#media-list .active, ul#poi-list .active {
 	width: 505px;
 	height: 200px;
 }
+
+table.sponsor-info-popup th { text-align: left }
+table.sponsor-info-popup td { max-width: 15em }
