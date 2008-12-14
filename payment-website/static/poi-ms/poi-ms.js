@@ -178,6 +178,7 @@ function pointToPath(point, level) {
 }
 
 function showOverview() {
+    log('showOverview');
     $('#back').css('visibility', 'hidden');
 
     $('#title').text(NLS('Übersicht'));
@@ -188,6 +189,13 @@ function showOverview() {
     $('#left-bar')
     .empty()
     .append(UL({ id: 'poi-list' }));
+
+    $('#poi-list')
+    .append($(LI(null,
+                 A({ href: '#' },
+                   IMG({ src: "http://www.google.com/mapfiles/marker.png" }),
+                   B(NLS("Sponsoren")))))
+            .bind('click', showSponsors));
 
     for (var i in pois) {
         var poi = pois[i];
@@ -269,8 +277,8 @@ function Map() {
         }
     }
 
-//    this.map.enableContinuousZoom();
-//    this.map.enableScrollWheelZoom();
+    this.map.enableContinuousZoom();
+    this.map.enableScrollWheelZoom();
 
     this.mapClicked = function (overlay, latlng, overlaylatlng) {
         log('map clicked, overlay: ' + overlay + ' latlng: ' + latlng + ' overlaylatlng: ' + overlaylatlng);
@@ -284,7 +292,7 @@ function Map() {
         var bounds = this.map.getBounds();
         var sw = latLngToPoint(bounds.getSouthWest());
         var ne = latLngToPoint(bounds.getNorthEast());
-        log('map has moved: ' + sw.x + ',' + ne.y + ',' + ne.x + ',' + sw.y);
+//        log('map has moved: ' + sw.x + ',' + ne.y + ',' + ne.x + ',' + sw.y);
 
         this.sponsorQuery = sw.x + ',' + ne.y + ',' + ne.x + ',' + sw.y;
     }
@@ -292,10 +300,28 @@ function Map() {
     GEvent.addListener(this.map, "click", bind(this.mapClicked, this));
     GEvent.addListener(this.map, "moveend", bind(this.moveEnd, this));
 
+    this.sponsorMarkers = [];
+
+    this.removeSponsorMarkers = function (all) {
+        log('remove sponsor markers');
+        var markers = [];
+        var gmap = this.map;
+        map(function(marker) {
+            if (!all && marker.opened) {
+                markers.push(marker);
+            } else {
+                gmap.removeOverlay(marker);
+            }
+        }, this.sponsorMarkers);
+        this.sponsorMarkers = markers;
+        log('done');
+    }
+
     this.overview = function () {
         this.show();
         $('#map').removeClass('small');
         $('#map').addClass('large');
+        this.removeSponsorMarkers(true);
         this.addControls();
         this.map.checkResize();
         this.map.setCenter(projection.fromPixelToLatLng(new GPoint(6500, 6350), 6), 2, customMap);
@@ -304,6 +330,7 @@ function Map() {
     this.poiDetail = function (x, y) {
         $('#map').removeClass('large');
         $('#map').addClass('small');
+        this.removeSponsorMarkers(true);
         this.removeControls();
         this.map.checkResize();
         this.map.setCenter(projection.fromPixelToLatLng(new GPoint(x, y), 6), 6);
@@ -349,8 +376,6 @@ function Map() {
         this.map.addOverlay(marker);
     }
 
-    this.sponsorMarkers = [];
-
     function makeTable(rows) {
         return TABLE({ 'class': 'sponsor-info-popup' },
                      TBODY(null,
@@ -364,7 +389,6 @@ function Map() {
     this.setSponsorMarker = function (sponsor) {
         var position = pointToLatLng(sponsor.contracts[0].centerX, sponsor.contracts[0].centerY);
         var sponsorMarker = new GMarker(position);
-        log('sponsor: ' + serializeJSON(sponsor));
         var info = [
             [ "Name", sponsor.name || NLS("[anonym]") ],
             [ "Country", sponsor.country ],
@@ -374,20 +398,28 @@ function Map() {
             info.push([ "Info", sponsor.infoText ]);
         }
         sponsorMarker.bindInfoWindow(makeTable(info));
+
+        function setMarkerOpened(marker, state) {
+            marker.opened = state;
+        }
+        
+        GEvent.addListener(this.map, "infowindowopen", partial(setMarkerOpened, sponsorMarker, true));
+        GEvent.addListener(this.map, "infowindowclose", partial(setMarkerOpened, sponsorMarker, false));
+
         this.map.addOverlay(sponsorMarker);
         this.sponsorMarkers.push(sponsorMarker);
     }
 
-    this.removeSponsorMarkers = function () {
-        map(bind(this.map.removeOverlay, this.map), this.sponsorMarkers);
-        this.sponsorMarkers = [];
-    }
-
     this.putSponsorPlacemarks = function(data) {
-        log('got ' + data.sponsors.length + ' sponsors to display');
-        this.removeSponsorMarkers();
-        map(bind(this.setSponsorMarker, this), data.sponsors);
-        this.checkMapMoved();
+        try {
+            log('got ' + data.sponsors.length + ' sponsors to display');
+            this.removeSponsorMarkers();
+            map(bind(this.setSponsorMarker, this), data.sponsors);
+            this.checkMapMoved();
+        }
+        catch (e) {
+            log('error ' + e + ' putting sponsor placemarks');
+        }
     }
 
     this.checkMapMoved = function() {
@@ -399,8 +431,6 @@ function Map() {
             callLater(0.5, bind(this.checkMapMoved, this));
         }
     }
-
-    this.checkMapMoved();
 }
 
 var pages = {
@@ -427,17 +457,17 @@ function showSponsor(e) {
 
     mainMap.zoomTo(contract.left, contract.top, 8);
     mainMap.setSponsorMarker(sponsor);
-    
-    // Math.max(contract.width, contract.height)
 }
 
 function showSponsors() {
 
     $('#left-bar')
     .empty()
-    .append(H3(NLS("Letzte Sponsoren")),
-            UL({ id: 'sponsor-list' }));
+//    .append(H3(NLS("Letzte Sponsoren")),
+//            UL({ id: 'sponsor-list' }))
+    ;
 
+    $('#title').text(NLS('Sponsoren'));
     map(function (sponsor) {
         $('#sponsor-list')
         .append($(LI(null,
@@ -451,25 +481,8 @@ function showSponsors() {
     }, sponsors.slice(0, 10));
 
     mainMap.overview();
-}
-
-function loadSponsors(data) {
-    try {
-        for (var i in data.sponsors) {
-            var sponsor = data.sponsors[i];
-            sponsors.push(sponsor);
-        }
-
-        var poi_id = document.location.hash.replace(/#/, "");
-        if (poi_id) {
-            showPOI(pois[poi_id]);
-        } else {
-            showOverview();
-        }
-    }
-    catch (e) {
-        alert(e);
-    }
+    mainMap.zoomTo(7100, 5400, 5);
+    mainMap.checkMapMoved();
 }
 
 function loadPOIs(data) {
@@ -481,7 +494,12 @@ function loadPOIs(data) {
 
         mainMap = new Map();
 
-        loadJSONDoc('/sponsors-json').addCallback(loadSponsors);
+        var poi_id = document.location.hash.replace(/#/, "");
+        if (poi_id) {
+            showPOI(pois[poi_id]);
+        } else {
+            showOverview();
+        }
     }
     catch (e) {
         alert(e);

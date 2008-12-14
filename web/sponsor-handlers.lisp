@@ -361,8 +361,8 @@
 (defun sponsors-at (query)
   (when (cl-ppcre:scan "^[0-9,]+$" query)
     (destructuring-bind (east north west south) (mapcar #'parse-integer (cl-ppcre:split "," query))
-      (when (and (< (- west east) 1000)
-                 (< (- south north) 1000))
+      (when (and (< (- west east) 1500)
+                 (< (- south north) 1500))
         (labels
             ((x-y-to-lon-lat (x y)
                (geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ x) (- +nw-utm-y+ y) +utm-zone+ t)))
