@@ -361,14 +361,16 @@
 (defun sponsors-at (query)
   (when (cl-ppcre:scan "^[0-9,]+$" query)
     (destructuring-bind (east north west south) (mapcar #'parse-integer (cl-ppcre:split "," query))
-      (labels
-          ((x-y-to-lon-lat (x y)
-             (geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ x) (- +nw-utm-y+ y) +utm-zone+ t)))
-        (mapcar #'contract-sponsor
-                (contracts-in-geo-box (coerce (append (x-y-to-lon-lat east north)
-                                                      (x-y-to-lon-lat west south))
-                                              '(vector double-float))
-                                      :limit 10))))))
+      (when (and (< (- west east) 1000)
+                 (< (- south north) 1000))
+        (labels
+            ((x-y-to-lon-lat (x y)
+               (geo-utm:utm-x-y-to-lon-lat (+ +nw-utm-x+ x) (- +nw-utm-y+ y) +utm-zone+ t)))
+          (mapcar #'contract-sponsor
+                  (contracts-in-geo-box (coerce (append (x-y-to-lon-lat east north)
+                                                        (x-y-to-lon-lat west south))
+                                                '(vector double-float))
+                                        :limit 20)))))))
 
 (defun largest-sponsors ()
   (mapcar #'contract-sponsor

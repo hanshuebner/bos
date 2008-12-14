@@ -443,18 +443,23 @@ has to be unique."
                                      #'contract-tree-changed))
 
 (defun contract-size (contract)
-  (length (contract-m2s contract)))
+  (apply #'max (cddr (contract-bounding-box contract))))
+
+(defun geo-box-size (geo-box)
+  (apply #'max (multiple-value-list (width-height (geo-box-rectangle geo-box)))))
 
 (defun contracts-in-geo-box (geo-box &key limit)
   "Return all contracts that intersect the given GEO-BOX.  If LIMIT is
 specified, the LIMIT largest contracts are returned."
   (let ((return-count 0)
-        (contracts (list nil)))
+        (contracts (list nil))
+        (min-size (floor (/ (geo-box-size geo-box) 10))))
     (ensure-intersecting-children *contract-tree*
                                   geo-box
                                   (lambda (node)
                                     (dolist (contract (placemark-contracts node))
-                                      (when (geo-box-encloses-p geo-box (contract-geo-box contract))
+                                      (when (and (geo-box-encloses-p geo-box (contract-geo-box contract))
+                                                 (>= (geo-box-size (contract-geo-box contract)) min-size))
                                         (when (and limit
                                                    (>= return-count limit))
                                           (if (<= (contract-size contract)
@@ -468,11 +473,11 @@ specified, the LIMIT largest contracts are returned."
                                                     (contract-size (cadr point))))
                                              (setf (cdr point) (cons contract (cdr point))))))))
                                   (lambda (node)
-                                    (or (and limit
+                                    (or (and nil limit
                                              (>= return-count limit))
                                         (leaf-node-p node))))
     (cdr contracts)))
 
-y(register-transient-init-function 'make-contract-tree-from-m2
+(register-transient-init-function 'make-contract-tree-from-m2
                                   'make-quad-tree
                                   'geometry:make-rect-publisher)

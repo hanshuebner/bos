@@ -276,8 +276,17 @@ function Map() {
         log('map clicked, overlay: ' + overlay + ' latlng: ' + latlng + ' overlaylatlng: ' + overlaylatlng);
     }
 
+    function latLngToPoint(latLng) {
+        return projection.fromLatLngToPixel(latLng, 6);
+    }
+
     this.moveEnd = function () {
-        log('map has moved');
+        var bounds = this.map.getBounds();
+        var sw = latLngToPoint(bounds.getSouthWest());
+        var ne = latLngToPoint(bounds.getNorthEast());
+        log('map has moved: ' + sw.x + ',' + ne.y + ',' + ne.x + ',' + sw.y);
+
+        this.sponsorQuery = sw.x + ',' + ne.y + ',' + ne.x + ',' + sw.y;
     }
 
     GEvent.addListener(this.map, "click", bind(this.mapClicked, this));
@@ -340,15 +349,51 @@ function Map() {
         this.map.addOverlay(marker);
     }
 
+    this.sponsorMarkers = [];
+
     this.setSponsorMarker = function (sponsor) {
         var position = pointToLatLng(sponsor.contracts[0].centerX, sponsor.contracts[0].centerY);
-        if (this.sponsorMarker) {
-            this.sponsorMarker.setLatLng(position);
-        } else {
-            this.sponsorMarker = new GMarker(position);
-            this.map.addOverlay(this.sponsorMarker);
+        var sponsorMarker = new GMarker(position);
+        this.map.addOverlay(sponsorMarker);
+        this.sponsorMarkers.push(sponsorMarker);
+    }
+
+    this.removeSponsorMarkers = function () {
+        try {
+            map(bind(this.map.removeOverlay, this.map), this.sponsorMarkers);
+            this.sponsorMarkers = [];
+        }
+        catch (e) {
+            log('error removing sponsor markers: ' + e);
         }
     }
+
+    this.startMapMovedChecker = function () {
+    }
+
+    this.putSponsorPlacemarks = function(data) {
+        log('got ' + data.sponsors.length + ' sponsors to display');
+        this.removeSponsorMarkers();
+        try {
+            map(bind(this.setSponsorMarker, this), data.sponsors);
+            this.checkMapMoved();
+        }
+        catch (e) {
+            log('error removing sponsor markers: ' + e);
+        }
+    }
+
+    this.checkMapMoved = function() {
+        if (this.sponsorQuery) {
+            loadJSONDoc('/sponsors-json?at=' + this.sponsorQuery)
+            .addCallback(bind(this.putSponsorPlacemarks, this));
+            this.sponsorQuery = null;
+        } else {
+            callLater(0.5, bind(this.checkMapMoved, this));
+        }
+    }
+
+    this.checkMapMoved();
 }
 
 var pages = {
