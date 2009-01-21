@@ -144,16 +144,6 @@
 	      </td>
 	    </tr>
 	    <tr>
-	      <td colspan="3">
-		<input type="checkbox" name="donationcert-yearly" value="1" />
-		Ich möchte eine Spendenbescheinigung am Jahresende.
-	      </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3" height="10"> 
-	      </td>
-	    </tr>
-	    <tr>
 	      <td colspan="3" height="1" bgcolor="#c0c0c0"> 
 	      </td>
 	    </tr>
