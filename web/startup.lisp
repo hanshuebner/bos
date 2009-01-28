@@ -23,6 +23,7 @@
              (website-url (format nil "http://~A" host) website-url-given)
              worldpay-test-mode
              (google-analytics-account "UA-3432041-1")
+             google-maps-api-key
              start-frontend)
   (when website-url-given
     (warn "Specifying :website-url in web.rc is deprecated. Use :host instead.~
@@ -37,7 +38,8 @@
   (unpublish)
   (bos.web::publish-website :website-directory *website-directory*
                             :website-url *website-url*
-                            :worldpay-test-mode *worldpay-test-mode*)
+                            :worldpay-test-mode *worldpay-test-mode*
+                            :google-maps-api-key google-maps-api-key)
   (format t "~&; Starting hunchentoot.~%")
   (force-output)
   (when *webserver*

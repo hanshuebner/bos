@@ -13,6 +13,11 @@
             (html ((:option :value (format nil "/~a/index" language-symbol) :selected "selected") " " (:princ language-name) " "))
             (html ((:option :value (format nil "/~a/index" language-symbol)) " " (:princ language-name) " ")))))
 
+(define-bknr-tag google-maps-script ()
+  (html ((:script :src (format nil "http://maps.google.com/maps?file=api&amp;v=2&amp;key=~A"
+                               (website-google-maps-api-key *website*))
+                  :type "text/javascript") "")))
+
 (define-bknr-tag language-chooser (name)
   (html ((:select :name name)
          (language-options-1 (request-language)))))

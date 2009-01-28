@@ -261,8 +261,9 @@ worldpay), return the common XML element name"
                                                          :subtype "mixed"
                                                          :content parts)
                                           t t))))
-  (ignore-errors
-    (delete-file (contract-pdf-pathname contract :print t))))
+  (when *enable-mails*
+    (ignore-errors
+      (delete-file (contract-pdf-pathname contract :print t)))))
 
 (defun mail-print-pdf (contract)
   (send-system-mail
@@ -287,8 +288,9 @@ worldpay), return the common XML element name"
                                    :encoding :base64
                                    :content (file-contents (contract-pdf-pathname contract :print t)))))
                        t t)))
-  (ignore-errors
-    (delete-file (contract-pdf-pathname contract :print t))))
+  (when *enable-mails*
+    (ignore-errors
+      (delete-file (contract-pdf-pathname contract :print t)))))
 
 (defun mail-backoffice-sponsor-data (contract numsqm country email name address language request-params)
   (let* ((contract-id (store-object-id contract))

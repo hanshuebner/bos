@@ -144,7 +144,11 @@
 (defun publish-directory (&key prefix destination)
   (push (hunchentoot:create-folder-dispatcher-and-handler prefix destination) hunchentoot:*dispatch-table*))
 
-(defun publish-website (&key website-directory website-url (worldpay-test-mode t))
+(defun publish-website (&key website-directory
+                        website-url
+                        (worldpay-test-mode t)
+                        google-maps-api-key)
+
   (setf *website-directory* website-directory)
 
   (when website-url
@@ -156,6 +160,7 @@
 
   (make-instance 'bos-website
                  :name "create-rainforest.org CMS"
+                 :google-maps-api-key google-maps-api-key
                  :handler-definitions `(("/edit-poi-medium" edit-poi-medium-handler)
                                         ("/edit-poi" edit-poi-handler)
                                         ("/edit-sponsor" edit-sponsor-handler)

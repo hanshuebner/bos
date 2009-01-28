@@ -3,7 +3,8 @@
 (enable-interpol-syntax)
 
 (defclass bos-website (website)
-  ())
+  ((google-maps-api-key :initarg :google-maps-api-key
+                        :reader website-google-maps-api-key)))
 
 (defmethod website-show-page ((website bos-website) fn title)
   (html
