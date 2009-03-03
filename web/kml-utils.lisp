@@ -281,10 +281,10 @@
   ;; http-query could be added to &key args
   (with-element "NetworkLink"
     (when name (with-element "name" (text name)))
-    (when rect (kml-region rect lod))
-    (when look-at (funcall look-at))
     (when hide-children
       (kml-hide-children-style))
+    (when rect (kml-region rect lod))
+    (when look-at (funcall look-at))
     (when fly-to-view (with-element "flyToView" (text "1")))
     (kml-link href :refresh-on-region (and rect t))))
 
