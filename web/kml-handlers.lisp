@@ -89,7 +89,7 @@
 
 (defun replace-all-url-hosts (string new-host)
   "Replaces all hostnames in STRING by NEW-HOST."
-  (ppcre:regex-replace-all #?r"((?:https?|ftp)://)\w+(?:\.\w+)*(?::\d+)?" string #?r"\1${new-host}"))
+  (ppcre:regex-replace-all #?r"(?<!xmlns=[\"'])((?:https?|ftp)://)\w+(?:\.\w+)*(?::\d+)?" string #?r"\1${new-host}"))
 
 (defun replace-lang-query-params (string new-lang)
   (ppcre:regex-replace-all #?r"(?i)(lang=)[a-z]{2,2}" string #?r"\1${new-lang}"))
@@ -267,9 +267,9 @@ and might be needed again."))
                                          (with-element "longitude" (text "8.297592139883164"))
                                          (with-element "latitude" (text "49.89989439494514"))
                                          (with-element "altitude" (text "0"))
-                                         (with-element "range" (text "5400715.913126094"))
+                                         (with-element "heading" (text "0"))
                                          (with-element "tilt" (text "0"))
-                                         (with-element "heading" (text "0"))))))))))
+                                         (with-element "range" (text "5400715.913126094"))))))))))
 
 (defmethod handle-object ((handler kml-root-dynamic-handler) (object sponsor))
   (write-root-kml handler object))
@@ -353,3 +353,11 @@ and might be needed again."))
       (with-element "name" (text (format nil "allocation-area ~D" (store-object-id area))))
       (kml-region (make-rectangle2 (allocation-area-bounding-box2 area))
                   nil))))
+
+(defun fix-xmlns ()
+  (with-transaction (:update-kml)
+    (dolist (kml-root (class-instances 'kml-root-data))
+      (with-slots (kml-string) kml-root
+        (setf kml-string (cl-ppcre:regex-replace-all "http://earth.google.com/kml/2.2"
+                                                     kml-string
+                                                     "http://www.opengis.net/kml/2.2"))))))
