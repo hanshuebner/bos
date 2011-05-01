@@ -16,7 +16,7 @@
   (print-unreadable-object (object stream :type t :identity nil)
     (ignore-errors
       (with-slots (x y image) object
-        (format stream "at (~D,~D) ~:[(no image)~;~A~]"
+        (format stream "at (~D,~D) ~:[(no image)~;~:*~A~]"
                 (* x +m2tile-width+)
                 (* y +m2tile-width+)
                 image)))))
