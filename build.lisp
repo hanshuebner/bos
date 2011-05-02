@@ -1,6 +1,10 @@
 ;;; a quick startup script that can be loaded with all supported lisps
 (in-package :cl-user)
 
+(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp" (user-homedir-pathname))))
+  (when (probe-file quicklisp-init)
+    (load quicklisp-init)))
+
 #+sbcl (require 'asdf)
 #+sbcl (require 'sb-posix)
 
@@ -12,21 +16,15 @@
       ext:*bytes-consed-between-gcs* (* 64 1024 1024)
       *default-pathname-defaults* (pathname (format nil "~A/" (nth-value 1 (unix:unix-current-directory)))))
 
-(load (compile-file "../../thirdparty/asdf/asdf.lisp"))
-
-;; cl-gd glue
-#+darwin (assert (zerop (asdf:run-shell-command "cd ../../thirdparty/cl-gd-0.5.6; make cl-gd-glue.dylib")))
-#-darwin (assert (zerop (asdf:run-shell-command "cd ../../thirdparty/cl-gd-0.5.6; make")))
-
 ;;; some helpers
-(defun setup-registry ()
+(defun setup-registry (directory)
   (format t "; setting up ASDF registry, please be patient...")
   (finish-output)
   (mapc #'(lambda (asd-pathname)
 	    (pushnew (make-pathname :directory (pathname-directory asd-pathname))
 		     asdf:*central-registry*
 		     :test #'equal))
-	(directory (merge-pathnames #p"**/*.asd" (truename "../../")))))
+	(directory (merge-pathnames #p"**/*.asd" (truename directory)))))
 
 (defun read-configuration (pathname)
   (with-open-file (s pathname)
@@ -35,8 +33,30 @@
        ;; 2008-03-12 kilian: I have added eval here (e.g. for merge-pathnames) 
        collect (eval form))))
 
+;; Image dumping functions
+#+openmcl
+(defvar *initial-shared-libraries* (copy-list ccl::*shared-libraries*))
+
+#+openmcl
+(defun dump-image (&optional (image-name "bknr.image"))
+  (format t "~&;;; --- dumping image ~A~%" image-name)
+  #-darwin
+  (progn
+    (dolist (lib ccl::*shared-libraries*)
+      (ignore-errors
+        (ccl::close-shared-library lib)))
+    (setf ccl::*shared-libraries* *initial-shared-libraries*))
+  (ccl:save-application image-name))
+
+#+sbcl
+(defun dump-image (&optional (image-name "bknr-sbcl.image"))
+  (format t "~&;;; --- dumping image ~A~%" image-name)
+  (sb-ext:save-lisp-and-die "bknr-sbcl.image"))
+
 ;;; setup asdf:*central-registry*
-(setup-registry)
+(setup-registry "./")
+;; clean up here, offline hack
+(setup-registry (merge-pathnames #P"ediware/drakma/" (user-homedir-pathname)))
 
 ;;; load bos project
 (asdf:oos 'asdf:load-op :bos.web)
@@ -71,9 +91,8 @@
             ))
   (format t "BOS Online-System~%")
   ;; slime
-  (asdf:oos 'asdf:load-op :swank)
-  (eval (read-from-string (format nil "(progn (swank-loader::init)
-                                         (swank:create-server :port ~D :dont-close t))" swank-port)))
+;  (asdf:oos 'asdf:load-op :swank)
+;  (eval (read-from-string (format nil "(progn (swank-loader::init) (swank:create-server :port ~D :dont-close t))" swank-port)))
   ;; start the bos server  
   (apply #'bos.m2::reinit (read-configuration "m2.rc"))
   (apply #'bos.web::init (read-configuration "web.rc"))

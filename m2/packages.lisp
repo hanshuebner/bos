@@ -75,6 +75,7 @@
         :cl-mime
         :cl-gd)
   (:shadowing-import-from :cl-interpol #:quote-meta-chars)
+  (:shadowing-import-from :bknr.utils #:run-shell-command)
   (:export #:m2-store
            #:*m2-store*
            #:register-transient-init-function

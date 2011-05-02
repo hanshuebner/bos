@@ -1,0 +1,12 @@
+[submodule "lib/bknr-datastore"]
+	path = lib/bknr-datastore
+	url = git@github.com:hanshuebner/bknr-datastore.git
+[submodule "lib/bknr-web"]
+	path = lib/bknr-web
+	url = git@github.com:hanshuebner/bknr-web.git
+[submodule "lib/xhtmlgen"]
+	path = lib/xhtmlgen
+	url = git@github.com:hanshuebner/xhtmlgen.git
+[submodule "lib/yason"]
+	path = lib/yason
+	url = git@github.com:hanshuebner/yason.git

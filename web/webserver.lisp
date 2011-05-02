@@ -214,6 +214,21 @@
                                          file-handler
                                          :destination ,(merge-pathnames #p"static/favicon.ico" website-directory)
                                          :content-type "image/x-icon")
+                                        ("/static"
+                                         directory-handler
+                                         :destination ,(merge-pathnames "static/" website-directory))
+                                        ("/ge/"
+                                         directory-handler
+                                         :destination ,(merge-pathnames "ge/" website-directory))
+                                        ("/images"
+                                         directory-handler
+                                         :destination ,(merge-pathnames "images/" website-directory))
+                                        ("/infosystem"
+                                         directory-handler
+                                         :destination ,(merge-pathnames "infosystem/" website-directory))
+                                        ("/certificates"
+                                         directory-handler
+                                         :destination ,*cert-download-directory*)
                                         ("/index" index-handler)
                                         user
                                         images                                   
@@ -234,15 +249,4 @@
                  :authorizer (make-instance 'bos-authorizer)
                  :site-logo-url "/images/bos-logo.gif"
                  :style-sheet-urls '("/static/cms.css")
-                 :javascript-urls '("/static/cms.js" "/static/tiny_mce/tiny_mce.js" "/static/MochiKit/MochiKit.js"))
-
-  (publish-directory :prefix "/static/"
-                     :destination (merge-pathnames "static/" website-directory))
-  (publish-directory :prefix "/ge/"
-                     :destination (merge-pathnames "ge/" website-directory))
-  (publish-directory :prefix "/images/"
-                     :destination (merge-pathnames "images/" website-directory))
-  (publish-directory :prefix "/infosystem/"
-                     :destination (merge-pathnames "infosystem/" website-directory))
-  (publish-directory :prefix "/certificates/"
-                     :destination *cert-download-directory*))
+                 :javascript-urls '("/static/cms.js" "/static/tiny_mce/tiny_mce.js" "/static/MochiKit/MochiKit.js")))

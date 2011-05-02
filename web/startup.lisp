@@ -24,7 +24,8 @@
              worldpay-test-mode
              (google-analytics-account "UA-3432041-1")
              google-maps-api-key
-             start-frontend)
+             start-frontend
+             foregroundp)
   (when website-url-given
     (warn "Specifying :website-url in web.rc is deprecated. Use :host instead.~
          ~%Website-url will then be initialized by  (format nil \"http://~~A\" host)."))
@@ -49,10 +50,16 @@
         ;; the reason for the following setting is that ptviewer sends
         ;; a different User-Agent -- (when requesting PTDefault.html)
         hunchentoot:*use-user-agent-for-sessions* nil)
-  (bt:make-thread (lambda ()
-                    (hunchentoot:start-server :port *port* :threaded nil
-                                              :persistent-connections-p nil))
-                  :name "hunchentoot non-threaded wrapper")
+  (flet
+      ((start-fn ()
+         (hunchentoot:start (make-instance 'bknr.web:bknr-acceptor
+                                           :port *port*
+                                           :taskmaster (make-instance 'hunchentoot:single-threaded-taskmaster)
+                                           :persistent-connections-p nil))))
+    (if foregroundp
+        (funcall #'start-fn)
+        (bt:make-thread #'start-fn
+                        :name (format nil "HTTP server on port ~A" *port*))))
   (setq *webserver* t)
   (if start-frontend
       (start-frontend :host host :backend-port port :port frontend-port)
