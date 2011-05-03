@@ -5,6 +5,8 @@
   (when (probe-file quicklisp-init)
     (load quicklisp-init)))
 
+(ql:quickload :quicklisp-slime-helper)
+
 #+sbcl (require 'asdf)
 #+sbcl (require 'sb-posix)
 
@@ -56,7 +58,7 @@
 ;;; setup asdf:*central-registry*
 (setup-registry "./")
 ;; clean up here, offline hack
-(setup-registry (merge-pathnames #P"ediware/drakma/" (user-homedir-pathname)))
+(setup-registry (merge-pathnames #P"ediware/" (user-homedir-pathname)))
 
 ;;; load bos project
 (asdf:oos 'asdf:load-op :bos.web)
@@ -84,6 +86,8 @@
   (env-ascii-check)
   ;; check for changes that are not yet in the core
   (asdf:oos 'asdf:load-op :bos.web)
+  (setf swank::*log-output* nil)
+  #-darwin
   (mapcar #'cl-gd::load-foreign-library ; for now...
           '("/usr/lib/libcrypto.so"
             "/usr/lib/libssl.so"
@@ -91,8 +95,7 @@
             ))
   (format t "BOS Online-System~%")
   ;; slime
-;  (asdf:oos 'asdf:load-op :swank)
-;  (eval (read-from-string (format nil "(progn (swank-loader::init) (swank:create-server :port ~D :dont-close t))" swank-port)))
+  (eval (read-from-string (format nil "(progn (swank-loader::init) (swank:create-server :port ~D :dont-close t))" swank-port)))
   ;; start the bos server  
   (apply #'bos.m2::reinit (read-configuration "m2.rc"))
   (apply #'bos.web::init (read-configuration "web.rc"))

@@ -50,17 +50,17 @@
         ;; the reason for the following setting is that ptviewer sends
         ;; a different User-Agent -- (when requesting PTDefault.html)
         hunchentoot:*use-user-agent-for-sessions* nil)
+  (setq *webserver* (make-instance 'bknr.web:bknr-acceptor
+                                   :port *port*
+                                   :taskmaster (make-instance 'hunchentoot:single-threaded-taskmaster)
+                                   :persistent-connections-p nil))
   (flet
       ((start-fn ()
-         (hunchentoot:start (make-instance 'bknr.web:bknr-acceptor
-                                           :port *port*
-                                           :taskmaster (make-instance 'hunchentoot:single-threaded-taskmaster)
-                                           :persistent-connections-p nil))))
+         (hunchentoot:start *webserver*)))
     (if foregroundp
         (funcall #'start-fn)
         (bt:make-thread #'start-fn
                         :name (format nil "HTTP server on port ~A" *port*))))
-  (setq *webserver* t)
   (if start-frontend
       (start-frontend :host host :backend-port port :port frontend-port)
       (warn "frontend not started - to achieve this specify :start-frontend t"))
