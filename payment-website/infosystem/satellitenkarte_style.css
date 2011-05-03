@@ -1,4 +1,8 @@
 
+body {
+    overflow: hidden;
+}
+
 .BreadCrumbs {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 10px;
