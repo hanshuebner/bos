@@ -7,3 +7,9 @@
 [submodule "lib/xhtmlgen"]
 	path = lib/xhtmlgen
 	url = git@github.com:hanshuebner/xhtmlgen
+[submodule "lib/cl-smtp"]
+	path = lib/cl-smtp
+	url = git@github.com:hanshuebner/cl-smtp
+[submodule "lib/yason"]
+	path = lib/yason
+	url = git@github.com:hanshuebner/yason
