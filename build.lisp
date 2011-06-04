@@ -18,6 +18,10 @@
       ext:*bytes-consed-between-gcs* (* 64 1024 1024)
       *default-pathname-defaults* (pathname (format nil "~A/" (nth-value 1 (unix:unix-current-directory)))))
 
+;; load cl-gd early so that uffi is loaded in order to prevent it from
+;; using cffi-uffi (which is loaded as a dependency later)
+(asdf:oos 'asdf:load-op :cl-gd)
+
 ;;; some helpers
 (defun setup-registry (directory)
   (format t "; setting up ASDF registry, please be patient...")
