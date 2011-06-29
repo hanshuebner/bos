@@ -232,11 +232,11 @@ to determine the intensity of the returned RGB value."
 
 (defun import-tiles (directory)
   (bknr.datastore::without-sync ()
-    (dolist (px (directory directory :all nil))
+    (dolist (px (directory directory))
       (print px)
       (let ((x (parse-integer (car (last (pathname-directory px)))))
             (i 0))
-        (dolist (image-pathname (directory px :all nil))
+        (dolist (image-pathname (directory px))
           (handler-case
               (let* ((y (parse-integer (pathname-name image-pathname)))
                      (tile (ensure-original-map-tile x y)))

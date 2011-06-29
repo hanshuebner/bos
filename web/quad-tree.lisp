@@ -159,10 +159,10 @@
 (defmethod shared-initialize :after ((obj node-extension) slot-names
                                      &key base-node parent-node index
                                      &allow-other-keys)
-  (flet ((xor (a b)
+  (flet ((xor- (a b)
            (or (and (not a) b)
                (and a (not b)))))
-    (assert (xor base-node (and parent-node index)))
+    (assert (xor- base-node (and parent-node index)))
     (if base-node
         (setf (%base-node obj) base-node)
         (setf (%base-node obj) (ensure-child (base-node parent-node) index)

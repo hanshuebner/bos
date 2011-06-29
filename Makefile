@@ -1,13 +1,13 @@
 all: bos.image
 
-SBCL_BUILD=env LC_CTYPE=en_US.UTF-8 HOME=/home/bknr sbcl --dynamic-space-size 800 --no-userinit
-SBCL_RUN=env LC_CTYPE=en_US.ISO8859-1 sbcl --core bos.core --dynamic-space-size 800 --no-userinit
+SBCL_BUILD=env LC_CTYPE=en_US.UTF-8 sbcl --dynamic-space-size 800
+SBCL_RUN=env LC_CTYPE=en_US.ISO8859-1 sbcl --core bos.core --dynamic-space-size 800
 
-CCL_BUILD=ccl -n
-CCL_RUN=ccl -n
+CCL_BUILD=ccl
+CCL_RUN=ccl
 
-all: bos.image
-start: start-ccl
+all: bos.core
+start: start-sbcl
 
 bos.core: build.lisp
 	$(SBCL_BUILD) --load build.lisp --eval '(sb-ext:save-lisp-and-die "bos.core")'

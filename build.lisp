@@ -46,12 +46,6 @@
 #+openmcl
 (defun dump-image (&optional (image-name "bknr.image"))
   (format t "~&;;; --- dumping image ~A~%" image-name)
-  #-darwin
-  (progn
-    (dolist (lib ccl::*shared-libraries*)
-      (ignore-errors
-        (ccl::close-shared-library lib)))
-    (setf ccl::*shared-libraries* *initial-shared-libraries*))
   (ccl:save-application image-name))
 
 #+sbcl
@@ -62,6 +56,7 @@
 ;;; setup asdf:*central-registry*
 (setup-registry "./")
 ;; clean up here, offline hack
+#+(or)
 (setup-registry (merge-pathnames #P"ediware/" (user-homedir-pathname)))
 
 ;;; load bos project
