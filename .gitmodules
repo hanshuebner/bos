@@ -13,3 +13,6 @@
 [submodule "lib/yason"]
 	path = lib/yason
 	url = git@github.com:hanshuebner/yason
+[submodule "payment-website/static/jump"]
+	path = payment-website/static/jump
+	url = git://github.com/eikes/jump
