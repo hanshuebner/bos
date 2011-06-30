@@ -83,7 +83,7 @@
                (manual-transfer (or (scan #?r"rweisen" action)
                                     (scan #?r"rweisung" action)
                                     (scan #?r"verf" action)))
-               (language (request-language))
+               (language (make-keyword-from-string (request-language)))
                (sponsor (make-sponsor :language language))
                (contract (make-contract sponsor numsqm
                                         :download-only (or (< (* +price-per-m2+ numsqm) *mail-amount*)
@@ -93,33 +93,41 @@
                                                         bos.m2::*online-contract-expiry-time*)
                                                     (get-universal-time)))))
           (destructuring-bind (price currency)
-              (case (make-keyword-from-string language)
+              (case language
                 (:da (list (* numsqm 24) "DKK"))
                 (t   (list (* numsqm 3)  "EUR")))
             (setf (get-template-var :worldpay-url)
-                  (if manual-transfer
-                      (format nil "ueberweisung?contract-id=~A&amount=~A&numsqm=~A~@[&donationcert-yearly=1~]"
-                              (store-object-id contract)
-                              price
-                              numsqm
-                              donationcert-yearly)
-                      (format nil "https://select.worldpay.com/wcc/purchase?instId=~A&cartId=~A&amount=~A&currency=~A&lang=~A&desc=~A&MC_sponsorid=~A&MC_password=~A&MC_donationcert-yearly=~A&MC_gift=~A~@[~A~]"
-                              *worldpay-installation-id*
-                              (store-object-id contract)
-                              price
-                              currency
-                              language
-                              (encode-urlencoded (format nil "~A ~A Samboja Lestari"
-                                                         numsqm
-                                                         (case (make-keyword-from-string language)
-                                                           (:de "qm Regenwald in")
-                                                           (:da "m2 Regnskov i")
-                                                           (t "sqm rain forest in"))))
-                              (store-object-id sponsor)
-                              (sponsor-master-code sponsor)
-                              (if donationcert-yearly "1" "0")
-                              (if gift "1" "0")
-                              (when *worldpay-test-mode* "&testMode=100"))))))
+                  (cond
+                    (manual-transfer
+                     (format nil "ueberweisung?contract-id=~A&amount=~A&numsqm=~A~@[&donationcert-yearly=1~]"
+                             (store-object-id contract)
+                             price
+                             numsqm
+                             donationcert-yearly))
+                    ((eq language :de)
+                     (format nil "spendino?contract-id=~A&amount=~A&numsqm=~A~@[&donationcert-yearly=1~]"
+                             (store-object-id contract)
+                             price
+                             numsqm
+                             donationcert-yearly))
+                    (t
+                     (format nil "https://select.worldpay.com/wcc/purchase?instId=~A&cartId=~A&amount=~A&currency=~A&lang=~A&desc=~A&MC_sponsorid=~A&MC_password=~A&MC_donationcert-yearly=~A&MC_gift=~A~@[~A~]"
+                             *worldpay-installation-id*
+                             (store-object-id contract)
+                             price
+                             currency
+                             language
+                             (encode-urlencoded (format nil "~A ~A Samboja Lestari"
+                                                        numsqm
+                                                        (case language
+                                                          (:de "qm Regenwald in")
+                                                          (:da "m2 Regnskov i")
+                                                          (t "sqm rain forest in"))))
+                             (store-object-id sponsor)
+                             (sponsor-master-code sponsor)
+                             (if donationcert-yearly "1" "0")
+                             (if gift "1" "0")
+                             (when *worldpay-test-mode* "&testMode=100")))))))
         (emit-tag-children))
     (bos.m2::allocation-areas-exhausted (e)
       (declare (ignore e))

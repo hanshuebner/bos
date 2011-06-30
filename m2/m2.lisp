@@ -186,8 +186,9 @@
   (bknr.datastore::mp-with-lock-held (*sponsor-counter-lock*)
     (incf *sponsor-counter*)))
 
-(defun make-sponsor (&rest initargs &key login &allow-other-keys)
+(defun make-sponsor (&rest initargs &key language login &allow-other-keys)
   (apply #'make-instance 'sponsor
+         :language (string language)
          :login (or login (format nil "s-~36R-~36R" (next-sponsor-counter) (get-universal-time)))
          :master-code (mod (+ (get-universal-time) (random 1000000)) 1000000)
          initargs))

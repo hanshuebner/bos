@@ -149,6 +149,24 @@ body {
 	font : normal normal 1.0em Verdana, Geneva, Arial, Helvetica, sans-serif;
 }
 
+/* Content-Box mit overflow fuer Spendino-formular */
+#textbox_spendino
+{
+	position: relative;
+	z-index: 39;
+	line-height: 16px;
+	height: 580px;
+	width: 550px;
+	margin-top: 0px;
+	margin-left: 30px;
+	margin-right: 17px;
+	margin-bottom: 2px;
+	visibility: visible;
+	display: block;
+	overflow: auto;
+	font : normal normal 1.0em Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
 /* Content-Box mit overflow fuer Formulare und Inhaltsseiten ohne content-right */
 #textbox_content_bigger
 {
