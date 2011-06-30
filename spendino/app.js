@@ -30,13 +30,27 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
+// Allowed IP addresses for status update callbacks
+var allowedPeers = {
+    '89.238.64.138': true,      // spendino
+    '89.238.76.182': true,      // spendino
+    '178.63.163.33': true       // netzhansa.com
+}
+
 // Routes
 
 app.post('/status', function(req, res) {
-    res.render('index', {
-        title: 'Status updated'
-    });
-    console.log('xtxid:', req.body.xtxid, 'status:', req.body.status);
+    var from = req.connection.socket.remoteAddress;
+    if (allowedPeers[from]) {
+        res.render('index', {
+            title: 'Status updated'
+        });
+        console.log('from:', from, 'xtxid:', req.body.xtxid, 'status:', req.body.status);
+    } else {
+        console.log('from:', from, 'rejected');
+        res.statusCode = 400;
+        res.end('invocation of handler prohibited');
+    }
 });
 
 app.get('/status', function(req, res) {
@@ -44,6 +58,18 @@ app.get('/status', function(req, res) {
         title: 'All well'
     });
     console.log("GET /status request");
+});
+
+app.get('/buy-success', function(req, res) {
+    res.render('index', {
+        title: 'donation successful'
+    });
+});
+
+app.get('/buy-failure', function(req, res) {
+    res.render('index', {
+        title: 'donation not successful'
+    });
 });
 
 app.listen(8077);
