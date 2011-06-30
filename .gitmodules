@@ -16,3 +16,6 @@
 [submodule "payment-website/static/jump"]
 	path = payment-website/static/jump
 	url = git://github.com/eikes/jump
+[submodule "lib/MochiKit"]
+	path = lib/MochiKit
+	url = https://github.com/mochi/mochikit.git
