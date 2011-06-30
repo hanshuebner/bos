@@ -36,7 +36,7 @@
     <!-- container content_main -->
     <div id="content_main">
       <div id="textbox_spendino" >
-        <script src="http://api.spendino.de/admanager/ads/display/437?xtxid=$(contract-id)&amp;xamount=$(amount)00"></script>
+        <script src="https://api.spendino.de/admanager/ads/display/437?xtxid=$(contract-id)&amp;xamount=$(amount)00"></script>
       </div>
     </div>
     <script type="text/javascript">maybe_show_ueberweisung_printed_cert()</script>
