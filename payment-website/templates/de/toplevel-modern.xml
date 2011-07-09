@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:bknr="http://bknr.net"
+    xmlns:bos="http://headcraft.de/bos"
+    >
+  <head>
+    <title>$(title)</title>
+    <link rel="stylesheet" href="/static/toplevel_style.css" />
+    <link rel="stylesheet" href="/static/content_style.css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript"><!-- x -->
+    </script>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <bos:page-specific-script/>
+  </head>
+  <body bos:lang="$(language)">
+
+    <!-- header and menu_top -->
+    <div id="header">
+
+      <div id="menue_banner">
+        <a href="index">
+          <img src="../images/site_header-de.gif" border="0" width="780" height="92"/>
+        </a>
+      </div>
+
+      <div id="menue_header_left">
+        BOS Deutschland
+      </div>
+
+      <div id="menue_header_main">
+        <div>l</div>
+        <div>
+          <a href="idea" class="menue"
+             title="Was genau passiert.">
+            Projekt
+          </a>
+        </div>
+        <div>l</div>
+        <div>
+          <a href="bestellung" class="menue"
+             title="Machen Sie mit!">
+            Spenden
+          </a>
+        </div>
+        <div>l</div>	
+        <div>
+          <a href="bos" class="menue"
+             title="BOS Foundation">
+            BOS
+          </a>
+        </div>
+        <div>l</div>	
+        <div>
+          <a href="/de/satmap" class="menue"
+             title="Satellitenkarte">
+            Satellitenkarte
+          </a>
+        </div>
+        <div>l</div>
+        <div>
+          <a href="contact" class="menue"
+             title="Kontakten Sie uns.">
+            Kontakt
+          </a>
+        </div>	
+      </div>
+    </div>
+    <!-- /header and menu_top -->
+
+    <!-- content 3teilig-->
+    <bknr:tag-body />
+    <!-- /content 3teilig-->
+
+    <bos:google-analytics-track />
+  </body>
+</html>

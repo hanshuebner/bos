@@ -108,6 +108,13 @@ function check_ueberweisung() {
 
 function check_online() {
 
+    var email = document.getElementById('email');
+    if (!email.value.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)) {
+        alert('Bitte geben Sie Ihre Email-Adresse ein');
+        email.focus();
+        return false;
+    }
+
     if (!document.bestellformular.disclaimer_read.checked) {
 	alert("Bitte lesen Sie die Verzichtsklausel und bestätigen Sie sie Ihr Einverständnis durch Ankreuzen der Checkbox");
 	return false;
@@ -277,3 +284,4 @@ function maybe_show_ueberweisung_printed_cert()
         document.getElementById('urkunde-download-info').style.display = 'inline';
     }
 }
+

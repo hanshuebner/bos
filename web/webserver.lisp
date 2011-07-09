@@ -24,6 +24,23 @@
 (defmethod find-template-pathname ((handler worldpay-template-handler) template-name)
   (call-next-method handler
                     (cond
+                      ((scan #?r"(^|.*/)handle-spendino-sale" template-name)
+                       (with-query-params (success contract-id)
+                         (format t "XXX handle-spendino-sale success ~A contract-id ~A~%" success contract-id)
+                         ;; fixme: language setting not yet supported
+                         (let ((contract (get-contract (parse-integer contract-id)))
+                               (lang "de"))
+                           (cond
+                             ((not (typep contract 'contract))
+                              (user-error "Error: Invalid transaction ID."))
+                             ((contract-paidp contract)
+                              (user-error "Error: Transaction already processed."))
+                             ((equal "false" success)
+                              #?"/$(lang)/sponsor_canceled")
+                             ((< (contract-price contract) *mail-certificate-threshold*)
+                              #?"/$(lang)/spendino-quittung")
+                             (t
+                              "/$(lang)/versand_info")))))
                       ((scan #?r"(^|.*/)handle-sale" template-name)
                        (with-query-params (cartId name address country transStatus lang MC_gift)
                          (unless (website-supports-language lang)

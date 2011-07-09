@@ -134,6 +134,28 @@
 	      <td colspan="3" height="10"> 
 	      </td>
 	    </tr>
+            <tr>
+              <td align="left" colspan="3">
+                <label for="email">Meine Email-Adresse:</label>
+              </td>
+            </tr>
+            <tr>
+              <td align="left" colspan="3">
+                <input type="text" name="email" id="email" size="65"/>
+              </td>
+            </tr>
+	    <tr>
+	      <td colspan="3" height="10"> 
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3" height="1" bgcolor="#c0c0c0"> 
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="3" height="10"> 
+	      </td>
+	    </tr>
 	    <tr>
 	      <td colspan="3">
 		<span class="headline">Spenden sind steuerlich absetzbar!</span><br /> 
@@ -155,7 +177,7 @@
 	    <tr>
 	      <td colspan="4">							
 		<span class="help_text">
-		  Ihre Daten werden elektronisch über unseren Partner WorldPay erfasst und bearbeitet.
+		  Ihre Daten werden elektronisch über unseren Partner Spendino erfasst und bearbeitet.
 		  Die Bestimmungen des Datenschutzgesetzes werden eingehalten. Daten werden nicht an Dritte
 		  weitergegeben.
 		</span>
@@ -230,9 +252,9 @@
 	<br /> <br />	
 	[<strong>Vertrauensgarantie</strong>]<br />
 
-	Worldpay ist ein international anerkannter
+	Spendino ist ein auf Spenden spezialisierter
 	Onlinezahlungsanbieter.  Ihre Zahlungsdaten (Konto- oder
-	Kreditkartennummer) werden verschlüsselt zu WorldPay
+	Kreditkartennummer) werden verschlüsselt zu Spendino
 	übertragen.  BOS Deutschland e.V. hat keinen Zugriff auf die
 	Zahlungsdaten.
 

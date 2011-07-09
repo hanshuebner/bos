@@ -70,7 +70,7 @@
 
 (define-bknr-tag buy-sqm ()
   (handler-case
-      (with-template-vars (numsqm numsqm1 action gift donationcert-yearly download-only)
+      (with-template-vars (numsqm numsqm1 action gift donationcert-yearly download-only email)
         (let* ((numsqm (parse-integer (or numsqm numsqm1)))
                ;; Wer ueber dieses Formular bestellt, ist ein neuer
                ;; Sponsor, also ein neues Sponsorenobjekt anlegen.  Eine
@@ -105,11 +105,15 @@
                              numsqm
                              donationcert-yearly))
                     ((eq language :de)
-                     (format nil "spendino?contract-id=~A&amount=~A&numsqm=~A~@[&donationcert-yearly=1~]"
+                     ;; FIXME: https not supported
+                     (let ((url (encode-urlencoded #?"http://$((hunchentoot:host))/handle-spendino-sale")))
+                       ;; send transaction information to node.js based spendino callback server
+                       (drakma:http-request #?"https://localhost:8077/start-payment?contract-id=$((store-object-id contract))&email=$(email)&url=$(url)&sponsor-id=$((store-object-id sponsor))&sponsor-master-code=$((sponsor-master-code sponsor))"))
+                     (format nil "spendino?contract-id=~A&amount=~A&numsqm=~A&email=~A"
                              (store-object-id contract)
                              price
                              numsqm
-                             donationcert-yearly))
+                             email))
                     (t
                      (format nil "https://select.worldpay.com/wcc/purchase?instId=~A&cartId=~A&amount=~A&currency=~A&lang=~A&desc=~A&MC_sponsorid=~A&MC_password=~A&MC_donationcert-yearly=~A&MC_gift=~A~@[~A~]"
                              *worldpay-installation-id*
@@ -217,3 +221,15 @@ document.write(unescape('%3Cscript src=%22' + gaJsHost + 'google-analytics.com/g
 (define-bknr-tag maybe-redirect ()
   (when (equal (hunchentoot:script-name*) "/")
     (html (:head ((:meta :http-equiv "refresh" :content "0; url=/index"))))))
+
+(define-bknr-tag page-specific-script ()
+  (let* ((script-basename (cl-ppcre:regex-replace ".*/" (hunchentoot:script-name*) ""))
+         (script-url (format nil "/static/~A.js" script-basename))
+         (script-pathname (probe-file (format nil "../..~A" script-url))))
+    (when script-pathname
+      (html ((:script :src script-url :type "text/javascript") " ")))))
+
+(define-bknr-tag spendino-payment ()
+  (with-template-vars (contract-id amount email)
+    (html ((:script :src #?"https://api.spendino.de/admanager/ads/display/437?xtxid=$(contract-id)&xamount=$(amount)00&xemail=$(email)")
+           " "))))
