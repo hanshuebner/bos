@@ -1,172 +1,172 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-  title="REGENWALD für SAMBOJA LESTARI"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
-	<div id="content">
-		<!-- content left-->
-		<div id="content_left">
-			<div id="textbox_left_form">
-				<table border="0" cellpadding="1" cellspacing="0">
-					<tr>
-						<td></td>
-						<td colspan="2">
-							<img src="/images/step5.gif" width="120" height="20" border="0" alt="" />
-						</td>
-					</tr>
-					<tr><td colspan="4" height="40"></td></tr>
-				</table>
-			</div>
-			<!-- footer -->
-			<div id="menue_footer">
-				<a href="#" onclick="window_extra('privacy')" class="footer">
-					Datenschutzinfo
-				</a>
-				l
-				<a href="#" onclick="window_extra('impressum')" class="footer">
-					Impressum
-				</a>
-			</div>
-			<!-- /footer -->
-		</div>
-		<!-- /content left-->
-		<!-- container content_main -->
-		<div id="content_main">
-			<div id="textbox_content_big" >
-				<form method="post" action="save-initial-profile" name="form" onsubmit="return check_profil_setup();">
-					<input type="hidden" name="sponsor-id" value="$(sponsor-id)" />
-					<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
-						<tr>
-							<td colspan="3" height="10">
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="25">Richten Sie jetzt Ihr Sponsoren-Profil ein:
-							</td>
-						</tr>
-						<tr>
-							<td height="20" width="40%">
-								<strong>Ihre Sponsoren-ID:</strong>
-							</td>
-							<td width="15">
-							</td>
-							<td>
-								$(sponsor-id)
-							</td>
-						</tr>
-						<tr>
-							<td height="30">
-								<strong> Kennwort:</strong>
-							</td>
-							<td>
-							</td>
-							<td>
-								<input type="password" name="password" value="" size="20" class="form_big" />
-							</td>
-						</tr>
-						<tr>
-							<td height="30">
-								<strong> Kennwort wiederholen:</strong>
-							</td>
-							<td>
-							</td>
-							<td>
-								<input type="password" name="password1" value="" size="20" class="form_big" />
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="20">
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3">
-								Momentan führen wir Ihr Profil unter unten angegebenem Namen. Sie können diesen an
-								dieser Stelle auch ändern bzw. angeben, dass Sie anonym bleiben möchten.
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="8">
-							</td>
-						</tr>
-						<tr>
-				                         <td width="40%" height="20">
-							 	Name:
-							</td>
-				                        <td>
-							</td>
-				                        <td>
-								<input type="text" name="name" value="$(name)" size="20" class="form_big"
-									onclick="javascript:document.form.anonym.checked = false;"
-									onblur="javascript:if (this.value == '') { document.form.anonym.checked = true; }"/>
-								<br />
-								<input type="checkbox" name="anonym" value="1"
-									onclick="javascript:if (this.checked) { document.form.name.value = ''; }"/> anonym
-				                        </td>
-						</tr>
-						<tr>
-							<td colspan="3" height="15">
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3">
-								<br />
-								Ihre E-Mail-Adresse wird <strong>nicht</strong> veröffentlicht, sondern lediglich für
-								interne Informationszwecke verwendet.
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="18">
-							</td>
-						</tr>
-						<tr>
-				                      	<td class="content_text" height="20">
-								E-Mail-Adresse:
-							</td>
-				                        <td>
-							</td>
-	                			        <td>
-								<input type="text" name="email" value="$(email)" size="33" class="form_big" />
-							</td>
-						</tr>
-						<tr>
-							<td height="12">
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="10">
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="1" bgcolor="#c0c0c0">
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="15">
-							</td>
-						</tr>
-						<tr>
-				                        <td colspan="3" align="right">
-								<input type="submit" class="form_big" name="Button" value="speichern und zu den Quadratmetern" />
-						  	</td>
-						</tr>
-					</table>
-				 </form>
-			</div>
-		</div>
-		<div id="content_right">
-			<div id="helpbox">
-				<br /><br />
-				[<strong>Profil-Kennwort</strong>]<br />
-				Geben Sie Ihr eigenes Kennwort an. Sollten Sie dieses vergessen, dann finden Sie ein so genanntes Master-Kennwort auf Ihrer
-				Zahlungsbestätigung, die per E-Mail verschickt wurde.<br /><br /><br /><br /><br />
-				[<strong>Profil-Einrichtung</strong>]<br />
-				Legen Sie fest, unter welchem Namen "Ihr" m² angezeigt werden sollen.
-				<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-		 	</div>
-		</div>
-	</div>
+    title="REGENWALD für SAMBOJA LESTARI"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:bknr="http://bknr.net"
+    xmlns:bos="http://headcraft.de/bos"
+    >
+  <div id="content">
+    <!-- content left-->
+    <div id="content_left">
+      <div id="textbox_left_form">
+        <table border="0" cellpadding="1" cellspacing="0">
+          <tr>
+            <td></td>
+            <td colspan="2">
+              <img src="/images/step5.gif" width="120" height="20" border="0" alt="" />
+            </td>
+          </tr>
+          <tr><td colspan="4" height="40"></td></tr>
+        </table>
+      </div>
+      <!-- footer -->
+      <div id="menue_footer">
+        <a href="#" onclick="window_extra('privacy')" class="footer">
+          Datenschutzinfo
+        </a>
+        l
+        <a href="#" onclick="window_extra('impressum')" class="footer">
+          Impressum
+        </a>
+      </div>
+      <!-- /footer -->
+    </div>
+    <!-- /content left-->
+    <!-- container content_main -->
+    <div id="content_main">
+      <div id="textbox_content_big" >
+        <form method="post" action="save-initial-profile" name="form" onsubmit="return check_profil_setup();">
+          <input type="hidden" name="sponsor-id" value="$(sponsor-id)" />
+          <table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td colspan="3" height="10">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" height="25">Richten Sie jetzt Ihr Sponsoren-Profil ein:
+              </td>
+            </tr>
+            <tr>
+              <td height="20" width="40%">
+                <strong>Ihre Sponsoren-ID:</strong>
+              </td>
+              <td width="15">
+              </td>
+              <td>
+                $(sponsor-id)
+              </td>
+            </tr>
+            <tr>
+              <td height="30">
+                <strong> Kennwort:</strong>
+              </td>
+              <td>
+              </td>
+              <td>
+                <input type="password" name="password" value="" size="20" class="form_big" />
+              </td>
+            </tr>
+            <tr>
+              <td height="30">
+                <strong> Kennwort wiederholen:</strong>
+              </td>
+              <td>
+              </td>
+              <td>
+                <input type="password" name="password1" value="" size="20" class="form_big" />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" height="20">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                Momentan führen wir Ihr Profil unter unten angegebenem Namen. Sie können diesen an
+                dieser Stelle auch ändern bzw. angeben, dass Sie anonym bleiben möchten.
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" height="8">
+              </td>
+            </tr>
+            <tr>
+              <td width="40%" height="20">
+                Name:
+              </td>
+              <td>
+              </td>
+              <td>
+                <input type="text" name="name" value="$(name)" size="20" class="form_big"
+                       onclick="javascript:document.form.anonym.checked = false;"
+                       onblur="javascript:if (this.value == '') { document.form.anonym.checked = true; }"/>
+                <br />
+                <input type="checkbox" name="anonym" value="1"
+                       onclick="javascript:if (this.checked) { document.form.name.value = ''; }"/> anonym
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" height="15">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                <br />
+                Ihre E-Mail-Adresse wird <strong>nicht</strong> veröffentlicht, sondern lediglich für
+                interne Informationszwecke verwendet.
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" height="18">
+              </td>
+            </tr>
+            <tr>
+              <td class="content_text" height="20">
+                E-Mail-Adresse:
+              </td>
+              <td>
+              </td>
+              <td>
+                <input type="text" name="email" value="$(email)" size="33" class="form_big" />
+              </td>
+            </tr>
+            <tr>
+              <td height="12">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" height="10">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" height="1" bgcolor="#c0c0c0">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" height="15">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" align="right">
+                <input type="submit" class="form_big" name="Button" value="speichern und zu den Quadratmetern" />
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
+    <div id="content_right">
+      <div id="helpbox">
+        <br /><br />
+        [<strong>Profil-Kennwort</strong>]<br />
+        Geben Sie Ihr eigenes Kennwort an. Sollten Sie dieses vergessen, dann finden Sie ein so genanntes Master-Kennwort auf Ihrer
+        Zahlungsbestätigung, die per E-Mail verschickt wurde.<br /><br /><br /><br /><br />
+        [<strong>Profil-Einrichtung</strong>]<br />
+        Legen Sie fest, unter welchem Namen "Ihr" m² angezeigt werden sollen.
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+      </div>
+    </div>
+  </div>
 </bknr:toplevel>
