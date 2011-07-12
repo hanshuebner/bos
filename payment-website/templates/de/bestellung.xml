@@ -3,6 +3,7 @@
 	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
    title="REGENWALD für SAMBOJA LESTARI"
+   template="toplevel-modern"
    xmlns="http://www.w3.org/1999/xhtml"
    xmlns:bknr="http://bknr.net"
    xmlns:bos="http://headcraft.de/bos"
@@ -51,35 +52,28 @@
 	    <tr>
 	      <td colspan="3" height="5"> </td>
 	    </tr>
-            <script type="text/javascript">
-              function verschenken(state) {
-                document.bestellformular.gift.disabled = !state;
-                document.bestellformular.gift.checked = false;
-              }
-            </script>
 	    <tr>
 	      <td colspan="3">
 		<input type="radio" name="numsqm" value="1"
-		       onclick="document.bestellformular.numsqm1.value = ''; verschenken(false)" />
+		       onclick="document.bestellformular.numsqm1.value = '';" />
 		1 m² Regenwald [3 Euro],
 		<br />
 		<input type="radio" name="numsqm" value="5"
-		       onclick="document.bestellformular.numsqm1.value = ''; verschenken(false)" />
+		       onclick="document.bestellformular.numsqm1.value = '';" />
 		5 m² Regenwald [15 Euro],
 		<br />
 		<input type="radio" name="numsqm" value="10" checked="checked"
-		       onclick="document.bestellformular.numsqm1.value = ''; verschenken(false)" />
+		       onclick="document.bestellformular.numsqm1.value = '';" />
 		10 m²  Regenwald [30 Euro],
 		<br />
 		<input type="radio" name="numsqm" value="30"
-		       onclick="document.bestellformular.numsqm1.value = ''; verschenken(true)" />
+		       onclick="document.bestellformular.numsqm1.value = '';" />
 		30 m² Regenwald [90 Euro]
 		<br />
-		<input type="radio" name="numsqm" value="" onclick="document.bestellformular.numsqm1.value = ''; verschenken(false)"/>
+		<input type="radio" name="numsqm" value="" onclick="document.bestellformular.numsqm1.value = '';"/>
 		oder
 		<input type="text" name="numsqm1" size="5" value=""
-		       onfocus="document.bestellformular.numsqm[4].click(); verschenken(false)"
-                       onkeyup="verschenken(document.bestellformular.numsqm1.value &gt;= 30)"/>
+		       onfocus="document.bestellformular.numsqm[4].click();"/>
 		Quadratmeter [zu je 3 Euro].
 		<br />
 	      </td>
@@ -103,7 +97,7 @@
             </tr>
             <tr>
               <td align="left" colspan="3">
-                <input type="text" name="email" id="email" size="65"/>
+                <input type="text" name="email" id="email" style="width: 100%"/>
               </td>
             </tr>
 	    <tr>
