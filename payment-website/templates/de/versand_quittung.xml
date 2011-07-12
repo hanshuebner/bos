@@ -1,150 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-  title="REGENWALD für SAMBOJA LESTARI"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
-	<!-- content 3teilig-->
-	<div id="content">
-		<!-- content left-->
-		<div id="content_left">
-			<div id="textbox_left_form">
-				<table border="0" cellpadding="1" cellspacing="0">
-					<tr>
-						<td></td>
-						<td colspan="2">
-							<img src="/images/step4.gif" width="120" height="20" border="0" alt="" />
-						</td>
-					</tr>
-					<tr><td colspan="4" height="40"></td></tr>
-				</table>
-			</div>
-			<!-- footer -->
-			<div id="menue_footer">
-				<a href="#" onclick="window_extra('privacy')" class="footer">
-					Datenschutzinfo
-				</a>
-				l
-				<a href="#" onclick="window_extra('impressum')" class="footer">
-					Impressum
-				</a>
-			<!-- /footer -->
-			</div>
-		<!-- /content left-->
-		</div>
-		<!-- container content_main -->
-		<div id="content_main">
-			<div id="textbox_content_big" >
-				<form method="post" action="generate-cert">
-					<input type="hidden" name="sponsor-id" value="$(sponsor-id)" />
-					<input type="hidden" name="__sponsorid" value="$(sponsor-id)" />
-					<input type="hidden" name="__password" value="$(master-code)" />
-					<input type="hidden" name="contract-id" value="$(contract-id)" />
-					<input type="hidden" name="want-print" value="$(want-print)" />
-					<input type="hidden" name="name" value="$(name)" />
-					<input type="hidden" name="address" value="$(address)" />
-					<input type="hidden" name="email" value="$(email)" />
-					<input type="hidden" name="gift" value="$(gift)" />
-					<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
-						<tr>
-							<td colspan="3">
-								Wir werden Ihre Regenwald-Urkunde auf den folgenden Namen ausstellen:<br /><br />
-								$(name)
-        <bos:only-if-print>
-								 <br /><br />
- 								Versandadresse für die Urkunde: <br />
-<pre>
-$(address)
-$(postcode)
-$(country)
-</pre>
-        </bos:only-if-print>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="10">
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3">
-								<span class="help_text">
-									Überprüfen Sie bitte die Richtigkeit der Angaben.
-								</span>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="20">
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="1" bgcolor="#c0c0c0">
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="10">
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="40">
-								Mit dieser Zahlung wurde ein neues Sponsoren-Profil mit der folgenden Sponsoren-ID angelegt:
-							</td>
-						</tr>
-						<tr>
-							<td height="20" width="40%">
-								<strong>Ihre Sponsoren-ID:</strong>
-							</td>
-							<td width="15">
-							</td>
-							<td>$(sponsor-id)
-							</td>
-						</tr>
-						<!--<tr>
-							<td height="20">   <strong> Ihr Kennwort:</strong></td>
-							<td></td>
-							<td>$(sponsor-password)</td>
-						</tr>-->
-						<tr>
-							<td colspan="3" height="20">
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="1" bgcolor="#c0c0c0">
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" height="10">
-							</td>
-						</tr>
-						<tr>
-							<td height="12">
-							</td>
-						</tr>
-						<tr>
-							<td colspan="3" align="right">
-								<input class="form_big" type="button"
-										value="zurück"
-										onclick="javascript:history.back()"
-										id="back" name="back" />
-								<input type="submit" class="form_big" name="Button" value="$(next-step-name)" />
-						  	</td>
-						</tr>
-					</table>
-				</form>
-			</div>
-		</div>
-		<div id="content_right">
-			<div id="helpbox">
-				<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-				[<strong>Sponsoren-ID</strong>]<br />
-				Mit Hilfe des Sponsoren-Profils können Sie Ihre gesponserten m² jederzeit wieder finden.
-				Diese ID dient der einwandfreien Zuordnung der m².
-				Besucher dieser Internetseite dürfen in alle m² und deren persönliche Profile einblicken.
-				Wenn Sie anonym bleiben wollen, können Sie dieses in Ihrem Profil mit Kennwortzugang veranlassen.
-				<br /><br /><br /><br /><br /><br />
-		 	</div>
-		</div>
-	</div>
+    title="REGENWALD für SAMBOJA LESTARI"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:bknr="http://bknr.net"
+    xmlns:bos="http://headcraft.de/bos"
+    >
+  <!-- content 3teilig-->
+  <div id="content">
+    <!-- content left-->
+    <div id="content_left">
+      <div id="textbox_left_form">
+      </div>
+      <!-- footer -->
+      <div id="menue_footer">
+        <a href="#" onclick="window_extra('privacy')" class="footer">
+          Datenschutzinfo
+        </a>
+        l
+        <a href="#" onclick="window_extra('impressum')" class="footer">
+          Impressum
+        </a>
+        <!-- /footer -->
+      </div>
+      <!-- /content left-->
+    </div>
+    <!-- container content_main -->
+    <div id="content_main">
+      <div id="textbox_content_big" >
+        <form method="post" action="generate-cert">
+          <input type="hidden" name="sponsor-id" value="$(sponsor-id)" />
+          <input type="hidden" name="__sponsorid" value="$(sponsor-id)" />
+          <input type="hidden" name="__password" value="$(master-code)" />
+          <input type="hidden" name="contract-id" value="$(contract-id)" />
+          <input type="hidden" name="want-print" value="$(want-print)" />
+          <input type="hidden" name="name" value="$(name)" />
+          <input type="hidden" name="address" value="$(address)" />
+          <input type="hidden" name="email" value="$(email)" />
+          <input type="hidden" name="gift" value="$(gift)" />
+          <table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td colspan="3">
+                Wir werden Ihre Regenwald-Urkunde auf den folgenden Namen ausstellen:<br /><br />
+                $(name)
+                <bos:only-if-print>
+                  <br /><br />
+                  Versandadresse für die Urkunde: <br />
+                  <pre>
+                    $(address)
+                    $(postcode)
+                    $(country)
+                  </pre>
+                </bos:only-if-print>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" height="10">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                <span class="help_text">
+                  Überprüfen Sie bitte die Richtigkeit der Angaben.
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" height="20">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" height="1" bgcolor="#c0c0c0">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" height="10">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" height="40">
+                Mit dieser Zahlung wurde ein neues Sponsoren-Profil mit der folgenden Sponsoren-ID angelegt:
+              </td>
+            </tr>
+            <tr>
+              <td height="20" width="40%">
+                <strong>Ihre Sponsoren-ID:</strong>
+              </td>
+              <td width="15">
+              </td>
+              <td>$(sponsor-id)
+              </td>
+            </tr>
+            <!--<tr>
+                <td height="20">   <strong> Ihr Kennwort:</strong></td>
+                <td></td>
+                <td>$(sponsor-password)</td>
+                </tr>-->
+            <tr>
+              <td colspan="3" height="20">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" height="1" bgcolor="#c0c0c0">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" height="10">
+              </td>
+            </tr>
+            <tr>
+              <td height="12">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" align="right">
+                <input class="form_big" type="button"
+                       value="zurück"
+                       onclick="javascript:history.back()"
+                       id="back" name="back" />
+                <input type="submit" class="form_big" name="Button" value="$(next-step-name)" />
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
+    <div id="content_right">
+      <div id="helpbox">
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+        [<strong>Sponsoren-ID</strong>]<br />
+        Mit Hilfe des Sponsoren-Profils können Sie Ihre gesponserten m² jederzeit wieder finden.
+        Diese ID dient der einwandfreien Zuordnung der m².
+        Besucher dieser Internetseite dürfen in alle m² und deren persönliche Profile einblicken.
+        Wenn Sie anonym bleiben wollen, können Sie dieses in Ihrem Profil mit Kennwortzugang veranlassen.
+        <br /><br /><br /><br /><br /><br />
+      </div>
+    </div>
+  </div>
 </bknr:toplevel>
