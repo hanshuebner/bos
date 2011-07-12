@@ -130,8 +130,7 @@
 		  betaling med kredit kort.  Bemærk, at onlinebetaling
 		  med kreditkort går via BOS Tyskland. Du kan derfor
 		  ikke få fradrag på sin selvangivelse, når du betaler
-		  med kreditkort. For at opnå skattefradrag, skal du
-		  betale via bankoverførsel.
+		  med kreditkort.
 		</span>
 		<!--
 		   Ich möchte den administrativen Aufwand und Kosten für BOS verringern und
@@ -145,7 +144,7 @@
 	    <tr>
 	      <td colspan="3">
 		<span class="help_text">
-		  [Information DanKort]<br></br>Vi kan tilbyde betaling med internationale kreditkort men desværre endnu ikke betaling med DanKort. Hvis du ikke er i besiddelse af et internationalt kreditkort (MasterCard, Visa o.l.), kan du overføre via din bank.
+		  [Information DanKort]<br></br>Vi kan tilbyde betaling med internationale kreditkort men desværre endnu ikke betaling med DanKort.
 		</span>
 	      </td>
 	    </tr>
@@ -165,8 +164,6 @@
 	    <tr>
 	      <td align="right" colspan="3">
 		<input type="submit" class="form_big_bold" name="action" value="Doner online" onclick="return check_online();" />
-		<input type="submit" class="form_big" name="action" value="bankoverførsel" onclick="return check_ueberweisung();" />
-		
 	      </td>
 	    </tr>
 	  </table>

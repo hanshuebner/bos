@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
@@ -8,7 +8,7 @@
   xmlns:bknr="http://bknr.net"
   xmlns:bos="http://headcraft.de/bos"
   >
-	<h1 class="extra">So sieht Ihre Regenwald-Urkunde aus:</h1>
+	<h1 class="extra">So sieht Ihre Lebenswald-Urkunde aus:</h1>
 	<center>
 		<img src="/images/certificat.jpg" width="300" height="424" alt="" border="0" />
 	</center>	

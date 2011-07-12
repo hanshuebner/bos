@@ -313,6 +313,27 @@ font-size: 100.1%;
 	background-color : White;
 }
 
+#advertisement
+{
+	position: absolute;
+        top: 318px;
+	z-index: 20;
+	margin-top: 15px;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	padding: 4px 4px 6px 6px;
+	font : normal normal 0.6em Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color : #333333;
+	font-weight : normal;
+	text-decoration : none;
+	width: 165px;
+	visibility: visible;
+	display: block;
+	max-width: 165px;
+	border : 1px solid #CCCCCC;
+	background-color : White;
+}
+
 #google_earth_logo
 {
   position: relative;

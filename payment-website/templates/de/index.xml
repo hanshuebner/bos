@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
@@ -35,10 +35,9 @@
 				<tr><td height="6"></td></tr>
 				<tr>
 					<td colspan="3">
-BOS schafft durch ein einzigartiges Aufforstungskonzept die vielleicht
-letzte Zufluchtstätte für Orang-Utans, Malaienbären und andere
-bedrohte Arten in Borneo. Die Fortschritte können Sie direkt hier im
-Internet beobachten.
+BOS regeneriert durch ein einzigartiges Aufforstungskonzept nicht nur den Regenwald, 
+sondern schafft gleichzeitig auch eine Zufluchtstätte für Orang-Utans, Malaienbären und andere bedrohte Arten auf Borneo.  
+Die Fortschritte können Sie auf dieser Webseite und über google earth beobachten. 
 					<br />
 					...
 					<a href="idea" class="more">
@@ -120,5 +119,24 @@ Internet beobachten.
 					<input value="ja" class="form_big" name="action" type="submit" onclick="return send_info_request();" />
 			</form> 
 		</div>
+
+
+<!-- M.K. 12.04.2010 Verweise auf bos-deutschland/blueten  blueten_sl.swf liegt in /images -->
+		<div id="advertisement">
+				<table border="0" cellpadding="0" cellspacing="0">
+				<tr><td><a href="http://www.bos-deutschland.de/blueten" target="_blank" class="titlegreen">Die Blütenwelt von Samboja Lestari</a></td></tr>
+				<tr><td height="6"> </td></tr>
+				<tr><td>
+	<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="165" height="100" id="blueten_sl" align="middle">
+	<param name="allowScriptAccess" value="sameDomain" />
+	<param name="allowFullScreen" value="false" />
+	<param name="movie" value="/images/blueten_sl.swf" /><param name="quality" value="high" /><param name="bgcolor" value="#ffffff" />	<embed src="/images/blueten_sl.swf" quality="high" bgcolor="#ffffff" width="165" height="100" name="blueten_sl" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.adobe.com/go/getflashplayer_de" />
+	</object>
+				</td></tr>
+			</table>
+		</div>
+<!-- M.K. 12.04.2010 ENDE-->
+
+			
 	</div>
 </bknr:toplevel>
