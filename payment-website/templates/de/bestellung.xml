@@ -21,30 +21,6 @@
 	    </td>
 	  </tr>
 	  <tr><td colspan="4" height="40"></td></tr>
-	  <tr>
-	    <td> </td>
-	    <td colspan="2">
-	      <span class="link_titlered">
-		Regenwald schaffen
-		<br />für nur 3,- Euro pro m²
-	      </span>
-	      <br /><br />
-	    </td>
-	    <td></td>				
-	  </tr>
-	  <tr>
-	    <td></td>
-	    <td colspan="2">
-	      Wir freuen uns über Ihre Entscheidung, sich mit BOS für Natur und Mensch in Indonesien zu engagieren.
-	      <br /><br />
-	      Mit Ihrer Unterstützung leisten Sie einen wichtigen Beitrag zur nachhaltigen Projektarbeit in Samboja Lestari
-	      <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-	      <a href="idea_subtitle2" class="more">
-		mehr...
-	      </a>
-	    </td>
-	    <td></td>
-	  </tr>
 	</table>
       </div>
       <!-- footer -->	
@@ -112,20 +88,6 @@
 	      <td colspan="3" height="8"> </td>
 	    </tr>
 	    
-	    <tr>
-	      <td colspan="3">
-		<input type="checkbox" name="gift" value="1" disabled="1"/>
-		Ich möchte die m² symbolisch verschenken.
- 		<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-		<a href="#" onclick="window_extra('verschenken')" class="more">
-		  Info
-		</a>
-	      </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3" height="10"> 
-	      </td>
-	    </tr>
 	    <tr>
 	      <td colspan="3" height="1" bgcolor="#c0c0c0"> 
 	      </td>
@@ -233,8 +195,8 @@
 	<br /><br /><br />
 	[<strong>Regenwald-Urkunde</strong>]
 	<br />
-	Ab einer Spende von 90,- Euro senden wir Ihnen oder dem Beschenkten eine attraktive Regenwald-Urkunde zu.
-	Schon ab 1 m² erhalten Sie eine
+	Ab einer Spende von 90,- Euro senden wir Ihnen eine attraktive
+	Regenwald-Urkunde zu.  Schon ab 1 m² erhalten Sie eine
 	<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
 	<a href="#" onclick="window_extra('certificat')" class="more">
 	  Urkunde

@@ -128,13 +128,11 @@
       <div id="helpbox">		
 	<strong>[Persönliche Daten]</strong>
 	<br />
-        Wir reservieren gerne die von Ihnen gewünschten m². Für die Zusendung
-        der entsprechenden Informationen (Regenwaldurkunde, Geokoordinaten,
-        Spendenbescheinigung) benötigen wir Ihre Daten. Nach
-        erfolgter Überweisung melden wir uns schriftlich und
-        per E-Mail.
-	<br /><br />
-	<strong>[Urkunde]</strong>
+        Wir reservieren gerne die von Ihnen gewünschten m². Für die
+        Zusendung der entsprechenden Informationen (Regenwaldurkunde,
+        Geokoordinaten, Spendenbescheinigung) benötigen wir Ihre
+        Daten. Nach erfolgter Überweisung melden wir uns per E-Mail.
+        <br /><br /> <strong>[Urkunde]</strong>
         <br />
         <span id="urkunde-print-info" style="display: none">
           Ihre persönliche Urkunde können Sie sich jederzeit bei
