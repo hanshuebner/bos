@@ -105,10 +105,8 @@
                              numsqm
                              donationcert-yearly))
                     ((eq language :de)
-                     ;; FIXME: https not supported
-                     (let ((url (encode-urlencoded #?"http://$((hunchentoot:host))/handle-spendino-sale")))
-                       ;; send transaction information to node.js based spendino callback server
-                       (drakma:http-request #?"https://localhost:8077/start-payment?contract-id=$((store-object-id contract))&email=$(email)&url=$(url)&sponsor-id=$((store-object-id sponsor))&sponsor-master-code=$((sponsor-master-code sponsor))"))
+                     ;; send transaction information to node.js based spendino callback server
+                     (spendino:register-payment contract email)
                      (format nil "spendino?contract-id=~A&amount=~A&numsqm=~A&email=~A"
                              (store-object-id contract)
                              price

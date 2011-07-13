@@ -6,13 +6,40 @@
 (defpackage :bos.web.spendino
   (:use :cl :bos.web :bos.m2 :bknr.web :cl-interpol :xhtml-generator :alexandria :bknr.datastore)
   (:nicknames :spendino)
-  (:export "STATUS-HANDLER"
+  (:export "REGISTER-PAYMENT"
+           "STATUS-HANDLER"
            "BUY-SUCCESS-HANDLER"
            "BUY-FAILURE-HANDLER"))
 
 (in-package :bos.web.spendino)
 
 (enable-interpol-syntax)
+
+;; Expiry time for contracts, this is the maximum time that the payment process may take.
+(defconstant +max-payment-time+ (* 60 10))
+
+;; List of (contract time email)
+(defvar *contract-emails* nil)
+
+(defun register-payment (contract email)
+  (push (list contract (get-universal-time) email) *contract-emails*))
+
+(defun find-contract-email (contract)
+  (let (new-contracts
+        retval
+        (now (get-universal-time)))
+    (dolist (list *contract-emails*)
+      (destructuring-bind (contract1 time email) list
+        (cond
+          ((> (- now time) +max-payment-time+)
+           ;; Skip this entry, expired
+           )
+          ((eq contract contract1)
+           (setf retval email))
+          (t
+           (push list new-contracts)))))
+    (setf *contract-emails* new-contracts)
+    retval))
 
 (defclass html-page-handler (page-handler)
   ())
@@ -37,8 +64,7 @@
     (handle-contract handler contract)))
 
 (defclass status-handler (contract-handler)
-  ()
-  (:default-initargs :object-class 'contract :query-function 'find-contract))
+  ())
 
 (defparameter *status-allowed-peers*
   '("89.238.64.138" "89.238.76.182" ; spendino
@@ -74,12 +100,17 @@
   (when (contract-paidp contract)
     (error "Contract ~A already marked as paid" (store-object-id contract)))
 
-  (html
-   (:html
-    (:head
-     (:title "Payment complete"))
-    (:body
-     "Payment for contract " (:princ-safe contract) " complete"))))
+  (let ((email (find-contract-email contract)))
+
+    (unless email
+      (error "Contract ~A not registered" contract))
+
+    (html
+     (:html
+      (:head
+       (:title "Payment complete"))
+      (:body
+       "Payment for contract " (:princ-safe contract) " complete")))))
 
 (defclass buy-failure-handler (contract-handler)
   ())
@@ -91,9 +122,13 @@
   (when (contract-paidp contract)
     (error "Contract ~A already marked as paid" (store-object-id contract)))
 
+  (format t "contract ~A canceled (email ~A)~%" contract (find-contract-email contract))
+
   (html
    (:html
     (:head
      (:title "Payment not complete"))
     (:body
-     "Payment NOT complete"))))
+     "Payment NOT complete"))
+   ((:script :type "text/javascript")
+    "window.top.location = 'https://' + window.location.host + '/de/sponsor_canceled'")))
