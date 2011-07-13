@@ -1,110 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  suppress-xml-headers="1"
-  >
-	<head>
-		<base href="$(website-url)/de/sponsor_canceled" />
-		<link rel="stylesheet" href="/static/toplevel_style.css" />
-		<link rel="stylesheet" href="/static/content_style.css" />
-		<script src="/static/bos.js" type="text/javascript"><!-- x -->	
-		</script> 
-             <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8" />-->
-		<title>REGENWALD für SAMBOJA LESTARI</title>
-	</head>
-	<body bos:lang="$(language)">
-		
-		<!-- header and menu_top -->
-		<div id="header">
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:bknr="http://bknr.net"
+    xmlns:bos="http://headcraft.de/bos"
+    suppress-xml-headers="1"
+    >
+  <head>
+    <base href="$(website-url)/de/sponsor_canceled" />
+    <link rel="stylesheet" href="/static/toplevel_style.css" />
+    <link rel="stylesheet" href="/static/content_style.css" />
+    <script src="/static/bos.js" type="text/javascript"><!-- x -->	
+    </script> 
+    <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8" />-->
+    <title>REGENWALD für SAMBOJA LESTARI</title>
+  </head>
+  <body bos:lang="$(language)">
+    
+    <!-- header and menu_top -->
+    <div id="header">
 
-			<div id="menue_banner">
-				<a href="index">
-					<img src="../images/site_header-de.gif" border="0" width="780" height="92"/>
-				</a>
-			</div>
+      <div id="menue_banner">
+        <a href="index">
+          <img src="../images/site_header-de.gif" border="0" width="780" height="92"/>
+        </a>
+      </div>
 
-			<div id="menue_header_left">
-			BOS Deutschland e.V.
-			</div>
-			<div id="menue_header_main">
-				<div>l</div>
-				<div>
-					<a href="idea" class="menue"
-							title="Was genau passiert.">
-						Projekt
-					</a>
-				</div>
-				<div>l</div>
-				<div>
-					<a href="bestellung" class="menue"
-							title="Machen Sie mit!">
-						Spenden
-					</a>
-				</div>
-				<div>l</div>	
-				<div>
-					<a href="bos" class="menue"
-							title="BOS Foundation">
-						BOS
-					</a>
-				</div>
-				<div>l</div>	
-				<div>
-					<a href="#" onclick="window_infosys()" class="menue"
-							title="Satellitenkarte">
-						Satellitenkarte
-					</a>
-				</div>
-				<div>l</div>
-				<div>
-					<a href="contact" class="menue"
-							title="Kontakten Sie uns.">
-						Kontakt
-					</a>
-				</div>	
-				<div>l</div>		
-			</div>
-		</div>
-		<!-- /header and menu_top -->
-		<!-- content 3teilig-->
-		<div id="content">
-			<div id="content_left"><!-- content left-->
-				<div id="textbox_left_form">		
-				</div>	
-				<!-- footer -->	
-				<div id="menue_footer">	
-					<a href="#" onclick="window_extra('privacy')" class="footer">
-						Datenschutzinfo
-					</a>
-					l
-					<a href="#" onclick="window_extra('impressum')" class="footer">
-						Impressum
-					</a>
-				</div>
-				<!-- /footer -->	
-			</div>
-			<!-- /content left-->
-			<!-- container content_main -->
-			<div id="content_main">
-				<div id="textbox_content_big" >
-					<table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
-						<tr>
-							<td colspan="3"><span class="headline">Sie haben die Zahlung abgebrochen</span></td>
-						</tr>
-					</table>
-				</div>
-			</div>
-			<div id="content_right">
-				<div id="helpbox">		
-					<br /><br />
-					[<strong>Zahlung abgebrochen</strong>]
-			 	</div>
-			</div>
-		</div>
-		<bos:google-analytics-track />
-	</body>
+      <div id="menue_header_left">
+        BOS Deutschland e.V.
+      </div>
+      <div id="menue_header_main">
+        <div>l</div>
+        <div>
+          <a href="idea" class="menue"
+             title="Was genau passiert.">
+            Projekt
+          </a>
+        </div>
+        <div>l</div>
+        <div>
+          <a href="bestellung" class="menue"
+             title="Machen Sie mit!">
+            Spenden
+          </a>
+        </div>
+        <div>l</div>	
+        <div>
+          <a href="bos" class="menue"
+             title="BOS Foundation">
+            BOS
+          </a>
+        </div>
+        <div>l</div>	
+        <div>
+          <a href="#" onclick="window_infosys()" class="menue"
+             title="Satellitenkarte">
+            Satellitenkarte
+          </a>
+        </div>
+        <div>l</div>
+        <div>
+          <a href="contact" class="menue"
+             title="Kontakten Sie uns.">
+            Kontakt
+          </a>
+        </div>	
+        <div>l</div>		
+      </div>
+    </div>
+    <!-- /header and menu_top -->
+    <!-- content 3teilig-->
+    <div id="content">
+      <div id="content_left"><!-- content left-->
+        <div id="textbox_left_form">		
+        </div>	
+        <!-- footer -->	
+        <div id="menue_footer">	
+          <a href="#" onclick="window_extra('privacy')" class="footer">
+            Datenschutzinfo
+          </a>
+          l
+          <a href="#" onclick="window_extra('impressum')" class="footer">
+            Impressum
+          </a>
+        </div>
+        <!-- /footer -->	
+      </div>
+      <!-- /content left-->
+      <!-- container content_main -->
+      <div id="content_main">
+        <div id="textbox_content_big" >
+          <table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td colspan="3"><span class="headline">Sie haben die Zahlung abgebrochen</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="content_right">
+        <div id="helpbox">		
+          <br /><br />
+          [<strong>Zahlung abgebrochen</strong>]
+        </div>
+      </div>
+    </div>
+    <bos:google-analytics-track />
+  </body>
 </html>
