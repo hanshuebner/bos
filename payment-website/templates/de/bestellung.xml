@@ -14,15 +14,6 @@
     <!-- content left-->
     <div id="content_left">
       <div id="textbox_left_form">		
-	<table border="0" cellpadding="1" cellspacing="0">
-	  <tr>
-	    <td></td>
-	    <td colspan="2">
-	      <img src="/images/step1.gif" width="120" height="20" border="0" alt="" />
-	    </td>
-	  </tr>
-	  <tr><td colspan="4" height="40"></td></tr>
-	</table>
       </div>
       <!-- footer -->	
       <div id="menue_footer">	
@@ -97,7 +88,7 @@
             </tr>
             <tr>
               <td align="left" colspan="3">
-                <input type="text" name="email" id="email" style="width: 100%"/>
+                <input type="text" name="email" id="email" style="width: 97%"/>
               </td>
             </tr>
 	    <tr>

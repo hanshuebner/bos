@@ -34,12 +34,6 @@
       <div id="content_left"><!-- content left-->
         <div id="textbox_left_form">		
           <table border="0" cellpadding="1" cellspacing="0">
-            <tr>
-              <td></td>
-              <td colspan="2">
-                <img src="/images/step3.gif" width="120" height="20" border="0" alt="" />
-              </td>
-            </tr>
             <tr><td colspan="4" height="40"></td></tr>
             <tr>
               <td> </td>
