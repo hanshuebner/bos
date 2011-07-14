@@ -1,0 +1,58 @@
+#slider {
+    margin: 20px 10px 20px 10px;
+}
+
+#content_main {
+    position: absolute;
+    z-index: 5;
+    margin-top: 30px;
+    margin-left: 220px;
+    width: 539px;
+    max-height: 477px;
+    visibility: visible;
+    display: block;
+    font : normal normal 0.8em Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+#content_main .headline {
+    font-size: 120%;
+}
+
+
+#content_main > form > div {
+    margin-bottom: 1em;
+}
+
+a {
+    color : #339900;
+    text-decoration : none;
+}
+
+
+div#anschrift {
+    display: none;
+    padding: 1em 3em 1em 3em;
+}
+
+#choose_printed_cert {
+    display: none;
+}
+
+.printed_cert_block {
+    min-height: 2.5em;
+}
+
+button {
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0;
+    line-height: 0;
+    width: auto;
+    overflow: visible;
+}
+
+input.labelHighlight {
+    color: grey;
+}

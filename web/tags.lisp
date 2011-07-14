@@ -71,7 +71,7 @@
 (define-bknr-tag buy-sqm ()
   (handler-case
       (with-template-vars (numsqm numsqm1 action gift donationcert-yearly download-only email)
-        (let* ((numsqm (parse-integer (or numsqm numsqm1)))
+        (let* ((numsqm (parse-integer (or numsqm numsqm1 (error "numsqm and numsqm1 not set"))))
                ;; Wer ueber dieses Formular bestellt, ist ein neuer
                ;; Sponsor, also ein neues Sponsorenobjekt anlegen.  Eine
                ;; Profil-ID wird automatisch zugewiesen, sonstige Daten
@@ -226,6 +226,13 @@ document.write(unescape('%3Cscript src=%22' + gaJsHost + 'google-analytics.com/g
          (script-pathname (probe-file (format nil "../..~A" script-url))))
     (when script-pathname
       (html ((:script :src script-url :type "text/javascript") " ")))))
+
+(define-bknr-tag page-specific-css ()
+  (let* ((css-basename (cl-ppcre:regex-replace ".*/" (hunchentoot:script-name*) ""))
+         (css-url (format nil "/static/~A.css" css-basename))
+         (css-pathname (probe-file (format nil "../..~A" css-url))))
+    (when css-pathname
+      (html ((:link :rel "stylesheet" :href css-url))))))
 
 (define-bknr-tag spendino-payment ()
   (with-template-vars (contract-id amount email)

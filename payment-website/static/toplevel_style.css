@@ -1,9 +1,8 @@
 /* Basics */
 
 body {
-margin-top: 0px;
-margin-left: 0px;
-font-size: 100.1%;
+    margin-top: 0px;
+    margin-left: 0px;
 }
 
 /* area f&uuml;r usemap */
@@ -245,7 +244,6 @@ font-size: 100.1%;
 	border-bottom : 1px solid #CCCCCC;
 	background-image : url(../images/bg_content_right.gif);
 }
-
 
 #newsbox1, #newsbox2, #newsbox3
 {

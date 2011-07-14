@@ -13,9 +13,9 @@
   <div id="content">
     <!-- content left-->
     <div id="content_left">
-      <div id="textbox_left_form">		
+      <div id="textbox_left_form">
       </div>
-      <!-- footer -->	
+      <!-- footer -->
       <div id="menue_footer">	
 	<a href="#" onclick="window_extra('privacy')" class="footer">
 	  Datenschutzinfo
@@ -30,183 +30,145 @@
     <!-- /content left-->
     <!-- container content_main -->
     <div id="content_main">
-      <div id="textbox_content_big" >
-	<form name="bestellformular" method="post" action="buy-sqm">
-	  <table id="formTable" width="100%" border="0" cellspacing="0" cellpadding="0">
-	    <tr>
-	      <td colspan="3">
-		<span class="headline">
-		  Ich bin dabei. Ich möchte sehen wie Samboja Lestari grüner wird und schaffe...
-		</span>
-	      </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3" height="5"> </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3">
-		<input type="radio" name="numsqm" value="1"
-		       onclick="document.bestellformular.numsqm1.value = '';" />
-		1 m² Regenwald [3 Euro],
-		<br />
-		<input type="radio" name="numsqm" value="5"
-		       onclick="document.bestellformular.numsqm1.value = '';" />
-		5 m² Regenwald [15 Euro],
-		<br />
-		<input type="radio" name="numsqm" value="10" checked="checked"
-		       onclick="document.bestellformular.numsqm1.value = '';" />
-		10 m²  Regenwald [30 Euro],
-		<br />
-		<input type="radio" name="numsqm" value="30"
-		       onclick="document.bestellformular.numsqm1.value = '';" />
-		30 m² Regenwald [90 Euro]
-		<br />
-		<input type="radio" name="numsqm" value="" onclick="document.bestellformular.numsqm1.value = '';"/>
-		oder
-		<input type="text" name="numsqm1" size="5" value=""
-		       onfocus="document.bestellformular.numsqm[4].click();"/>
-		Quadratmeter [zu je 3 Euro].
-		<br />
-	      </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3" height="8"> </td>
-	    </tr>
-	    
-	    <tr>
-	      <td colspan="3" height="1" bgcolor="#c0c0c0"> 
-	      </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3" height="10"> 
-	      </td>
-	    </tr>
-            <tr>
-              <td align="left" colspan="3">
-                <label for="email">Meine Email-Adresse:</label>
-              </td>
-            </tr>
-            <tr>
-              <td align="left" colspan="3">
-                <input type="text" name="email" id="email" style="width: 97%"/>
-              </td>
-            </tr>
-	    <tr>
-	      <td colspan="3" height="10"> 
-	      </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3" height="1" bgcolor="#c0c0c0"> 
-	      </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3" height="10"> 
-	      </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3">
-		<span class="headline">Spenden sind steuerlich absetzbar!</span><br /> 
-	      </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3" height="10"> 
-	      </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3" height="1" bgcolor="#c0c0c0"> 
-	      </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3" height="10"> 
-	      </td>
-	    </tr>	
-	    
-	    <tr>
-	      <td colspan="4">							
-		<span class="help_text">
-		  Ihre Daten werden elektronisch über unseren Partner Spendino erfasst und bearbeitet.
-		  Die Bestimmungen des Datenschutzgesetzes werden eingehalten. Daten werden nicht an Dritte
-		  weitergegeben.
-		</span>
-		
- 		<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-		<a href="#" onclick="window_extra('privacy')" class="more">
-		  Datenschutzinformation
-		</a>
-	      </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3" height="9"> </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3">
-		<span class="help_text">
-		  Spenden Sie bequem online via Kreditkarte oder Lastschriftverfahren.
-		  Sie verringern damit administrative Kosten für BOS.
-		</span>
-		<!--
-		    Ich möchte den administrativen Aufwand und Kosten für BOS verringern und
-		    spende deshalb bequem online via Kreditkarte oder per Lastschrift.
-		  -->
-	      </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3" height="15"> </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3">
-		<input type="checkbox" name="disclaimer_read" value="1" />
-		Ich habe die
- 		<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-		<a href="#" onclick="show_disclaimer()" class="more">
-		  Verzichtsklausel
-		</a> gelesen und stimme ihr zu. <br /> 
-	      </td>
-	    </tr>
-	    <tr>
-	      <td align="right" colspan="3">
-		<input type="submit" class="form_big_bold" name="action" value="Online Spenden"
-		       onclick="return check_online();" />
-		<input type="submit" class="form_big" name="action" value="Überweisen"
-		       onclick="return check_ueberweisung();" />
-	      </td>
-	    </tr>
-	  </table>
-	</form>
-      </div>
-    </div>
-    <div id="content_right">
-      <div id="helpbox">		
-	<br /><br /><br />
-	[<strong>Regenwald-Urkunde</strong>]
-	<br />
-	Ab einer Spende von 90,- Euro senden wir Ihnen eine attraktive
-	Regenwald-Urkunde zu.  Schon ab 1 m² erhalten Sie eine
-	<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-	<a href="#" onclick="window_extra('certificat')" class="more">
-	  Urkunde
-	</a>
-	als pdf-Download im eigenen Sponsoren-Profil. 
-	<br /><br /><br />
-	[<strong>Spendenquittung</strong>]
-	<br />
+      <form name="bestellformular" method="post" action="buy-sqm">
+        <div>
+          <span class="headline">
+            Ich bin dabei und möchte sehen, wie Samboja Lestari grüner
+            wird.  Ich schaffe <input name="numsqm" id="numsqm"
+            size="4" value="10"/> m² Regenwald für <span
+            id="amount">30</span> Euro.
+          </span>
+          <div id="slider">
+          </div>
+        </div>
+        <div>
+          <input type="text" name="email" id="email" style="width: 97%" title="Email-Adresse"/>
+        </div>
+        <div>
+          <div id="announce_printed_cert" class="printed_cert_block">
+            Bei Spenden ab 90&#8364; senden wir Ihnen Ihre
+            <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+            <a href="#" onclick="window_extra('certificat')">Lebenswaldurkunde</a>
+            auf Wunsch per Post zu.
+          </div>
+          <div id="choose_printed_cert" class="printed_cert_block">
+            <input type="checkbox" name="printed_cert" id="printed_cert" value="1" />
+            <label for="printed_cert">
+              Ich möchte meine
+              <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+              <a href="#" onclick="window_extra('certificat')">Lebenswaldurkunde</a>
+              zugesandt bekommen.
+            </label>
+            <div id="anschrift">
+              <div>
+                <label for="title">Anrede</label>
+                <select name="title" id="title"> 
+                  <option>Bitte wählen Sie</option> 
+                  <option value="Herr">Herr</option> 
+                  <option value="Frau">Frau</option> 
+                </select>
+                <label for="academicTitle">Titel</label>
+                <select name="academicTitle" id="academicTitle"> 
+                  <option>Bitte wählen Sie</option> 
+                  <option value="Dr.">Dr.</option> 
+                  <option value="Prof">Prof</option> 
+                  <option value="Prof. Dr.">Prof. Dr.</option> 
+                </select>
+              </div>
+              <div>
+                <input name="firstname" type="text" id="firstname" title="Vorname" size="27"/>
+                <input name="lastname" type="text" id="surname" title="Nachname" size="27"/>
+                <br/>
+                <input name="street" type="text" id="street" title="Strasse" size="50"/>
+                <input name="number" type="text" id="number" title="Nr." size="4"/>
+                <br/>
+                <input name="zip" type="text" id="zip" title="PLZ" size="4"/>
+                <input name="city" type="text" id="city" title="Ort" size="50"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--
+            <span class="help_text">
+            Ihre Daten werden elektronisch über unseren Partner Spendino erfasst und bearbeitet.
+            Die Bestimmungen des Datenschutzgesetzes werden eingehalten. Daten werden nicht an Dritte
+            weitergegeben.
+            </span>
+            
+            <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+            <a href="#" onclick="window_extra('privacy')" class="more">
+            Datenschutzinformation
+            </a>
 
-	Bei Spenden über 200,- Euro schicken wir Ihnen eine
-	Spendenbescheinigung per Post zu.  Bei Spenden bis zu 200 Euro
-	reicht die Vorlage des Überweisungsträgers oder
-        Kontoauszugs bei der Steuererklärung.
-
-	<br /> <br />	
-	[<strong>Vertrauensgarantie</strong>]<br />
-
-	Spendino ist ein auf Spenden spezialisierter
-	Onlinezahlungsanbieter.  Ihre Zahlungsdaten (Konto- oder
-	Kreditkartennummer) werden verschlüsselt zu Spendino
-	übertragen.  BOS Deutschland e.V. hat keinen Zugriff auf die
-	Zahlungsdaten.
-
-	<br /><br />
-      </div>			
+<span class="help_text">
+Spenden Sie bequem online via Kreditkarte oder Lastschriftverfahren.
+Sie verringern damit administrative Kosten für BOS.
+</span>
+        -->
+        <div>
+          <input type="checkbox" name="disclaimer_read" id="disclaimer_read" value="1" />
+          <label for="disclaimer_read">
+            Ich habe die
+            <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+            <a href="#" onclick="show_disclaimer()">
+              Verzichtsklausel
+              </a> gelesen und stimme ihr zu. 
+          </label>
+        </div>
+        <div>
+          <button name="action" value="creditcard">
+            <img src="/images/creditcard_logo.png" alt="Mit Kreditkarte bezahlen"/>
+          </button>
+          <button name="action" value="ec">
+            <img src="/images/ec_logo.png" alt="Mit Lastschrift bezahlen"/>
+          </button>
+          <button name="action" value="paypal">
+            <img src="/images/paypal_logo.png" alt="Mit PayPal bezahlen"/>
+          </button>
+          <button name="action" value="ueberweisung">
+            <img src="/images/ueberweisung_logo.png" alt="Per Ueberweisung bezahlen"/>
+          </button>
+        </div>
+        <div>
+          <span class="headline">Spenden sind steuerlich absetzbar!</span>
+        </div>
+      </form>
     </div>
   </div>
+  <!--
+  <div id="content_right">
+    <div id="helpbox">		
+      <br /><br /><br />
+      [<strong>Regenwald-Urkunde</strong>]
+      <br />
+      Ab einer Spende von 90,- Euro senden wir Ihnen auf Wunsch eine
+      attraktive Regenwald-Urkunde per Post zu.  Schon ab 1 m²
+      erhalten Sie eine
+      <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+      <a href="#" onclick="window_extra('certificat')" class="more">
+        Urkunde
+      </a>
+      als pdf-Download im eigenen Sponsoren-Profil. 
+      <br /><br /><br />
+      [<strong>Spendenquittung</strong>]
+      <br />
+
+      Bei Spenden über 200,- Euro schicken wir Ihnen eine
+      Spendenbescheinigung per Post zu.  Bei Spenden bis zu 200 Euro
+      reicht die Vorlage des Überweisungsträgers oder
+      Kontoauszugs bei der Steuererklärung.
+
+      <br /> <br />	
+      [<strong>Vertrauensgarantie</strong>]<br />
+
+      Spendino ist ein auf Spenden spezialisierter
+      Onlinezahlungsanbieter.  Ihre Zahlungsdaten (Konto- oder
+      Kreditkartennummer) werden verschlüsselt zu Spendino
+      übertragen.  BOS Deutschland e.V. hat keinen Zugriff auf die
+      Zahlungsdaten.
+
+      <br /><br />
+    </div>
+  </div>
+    -->
 </bknr:toplevel>

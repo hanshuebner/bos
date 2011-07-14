@@ -10,7 +10,15 @@
     <title>$(title)</title>
     <link rel="stylesheet" href="/static/toplevel_style.css" />
     <link rel="stylesheet" href="/static/content_style.css" />
+    <link rel="stylesheet" href="/static/css/south-street/jquery-ui-1.8.14.custom.css" />
+    <bos:page-specific-css/>
+    <script src="/static/bos.js" type="text/javascript"><!-- x -->
+    </script>
     <script src="/static/jquery-1.6.2.min.js" type="text/javascript"><!-- x -->
+    </script>
+    <script src="/static/jquery-ui-1.8.14.custom.min.js" type="text/javascript"><!-- x -->
+    </script>
+    <script src="/static/jquery.labelify.js" type="text/javascript"><!-- x -->
     </script>
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <bos:page-specific-script/>
