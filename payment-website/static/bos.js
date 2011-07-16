@@ -31,7 +31,6 @@ function make_infosys_window() {
     open('',
          "infowin",
          "width=740,height=500,status=no,toolbar=no,menubar=no,resizable=no,scrollbars=no,left=250,top=50");
-    document.forms[0].action = "/" + document.body.getAttribute("bos:lang") + "/infosystem";
 };
 
 // Sprachumschaltung

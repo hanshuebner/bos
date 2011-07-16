@@ -150,7 +150,7 @@
           </table>
         </div>
         <div id="textbox_left_login">
-          <form target="infowin" onsubmit="make_infosys_window()" method="post">
+          <form target="infowin" onsubmit="make_infosys_window()" action="/infosys" method="post">
             <div>
               <label for="__sponsorid">Sponsor-ID</label>
               <br/>
