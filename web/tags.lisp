@@ -96,7 +96,7 @@
               (case language
                 (:da (list (* numsqm 24) "DKK"))
                 (t   (list (* numsqm 3)  "EUR")))
-            (setf (get-template-var :worldpay-url)
+            (setf (get-template-var :payment-url)
                   (cond
                     (manual-transfer
                      (format nil "ueberweisung?contract-id=~A&amount=~A&numsqm=~A~@[&donationcert-yearly=1~]"

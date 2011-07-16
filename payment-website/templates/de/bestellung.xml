@@ -31,25 +31,44 @@
     <!-- container content_main -->
     <div id="content_main">
       <form name="bestellformular" method="post" action="buy-sqm">
-        <div>
+        <div class="hasInfo">
           <span class="headline">
             Ich bin dabei und möchte sehen, wie Samboja Lestari grüner
             wird.  Ich schaffe <input name="numsqm" id="numsqm"
             size="4" value="10"/> m² Regenwald für <span
             id="amount">30</span> Euro.
           </span>
-          <div id="slider">
+          <div id="sliderContainer">
+            <div id="legend10">10m²</div>
+            <div id="legend100">100m²</div>
+            <div id="legend1000">1000m²</div>
+            <div id="slider">
+            </div>
+          </div>
+          <div class="infoPopup">
+            Bitte geben Sie die gewuenschte Anzahl von Quadratmetern
+            zu je 3 Euro ein, oder waehlen Sie eine Anzahl durch
+            Bewegen des gruenen Knopfes aus. XXX UMLAUTE XXX
           </div>
         </div>
         <div>
-          <input type="text" name="email" id="email" style="width: 97%" title="Email-Adresse"/>
+          <div class="hasInfo">
+            <input type="text" name="email" id="email" style="width: 97%" title="Email-Adresse"/>
+            <div class="infoPopup">
+              Ihre Email-Adresse benötigen wir, um Ihnen Ihre Zugangsdaten zuzuschicken.
+            </div>
+          </div>
         </div>
         <div>
-          <div id="announce_printed_cert" class="printed_cert_block">
+          <div id="announce_printed_cert" class="printed_cert_block bubbleInfo">
             Bei Spenden ab 90&#8364; senden wir Ihnen Ihre
             <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
             <a href="#" onclick="window_extra('certificat')">Lebenswaldurkunde</a>
             auf Wunsch per Post zu.
+            <div class="infoPopup">
+              Schon ab 1 m² erhalten Sie Ihre Lebenswaldurkunde als
+              pdf-Download in Ihrem Sponsoren-Profil.
+            </div>
           </div>
           <div id="choose_printed_cert" class="printed_cert_block">
             <input type="checkbox" name="printed_cert" id="printed_cert" value="1" />
@@ -88,23 +107,6 @@
             </div>
           </div>
         </div>
-        <!--
-            <span class="help_text">
-            Ihre Daten werden elektronisch über unseren Partner Spendino erfasst und bearbeitet.
-            Die Bestimmungen des Datenschutzgesetzes werden eingehalten. Daten werden nicht an Dritte
-            weitergegeben.
-            </span>
-            
-            <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-            <a href="#" onclick="window_extra('privacy')" class="more">
-            Datenschutzinformation
-            </a>
-
-<span class="help_text">
-Spenden Sie bequem online via Kreditkarte oder Lastschriftverfahren.
-Sie verringern damit administrative Kosten für BOS.
-</span>
-        -->
         <div>
           <input type="checkbox" name="disclaimer_read" id="disclaimer_read" value="1" />
           <label for="disclaimer_read">
@@ -116,59 +118,49 @@ Sie verringern damit administrative Kosten für BOS.
           </label>
         </div>
         <div>
-          <button name="action" value="creditcard">
-            <img src="/images/creditcard_logo.png" alt="Mit Kreditkarte bezahlen"/>
-          </button>
-          <button name="action" value="ec">
-            <img src="/images/ec_logo.png" alt="Mit Lastschrift bezahlen"/>
-          </button>
-          <button name="action" value="paypal">
-            <img src="/images/paypal_logo.png" alt="Mit PayPal bezahlen"/>
-          </button>
-          <button name="action" value="ueberweisung">
-            <img src="/images/ueberweisung_logo.png" alt="Per Ueberweisung bezahlen"/>
-          </button>
+          Bitte wählen Sie Ihre Zahlungsmethode:
         </div>
         <div>
+          <div class="hasInfo" style="display: inline">
+            <button name="action" value="creditcard">
+              <img src="/images/creditcard_logo.png" title="Mit Kreditkarte bezahlen"/>
+            </button>
+            <button name="action" value="ec">
+              <img src="/images/ec_logo.png" title="Mit Lastschrift bezahlen"/>
+            </button>
+            <button name="action" value="paypal">
+              <img src="/images/paypal_logo.png" title="Mit PayPal bezahlen"/>
+            </button>
+            <div class="infoPopup">
+              <p>
+                Ihre Zahlungsdaten werden elektronisch über unseren
+                Partner Spendino erfasst und bearbeitet.  Die
+                Bestimmungen des Datenschutzgesetzes werden
+                eingehalten. Daten werden nicht an Dritte weitergegeben.
+              </p>
+              <p>
+                Spendino ist ein auf Spenden spezialisierter
+                Onlinezahlungsanbieter.  Ihre Zahlungsdaten (Konto- oder
+                Kreditkartennummer) werden verschlüsselt zu Spendino
+                übertragen.  BOS Deutschland e.V. hat keinen Zugriff auf die
+                Zahlungsdaten.
+              </p>
+            </div>
+          </div>
+          <button name="action" value="ueberweisung">
+            <img src="/images/ueberweisung_logo.png" title="Per Überweisung bezahlen"/>
+          </button>
+        </div>
+        <div class="hasInfo">
           <span class="headline">Spenden sind steuerlich absetzbar!</span>
+          <div class="infoPopup">
+            Bei Spenden über 200,- Euro schicken wir Ihnen eine
+            Spendenbescheinigung per Post zu.  Bei Spenden bis zu 200 Euro
+            reicht die Vorlage des Überweisungsträgers oder
+            Kontoauszugs bei der Steuererklärung.
+          </div>
         </div>
       </form>
     </div>
   </div>
-  <!--
-  <div id="content_right">
-    <div id="helpbox">		
-      <br /><br /><br />
-      [<strong>Regenwald-Urkunde</strong>]
-      <br />
-      Ab einer Spende von 90,- Euro senden wir Ihnen auf Wunsch eine
-      attraktive Regenwald-Urkunde per Post zu.  Schon ab 1 m²
-      erhalten Sie eine
-      <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-      <a href="#" onclick="window_extra('certificat')" class="more">
-        Urkunde
-      </a>
-      als pdf-Download im eigenen Sponsoren-Profil. 
-      <br /><br /><br />
-      [<strong>Spendenquittung</strong>]
-      <br />
-
-      Bei Spenden über 200,- Euro schicken wir Ihnen eine
-      Spendenbescheinigung per Post zu.  Bei Spenden bis zu 200 Euro
-      reicht die Vorlage des Überweisungsträgers oder
-      Kontoauszugs bei der Steuererklärung.
-
-      <br /> <br />	
-      [<strong>Vertrauensgarantie</strong>]<br />
-
-      Spendino ist ein auf Spenden spezialisierter
-      Onlinezahlungsanbieter.  Ihre Zahlungsdaten (Konto- oder
-      Kreditkartennummer) werden verschlüsselt zu Spendino
-      übertragen.  BOS Deutschland e.V. hat keinen Zugriff auf die
-      Zahlungsdaten.
-
-      <br /><br />
-    </div>
-  </div>
-    -->
 </bknr:toplevel>

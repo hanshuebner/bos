@@ -3,6 +3,7 @@
 body {
     margin-top: 0px;
     margin-left: 0px;
+    overflow: hidden;
 }
 
 /* area f&uuml;r usemap */
@@ -376,7 +377,7 @@ body {
 
 
 #menue_footer {
-	position: relative;
+	position: absolute;
 	z-index: 15;
 	margin-top: 5px;
 	margin-left: 0px;
@@ -392,13 +393,9 @@ body {
 	border-bottom : 1px solid #CCCCCC;
 	border-top : 1px solid #CCCCCC;
 	bottom : 0px;
+        left: 0px;
 }
 
-
-
-
-
-
-
-
-
+button, #slider, input[type='checkbox'] {
+    cursor: pointer;
+}

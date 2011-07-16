@@ -20,6 +20,8 @@
     </script>
     <script src="/static/jquery.labelify.js" type="text/javascript"><!-- x -->
     </script>
+    <script src="/static/jquery.bos.js" type="text/javascript"><!-- x -->
+    </script>
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <bos:page-specific-script/>
   </head>

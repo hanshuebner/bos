@@ -1,4 +1,4 @@
-function check_online() {
+function check_form() {
 
     var email = $('#email');
     if (email.val() == "") {
@@ -60,7 +60,7 @@ $(document).ready(function () {
         window.location = window.location.href.replace(/^http:/, "https:");
     }
 
-    document.bestellformular.onsubmit = check_online;
+    document.bestellformular.onsubmit = check_form;
 
     $(":text").labelify({ labelledClass: "labelHighlight" });
     $('#slider').slider({ slide: changeSqmCount, value: 9 });
@@ -72,9 +72,9 @@ $(document).ready(function () {
     });
     $('#printed_cert').change(function () {
         if (this.checked) {
-            $('#anschrift').show('fast');
+            $('#anschrift').show();
         } else {
-            $('#anschrift').hide('fast');
+            $('#anschrift').hide();
         }
     });
 });
