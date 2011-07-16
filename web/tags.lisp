@@ -238,3 +238,6 @@ document.write(unescape('%3Cscript src=%22' + gaJsHost + 'google-analytics.com/g
   (with-template-vars (contract-id amount email)
     (html ((:script :src #?"https://api.spendino.de/admanager/ads/display/437?xtxid=$(contract-id)&xamount=$(amount)00&xemail=$(email)")
            " "))))
+
+(define-bknr-tag infosystem ()
+  (bknr.web::redirect-request :target (format nil "/infosystem/~A/satellitenkarte.htm" (request-language))))

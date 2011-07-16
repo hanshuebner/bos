@@ -150,14 +150,14 @@
           </table>
         </div>
         <div id="textbox_left_login">
-          <form>
+          <form target="infowin" onsubmit="make_infosys_window()" method="post">
             <div>
-              <label for="sponsorid-input">Sponsor-ID</label>
+              <label for="__sponsorid">Sponsor-ID</label>
               <br/>
-              <input id="sponsorid-input" type="text" name="__sponsorid"/>
+              <input class="sponsorid-input" type="text" name="__sponsorid"/>
               <br/>
               <label for="Password-input">Kennwort</label>
-              <input id="password-input" class="password-input" type="password" name="__password"/>
+              <input class="password-input" type="password" name="__password"/>
               <button onclick="window_infosys()">
                 <img class="login-button" src="/infosystem/bilder/submit.gif"/>
               </button>

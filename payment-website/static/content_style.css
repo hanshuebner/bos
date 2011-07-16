@@ -82,7 +82,7 @@ body {
 	color : #333333;
 	font-weight : normal;
 	text-decoration : none;
-        padding: 8px 4px 0px 10px;
+        padding: 2px 4px 0px 10px;
 }
 
 #textbox_left_login img {
@@ -98,6 +98,10 @@ body {
     line-height: 0;
     width: auto;
     overflow: visible;
+}
+
+#textbox_left_login .sponsorid-input {
+    width: 125px;
 }
 
 #textbox_left_login .password-input {

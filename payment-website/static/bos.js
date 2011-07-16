@@ -27,20 +27,11 @@ function window_news(target) {
 };
 
 // ***  extrafenster fuer satellitenkarte *** //
-function window_infosys() {
-    var url = "/infosystem/" + document.body.getAttribute("bos:lang") + "/satellitenkarte.htm";
-
-    var sponsorid_input = document.getElementById('sponsorid-input');
-    var password_input = document.getElementById('password-input');
-
-    if (sponsorid_input && password_input) {
-	url += "?__sponsorid=" + sponsorid_input.value + "&__password=" + password_input.value;
-    }
-	
-    mywin=open(url,
-	       "infowin",
-	       "width=740,height=500,status=no,toolbar=no,menubar=no,resizable=no,scrollbars=no,left=250,top=50");
-    mywin.focus();
+function make_infosys_window() {
+    open('',
+         "infowin",
+         "width=740,height=500,status=no,toolbar=no,menubar=no,resizable=no,scrollbars=no,left=250,top=50");
+    document.forms[0].action = "/" + document.body.getAttribute("bos:lang") + "/infosystem";
 };
 
 // Sprachumschaltung
