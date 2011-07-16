@@ -282,16 +282,17 @@
       (setf (hunchentoot:header-out :pragma) "no-cache")
       (setf (hunchentoot:header-out :expires) "-1")
       (with-http-body ()
-        (html
-         ((:script :language "JavaScript")
-          (:princ (format nil  "parent.set_loginstatus('~A');"
-                          (cond
-                            ((typep (bknr-session-user) 'sponsor)
-                             "logged-in")
-                            (__sponsorid
-                             "login-failed")
-                            (t
-                             "not-logged-in"))))))))))
+        (let ((response (format nil  "parent.set_loginstatus('~A');"
+                                (cond
+                                  ((typep (bknr-session-user) 'sponsor)
+                                   "logged-in")
+                                  (__sponsorid
+                                   "login-failed")
+                                  (t
+                                   "not-logged-in")))))
+          (html
+           ((:script :type "text/javascript")
+            (:princ response))))))))
 
 (defclass cert-regen-handler (editor-only-handler edit-object-handler)
   ()

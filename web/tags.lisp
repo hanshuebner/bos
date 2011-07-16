@@ -241,4 +241,5 @@ document.write(unescape('%3Cscript src=%22' + gaJsHost + 'google-analytics.com/g
 
 (define-bknr-tag infosystem ()
   (bknr.web:authorize (website-authorizer *website*))
-  (bknr.web::redirect-request :target (format nil "/infosystem/~A/satellitenkarte.htm" (request-language))))
+  (bknr.web::redirect-request :target (format nil "/infosystem/~A/satellitenkarte.htm~@[#invalid-login~]"
+                                              (request-language) (bknr-session-user))))

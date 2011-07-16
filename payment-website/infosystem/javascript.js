@@ -234,21 +234,24 @@ function login_pruefen() {
 
     var current_url = '' + document.location;
 
-    if (user == '' && current_url.match(/__sponsorid/)) {
-	user = current_url.replace(/.*__sponsorid=([^?]*).*/, "$1");
-	password = current_url.replace(/.*__password=([^?]*).*/, "$1");
+    if (document.location.hash == '#invalid-login') {
+        document.getElementById("Loginfehler").style.visibility = 'visible';
+        document.getElementById("Anmelden").style.visibility = "visible";
+        document.getElementById("SponsorInfo").style.visibility = "hidden";
+        document.location.hash = '';
+        qm_laden();
+    } else {
+        var url = http_pfad + "/sponsor-login";
+        if (user != "") {
+            url += "?__sponsorid=" + user + "&__password=" + password;
+        }
+        loginstatus = undefined;
+        window.frames['data'].window.location.replace(url);
+
+        dbg("<br/> -> lade Login-Status - url ist " + url + '<br/>');
+
+        login_warten(); // Wartefunktion starten
     }
-
-    var url = http_pfad + "/sponsor-login";
-    if (user != "") {
-	url += "?__sponsorid=" + user + "&__password=" + password;
-    }
-    loginstatus = undefined;
-    window.frames['data'].window.location.replace(url);
-
-    dbg("<br/> -> lade Login-Status - url ist " + url + '<br/>');
-
-    login_warten(); // Wartefunktion starten
 
     return false;
 }
