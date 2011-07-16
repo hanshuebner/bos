@@ -1,71 +1,74 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-  template="toplevel_extra"
-  title="REGENWALD für SAMBOJA LESTARI - Datenschutzinformation"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+    template="toplevel_extra"
+    title="REGENWALD für SAMBOJA LESTARI - Datenschutzinformation"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:bknr="http://bknr.net"
+    xmlns:bos="http://headcraft.de/bos"
+    >
   <bos:set-cachable/>
-	<h1 class="extra">Datenschutzgrundsätze (Privacy Policy) von BOS Deutschland e.V.</h1>
-	<p class="text_content">
-		<p>
+  <h1 class="extra">Datenschutzgrundsätze (Privacy Policy) von BOS Deutschland e.V.</h1>
+  <p class="text_content">
+    <p>
 
-Der Schutz Ihrer persönlichen Daten durch elektronische Verarbeitung
-ist BOS Deutschland e.V. ein wichtiges Anliegen und streng
-reglementiert.  BOS Deutschland e.V. ist als gemeinnütziger und besonders förderungswürdiger 
-Verein anerkannt und unterliegt dem Bundesdatenschutzgesetz (BDSG).  Eingetragen
-in das Vereinsregister: Amtsgericht Charlottenburg, Berlin, VR 24216
-B Freistellungsbescheid: Finanzamt für Körperschaften I Berlin,
-St.Nr.: 27/661/56139.  Spenden und Mitgliedsbeiträge sind
-steuerabzugsfähig.
+      Der Schutz Ihrer persönlichen Daten durch elektronische
+      Verarbeitung ist BOS Deutschland e.V. ein wichtiges Anliegen und
+      streng reglementiert.  BOS Deutschland e.V. ist als
+      gemeinnütziger und besonders förderungswürdiger Verein anerkannt
+      und unterliegt dem Bundesdatenschutzgesetz (BDSG).  Eingetragen
+      in das Vereinsregister: Amtsgericht Charlottenburg, Berlin, VR
+      24216 B Freistellungsbescheid: Finanzamt für Körperschaften I
+      Berlin, St.Nr.: 27/661/56139.  Spenden und Mitgliedsbeiträge
+      sind steuerabzugsfähig.
 
-		</p>
-		<p>
-<b>Was geschieht mit Ihren persönlichen Daten?</b>
-		</p>
-		<p>
-Wenn Sie sich dazu entschieden haben online zu spenden, müssen Sie
-Ihre Kontoinformationen bekannt geben.  Diese Informationen werden
-ausschließlich von WorldPay verarbeitet.  WorldPay ist ein
-international anerkannter Onlinezahlungsanbieter.  Ihre Daten werden
-im sicheren SSL-Verfahren verschlüsselt zu WorldPay übertragen.  BOS
-Deutschland e.V. hat keinen Zugriff auf Ihre Kontoinformationen.
-		</p>
-		<p>
-Jedem Quadratmeter des Naturschutzprojektes, den Sie durch Ihre Spende
-unterstützen, wird Ihr persönliches Profil angehängt. Dieses Profil
-besteht aus Namen, Landesherkunft, Anzahl der gesponsorten
-Quadratmeter, Datum der Unterstützung und einem möglichen,
-persönlichen Grußtext.  Alle Profilinformationen (ausschließlich
-E-Mail-Adresse und Postadresse) sind für jeden Besucher unserer
-Webseite einsehbar.  Hierdurch soll eine größtmögliche Transparenz und
-Interaktion zwischen den SpenderInnen gefördert
-werden.  Profilinformationen können von der betreffenden Person durch
-Kennwortzugang jederzeit geändert werden.  Hierüber ist es ist Ihnen auch
-möglich, anonym zu bleiben.
-		</p>
-		<p>
-Um Ihnen Ihr persönliches Profil mit Sponsoren-ID und Kennwort
-zusenden zu können, benötigen wir die Angabe Ihrer E-Mail-Adresse.
-Für die Versendung von Urkunden per Post benötigen wir eine
-entsprechende Adresse und den Namen der Person, auf die die Urkunde
-ausgestellt werden soll.  Für die Versendung von
-Newslettern/Nachrichten können Sie uns Ihre E-Mail-Adresse
-bekanntgeben.
-		</p>
-		<p>
-Wir versichern, dass diese Daten nur zu Zwecken der Verwaltung und
-Information von BOS Deutschland e.V. sowie im internationalen
-BOS-Verbund verwendet werden. Sie können der Zusendung von
-Informationen jederzeit widersprechen und das Löschen Ihrer Daten aus
-dem System bewirken.  Bitte geben Sie stets Ihre Sponsor-ID an!
-		</p>
-		<p>
-Wenn Sie Fragen zu den Datenschutzgrundsätzen von BOS Deutschland
-e.V. haben, wenden Sie sich bitte an datenschutz@bos-deutschland.de.
-		</p>
-	</p>
+    </p>
+    <p>
+      <b>Was geschieht mit Ihren persönlichen Daten?</b>
+    </p>
+    <p>
+      Wenn Sie sich dazu entschieden haben online zu spenden, müssen
+      Sie Ihre Kontoinformationen bekannt geben.  Diese Informationen
+      werden ausschließlich von Spendino verarbeitet.  Spendion ist
+      ein auf Spenden spezialisierter Onlinezahlungsanbieter.  Ihre
+      Daten werden im sicheren SSL-Verfahren verschlüsselt zu Spendino
+      übertragen.  BOS Deutschland e.V. hat keinen Zugriff auf Ihre
+      Kontoinformationen.
+    </p>
+    <p>
+      Jedem Quadratmeter des Naturschutzprojektes, den Sie durch Ihre
+      Spende unterstützen, wird Ihr persönliches Profil
+      angehängt. Dieses Profil besteht aus Namen, Landesherkunft,
+      Anzahl der gesponsorten Quadratmeter, Datum der Unterstützung
+      und einem möglichen, persönlichen Grußtext.  Alle
+      Profilinformationen (ausschließlich E-Mail-Adresse und
+      Postadresse) sind für jeden Besucher unserer Webseite einsehbar.
+      Hierdurch soll eine größtmögliche Transparenz und Interaktion
+      zwischen den SpenderInnen gefördert werden.  Profilinformationen
+      können von der betreffenden Person durch Kennwortzugang
+      jederzeit geändert werden.  Hierüber ist es ist Ihnen auch
+      möglich, anonym zu bleiben.
+    </p>
+    <p>
+      Um Ihnen Ihr persönliches Profil mit Sponsoren-ID und Kennwort
+      zusenden zu können, benötigen wir die Angabe Ihrer E-Mail-Adresse.
+      Für die Versendung von Urkunden per Post benötigen wir eine
+      entsprechende Adresse und den Namen der Person, auf die die Urkunde
+      ausgestellt werden soll.  Für die Versendung von
+      Newslettern/Nachrichten können Sie uns Ihre E-Mail-Adresse
+      bekanntgeben.
+    </p>
+    <p>
+      Wir versichern, dass diese Daten nur zu Zwecken der Verwaltung
+      und Information von BOS Deutschland e.V. verwendet werden. Sie
+      können der Zusendung von Informationen jederzeit widersprechen
+      und das Löschen Ihrer Daten aus dem System bewirken.  Bitte
+      geben Sie stets Ihre Sponsor-ID an!
+    </p>
+    <p>
+      Wenn Sie Fragen zu den Datenschutzgrundsätzen von BOS Deutschland
+      e.V. haben, wenden Sie sich bitte an datenschutz@bos-deutschland.de.
+    </p>
+  </p>
 </bknr:toplevel>

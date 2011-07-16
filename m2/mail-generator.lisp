@@ -422,3 +422,25 @@ Donationcert yearly: ~A
                       (make-contract-xml-part contract-id params)
                       (make-vcard-part contract-id (worldpay-callback-params-to-vcard params)))))
     (mail-contract-data contract "WorldPay" parts)))
+
+(defun moustache-expand (template &rest vars)
+  (cl-ppcre:regex-replace-all
+   "{{(.*?)}}" template
+   (lambda (target-string start end match-start match-end reg-starts reg-ends)
+     (declare (ignore start end match-start match-end))
+     (let ((key (make-keyword-from-string (subseq target-string
+                                                  (aref reg-starts 0) (aref reg-ends 0)))))
+       (princ-to-string (getf vars key key))))))
+
+(defun send-instructions-to-sponsor (contract email-address &key (language "de"))
+  "Send the instructions email to the sponsor, using the email-address provided"
+  (let ((sponsor (contract-sponsor contract)))
+    (send-system-mail :to email-address
+                      :subject "Ihre Quadratmeter"
+                      :text (moustache-expand
+                             (file-contents (merge-pathnames (format nil "instructions-email-~(~A~).txt" language)
+                                                             bos.web::*website-directory*)
+                                            :element-type 'character)
+                             :sponsor-id (store-object-id sponsor)
+                             :sponsor-master-code (sponsor-master-code sponsor)))))
+    

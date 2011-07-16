@@ -72,6 +72,7 @@
       <div id="content_main">
         <div id="textbox_content_big" >
           <bos:process-payment source="spendino">
+            <bos:send-instruction-email contract-id="$(cartId)" email="$(email)"/>
             <form method="post" action="generate-cert">
               <input type="hidden" name="contract-id" value="$(cartId)" />
               <input type="hidden" name="__sponsorid" value="$(sponsor-id)" />

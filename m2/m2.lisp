@@ -323,7 +323,8 @@
   (setf (contract-paidp contract) newval)
   (publish-contract-change contract)
   (add-to-contract-stats contract)
-  (bknr.rss::add-item "news" contract))
+  (bknr.rss::add-item "news" contract)
+  contract)
 
 (defmethod contract-price ((contract contract))
   (* (length (contract-m2s contract)) +price-per-m2+))

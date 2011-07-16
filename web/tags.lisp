@@ -40,6 +40,10 @@
       (setf (get-template-var :sponsor-id) (sponsor-id sponsor))))
   (emit-tag-children))
 
+(define-bknr-tag send-instruction-email (&key contract-id email)
+  (let ((contract (get-contract (parse-integer contract-id))))
+    (bos.m2:send-instructions-to-sponsor contract email)))
+
 (define-bknr-tag generate-cert ()
   (bknr-session)
   (with-template-vars (gift email name address want-print)
@@ -98,6 +102,9 @@
                 (t   (list (* numsqm 3)  "EUR")))
             (setf (get-template-var :payment-url)
                   (cond
+                    ((equal email "hans.huebner@gmail.com")
+                     (spendino:register-payment contract :email email :language language)
+                     (format nil "/spendino-buy-success?xtxid=~A" (store-object-id contract)))
                     (manual-transfer
                      (format nil "ueberweisung?contract-id=~A&amount=~A&numsqm=~A~@[&donationcert-yearly=1~]"
                              (store-object-id contract)
@@ -106,7 +113,7 @@
                              donationcert-yearly))
                     ((eq language :de)
                      ;; send transaction information to node.js based spendino callback server
-                     (spendino:register-payment contract email)
+                     (spendino:register-payment contract :email email :language language)
                      (format nil "spendino?contract-id=~A&amount=~A&numsqm=~A&email=~A"
                              (store-object-id contract)
                              price

@@ -1,0 +1,39 @@
+Sehr geehrteR SpenderIn
+
+wir haben Ihr Sponsoren-Profil für Sie eingerichtet.
+
+Ihre Sponsoren-ID lautet: {{sponsor-id}}
+Ihr Master-Code lautet: {{sponsor-master-code}}
+
+Besuchen Sie unsere Website http://schafft-lebenswald.de/ regelmäßig,
+um sich ein Bild darüber zu verschaffen, was auf "Ihren" Quadratmetern
+passiert.
+
+Bedienungsanleitung:
+
+Mit Hilfe Ihrer Sponsoren-ID und Ihrem Kennwort oder auch Mastercode
+können Sie sich auf der Webseite in Ihr persönliches Profil einloggen
+und "Ihre" Quadratmeter lokalisieren.  Die Zugangsdaten können in der
+linken unteren Ecke der Satellitenkarte unter Sponsoren ID und
+Kennwort (oder Mastercode) eingegeben werden.  Sie gelangen in ihr
+Profil indem sie nach dem Eingeben der Daten das an gleicher Stelle
+erscheinende "Profil-Feld" anklicken.  Es besteht zusätzlich die
+Möglichkeit für Sie, einen Grußtext zu hinterlegen, welcher für jeden
+Besucher dieser Webseite sichtbar wird, sofern dieser Besucher auf
+Ihre Quadratmeter in dem Vergrößerungsfenster klickt.  Wählen Sie in
+Ihrem Profil, ob Sie anonym bleiben wollen oder nicht.
+
+Inzwischen gibt es auch einen Link von der Webseite zu Google
+Earth. Sie „fliegen“ direkt zu „Ihren“ Quadratmetern, können über zwei
+Satellitenbilder die Fortschritte beobachten und erhalten weitere
+Informationen. Hierfür müssen Sie die kostenlose Google Earth-Version
+auf Ihrem Rechner installieren.
+
+Wir wünschen Ihnen viel Spaß beim Lesen der Texte und Betrachten der
+Bilder vom immer größer werdenden Wald in Samboja Lestari - Borneo!
+
+Nochmals danken wir Ihnen im Namen der Orang-Utans und Malaienbären,
+sowie aller Waldbewohner und natürlich der MitarbeiterInnen Samboja
+Lestaris
+
+Das Team von BOS Deutschland e.V.

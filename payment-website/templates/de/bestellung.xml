@@ -59,7 +59,7 @@
             </div>
           </div>
         </div>
-        <div>
+        <div class="hasInfo">
           <div id="announce_printed_cert" class="printed_cert_block bubbleInfo">
             Bei Spenden ab 90&#8364; senden wir Ihnen Ihre
             <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
@@ -105,6 +105,9 @@
                 <input name="city" type="text" id="city" title="Ort" size="50"/>
               </div>
             </div>
+          </div>
+          <div class="infoPopup">
+            Die Urkunden eignen sich auch gut als Geschenk!
           </div>
         </div>
         <div>

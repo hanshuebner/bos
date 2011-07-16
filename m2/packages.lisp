@@ -261,6 +261,7 @@
            #:mail-backoffice-sponsor-data
            #:mail-worldpay-sponsor-data
            #:mail-print-pdf
+           #:send-instructions-to-sponsor
 
            #:*cert-download-directory*
 

@@ -21,21 +21,22 @@
 ;; List of (contract time email)
 (defvar *contract-emails* nil)
 
-(defun register-payment (contract email)
-  (push (list contract (get-universal-time) email) *contract-emails*))
+(defun register-payment (contract &rest properties &key email language &allow-other-keys)
+  (declare (ignore email language))
+  (push (append (list contract (get-universal-time)) properties) *contract-emails*))
 
-(defun find-contract-email (contract)
+(defun find-contract-plist (contract)
   (let (new-contracts
         retval
         (now (get-universal-time)))
     (dolist (list *contract-emails*)
-      (destructuring-bind (contract1 time email) list
+      (destructuring-bind (contract1 time &rest plist) list
         (cond
           ((> (- now time) +max-payment-time+)
            ;; Skip this entry, expired
            )
           ((eq contract contract1)
-           (setf retval email))
+           (setf retval plist))
           (t
            (push list new-contracts)))))
     (setf *contract-emails* new-contracts)
@@ -49,7 +50,7 @@
     (with-http-body ()
       (call-next-method))))
 
-(defclass contract-handler (html-page-handler)
+(defclass contract-handler (page-handler)
   ())
 
 (defgeneric handle-contract (handler contract))
@@ -63,7 +64,7 @@
                        (error "Contract ~A not found" xtxid))))
     (handle-contract handler contract)))
 
-(defclass status-handler (contract-handler)
+(defclass status-handler (contract-handler html-page-handler)
   ())
 
 (defparameter *status-allowed-peers*
@@ -100,17 +101,11 @@
   (when (contract-paidp contract)
     (error "Contract ~A already marked as paid" (store-object-id contract)))
 
-  (let ((email (find-contract-email contract)))
+  (destructuring-bind (&key email language) (or (find-contract-plist contract)
+                                                (error "Contract ~A not registered" contract))
 
-    (unless email
-      (error "Contract ~A not registered" contract))
-
-    (html
-     (:html
-      (:head
-       (:title "Payment complete"))
-      (:body
-       "Payment for contract " (:princ-safe contract) " complete")))))
+    (bknr.web::redirect-request :target (format nil "/~(~A~)/spendino-quittung?cartId=~A&email=~A"
+                                                language (store-object-id contract) email))))
 
 (defclass buy-failure-handler (contract-handler)
   ())

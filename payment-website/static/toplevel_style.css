@@ -3,7 +3,6 @@
 body {
     margin-top: 0px;
     margin-left: 0px;
-    overflow: hidden;
 }
 
 /* area f&uuml;r usemap */
@@ -166,19 +165,6 @@ body {
 }
 
 /* Container im Extra-Fenster */
-#content_extra{
-	position: relative;
-	z-index: 4;
-	margin-left: 5px;
-	width: 450px;
-	visibility: visible;
-	display: block;
-	border-color : #CCCCCC;
-	border-style : solid;
-	border-width : 1px;
-}
-
-/* Container im Ringschema-Fenster */
 #content_extra{
 	position: relative;
 	z-index: 4;
