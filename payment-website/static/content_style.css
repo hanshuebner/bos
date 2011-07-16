@@ -70,9 +70,8 @@ body {
 	position: relative;
 	background-color: white;
 	z-index: 20;
-	width: 150px;
-	max-width: 150px;
-	height: 85px;
+	width: 136px;
+	height: 78px;
 	margin : 0px 15px 0px 15px;
 	border-width: 1px;
 	border-style: solid solid solid solid;
@@ -83,16 +82,36 @@ body {
 	color : #333333;
 	font-weight : normal;
 	text-decoration : none;
+        padding: 8px 4px 0px 10px;
 }
 
-.password-input {
-	width: 115px;
+#textbox_left_login img {
+    vertical-align: text-bottom;
 }
 
-.login-button {
-	top: 5px;
+#textbox_left_login button {
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0;
+    line-height: 0;
+    width: auto;
+    overflow: visible;
 }
-	
+
+#textbox_left_login .password-input {
+    width: 100px;
+}
+
+#textbox_left_login .login-button {
+    top: 5px;
+}
+
+#textbox_left_login input, #textbox_left_login button {
+    vertical-align: middle;
+}
+
 #textbox_right
 	{
 	position: relative;
@@ -121,7 +140,7 @@ body {
 	line-height: 16px;
 	height: 447px;
 	width: 366px;
-	margin-top: 30px;
+	margin-top: 3px;
 	margin-left: 17px;
 	margin-right: 17px;
 	margin-bottom: 2px;
@@ -170,19 +189,19 @@ body {
 /* Content-Box mit overflow fuer Formulare und Inhaltsseiten ohne content-right */
 #textbox_content_bigger
 {
+    overflow: hidden;
 	position: relative;
 	z-index: 39;
 	line-height: 13px;
 	height: 447px;
 	width: 556px;
-	margin-top: 30px;
+	margin-top: 10px;
 	margin-left: 17px;
 	margin-right: 17px;
 	margin-bottom: 2px;
 	visibility: visible;
 	display: block;
 	max-height : 450px;
-	overflow: auto;
 	font : normal normal 1.0em Verdana, Geneva, Arial, Helvetica, sans-serif;
 }
 
