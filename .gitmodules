@@ -19,3 +19,6 @@
 [submodule "lib/MochiKit"]
 	path = lib/MochiKit
 	url = https://github.com/mochi/mochikit.git
+[submodule "lib/jQuery-Validation-Engine"]
+	path = lib/jQuery-Validation-Engine
+	url = https://github.com/posabsolute/jQuery-Validation-Engine.git

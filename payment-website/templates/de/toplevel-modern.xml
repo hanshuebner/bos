@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/static/toplevel_style.css" />
     <link rel="stylesheet" href="/static/content_style.css" />
     <link rel="stylesheet" href="/static/css/south-street/jquery-ui-1.8.14.custom.css" />
+    <link rel="stylesheet" href="/static/css/validationEngine.jquery.css" type="text/css"/>
     <bos:page-specific-css/>
     <script src="/static/bos.js" type="text/javascript"><!-- x -->
     </script>
@@ -21,6 +22,10 @@
     <script src="/static/jquery.labelify.js" type="text/javascript"><!-- x -->
     </script>
     <script src="/static/jquery.bos.js" type="text/javascript"><!-- x -->
+    </script>
+    <script src="/static/jquery.validationEngine-de.js" type="text/javascript" charset="utf-8"><!-- x -->
+    </script>
+    <script src="/static/jquery.validationEngine.js" type="text/javascript" charset="utf-8"><!-- x -->
     </script>
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <bos:page-specific-script/>

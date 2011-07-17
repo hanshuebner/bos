@@ -60,7 +60,21 @@ $(document).ready(function () {
         window.location = window.location.href.replace(/^http:/, "https:");
     }
 
-    document.bestellformular.onsubmit = check_form;
+    // Make sure that all our input and form elements ave an id
+    // attribute, required by form validator.
+    $(':input, form').each(function () {
+        if (!$(this).attr('id')) {
+            $(this).attr('id', $(this).attr('name'));
+        }
+    });
+    $(':input').focus(function () {
+        $('form').validationEngine('hideAll');
+        $(":text").labelify({ labelledClass: "labelHighlight" });
+    });
+    $('form').validationEngine();
+    document.bestellformular.onsubmit = function () {
+        return $('form').validationEngine('validate');
+    }
 
     $(":text").labelify({ labelledClass: "labelHighlight" });
     $('#slider').slider({ slide: changeSqmCount, value: 9 });

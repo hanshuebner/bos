@@ -34,8 +34,9 @@
         <div class="hasInfo">
           <span class="headline">
             Ich bin dabei und möchte sehen, wie Samboja Lestari grüner
-            wird.  Ich schaffe <input name="numsqm" id="numsqm"
-            size="4" value="10"/> m² Regenwald für <span
+            wird.  Ich schaffe
+            <input name="numsqm" class="validate[required,custom[integer]]" size="4" value="10"/>
+            m² Regenwald für <span
             id="amount">30</span> Euro.
           </span>
           <div id="sliderContainer">
@@ -46,14 +47,15 @@
             </div>
           </div>
           <div class="infoPopup">
-            Bitte geben Sie die gewuenschte Anzahl von Quadratmetern
-            zu je 3 Euro ein, oder waehlen Sie eine Anzahl durch
-            Bewegen des gruenen Knopfes aus. XXX UMLAUTE XXX
+            Bitte geben Sie die gewünschte Anzahl von Quadratmetern zu
+            je 3 Euro ein, oder wählen Sie eine Anzahl durch Bewegen
+            des grünen Knopfes aus.
           </div>
         </div>
         <div>
           <div class="hasInfo">
-            <input type="text" name="email" id="email" style="width: 97%" title="Email-Adresse"/>
+            <input type="text" name="email" id="email" style="width: 97%" title="Email-Adresse"
+                   class="validate[required,custom[email]]"/>
             <div class="infoPopup">
               Ihre Email-Adresse benötigen wir, um Ihnen Ihre Zugangsdaten zuzuschicken.
             </div>
@@ -81,7 +83,7 @@
             <div id="anschrift">
               <div>
                 <label for="title">Anrede</label>
-                <select name="title" id="title"> 
+                <select name="title" id="title" class="validate[required]"> 
                   <option>Bitte wählen Sie</option> 
                   <option value="Herr">Herr</option> 
                   <option value="Frau">Frau</option> 
@@ -95,14 +97,14 @@
                 </select>
               </div>
               <div>
-                <input name="firstname" type="text" id="firstname" title="Vorname" size="27"/>
-                <input name="lastname" type="text" id="surname" title="Nachname" size="27"/>
+                <input name="firstname" type="text" class="validate[required]" title="Vorname" size="27"/>
+                <input name="lastname" type="text" class="validate[required]" title="Nachname" size="27"/>
                 <br/>
-                <input name="street" type="text" id="street" title="Strasse" size="50"/>
-                <input name="number" type="text" id="number" title="Nr." size="4"/>
+                <input name="street" type="text" class="validate[required]" title="Strasse" size="50"/>
+                <input name="number" type="text" class="validate[required]" title="Nr." size="4"/>
                 <br/>
-                <input name="zip" type="text" id="zip" title="PLZ" size="4"/>
-                <input name="city" type="text" id="city" title="Ort" size="50"/>
+                <input name="zip" type="text" class="validate[required]" title="PLZ" size="4"/>
+                <input name="city" type="text" class="validate[required]" title="Ort" size="50"/>
               </div>
             </div>
           </div>
@@ -111,7 +113,7 @@
           </div>
         </div>
         <div>
-          <input type="checkbox" name="disclaimer_read" id="disclaimer_read" value="1" />
+          <input type="checkbox" name="disclaimer_read" class="validate[required]" value="1" />
           <label for="disclaimer_read">
             Ich habe die
             <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
