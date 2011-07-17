@@ -25,7 +25,7 @@
   (call-next-method handler
                     (cond
                       ((scan #?r"(^|.*/)handle-sale" template-name)
-                       (with-query-params (cartId name address country transStatus lang MC_gift)
+                       (with-query-params (cartId name address country transStatus lang)
                          (unless (website-supports-language lang)
                            (setf lang *default-language*))
                          (let ((contract (get-contract (parse-integer cartId))))
@@ -43,9 +43,7 @@
                              (t
                               (when (<= *mail-fiscal-certificate-threshold* (contract-price contract))
                                 (mail-fiscal-certificate-to-office contract name address country))
-                              (if (and MC_gift (equal MC_gift "1"))
-                                  #?"/$(lang)/versand_geschenk"
-                                  #?"/$(lang)/versand_info"))))))
+                              #?"/$(lang)/versand_info")))))
                       ((equal "" template-name)
                        "de/index")
                       (t
