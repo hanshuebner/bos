@@ -46,16 +46,15 @@
 
 (define-bknr-tag generate-cert ()
   (bknr-session)
-  (with-template-vars (gift email name address want-print)
+  (with-template-vars (email name address want-print)
     (let ((contract (find-store-object (parse-integer (get-template-var :contract-id)))))
       (when (equal want-print "no")
         (contract-set-download-only-p contract t))
       (contract-issue-cert contract name :address address :language (request-language))
       (send-to-postmaster #'mail-worldpay-sponsor-data contract)
-      (bknr.web::redirect-request :target (if gift "index"
-                                              (format nil "profil_setup?name=~A&email=~A&sponsor-id=~A"
-                                                      (encode-urlencoded name) (encode-urlencoded email)
-                                                      (store-object-id (contract-sponsor contract))))))))
+      (bknr.web::redirect-request :target (format nil "profil_setup?name=~A&email=~A&sponsor-id=~A"
+                                                  (encode-urlencoded name) (encode-urlencoded email)
+                                                  (store-object-id (contract-sponsor contract)))))))
 
 (define-bknr-tag urkunde-per-post (&key contract-id min-amount message)
   (let ((contract (get-contract (parse-integer contract-id))))
@@ -74,7 +73,7 @@
 
 (define-bknr-tag buy-sqm ()
   (handler-case
-      (with-template-vars (numsqm numsqm1 action gift donationcert-yearly download-only email)
+      (with-template-vars (numsqm numsqm1 action donationcert-yearly download-only email printed-cert)
         (let* ((numsqm (parse-integer (or numsqm numsqm1 (error "numsqm and numsqm1 not set"))))
                ;; Wer ueber dieses Formular bestellt, ist ein neuer
                ;; Sponsor, also ein neues Sponsorenobjekt anlegen.  Eine
@@ -89,9 +88,11 @@
                                     (scan #?r"verf" action)))
                (language (make-keyword-from-string (request-language)))
                (sponsor (make-sponsor :language language))
+               (download-only (or (< (* +price-per-m2+ numsqm) *mail-amount*)
+                                  download-only))
+               (printed-cert (and (not download-only) printed-cert))
                (contract (make-contract sponsor numsqm
-                                        :download-only (or (< (* +price-per-m2+ numsqm) *mail-amount*)
-                                                           download-only)
+                                        :download-only download-only
                                         :expires (+ (if manual-transfer
                                                         bos.m2::*manual-contract-expiry-time*
                                                         bos.m2::*online-contract-expiry-time*)
@@ -103,7 +104,7 @@
             (setf (get-template-var :payment-url)
                   (cond
                     ((equal email "hans.huebner@gmail.com")
-                     (spendino:register-payment contract :email email :language language)
+                     (spendino:register-payment contract :email email :language language :printed-cert printed-cert)
                      (format nil "/spendino-buy-success?xtxid=~A" (store-object-id contract)))
                     (manual-transfer
                      (format nil "ueberweisung?contract-id=~A&amount=~A&numsqm=~A~@[&donationcert-yearly=1~]"
@@ -113,14 +114,14 @@
                              donationcert-yearly))
                     ((eq language :de)
                      ;; send transaction information to node.js based spendino callback server
-                     (spendino:register-payment contract :email email :language language)
+                     (spendino:register-payment contract :email email :language language :printed-cert printed-cert)
                      (format nil "spendino?contract-id=~A&amount=~A&numsqm=~A&email=~A"
                              (store-object-id contract)
                              price
                              numsqm
                              email))
                     (t
-                     (format nil "https://select.worldpay.com/wcc/purchase?instId=~A&cartId=~A&amount=~A&currency=~A&lang=~A&desc=~A&MC_sponsorid=~A&MC_password=~A&MC_donationcert-yearly=~A&MC_gift=~A~@[~A~]"
+                     (format nil "https://select.worldpay.com/wcc/purchase?instId=~A&cartId=~A&amount=~A&currency=~A&lang=~A&desc=~A&MC_sponsorid=~A&MC_password=~A&MC_donationcert-yearly=~A~@[~A~]"
                              *worldpay-installation-id*
                              (store-object-id contract)
                              price
@@ -135,7 +136,6 @@
                              (store-object-id sponsor)
                              (sponsor-master-code sponsor)
                              (if donationcert-yearly "1" "0")
-                             (if gift "1" "0")
                              (when *worldpay-test-mode* "&testMode=100")))))))
         (emit-tag-children))
     (bos.m2::allocation-areas-exhausted (e)
