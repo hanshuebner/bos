@@ -8,28 +8,7 @@
    xmlns:bknr="http://bknr.net"
    xmlns:bos="http://headcraft.de/bos"
    >
-  <div id="content">
-    <div id="content_left"><!-- content left-->
-      <div id="textbox_left_form">		
-      </div>	
-      <!-- footer -->	
-      <div id="menue_footer">	
-	<a href="#" onclick="window_extra('privacy')" class="footer">
-	  Datenschutzinfo
-	</a>
-	l
-	<a href="#" onclick="window_extra('impressum')" class="footer">
-	  Impressum
-	</a>
-      </div>
-      <!-- /footer -->	
-    </div>
-    <!-- /content left-->
-    <!-- container content_main -->
-    <div id="content_main">
-      <div id="textbox_spendino" >
-        <bos:spendino-payment/>
-      </div>
-    </div>
+  <div id="textbox_spendino" >
+    <bos:spendino-payment/>
   </div>
 </bknr:toplevel>

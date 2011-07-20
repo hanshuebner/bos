@@ -8,164 +8,134 @@
    xmlns:bknr="http://bknr.net"
    xmlns:bos="http://headcraft.de/bos"
    >
-  <bos:set-cachable/>
-  <!-- content 3teilig-->
-  <div id="content">
-    <!-- content left-->
-    <div id="content_left">
-      <div id="textbox_left_form">
+  <form name="bestellformular" method="post" action="buy-sqm">
+    <div>
+      <span class="headline">
+        Ich bin dabei und möchte sehen, wie Samboja Lestari grüner
+        wird.  Ich schaffe
+        <input name="numsqm" class="validate[required,custom[integer]]" size="4" value="10"/>
+        m² Regenwald für <span
+        id="amount">30</span> Euro.
+      </span>
+      <div id="sliderContainer">
+        <div id="legend10">10m²</div>
+        <div id="legend100">100m²</div>
+        <div id="legend1000">1000m²</div>
+        <div id="slider">
+        </div>
       </div>
-      <!-- footer -->
-      <div id="menue_footer">	
-	<a href="#" onclick="window_extra('privacy')" class="footer">
-	  Datenschutzinfo
-	</a>
-	l
-	<a href="#" onclick="window_extra('impressum')" class="footer">
-	  Impressum
-	</a>
+      <div class="infoPopup">
+        Bitte geben Sie die gewünschte Anzahl von Quadratmetern zu
+        je 3 Euro ein, oder wählen Sie eine Anzahl durch Bewegen
+        des grünen Knopfes aus.
       </div>
-      <!-- /footer -->	
     </div>
-    <!-- /content left-->
-    <!-- container content_main -->
-    <div id="content_main">
-      <form name="bestellformular" method="post" action="buy-sqm">
-        <div class="hasInfo">
-          <span class="headline">
-            Ich bin dabei und möchte sehen, wie Samboja Lestari grüner
-            wird.  Ich schaffe
-            <input name="numsqm" class="validate[required,custom[integer]]" size="4" value="10"/>
-            m² Regenwald für <span
-            id="amount">30</span> Euro.
-          </span>
-          <div id="sliderContainer">
-            <div id="legend10">10m²</div>
-            <div id="legend100">100m²</div>
-            <div id="legend1000">1000m²</div>
-            <div id="slider">
-            </div>
-          </div>
-          <div class="infoPopup">
-            Bitte geben Sie die gewünschte Anzahl von Quadratmetern zu
-            je 3 Euro ein, oder wählen Sie eine Anzahl durch Bewegen
-            des grünen Knopfes aus.
-          </div>
+    <div>
+      <div>
+        <input type="text" name="email" id="email" style="width: 97%" title="Email-Adresse"
+               class="validate[required,custom[email]]"/>
+        <div class="infoPopup">
+          Ihre Email-Adresse benötigen wir, um Ihnen Ihre Zugangsdaten zuzuschicken.
         </div>
-        <div>
-          <div class="hasInfo">
-            <input type="text" name="email" id="email" style="width: 97%" title="Email-Adresse"
-                   class="validate[required,custom[email]]"/>
-            <div class="infoPopup">
-              Ihre Email-Adresse benötigen wir, um Ihnen Ihre Zugangsdaten zuzuschicken.
-            </div>
-          </div>
-        </div>
-        <div class="hasInfo">
-          <div id="announce_printed_cert" class="printed_cert_block bubbleInfo">
-            Bei Spenden ab 90&#8364; senden wir Ihnen Ihre
-            <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-            <a href="#" onclick="window_extra('certificat')">Lebenswaldurkunde</a>
-            auf Wunsch per Post zu.
-            <div class="infoPopup">
-              Schon ab 1 m² erhalten Sie Ihre Lebenswaldurkunde als
-              pdf-Download in Ihrem Sponsoren-Profil.
-            </div>
-          </div>
-          <div id="choose_printed_cert" class="printed_cert_block">
-            <input type="checkbox" name="printed_cert" id="printed_cert" value="1" />
-            <label for="printed_cert">
-              Ich möchte meine
-              <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-              <a href="#" onclick="window_extra('certificat')">Lebenswaldurkunde</a>
-              zugesandt bekommen.
-            </label>
-            <div id="anschrift">
-              <div>
-                <label for="title">Anrede</label>
-                <select name="title" id="title" class="validate[required]"> 
-                  <option>Bitte wählen Sie</option> 
-                  <option value="Herr">Herr</option> 
-                  <option value="Frau">Frau</option> 
-                </select>
-                <label for="academicTitle">Titel</label>
-                <select name="academicTitle" id="academicTitle"> 
-                  <option>Bitte wählen Sie</option> 
-                  <option value="Dr.">Dr.</option> 
-                  <option value="Prof">Prof</option> 
-                  <option value="Prof. Dr.">Prof. Dr.</option> 
-                </select>
-              </div>
-              <div>
-                <input name="firstname" type="text" class="validate[required]" title="Vorname" size="27"/>
-                <input name="lastname" type="text" class="validate[required]" title="Nachname" size="27"/>
-                <br/>
-                <input name="street" type="text" class="validate[required]" title="Strasse" size="50"/>
-                <input name="number" type="text" class="validate[required]" title="Nr." size="4"/>
-                <br/>
-                <input name="zip" type="text" class="validate[required]" title="PLZ" size="4"/>
-                <input name="city" type="text" class="validate[required]" title="Ort" size="50"/>
-              </div>
-            </div>
-          </div>
-          <div class="infoPopup">
-            Die Urkunden eignen sich auch gut als Geschenk!
-          </div>
-        </div>
-        <div>
-          <input type="checkbox" name="disclaimer_read" class="validate[required]" value="1" />
-          <label for="disclaimer_read">
-            Ich habe die
-            <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-            <a href="#" onclick="show_disclaimer()">
-              Verzichtsklausel
-              </a> gelesen und stimme ihr zu. 
-          </label>
-        </div>
-        <div>
-          Bitte wählen Sie Ihre Zahlungsmethode:
-        </div>
-        <div>
-          <div class="hasInfo" style="display: inline">
-            <button name="action" value="creditcard">
-              <img src="/images/creditcard_logo.png" title="Mit Kreditkarte bezahlen"/>
-            </button>
-            <button name="action" value="ec">
-              <img src="/images/ec_logo.png" title="Mit Lastschrift bezahlen"/>
-            </button>
-            <button name="action" value="paypal">
-              <img src="/images/paypal_logo.png" title="Mit PayPal bezahlen"/>
-            </button>
-            <div class="infoPopup">
-              <p>
-                Ihre Zahlungsdaten werden elektronisch über unseren
-                Partner Spendino erfasst und bearbeitet.  Die
-                Bestimmungen des Datenschutzgesetzes werden
-                eingehalten. Daten werden nicht an Dritte weitergegeben.
-              </p>
-              <p>
-                Spendino ist ein auf Spenden spezialisierter
-                Onlinezahlungsanbieter.  Ihre Zahlungsdaten (Konto- oder
-                Kreditkartennummer) werden verschlüsselt zu Spendino
-                übertragen.  BOS Deutschland e.V. hat keinen Zugriff auf die
-                Zahlungsdaten.
-              </p>
-            </div>
-          </div>
-          <button name="action" value="ueberweisung">
-            <img src="/images/ueberweisung_logo.png" title="Per Überweisung bezahlen"/>
-          </button>
-        </div>
-        <div class="hasInfo">
-          <span class="headline">Spenden sind steuerlich absetzbar!</span>
-          <div class="infoPopup">
-            Bei Spenden über 200,- Euro schicken wir Ihnen eine
-            Spendenbescheinigung per Post zu.  Bei Spenden bis zu 200 Euro
-            reicht die Vorlage des Überweisungsträgers oder
-            Kontoauszugs bei der Steuererklärung.
-          </div>
-        </div>
-      </form>
+      </div>
     </div>
-  </div>
+    <div>
+      <div id="announce_printed_cert" class="printed_cert_block bubbleInfo">
+        Bei Spenden ab 90&#8364; senden wir Ihnen Ihre
+        <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+        <a href="#" onclick="window_extra('certificat')">Lebenswaldurkunde</a>
+        auf Wunsch per Post zu.
+        <div class="infoPopup">
+          Schon ab 1 m² erhalten Sie Ihre Lebenswaldurkunde als
+          pdf-Download in Ihrem Sponsoren-Profil.
+        </div>
+      </div>
+      <div id="choose_printed_cert" class="printed_cert_block">
+        <input type="checkbox" name="printed-cert" value="1" />
+        <label for="printed-cert">
+          Ich möchte meine
+          <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+          <a href="#" onclick="window_extra('certificat')">Lebenswaldurkunde</a>
+          zugesandt bekommen.
+        </label>
+        <div id="anschrift">
+          <div>
+            <label for="title">Anrede</label>
+            <select name="title" class="validate[required]"> 
+              <option value="">Bitte wählen Sie</option> 
+              <option>Herr</option> 
+              <option>Frau</option> 
+            </select>
+            <label for="academic-title">Titel</label>
+            <select name="academic-title"> 
+              <option value="">Bitte wählen Sie</option> 
+              <option>Dr.</option> 
+              <option>Prof</option> 
+              <option>Prof. Dr.</option> 
+            </select>
+          </div>
+          <div>
+            <input name="firstname" type="text" class="validate[required]" title="Vorname" size="27"/>
+            <input name="lastname" type="text" class="validate[required]" title="Nachname" size="27"/>
+            <br/>
+            <input name="street" type="text" class="validate[required]" title="Strasse" size="50"/>
+            <input name="number" type="text" class="validate[required]" title="Nr." size="4"/>
+            <br/>
+            <input name="zip" type="text" class="validate[required]" title="PLZ" size="4"/>
+            <input name="city" type="text" class="validate[required]" title="Ort" size="50"/>
+          </div>
+        </div>
+      </div>
+      <div class="infoPopup">
+        Die Urkunden eignen sich auch gut als Geschenk!
+      </div>
+    </div>
+    <div>
+      <input type="checkbox" name="disclaimer_read" class="validate[required]" value="1" />
+      <label for="disclaimer_read">
+        Ich habe die
+        <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+        <a href="#" onclick="show_disclaimer()">
+          Verzichtsklausel
+          </a> gelesen und stimme ihr zu. 
+      </label>
+    </div>
+    <div>
+      Bitte wählen Sie Ihre Zahlungsmethode:
+    </div>
+    <div>
+      <div style="display: inline">
+        <button name="action" value="creditcard">
+          <img src="/images/spendino_logo.png" title="Mit Kreditkarte, Lastschrift oder PayPal bezahlen"/>
+        </button>
+        <div class="infoPopup">
+          <p>
+            Ihre Zahlungsdaten werden elektronisch über unseren
+            Partner Spendino erfasst und bearbeitet.  Die
+            Bestimmungen des Datenschutzgesetzes werden
+            eingehalten. Daten werden nicht an Dritte weitergegeben.
+          </p>
+          <p>
+            Spendino ist ein auf Spenden spezialisierter
+            Onlinezahlungsanbieter.  Ihre Zahlungsdaten (Konto- oder
+            Kreditkartennummer) werden verschlüsselt zu Spendino
+            übertragen.  BOS Deutschland e.V. hat keinen Zugriff auf die
+            Zahlungsdaten.
+          </p>
+        </div>
+      </div>
+      <button name="action" value="ueberweisung">
+        <img src="/images/ueberweisung_logo.png" title="Per Überweisung bezahlen"/>
+      </button>
+    </div>
+    <div>
+      <span class="headline">Spenden sind steuerlich absetzbar!</span>
+      <div class="infoPopup">
+        Bei Spenden über 200,- Euro schicken wir Ihnen eine
+        Spendenbescheinigung per Post zu.  Bei Spenden bis zu 200 Euro
+        reicht die Vorlage des Überweisungsträgers oder
+        Kontoauszugs bei der Steuererklärung.
+      </div>
+    </div>
+  </form>
 </bknr:toplevel>

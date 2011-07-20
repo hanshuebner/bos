@@ -1,8 +1,8 @@
 #!/bin/sh
 
 export PATH=/bin:/usr/bin:/usr/local/bin
-CERTS=/home/bknr/certs
-CHECKOUT=/home/bknr/bknr-svn/projects/bos/cert-daemon
+CERTS=/home/hans/certs
+CHECKOUT=/home/hans/bos/cert-daemon
 hostname=`hostname`
 
 cd $CERTS

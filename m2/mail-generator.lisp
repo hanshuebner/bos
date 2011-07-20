@@ -42,6 +42,8 @@
 (defvar *country->office-email* '(("DK" . "bosdanmark.regnskov@gmail.com")
                                   ("SE" . "bosdanmark.regnskov@gmail.com")))
 
+(defvar *catch-all-mail-address* "hans.huebner@gmail.com")
+
 (defun country->office-email (country)
   (or (cdr (assoc country *country->office-email* :test #'string-equal))
       *office-mail-address*))
@@ -50,25 +52,26 @@
   "Return the email address of the MXM office responsible for handling a contract"
   (country->office-email (sponsor-country (contract-sponsor contract))))
 
-(defun send-system-mail (&key (to *office-mail-address*) (subject "(no subject") (text "(no text)") (content-type "text/plain; charset=UTF-8") more-headers)
+(defun send-system-mail (&key (to *office-mail-address*) (subject "(no subject)") (text "(no text)") (content-type "text/plain; charset=UTF-8") more-headers)
   (setf to (alexandria:ensure-list to))
-  (if *enable-mails*
-      (cl-smtp:with-smtp-mail (smtp "localhost" *mail-sender* to)
-        (format smtp "X-Mailer: BKNR-BOS-mailer
+  (unless *enable-mails*
+    (format t "Mail with subject ~S to ~A sent to ~A~%" subject to *catch-all-mail-address*)
+    (setf to (list *catch-all-mail-address*)))
+  (cl-smtp:with-smtp-mail (smtp "localhost" *mail-sender* to)
+    (format smtp "X-Mailer: BKNR-BOS-mailer
 Date: ~A
 From: ~A
 To: ~{~A~^, ~}
 Subject: ~A
 ~@[Content-Type: ~A
 ~]~@[~*~%~]~A"
-                (format-date-time (get-universal-time) :mail-style t)
-                *mail-sender*
-                to
-                subject
-                content-type
-                (not more-headers)
-                text))
-      (format t "Mail with subject ~S to ~A not sent~%" subject to)))
+            (format-date-time (get-universal-time) :mail-style t)
+            *mail-sender*
+            to
+            subject
+            content-type
+            (not more-headers)
+            text)))
 
 (defun mail-info-request (email country)
   (send-system-mail :subject "Mailing list request"
@@ -78,9 +81,6 @@ Subject: ~A
 
 $(email)
 "))
-
-(defun mail-fiscal-certificate-to-office (contract name address country)
-  #+(or) (format t "mail-fiscal-certificate-to-office: ~a name: ~a address: ~a country: ~a~%" contract name address country))
 
 (defun mail-template-directory (language)
   "Return the directory where the mail templates are stored"
@@ -188,7 +188,7 @@ Gift: ~A
                  :type "text"
                  :subtype "html"
                  :charset "utf-8"
-                 :encoding :quoted-printable
+                 :encoding :base64
                  :content string))
 
 (defparameter *common-element-names*
@@ -212,7 +212,7 @@ worldpay), return the common XML element name"
                  :type "text"
                  :subtype (format nil "xml; name=\"contract-~A.xml\"" id)
                  :charset "utf-8"
-                 :encoding :quoted-printable
+                 :encoding :base64
                  :content (format nil "
 <sponsor>
  <date>~A</date>
@@ -335,61 +335,87 @@ Amount: EUR~A.00
                                                    :email email)))))
     (mail-contract-data contract "Manually entered sponsor" parts)))
 
-(defun mail-manual-sponsor-data (contract vorname name strasse plz ort email telefon want-print donationcert-yearly request-params)
-  (let* ((sponsor-id (store-object-id (contract-sponsor contract)))
-         (contract-id (store-object-id contract))
-         (parts (list (make-html-part (format nil "
-<html>
- <body>
-   <h1>Sponsor data as entered by the sponsor:</h1>
-   <table border=\"1\">
-    <tr><td>Contract-ID</td><td>~@[~A~]</td></tr>
-    <tr><td>Number of sqm</td><td>~A</td></tr>
-    <tr><td>Amount</td><td>EUR~A</td></tr>
-    <tr><td>First name</td><td>~@[~A~]</td></tr>
-    <tr><td>Last name</td><td>~@[~A~]</td></tr>
-    <tr><td>Street</td><td>~@[~A~]</td></tr>
-    <tr><td>Postcode</td><td>~@[~A~]</td></tr>
-    <tr><td>City</td><td>~@[~A~]</td></tr>
-    <tr><td>Email</td><td>~@[~A~]</td></tr>
-    <tr><td>Phone</td><td>~@[~A~]</td></tr>
-    <tr><td></td></tr>
-    <tr><td>Printed certificate</td><td>~A</td></tr>
-    <tr><td>Donation receipt at year's end</td><td>~A</td></tr>
-   </table>
-   <p><a href=\"~A/complete-transfer/~A?email=~A\">Acknowledge receipt of payment</a></p>
- </body>
-</html>
-"
-                                              (store-object-id contract)
-                                              (length (contract-m2s contract))
-                                              (* 3.0 (length (contract-m2s contract)))
-                                              vorname name strasse plz ort email telefon
-                                              (if want-print "yes" "no")
-                                              (if donationcert-yearly "yes" "no")
-                                              *website-url* contract-id (or email "")))
-                      (make-contract-xml-part contract-id request-params)
-                      (make-vcard-part contract-id (make-vcard :sponsor-id sponsor-id
-                                                               :note (format nil "Paid-by: Manual money transfer
+(defmacro with-html-to-string (() &body body)
+  `(with-output-to-string (s)
+     (xhtml-generator:with-xhtml (s)
+       ,@body)))
+
+(defmacro tr* (title contents)
+  `(:tr (:td ,title) (:td (:princ-safe ,contents))))
+
+(defun alist-keyword-plist (alist)
+  (loop for (key . value) in alist
+       collect (make-keyword-from-string (string key))
+       collect value))
+
+(defun mail-manual-sponsor-data (contract contract-plist request-params)
+  (destructuring-bind (&key email amount want-print &allow-other-keys) contract-plist
+    (let* ((sponsor-id (store-object-id (contract-sponsor contract)))
+           (contract-id (store-object-id contract))
+           (parts (list (make-html-part
+                         (with-html-to-string ()
+                           (:html
+                            (:body
+                             (:h1 "Contract information")
+                             ((:table :border "1")
+                              (tr* "Contract ID" contract-id)
+                              (tr* "Sponsor ID" sponsor-id)
+                              (tr* "Amount" amount)
+                              (tr* "Email" email)
+                              (tr* "Printed certificate?" want-print))
+                             (destructuring-bind
+                                   (&key title academic-title firstname lastname street number zip city &allow-other-keys)
+                                 (alist-keyword-plist request-params)
+                               (when (or title academic-title firstname lastname street number zip city)
+                                 (xhtml-generator:html
+                                  (:h1 "Invoice address:")
+                                  ((:table :border "1")
+                                   (tr* "First Name" firstname)
+                                   (tr* "Last Name" lastname)
+                                   (tr* "Street" street)
+                                   (tr* "Number" number)
+                                   (tr* "ZIP" zip)
+                                   (tr* "City" city)))))
+                             (destructuring-bind
+                                   (&key title academic-title firstname lastname street number zip city &allow-other-keys)
+                                 contract-plist
+                               (when (or title academic-title firstname lastname street number zip city)
+                                 (xhtml-generator:html
+                                  (:h1 "Shipping address:")
+                                  ((:table :border "1")
+                                   (tr* "First Name" firstname)
+                                   (tr* "Last Name" lastname)
+                                   (tr* "Street" street)
+                                   (tr* "Number" number)
+                                   (tr* "ZIP" zip)
+                                   (tr* "City" city)))))
+                             (:p
+                              ((:a :href (format nil "~A/complete-transfer/~A?email=~A"
+                                                 *website-url* contract-id email))
+                               "Acknowledge receipt of payment"))))))
+                        (make-contract-xml-part contract-id request-params)
+                        #+(or)
+                        (make-vcard-part contract-id (make-vcard :sponsor-id sponsor-id
+                                                                 :note (format nil "Paid-by: Manual money transfer
 Contract ID: ~A
 Sponsor ID: ~A
 Number of sqms: ~A
 Amount: EUR~A.00
 Donationcert yearly: ~A
 "
-                                                                             contract-id
-                                                                             sponsor-id
-                                                                             (length (contract-m2s contract))
-                                                                             (* 3 (length (contract-m2s contract)))
-                                                                             (if donationcert-yearly "Yes" "No"))
-                                                               :vorname vorname
-                                                               :nachname name
-                                                               :strasse strasse
-                                                               :postcode plz
-                                                               :ort ort
-                                                               :email email
-                                                               :tel telefon)))))
-    (mail-contract-data contract "Ueberweisungsformular" parts)))
+                                                                               contract-id
+                                                                               sponsor-id
+                                                                               (length (contract-m2s contract))
+                                                                               (* 3 (length (contract-m2s contract)))
+                                                                               (if donationcert-yearly "Yes" "No"))
+                                                                 :vorname vorname
+                                                                 :nachname name
+                                                                 :strasse strasse
+                                                                 :postcode plz
+                                                                 :ort ort
+                                                                 :email email
+                                                                 :tel telefon)))))
+      (mail-contract-data contract "Ueberweisungsformular" parts))))
 
 (defvar *worldpay-params-hash* (make-hash-table :test #'equal))
 
@@ -443,4 +469,3 @@ Donationcert yearly: ~A
                                             :element-type 'character)
                              :sponsor-id (store-object-id sponsor)
                              :sponsor-master-code (sponsor-master-code sponsor)))))
-    

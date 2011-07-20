@@ -8,8 +8,8 @@
     >
   <head>
     <title>$(title)</title>
-    <link rel="stylesheet" href="/static/toplevel_style.css" />
-    <link rel="stylesheet" href="/static/content_style.css" />
+    <link rel="stylesheet" href="/static/reset.css" />
+    <link rel="stylesheet" href="/static/toplevel-modern.css" />
     <link rel="stylesheet" href="/static/css/south-street/jquery-ui-1.8.14.custom.css" />
     <link rel="stylesheet" href="/static/css/validationEngine.jquery.css" type="text/css"/>
     <bos:page-specific-css/>
@@ -86,7 +86,24 @@
     <!-- /header and menu_top -->
 
     <!-- content 3teilig-->
-    <bknr:tag-body />
+    <div id="content">
+      <div id="content_main">
+        <bknr:tag-body />
+      </div>
+      <div id="content_right">
+        <div id="info_area">
+        </div>
+        <div id="content_right_footer">	
+          <a href="#" onclick="window_extra('privacy')" class="footer">
+            Datenschutzinfo
+          </a>
+          l
+          <a href="#" onclick="window_extra('impressum')" class="footer">
+            Impressum
+          </a>
+        </div>
+      </div>
+    </div>
     <!-- /content 3teilig-->
 
     <bos:google-analytics-track />

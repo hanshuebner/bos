@@ -15,33 +15,6 @@
 
 (enable-interpol-syntax)
 
-;; Expiry time for contracts, this is the maximum time that the payment process may take.
-(defconstant +max-payment-time+ (* 60 10))
-
-;; List of (contract time email)
-(defvar *contract-emails* nil)
-
-(defun register-payment (contract &rest properties &key email language &allow-other-keys)
-  (declare (ignore email language))
-  (push (append (list contract (get-universal-time)) properties) *contract-emails*))
-
-(defun find-contract-plist (contract)
-  (let (new-contracts
-        retval
-        (now (get-universal-time)))
-    (dolist (list *contract-emails*)
-      (destructuring-bind (contract1 time &rest plist) list
-        (cond
-          ((> (- now time) +max-payment-time+)
-           ;; Skip this entry, expired
-           )
-          ((eq contract contract1)
-           (setf retval plist))
-          (t
-           (push list new-contracts)))))
-    (setf *contract-emails* new-contracts)
-    retval))
-
 (defclass html-page-handler (page-handler)
   ())
 
@@ -91,39 +64,35 @@
        "The status change for contract " (:princ-safe contract)
        " has been processed, the new status is " (:princ-safe status))))))
 
+(defclass unpaid-contract-handler (contract-handler)
+  ())
+
+(defmethod handle-contract :around ((handler unpaid-contract-handler) contract)
+  (let* ((contract-plist (or (hunchentoot:session-value :contract-plist)
+                             (error "Session does not contain :contract-plist key")))
+         (session-contract (or (getf contract-plist :contract)
+                               (error "No contract in :contract-plist"))))
+    (unless (eq contract session-contract)
+      (error "session contract ~A does not equal contract referenced by spendino's request ~A" session-contract contract))
+
+    (when (contract-paidp contract)
+      (error "Contract ~A already marked as paid" (store-object-id contract)))
+
+    (call-next-method)))
+
 ;; When a payment is complete, users are redirected to this page by Spendino.
 
-(defclass buy-success-handler (contract-handler)
+(defclass buy-success-handler (unpaid-contract-handler)
   ())
 
 (defmethod handle-contract ((handler buy-success-handler) contract)
 
-  (when (contract-paidp contract)
-    (error "Contract ~A already marked as paid" (store-object-id contract)))
+  (bknr.web::redirect-request :target "/de/spendino-quittung"))
 
-  (destructuring-bind (&key email language) (or (find-contract-plist contract)
-                                                (error "Contract ~A not registered" contract))
-
-    (bknr.web::redirect-request :target (format nil "/~(~A~)/spendino-quittung?cartId=~A&email=~A"
-                                                language (store-object-id contract) email))))
-
-(defclass buy-failure-handler (contract-handler)
+(defclass buy-failure-handler (unpaid-contract-handler)
   ())
 
 (defmethod handle-contract ((handler buy-failure-handler) contract)
 
   ;; When a payment is complete, users are redirected to this page by Spendino.
-
-  (when (contract-paidp contract)
-    (error "Contract ~A already marked as paid" (store-object-id contract)))
-
-  (format t "contract ~A canceled (email ~A)~%" contract (find-contract-email contract))
-
-  (html
-   (:html
-    (:head
-     (:title "Payment not complete"))
-    (:body
-     "Payment NOT complete"))
-   ((:script :type "text/javascript")
-    "window.top.location = 'https://' + window.location.host + '/de/sponsor_canceled'")))
+  (bknr.web::redirect-request :target "/de/sponsor_canceled"))

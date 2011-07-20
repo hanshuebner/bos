@@ -2,6 +2,10 @@
 
 (enable-interpol-syntax)
 
+(defmacro with-contract-data-from-session ((&rest vars) &body body)
+  `(destructuring-bind (&key ,@vars &allow-other-keys) (hunchentoot:session-value :contract-plist)
+     ,@body))
+
 (defun emit-without-quoting (str)
   ;; das ist fuer WPDISPLAY
   (cxml::maybe-close-tag *html-sink*)
@@ -28,23 +32,31 @@
 (define-bknr-tag worldpay-receipt ()
   (emit-without-quoting "<WPDISPLAY ITEM=banner>"))
 
-(define-bknr-tag process-payment (&key (source "worldpay"))
+(define-bknr-tag process-worldpay-payment ()
   (with-template-vars (cartId transId email country)
-    (let* ((contract (get-contract (parse-integer cartId)))
+    (let* ((contract (if cartId
+                         (get-contract (parse-integer cartId))
+                         (getf (hunchentoot:session-value :contract-plist) :contract)))
            (sponsor (contract-sponsor contract)))
       (change-slot-values sponsor 'bknr.web::email email)
       (change-slot-values contract 'bos.m2::worldpay-trans-id transId)
       (sponsor-set-country sponsor country)
-      (contract-set-paidp contract (format nil "~A: paid via ~A" (format-date-time) source))
+      (contract-set-paidp contract (format nil "~A: paid via WorldPay" (format-date-time)))
       (setf (get-template-var :master-code) (sponsor-master-code sponsor))
       (setf (get-template-var :sponsor-id) (sponsor-id sponsor))))
   (emit-tag-children))
 
-(define-bknr-tag send-instruction-email (&key contract-id email)
-  (let ((contract (get-contract (parse-integer contract-id))))
-    (bos.m2:send-instructions-to-sponsor contract email)))
+(define-bknr-tag process-spendino-payment ()
+  (with-contract-data-from-session (contract email)
+    (let ((sponsor (contract-sponsor contract)))
+      (with-transaction (:process-spendino-payment)
+        (setf (slot-value sponsor 'bknr.web::email) email
+              (sponsor-country sponsor) "de")
+        (contract-set-paidp contract (format nil "~A: paid via Spendino" (format-date-time)))))
+    (bos.m2:send-instructions-to-sponsor contract email))
+  (emit-tag-children))
 
-(define-bknr-tag generate-cert ()
+(define-bknr-tag worldpay-generate-cert ()
   (bknr-session)
   (with-template-vars (email name address want-print)
     (let ((contract (find-store-object (parse-integer (get-template-var :contract-id)))))
@@ -52,6 +64,27 @@
         (contract-set-download-only-p contract t))
       (contract-issue-cert contract name :address address :language (request-language))
       (send-to-postmaster #'mail-worldpay-sponsor-data contract)
+      (bknr.web::redirect-request :target (format nil "profil_setup?name=~A&email=~A&sponsor-id=~A"
+                                                  (encode-urlencoded name) (encode-urlencoded email)
+                                                  (store-object-id (contract-sponsor contract)))))))
+
+(define-bknr-tag spendino-generate-cert ()
+  (bknr-session)
+  (with-template-vars (name)
+    (with-contract-data-from-session (contract
+                                      email printed-cert
+                                      title academic-title
+                                      firstname lastname
+                                      street number
+                                      zip city)
+      (contract-set-download-only-p contract (not printed-cert))
+      (contract-issue-cert contract name
+                           :address (format nil "~A~@[ ~A~] ~A ~A~%~A ~A~%~A ~A"
+                                            title academic-title
+                                            firstname lastname
+                                            street number
+                                            zip city)
+                           :language "de")
       (bknr.web::redirect-request :target (format nil "profil_setup?name=~A&email=~A&sponsor-id=~A"
                                                   (encode-urlencoded name) (encode-urlencoded email)
                                                   (store-object-id (contract-sponsor contract)))))))
@@ -73,7 +106,8 @@
 
 (define-bknr-tag buy-sqm ()
   (handler-case
-      (with-template-vars (numsqm numsqm1 action donationcert-yearly download-only email printed-cert)
+      (with-template-vars (numsqm numsqm1 action donationcert-yearly download-only email printed-cert
+                                  title academic-title firstname lastname street number zip city)
         (let* ((numsqm (parse-integer (or numsqm numsqm1 (error "numsqm and numsqm1 not set"))))
                ;; Wer ueber dieses Formular bestellt, ist ein neuer
                ;; Sponsor, also ein neues Sponsorenobjekt anlegen.  Eine
@@ -83,9 +117,7 @@
                ;; Website angeboten, was passenderweise durch die folgende
                ;; Überprüfung auch sicher gestellt wurde.  Sollte man aber
                ;; eventuell noch mal prüfen und sicher stellen.
-               (manual-transfer (or (scan #?r"rweisen" action)
-                                    (scan #?r"rweisung" action)
-                                    (scan #?r"verf" action)))
+               (manual-transfer (scan #?r"(rweisen|weisung|verf)" action))
                (language (make-keyword-from-string (request-language)))
                (sponsor (make-sponsor :language language))
                (download-only (or (< (* +price-per-m2+ numsqm) *mail-amount*)
@@ -96,30 +128,45 @@
                                         :expires (+ (if manual-transfer
                                                         bos.m2::*manual-contract-expiry-time*
                                                         bos.m2::*online-contract-expiry-time*)
-                                                    (get-universal-time)))))
+                                                    (get-universal-time))))
+               payment-outcome)
+          ;; handle special mail addresses that may skip the spendino
+          ;; payment process for testing purposes
+          (cl-ppcre:regex-replace "^(fail|success)\\.(hans\\.huebner@gmail\\.com|.*@bos-deutschland\\.de)$"
+                                  email
+                                  (lambda (target-string start end match-start match-end reg-starts reg-ends)
+                                    (declare (ignore start end match-start match-end))
+                                    (setf payment-outcome (subseq target-string (aref reg-starts 0) (aref reg-ends 0))
+                                          email (subseq target-string (aref reg-starts 1) (aref reg-ends 1)))))
           (destructuring-bind (price currency)
               (case language
                 (:da (list (* numsqm 24) "DKK"))
                 (t   (list (* numsqm 3)  "EUR")))
-            (setf (get-template-var :payment-url)
+            
+            (setf (hunchentoot:session-value :contract-plist)
+                  (list :contract contract
+                        :contract-id (store-object-id contract)
+                        :amount price
+                        :numsqm numsqm
+                        :email email
+                        :language language
+                        :printed-cert printed-cert
+                        :title title
+                        :academic-title academic-title
+                        :firstname firstname
+                        :lastname lastname
+                        :street street
+                        :number number
+                        :zip zip
+                        :city city)
+                  (get-template-var :payment-url)
                   (cond
-                    ((equal email "hans.huebner@gmail.com")
-                     (spendino:register-payment contract :email email :language language :printed-cert printed-cert)
-                     (format nil "/spendino-buy-success?xtxid=~A" (store-object-id contract)))
                     (manual-transfer
-                     (format nil "ueberweisung?contract-id=~A&amount=~A&numsqm=~A~@[&donationcert-yearly=1~]"
-                             (store-object-id contract)
-                             price
-                             numsqm
-                             donationcert-yearly))
+                     "ueberweisung")
+                    (payment-outcome
+                     (format nil "/spendino-buy-~A?xtxid=~A" payment-outcome (store-object-id contract)))
                     ((eq language :de)
-                     ;; send transaction information to node.js based spendino callback server
-                     (spendino:register-payment contract :email email :language language :printed-cert printed-cert)
-                     (format nil "spendino?contract-id=~A&amount=~A&numsqm=~A&email=~A"
-                             (store-object-id contract)
-                             price
-                             numsqm
-                             email))
+                     "spendino")
                     (t
                      (format nil "https://select.worldpay.com/wcc/purchase?instId=~A&cartId=~A&amount=~A&currency=~A&lang=~A&desc=~A&MC_sponsorid=~A&MC_password=~A&MC_donationcert-yearly=~A~@[~A~]"
                              *worldpay-installation-id*
@@ -142,25 +189,22 @@
       (declare (ignore e))
       (bknr.web::redirect-request :target "allocation-areas-exhausted"))))
 
-(define-bknr-tag mail-transfer ()
-  (with-query-params (country
-                      contract-id
-                      name vorname strasse plz ort telefon want-print
-                      email donationcert-yearly)
-    (let* ((contract (store-object-with-id (parse-integer contract-id)))           
-           (download-only (or (< (contract-price contract) *mail-certificate-threshold*)
-                              (not want-print))))      
+(define-bknr-tag mail-transfer (&key (language "de"))
+  (with-query-params (cert-name title academic-title firstname lastname street number zip city)
+    (with-contract-data-from-session (contract printed-cert)
       (with-transaction (:prepare-before-mail)
-        (setf (contract-download-only contract) download-only)
-        (setf (sponsor-country (contract-sponsor contract)) country))
-      (contract-issue-cert contract (format nil "~A ~A" vorname name)
-                           :address (format nil "~A ~A~%~A~%~A ~A"
-                                            vorname name
-                                            strasse
-                                            plz ort)
-                           :language (request-language))
+        (setf (contract-download-only contract) (not printed-cert))
+        (setf (sponsor-country (contract-sponsor contract)) language))
+      (contract-issue-cert contract cert-name
+                           :address (format nil "~A~@[ ~A~] ~A ~A~%~A ~A~%~A ~A"
+                                            title academic-title
+                                            firstname lastname
+                                            street number
+                                            zip city)
+                           :language language)
       (send-to-postmaster #'mail-manual-sponsor-data
-                          contract vorname name strasse plz ort email telefon want-print donationcert-yearly
+                          contract
+                          (hunchentoot:session-value :contract-plist)
                           (all-request-params)))))
 
 (define-bknr-tag when-certificate ()
@@ -242,7 +286,7 @@ document.write(unescape('%3Cscript src=%22' + gaJsHost + 'google-analytics.com/g
       (html ((:link :rel "stylesheet" :href css-url))))))
 
 (define-bknr-tag spendino-payment ()
-  (with-template-vars (contract-id amount email)
+  (with-contract-data-from-session (contract-id amount email)
     (html ((:script :src #?"https://api.spendino.de/admanager/ads/display/437?xtxid=$(contract-id)&xamount=$(amount)00&xemail=$(email)")
            " "))))
 
@@ -250,3 +294,22 @@ document.write(unescape('%3Cscript src=%22' + gaJsHost + 'google-analytics.com/g
   (bknr.web:authorize (website-authorizer *website*))
   (bknr.web::redirect-request :target (format nil "/infosystem/~A/satellitenkarte.htm~@[#invalid-login~]"
                                               (request-language) (bknr-session-user))))
+
+(define-bknr-tag contract-template-vars-from-session (&key vars)
+  (when vars
+    (setf vars (cl-ppcre:split "," vars)))
+  (loop
+     for (key value) on (hunchentoot:session-value :contract-plist) by #'cddr
+     when (or (null vars)
+              (member key vars :test #'string-equal))
+     do (setf (get-template-var key) (or value "")))
+  (emit-tag-children))
+
+(define-bknr-tag sponsor-login-inputs ()
+  (with-contract-data-from-session (contract)
+    (let* ((sponsor (contract-sponsor contract))
+           (sponsor-id (store-object-id sponsor))
+           (sponsor-master-code (sponsor-master-code sponsor)))
+      (html
+       ((:input :type "hidden" :name "__sponsorid" :value sponsor-id))
+       ((:input :type "hidden" :name "__password" :value sponsor-master-code))))))

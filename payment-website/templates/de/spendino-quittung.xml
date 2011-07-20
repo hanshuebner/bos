@@ -8,7 +8,6 @@
     suppress-xml-headers="1"
     >
   <head>
-    <base href="$(website-url)/de/quittung" />
     <link rel="stylesheet" href="/static/toplevel_style.css" />
     <link rel="stylesheet" href="/static/content_style.css" />
     <script src="/static/bos.js" type="text/javascript"><!-- x -->	
@@ -71,13 +70,9 @@
       <!-- container content_main -->
       <div id="content_main">
         <div id="textbox_content_big" >
-          <bos:process-payment source="spendino">
-            <bos:send-instruction-email contract-id="$(cartId)" email="$(email)"/>
-            <form method="post" action="generate-cert">
-              <input type="hidden" name="contract-id" value="$(cartId)" />
-              <input type="hidden" name="__sponsorid" value="$(sponsor-id)" />
-              <input type="hidden" name="__password" value="$(master-code)" />
-              <input type="hidden" name="email" value="$(email)" />
+          <bos:process-spendino-payment>
+            <form method="post" action="spendino-generate-cert">
+              <bos:sponsor-login-inputs/>
               <table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                   <td colspan="3"><span class="headline">Ihre Zahlung war erfolgreich!</span></td>
@@ -99,20 +94,18 @@
                 <tr>
                   <td colspan="3" height="1" bgcolor="#c0c0c0"> </td>
                 </tr>
-                
                 <tr>
                   <td height="12"></td>
                 </tr>
                 <tr>
                   <td colspan="3" align="right">
                     <input type="submit" class="form_big" name="Button"
-                           onclick="javascript:return confirm('Ist der Name korrekt angegeben?');"
                            value="speichern und weiter" />
                   </td>
                 </tr>
               </table>
             </form>
-          </bos:process-payment>
+          </bos:process-spendino-payment>
         </div>
       </div>
       <div id="content_right">

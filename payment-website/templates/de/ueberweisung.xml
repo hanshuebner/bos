@@ -1,160 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-   title="REGENWALD für SAMBOJA LESTARI"
-   xmlns="http://www.w3.org/1999/xhtml"
-   xmlns:bknr="http://bknr.net"
-   xmlns:bos="http://headcraft.de/bos"
-   >
-  <div id="content">
-    <div id="content_left"><!-- content left-->
-      <div id="textbox_left_form">		
-      </div>	
-      <!-- footer -->	
-      <div id="menue_footer">	
-	<a href="#" onclick="window_extra('privacy')" class="footer">
-	  Datenschutzinfo
-	</a>
-	l
-	<a href="#" onclick="window_extra('impressum')" class="footer">
-	  Impressum
-	</a>
-      </div>
-      <!-- /footer -->	
-    </div>
-    <!-- /content left-->
-    <!-- container content_main -->
-    <div id="content_main">
-      <div id="textbox_content_big" >
-	<form action="mail-transfer" method="post"
-	      enctype="application/x-www-form-urlencoded"
-	      name="mailtransfer"
-	      id="mailtransfer"
-	      onsubmit="return check_ueberweisung_de()">
-	  <input type="hidden" name="contract-id" value="$(contract-id)" />
-	  <input type="hidden" name="sponsor-id" value="$(sponsor-id)" />
-	  <input type="hidden" name="amount" value="$(amount)" />
-	  <input type="hidden" name="numsqm" id="numsqm" value="$(numsqm)" />
-	  <input type="hidden" name="gift" value="$(gift)" />
-	  <input type="hidden" name="donationcert-yearly" value="$(donationcert-yearly)" />
-	  <table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
-	    <tr>
-	      <td colspan="3"><span class="headline">Ich möchte meine Spende überweisen.</span></td>
-	    </tr>
-	    <tr>
-	      <td colspan="3" height="7"> </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3">
-                Ich habe mich dazu entschieden einen Betrag von $(amount) Euro auf das Spendenkonto "Samboja Lestari" von BOS Deutschland e.V. zu überweisen.
-		<table border="0">
-		  <tr><td>Kontonummer:</td><td>32 10 100</td></tr>
-		  <tr><td>Bank:</td><td>Bank für Sozialwirtschaft</td></tr>
-		  <tr><td>BLZ:</td><td>100 205 00</td></tr>
-		</table>
-		<strong>Bitte unbedingt den Verwendungszweck "SL ID $(contract-id)" auf dem Überweisungsformular angeben!</strong>
-		<br /> <br />
-		Meine Überweisung muss ich bei meiner Bank eigenständig veranlassen!
-	      </td>
-	    </tr>						
-	    <tr>
-	      <td colspan="3" height="7"> </td>
-	    </tr>
-	    <tr>
-	      <td height="10">Vorname:</td>
-	      <td width="10"></td>
-	      <td><input name="vorname" type="text" size="25" maxlength="30" /></td>
-	    </tr>
-	    <tr>
-	      <td height="10">Name:</td>
-	      <td width="10"></td>
-	      <td><input name="name" type="text" size="25" maxlength="30" /></td>
-	    </tr>
-	    <tr>
-	      <td height="10">Straße/Nr.:</td>
-	      <td width="10"></td>
-	      <td><input name="strasse" type="text" size="25" maxlength="30" /></td>
-	    </tr>
-	    <tr>
-	      <td height="10">PLZ/Ort</td>
-	      <td width="10"></td>
-	      <td>
-		<input name="plz" type="text" size="5" maxlength="5" />
-		<input name="ort" type="text" size="13" maxlength="30" />
-	      </td>
-	    </tr>
-	    <tr>
-	      <td height="10">E-Mail:</td>
-	      <td width="10"></td>
-	      <td><input name="email" type="text" size="25" maxlength="50" /></td>
-	    </tr>
-	    <tr>
-	      <td height="10">Telefon:</td>
-	      <td width="10"></td>
-	      <td><input name="telefon" type="text" size="25" maxlength="30" /></td>
-	    </tr>							
-	    <tr>
-	      <td colspan="3" height="20"> </td>
-	    </tr>
-	    <tr id="mail-cert" style="visibility: hidden">
-	      <td colspan="3">
-		<input type="checkbox" name="want-print"/>
- 		Ich möchte meine Regenwaldurkunde per Post zugeschickt bekommen.
-	      </td>
-	    </tr>
-	    <tr>
-	      <td colspan="3" height="20"> </td>
-	    </tr>
-	    <tr>
-              <td align="right" colspan="3">
-		<input type="submit" id="submit_button" class="form_big" name="action" value="Angaben an BOS mailen" />
-	      </td>
-	    </tr>
-	  </table>
-	</form>
-      </div>
-    </div>
-    <div id="content_right">
-      <div id="helpbox">		
-	<strong>[Persönliche Daten]</strong>
-	<br />
-        Wir reservieren gerne die von Ihnen gewünschten m². Für die
-        Zusendung der entsprechenden Informationen (Regenwaldurkunde,
-        Geokoordinaten, Spendenbescheinigung) benötigen wir Ihre
-        Daten. Nach erfolgter Überweisung melden wir uns per E-Mail.
-        <br /><br /> <strong>[Urkunde]</strong>
-        <br />
-        <span id="urkunde-print-info" style="display: none">
-          Ihre persönliche Urkunde können Sie sich jederzeit bei
-	  schafft-lebenswald.de als PDF herunterladen, auch wenn Sie
-	  diese nicht per Post zugeschickt bekommen wollen.
-        </span>
-        <span id="urkunde-download-info" style="display: none">
-          Ihre persönliche Urkunde können Sie sich jederzeit bei
-          schafft-lebenswald.de als PDF herunterladen.
-        </span>
-        <br /><br />
-	<strong>[Dieses Formular]</strong>
-	<br />
-	Bitte senden Sie dieses Formular per E-Mail direkt an uns. Sie können es auch
-	<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-	<a href="#" onclick="window.print();" class="more">
-	  ausdrucken
-	</a>
-	und per Fax oder Post an unsere
-	Kontaktadresse schicken:
-	<br /><br />
-	BOS Deutschland e.V.
-	<br />
-	Tempelhofer Damm 2
-	<br />
-	10121 Berlin
-	<br /><br />
-	Tel: (030) 890 6076-0<br/>
-	Fax: (030) 890 6076-10
-      </div>		
-    </div>
-    <script type="text/javascript">maybe_show_ueberweisung_printed_cert()</script>
+    title="REGENWALD für SAMBOJA LESTARI"
+    template="toplevel-modern"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:bknr="http://bknr.net"
+    xmlns:bos="http://headcraft.de/bos"
+    >
+  <bos:contract-template-vars-from-session/>
+  <div class="headline">
+    Bitte überweisen Sie den Spendenbetrag von $(amount) Euro auf das Spendenkonto "Samboja Lestari" von BOS Deutschland e.V.
   </div>
+  <div id="kontoinfo">
+    <table border="0">
+      <tr><td>Kontonummer:</td><td>32 10 100</td></tr>
+      <tr><td>Bank:</td><td>Bank für Sozialwirtschaft</td></tr>
+      <tr><td>BLZ:</td><td>100 205 00</td></tr>
+    </table>
+  </div>
+  <p>
+    <strong>Bitte unbedingt den Verwendungszweck "SL ID
+    $(contract-id)" auf dem Überweisungsformular angeben!</strong>
+  </p>
+  <p id="download-cert-only">
+    Sobald die Zahlung bei uns eingegangen ist, senden wir Ihnen
+    eine Email mit Ihren Zugangsdaten.
+  </p>
+  <p id="printed-cert">
+    Sobald die Zahlung bei uns eingegangen ist, senden wir Ihnen
+    Ihre Lebenswaldurkunde per Post zu.
+  </p>
+  <form action="mail-transfer" method="post" name="ueberweisung-form">
+    <div>
+      Bitte geben Sie den Namen ein, der auf der Regenwaldurkunde
+      erscheinen soll:
+      <p>
+        <input type="text" name="cert-name" id="cert-name" class="validate[required]" value="$(firstname) $(lastname)" />
+      </p>
+      <div class="infoPopup">
+        Wenn Sie die Urkunde verschenken wollen, geben Sie hier den
+        Namen der oder des Beschenkten ein.
+      </div>
+    </div>
+    <div>
+      <input type="checkbox" name="spendenbescheinigung" value="1" />
+      <label for="spendenbescheinigung">Ich benötige eine Spendenbescheinigung</label>
+      <div id="anschrift">
+        <div>
+          <label for="title">Anrede</label>
+          <select name="title" class="validate[required]"> 
+            <option value="">Bitte wählen Sie</option> 
+            <option>Herr</option> 
+            <option>Frau</option>
+          </select>
+          <!-- hack to ensure proper preselection (see ueberweisung.js) -->
+          <input type="hidden" name="title-default" value="$(title)"/>
+          <label for="academic-title">Titel</label>
+          <select name="academic-title"> 
+            <option value="">Bitte wählen Sie</option> 
+            <option>Dr.</option> 
+            <option>Prof</option> 
+            <option>Prof. Dr.</option> 
+          </select>
+          <!-- hack to ensure proper preselection (see ueberweisung.js) -->
+          <input type="hidden" name="academic-title-default" value="$(academic-title)"/>
+        </div>
+        <div>
+          <input name="firstname" type="text" class="validate[required]" title="Vorname" size="27" value="$(firstname)"/>
+          <input name="lastname" type="text" class="validate[required]" title="Nachname" size="27" value="$(lastname)"/>
+          <br/>
+          <input name="street" type="text" class="validate[required]" title="Strasse" size="50" value="$(street)"/>
+          <input name="number" type="text" class="validate[required]" title="Nr." size="4" value="$(number)"/>
+          <br/>
+          <input name="zip" type="text" class="validate[required]" title="PLZ" size="4" value="$(zip)"/>
+          <input name="city" type="text" class="validate[required]" title="Ort" size="50" value="$(city)"/>
+        </div>
+      </div>
+      <div class="infoPopup">
+        <p>
+          Bei Spenden über 200,- Euro schicken wir Ihnen auf Wunsch eine
+          Spendenbescheinigung per Post zu.  Bei Spenden bis zu 200 Euro
+          reicht die Vorlage des Überweisungsträgers oder Kontoauszugs
+          bei der Steuererklärung.
+        </p>
+        <p>
+          Bitte beachten Sie, dass der Kontoinhaber mit dem Empfänger
+          der Spendenbescheinigung übereinstimmen muss, damit sie vom
+          Finanzamt anerkannt wird.
+        </p>
+      </div>
+      <p>
+        <input type="submit" name="action" value="Angaben an BOS mailen"/>
+      </p>
+    </div>
+  </form>
 </bknr:toplevel>

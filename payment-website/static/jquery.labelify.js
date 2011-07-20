@@ -55,11 +55,11 @@ jQuery.fn.labelify = function(settings) {
     $(this).data("label",lookup(this).replace(/\n/g,''));
     $(this).focus(function() {
       if (this.value === $(this).data("label")) {
-        this.value = this.defaultValue;
+        this.value = "";
         $(this).removeClass(settings.labelledClass);
       }
     }).blur(function(){
-      if (this.value === this.defaultValue) {
+      if (this.value === "") {
         this.value = $(this).data("label");
         $(this).addClass(settings.labelledClass);
       }
@@ -68,7 +68,7 @@ jQuery.fn.labelify = function(settings) {
     var removeValuesOnExit = function() {
       jQuery_labellified_elements.each(function(){
         if (this.value === $(this).data("label")) {
-          this.value = this.defaultValue;
+          this.value = "";
           $(this).removeClass(settings.labelledClass);
         }
       })
@@ -77,7 +77,7 @@ jQuery.fn.labelify = function(settings) {
     $(this).parents("form").submit(removeValuesOnExit);
     $(window).unload(removeValuesOnExit);
     
-    if (this.value !== this.defaultValue) {
+    if (this.value !== "") {
       // user already started typing; don't overwrite their work!
       return;
     }

@@ -67,11 +67,18 @@ $(document).ready(function () {
             $(this).attr('id', $(this).attr('name'));
         }
     });
-    $(':input').focus(function () {
+
+    function cleanupInputs () {
         $('form').validationEngine('hideAll');
         $(":text").labelify({ labelledClass: "labelHighlight" });
-    });
+    }
+
+    $(':input')
+        .focus(cleanupInputs);
+    $('input[type=checkbox]')
+        .click(cleanupInputs);
     $('form').validationEngine();
+    // need to use direct dom method, not jquery, so that interaction with labelify works
     document.bestellformular.onsubmit = function () {
         return $('form').validationEngine('validate');
     }
@@ -84,7 +91,7 @@ $(document).ready(function () {
         
         setWantedSqm(value);
     });
-    $('#printed_cert').change(function () {
+    $('#printed-cert').change(function () {
         if (this.checked) {
             $('#anschrift').show();
         } else {

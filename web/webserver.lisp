@@ -142,8 +142,8 @@
 (defun publish-directory (&key prefix destination)
   (push (hunchentoot:create-folder-dispatcher-and-handler prefix destination) hunchentoot:*dispatch-table*))
 
-(defun publish-website (&key website-directory
-                        website-url
+(defun publish-website (&key (website-directory *website-directory*)
+                        (website-url *website-url*)
                         (worldpay-test-mode t)
                         google-maps-api-key)
 

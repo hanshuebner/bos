@@ -103,35 +103,6 @@
               </td>
             </tr>
             <tr>
-              <td colspan="3">
-                <br />
-                Ihre E-Mail-Adresse wird <strong>nicht</strong> veröffentlicht, sondern lediglich für
-                interne Informationszwecke verwendet.
-              </td>
-            </tr>
-            <tr>
-              <td colspan="3" height="18">
-              </td>
-            </tr>
-            <tr>
-              <td class="content_text" height="20">
-                E-Mail-Adresse:
-              </td>
-              <td>
-              </td>
-              <td>
-                <input type="text" name="email" value="$(email)" size="33" class="form_big" />
-              </td>
-            </tr>
-            <tr>
-              <td height="12">
-              </td>
-            </tr>
-            <tr>
-              <td colspan="3" height="10">
-              </td>
-            </tr>
-            <tr>
               <td colspan="3" height="1" bgcolor="#c0c0c0">
               </td>
             </tr>

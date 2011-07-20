@@ -50,7 +50,7 @@
                (:file "allocation-cache-handlers" :depends-on ("packages" "web-macros"))
                (:file "languages-handler" :depends-on ("packages" "web-macros"))
                (:file "spendino-handlers" :depends-on ("packages" "web-macros"))
-               (:file "tags" :depends-on ("packages"))
+               (:file "tags" :depends-on ("packages" "spendino-handlers"))
                (:file "news-tags" :depends-on ("packages"))
                (:file "news-rss" :depends-on ("packages"))
                (:file "contract-rss" :depends-on ("packages"))

@@ -86,33 +86,6 @@
       </td>
     </tr>
     <tr>
-      <td colspan="3" height="15"> 
-      </td>
-    </tr>
-    <tr>
-      <td colspan="3">
-        <br />Ihre E-Mail-Adresse wird<strong> nicht</strong> veröffentlicht, sondern lediglich für interne Informationszwecke verwendet.
-      </td>
-    </tr>
-    <tr>
-      <td colspan="3" height="18"> 
-      </td>
-    </tr>
-    <tr>
-      <td class="content_text" height="20">    
-        E-Mail-Adresse:
-      </td>
-      <td> 
-      </td>
-      <td>
-        $(email)
-      </td>
-    </tr>						
-    <tr>
-      <td height="12">
-      </td>
-    </tr>
-    <tr>
       <td colspan="3" height="10"> 
       </td>
     </tr>
