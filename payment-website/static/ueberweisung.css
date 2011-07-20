@@ -1,0 +1,21 @@
+#anschrift {
+    display: none;
+}
+
+#printed-cert {
+    display: none;
+}
+
+#anschrift {
+    padding: 1em 3em 1em 3em;
+}
+
+#anschrift {
+    display: none;
+}
+
+#cert-name {
+    margin-left: 4em;
+    width: 70%;
+    font-size: 1.2em;
+}

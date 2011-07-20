@@ -1,0 +1,152 @@
+body {
+    font: normal normal 0.8em Verdana, Geneva, Arial, Helvetica, sans-serif;
+    padding: 25px 50px 25px 50px;
+}
+
+#header {
+    position: relative;
+    height: 95px;
+}
+
+.infoPopup {
+    display: none;
+}
+
+/* styles for menu header not refactored, apologies */
+
+#menue_banner {
+    position: absolute;
+    z-index: 8;
+}
+
+/* menueleiste im header - alte version */
+#menue_header {
+    position: absolute;
+    z-index: 10;
+    margin-top: 56px;
+    margin-left: 235px;
+    width: 550px;
+    height: 18px;
+    color: gray;
+    background-color: white;
+}
+
+/* menueleiste im header - neue version - linker bereich */
+#menue_header_left {
+    position: absolute;
+    z-index: 30;
+    margin-top: 75px;
+    margin-left: 30px;
+    width: 150px;
+    height: 18px;
+    color: gray;
+}
+/* menueleiste im header - neue version - mittlerer bereich hauptmenue */
+#menue_header_main {
+    position: absolute;
+    z-index: 120;
+    margin-top: 74px;
+    margin-left: 230px;
+    width: 410px;
+    height: 15px;
+    color: gray;
+}
+
+/* menuepunkte mittlerer und rechter menue-container */
+#menue_header_main div, #menue_header_left div {
+    height: 17px;
+    z-index: 15;
+    padding-top: 2px;
+}
+
+#menue_header_main div {
+    float: left;
+    padding-left: 5px;
+    padding-right: 6px;
+}
+#menue_header_right div {
+    float: left;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+a.menue {
+    font-size: 0.85em;
+    font-weight: bold;
+    color: gray;
+    text-decoration: none;
+}
+
+a.menue:hover {
+    color: #990000;
+}
+a.menue:active {
+    color: #990000;
+}
+
+/* end of menu header stuff */
+
+#content {
+    width: 800px;
+    min-height: 500px;
+}
+
+#content_main {
+    width: 539px;
+    float: left;
+    padding: 25px;
+}
+
+.headline {
+    color: #256F16;
+    font-weight: bold;
+    font-size: 120%;
+}
+
+#content_main > form > div {
+    margin-bottom: 1em;
+}
+
+#content_right {
+    position: relative;
+    float: right;
+    min-height: 500px;
+    width: 180px;
+    margin-right: 20px;
+    font-size: 0.85em;
+    background-image: url(../images/bg_content_right.gif);
+    padding: 10px 5px 10px 5px;
+}
+
+#content_right_footer {
+    position: absolute;
+    bottom: 2px;
+    left: 8px;
+}
+
+a {
+    color : #339900;
+    text-decoration : none;
+}
+
+input.labelHighlight {
+    color: grey;
+}
+
+p {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
+strong {
+    font-weight: bold;
+}
+
+#kontoinfo {
+    padding: 1em 3em 1em 3em;
+}
+
+#kontoinfo td {
+    padding-right: 10px;
+}
+
