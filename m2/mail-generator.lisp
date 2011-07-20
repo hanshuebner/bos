@@ -39,10 +39,10 @@
   (bt:with-lock-held (*postmaster-queue-lock*)
     (enqueue (list function contract args) *postmaster-queue*)))
 
-(defvar *country->office-email* '(("DK" . "bosdanmark.regnskov@gmail.com")
-                                  ("SE" . "bosdanmark.regnskov@gmail.com")))
+(defparameter *country->office-email* '(("DK" . "bosdanmark.regnskov@gmail.com")
+                                        ("SE" . "bosdanmark.regnskov@gmail.com")))
 
-(defvar *catch-all-mail-address* "hans.huebner@gmail.com")
+(defparameter *catch-all-mail-address* "test-sl@neu.schafft-lebenswald.de")
 
 (defun country->office-email (country)
   (or (cdr (assoc country *country->office-email* :test #'string-equal))

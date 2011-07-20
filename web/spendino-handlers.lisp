@@ -89,10 +89,13 @@
 
   (bknr.web::redirect-request :target "/de/spendino-quittung"))
 
-(defclass buy-failure-handler (unpaid-contract-handler)
+(defclass buy-failure-handler (unpaid-contract-handler html-page-handler)
   ())
 
 (defmethod handle-contract ((handler buy-failure-handler) contract)
-
   ;; When a payment is complete, users are redirected to this page by Spendino.
-  (bknr.web::redirect-request :target "/de/sponsor_canceled"))
+  (html
+   (:html
+    (:head
+     ((:script :type "text/javascript")
+      "window.top.location = '/de/spendino-sponsor-canceled';")))))

@@ -18,6 +18,6 @@ function do_poll()
 
 
 $(document).ready(function() {
-    console.log('start polling');
-    setInterval(do_poll, 1000);
+/*    console.log('start polling');
+    setInterval(do_poll, 1000); */
 });
