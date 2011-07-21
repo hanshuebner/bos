@@ -12,8 +12,9 @@
     Vielen Dank für Ihre Unterstützung
   </p>
   <strong>
-    Bitte geben Sie unbedingt die ID $(contract-id) als Verwendungszweck
-    Ihrer Überweisung an, damit wir Sie nach der Bearbeitung erreichen können!
+    Bitte geben Sie unbedingt die SL-ID $(contract-id) als
+    Verwendungszweck Ihrer Überweisung an, damit wir Sie nach der
+    Bearbeitung erreichen können!
   </strong>
   <div id="kontoinfo">
     <table border="0">
