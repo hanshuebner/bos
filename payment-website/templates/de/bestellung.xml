@@ -124,9 +124,15 @@
           </p>
         </div>
       </div>
-      <button name="action" value="ueberweisung">
-        <img src="/images/ueberweisung_logo.png" title="Per Überweisung bezahlen"/>
-      </button>
+      <div style="display: inline">
+        <button name="action" value="ueberweisung">
+          <img src="/images/ueberweisung_logo.png" title="Per Überweisung bezahlen"/>
+        </button>
+        <div class="infoPopup">
+          Wenn Sie uns Ihre Spende selbst ueberweisen wollen, wählen
+          Sie bitte diese Option.
+        </div>
+      </div>
     </div>
     <div>
       <span class="headline">Spenden sind steuerlich absetzbar!</span>
