@@ -27,6 +27,11 @@ function window_news(target) {
 };
 
 // ***  extrafenster fuer satellitenkarte *** //
+
+function window_infosys() {
+    make_infosys_window('/infosys');
+}
+
 function make_infosys_window(url) {
     open(url || '',
          "infowin",
