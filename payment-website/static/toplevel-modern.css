@@ -8,6 +8,10 @@ body {
     height: 95px;
 }
 
+#menue_header_left {
+    font-size: 0.8em;
+}
+
 .infoPopup {
     display: none;
 }
