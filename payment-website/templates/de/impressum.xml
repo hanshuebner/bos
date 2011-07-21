@@ -1,47 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-  template="toplevel_extra"
-  title="RAINFOREST for SAMBOJA LESTARI - imprint"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+    template="toplevel_extra"
+    title="RAINFOREST for SAMBOJA LESTARI - imprint"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:bknr="http://bknr.net"
+    xmlns:bos="http://headcraft.de/bos"
+    >
   <bos:set-cachable/>
-	<h1 class="extra">Impressum</h1>
-	<p class="text_content">
-		<strong>www.schafft-lebenswald.de </strong>ist eine Webseite von:<br /><br />
+  <h1 class="extra">Impressum</h1>
+  <p class="text_content">
 
-		BOS Deutschland e.V. in Zusammenarbeit mit The Borneo Orangutan Survival Foundation (BOS) <br /> <br />
+    <strong>www.schafft-lebenswald.de </strong>ist eine Webseite von:<br /><br />
 
-		Postanschrift:<br /><br />
-		BOS Deutschland e.V.<br /><br />
-                Tempelhofer Damm 2<br />
-		12101 Berlin<br /><br />
-		Germany<br /><br />
-				
-		Tel:  +49 - (0)30 - 890 6076-0<br /><br />
-		Fax:  +49 - (0)30 - 890 6076-10<br /><br />
-				
-		<img src="/images/pfeil_link_on.gif" valign="bottom" width="10" height="9" alt="" />
-		<a href="mailto:info@bos-deutschland.de'" class="content_green">
-			info@bos-deutschland.de
-		</a>
-		<br />
-		<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-		<a href="http://www.bos-deutschland.de" target="_empty" class="content_green">
-			www.bos-deutschland.de
-		</a>
-		<br /><br />
-		1. Vorsitzender: Leonhard Graf Rothkirch-Trach<br />
-		2. Vorsitzender: Marianne Klute<br />
-                Schatzmeister: Felix Affeld<br />
-                Beisitzerin: Michelle Desilet<br />
-                Beisitzer: Maik Schaffer<br /><br />
-		BOS Deutschland e.V. ist im Vereinsregister des Amtsgerichtes Berlin-Charlottenburg unter VR 24216 B eingetragen.<br /><br />
-		Die Fotos auf der Webseite sind copyrightgeschützt und stehen für kommerzielle  Zwecke nicht frei zur Verfügung.
-		Wenn Sie Fotos von BOS nutzen möchten, wenden Sie sich bitte an die oben genannte Kontaktadresse. <br /><br />
-		Wenn Sie Fragen haben sollten, schreiben Sie eine E-Mail oder rufen Sie uns an.<br /><br />
-	</p>					
+    BOS Deutschland e.V. in Zusammenarbeit mit The Borneo Orangutan
+    Survival Foundation (BOS) <br /> <br />
+
+    Postanschrift:<br /><br />
+    BOS Deutschland e.V.<br /><br />
+    Tempelhofer Damm 2<br />
+    12101 Berlin<br /><br />
+    Germany<br /><br />
+    
+    Tel:  +49 - (0)30 - 890 6076-0<br /><br />
+    Fax:  +49 - (0)30 - 890 6076-10<br /><br />
+    
+    <img src="/images/pfeil_link_on.gif" valign="bottom" width="10" height="9" alt="" />
+    <a href="mailto:info@bos-deutschland.de'" class="content_green">
+      info@bos-deutschland.de
+    </a>
+    <br />
+
+    <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+    <a href="http://www.bos-deutschland.de" target="_empty" class="content_green">
+      www.bos-deutschland.de
+    </a>
+
+    <br /><br />
+    1. Vorsitzender: Leonhard Graf Rothkirch-Trach<br />
+    2. Vorsitzender: Marianne Klute<br />
+    Schatzmeister: Felix Affeld<br />
+    Beisitzerin: Michelle Desilet<br />
+    Beisitzer: Bernhard May<br /><br />
+
+    BOS Deutschland e.V. ist im Vereinsregister des Amtsgerichtes
+    Berlin-Charlottenburg unter VR 24216 B eingetragen.<br /><br />
+
+    Die Fotos auf der Webseite sind copyrightgeschützt und stehen für
+    kommerzielle Zwecke nicht frei zur Verfügung.  Wenn Sie Fotos von
+    BOS nutzen möchten, wenden Sie sich bitte an die oben genannte
+    Kontaktadresse. <br /><br /> 
+
+    Wenn Sie Fragen haben sollten, schreiben Sie eine E-Mail oder
+    rufen Sie uns an.<br /><br />
+  </p>					
 </bknr:toplevel>
