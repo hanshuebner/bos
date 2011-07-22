@@ -64,9 +64,12 @@
         (contract-set-download-only-p contract t))
       (contract-issue-cert contract name :address address :language (request-language))
       (send-to-postmaster #'mail-worldpay-sponsor-data contract)
-      (bknr.web::redirect-request :target (format nil "profil_setup?name=~A&email=~A&sponsor-id=~A"
-                                                  (encode-urlencoded name) (encode-urlencoded email)
-                                                  (store-object-id (contract-sponsor contract)))))))
+      (bknr.web::redirect-request
+       :target (puri:merge-uris (format nil "/~A/profil_setup?name=~A&email=~A&sponsor-id=~A"
+                                        (request-language)
+                                        (encode-urlencoded name) (encode-urlencoded email)
+                                        (store-object-id (contract-sponsor contract)))
+                                *website-url*)))))
 
 (define-bknr-tag spendino-generate-cert ()
   (bknr-session)
@@ -108,7 +111,7 @@
   (handler-case
       (with-template-vars (numsqm numsqm1 action donationcert-yearly download-only email printed-cert
                                   title academic-title firstname lastname street number zip city)
-        (let* ((numsqm (parse-integer (or numsqm numsqm1 (error "numsqm and numsqm1 not set"))))
+        (let* ((numsqm (parse-integer (or numsqm numsqm1 (error "numsqm ~A and numsqm1 ~A not set" numsqm numsqm1))))
                ;; Wer ueber dieses Formular bestellt, ist ein neuer
                ;; Sponsor, also ein neues Sponsorenobjekt anlegen.  Eine
                ;; Profil-ID wird automatisch zugewiesen, sonstige Daten
@@ -205,7 +208,7 @@
       (send-to-postmaster #'mail-manual-sponsor-data
                           contract
                           (or (hunchentoot:header-in* :origin)
-                              (website-url))
+                              *website-url*)
                           (hunchentoot:session-value :contract-plist)
                           (all-request-params)))))
 

@@ -9,6 +9,11 @@
 
 (defvar *website-directory*)
 
+(defun website-url* ()
+  (or (and (boundp 'hunchentoot:*request*)
+           (hunchentoot:header-in* :origin))
+      *website-url*))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -24,7 +29,7 @@
 (defmethod find-template-pathname ((handler worldpay-template-handler) template-name)
   (call-next-method handler
                     (cond
-                      ((scan #?r"(^|.*/)handle-sale" template-name)
+                      ((equal template-name "handle-sale")
                        (with-query-params (cartId name address country transStatus lang)
                          (unless (website-supports-language lang)
                            (setf lang *default-language*))
@@ -39,7 +44,7 @@
                              ((equal "C" transStatus)
                               #?"/$(lang)/sponsor_canceled")
                              ((< (contract-price contract) *mail-certificate-threshold*)
-                              #?"/$(lang)/quittung")
+                              #?"/$(lang)/worldpay-quittung")
                              (t
                               (when (<= *mail-fiscal-certificate-threshold* (contract-price contract))
                                 (mail-fiscal-certificate-to-office contract name address country))
