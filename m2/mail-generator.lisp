@@ -348,7 +348,7 @@ Amount: EUR~A.00
        collect (make-keyword-from-string (string key))
        collect value))
 
-(defun mail-manual-sponsor-data (contract contract-plist request-params)
+(defun mail-manual-sponsor-data (contract website-url contract-plist request-params)
   (destructuring-bind (&key email amount want-print &allow-other-keys) contract-plist
     (let* ((sponsor-id (store-object-id (contract-sponsor contract)))
            (contract-id (store-object-id contract))
@@ -362,7 +362,7 @@ Amount: EUR~A.00
                               (tr* "Sponsor ID" sponsor-id)
                               (tr* "Amount" amount)
                               (tr* "Email" email)
-                              (tr* "Printed certificate?" want-print))
+                              (tr* "Printed certificate?" (if want-print "yes" "no")))
                              (destructuring-bind
                                    (&key title academic-title firstname lastname street number zip city &allow-other-keys)
                                  (alist-keyword-plist request-params)
@@ -390,8 +390,9 @@ Amount: EUR~A.00
                                    (tr* "ZIP" zip)
                                    (tr* "City" city)))))
                              (:p
-                              ((:a :href (format nil "~A/complete-transfer/~A?email=~A"
-                                                 *website-url* contract-id email))
+                              ((:a :href (format nil "~A~Acomplete-transfer/~A?email=~A"
+                                                 website-url (if (alexandria:ends-with #\/ website-url) "" "/")
+                                                 contract-id email))
                                "Acknowledge receipt of payment"))))))
                         (make-contract-xml-part contract-id request-params)
                         #+(or)

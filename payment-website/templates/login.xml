@@ -5,6 +5,10 @@
   <head>
    <title>Please log in to the BOS CMS</title>
    <link rel="stylesheet" href="/static/cms.css" />
+   <script src="/static/jquery-1.6.2.min.js" type="text/javascript"><!-- x -->
+   </script>
+   <script src="/static/login.js" type="text/javascript"><!-- x -->
+   </script>
   </head>
   <body>
    <img src="/images/bos-logo.gif" width="348" height="255"/>

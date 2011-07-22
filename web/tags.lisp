@@ -204,6 +204,8 @@
                            :language language)
       (send-to-postmaster #'mail-manual-sponsor-data
                           contract
+                          (or (hunchentoot:header-in* :origin)
+                              (website-url))
                           (hunchentoot:session-value :contract-plist)
                           (all-request-params)))))
 
@@ -254,7 +256,9 @@
 
 (define-bknr-tag admin-login-page ()
   (if (editor-p (bknr-session-user))
-      (html (:head ((:meta :http-equiv "refresh" :content "0; url=/admin"))))
+      (html (:head ((:meta :http-equiv "refresh"
+                           :content (format nil "0; url=~A" (or (hunchentoot:session-value :login-redirect-uri)
+                                                                "/admin"))))))
       (emit-tag-children)))
 
 (define-bknr-tag google-analytics-track ()
