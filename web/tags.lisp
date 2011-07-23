@@ -53,7 +53,9 @@
         (setf (slot-value sponsor 'bknr.web::email) email
               (sponsor-country sponsor) "de")
         (contract-set-paidp contract (format nil "~A: paid via Spendino" (format-date-time)))))
-    (bos.m2:send-instructions-to-sponsor contract email))
+    (bos.m2:send-instructions-to-sponsor contract email
+                                         (merge-pathnames (format nil "instructions-email-~(~A~).txt" (request-language))
+                                                          *website-directory*)))
   (emit-tag-children))
 
 (define-bknr-tag worldpay-generate-cert ()

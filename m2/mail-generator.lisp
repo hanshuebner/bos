@@ -459,14 +459,13 @@ Donationcert yearly: ~A
                                                   (aref reg-starts 0) (aref reg-ends 0)))))
        (princ-to-string (getf vars key key))))))
 
-(defun send-instructions-to-sponsor (contract email-address &key (language "de"))
+(defun send-instructions-to-sponsor (contract email-address template &key (language "de"))
   "Send the instructions email to the sponsor, using the email-address provided"
   (let ((sponsor (contract-sponsor contract)))
     (send-system-mail :to email-address
                       :subject "Ihre Quadratmeter"
                       :text (moustache-expand
-                             (file-contents (merge-pathnames (format nil "instructions-email-~(~A~).txt" language)
-                                                             bos.web::*website-directory*)
+                             (file-contents template
                                             :element-type 'character)
                              :sponsor-id (store-object-id sponsor)
                              :sponsor-master-code (sponsor-master-code sponsor)))))
