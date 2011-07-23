@@ -1,7 +1,7 @@
 all: bos.image
 
 SBCL_BUILD=env LC_CTYPE=en_US.UTF-8 sbcl --dynamic-space-size 800
-SBCL_RUN=env LC_CTYPE=en_US.ISO8859-1 sbcl --core bos.core --dynamic-space-size 800
+SBCL_RUN=env LC_CTYPE=en_US.UTF-8 sbcl --core bos.core --dynamic-space-size 800
 
 CCL_BUILD=ccl
 CCL_RUN=ccl
