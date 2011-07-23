@@ -75,7 +75,9 @@
   (unless contract
     (setf contract (find-if #'contract-pdf-pathname (sponsor-contracts (bknr.web:bknr-session-user)))))
   (if (contract-certificates-generated-p contract)
-      (redirect (format nil "/certificates/~D.pdf" (store-object-id contract)))
+      (with-http-response (:content-type "application/pdf")
+        (file-contents (merge-pathnames (format nil "~D.pdf" (store-object-id contract))
+                                        bos.m2.config:*cert-download-directory*)))
       (with-http-response (:content-type "text/html; charset=UTF-8")
         (with-http-body ()
           (html
@@ -234,9 +236,6 @@
                                         ("/infosystem"
                                          directory-handler
                                          :destination ,(merge-pathnames "infosystem/" website-directory))
-                                        ("/certificates"
-                                         directory-handler
-                                         :destination ,*cert-download-directory*)
                                         ("/index" index-handler)
                                         user
                                         images                                   
