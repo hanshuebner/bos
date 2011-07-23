@@ -116,6 +116,8 @@
 
 (defmethod authorize ((authorizer bos-authorizer))
   (with-query-params (__sponsorid __password)
+    (when __sponsorid
+      (setf (hunchentoot:session-value 'bknr-session) nil))
     (if (and __sponsorid __password)
         (handler-case
             (let ((sponsor (find-store-object (parse-integer __sponsorid) :class 'sponsor)))
