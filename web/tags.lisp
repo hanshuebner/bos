@@ -298,9 +298,11 @@ document.write(unescape('%3Cscript src=%22' + gaJsHost + 'google-analytics.com/g
            " "))))
 
 (define-bknr-tag infosystem ()
-  (bknr.web:authorize (website-authorizer *website*))
-  (bknr.web::redirect-request :target (format nil "/infosystem/~A/satellitenkarte.htm~@[#invalid-login~]"
-                                              (request-language) (bknr-session-user))))
+  (with-template-vars (__sponsorid)
+    (when __sponsorid
+      (bknr.web:authorize (website-authorizer *website*)))
+    (bknr.web::redirect-request :target (format nil "/infosystem/~A/satellitenkarte.htm~@[#invalid-login~]"
+                                                (request-language) (not (bknr-session-user))))))
 
 (define-bknr-tag contract-template-vars-from-session (&key vars)
   (when vars
