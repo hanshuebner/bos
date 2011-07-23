@@ -1,3 +1,10 @@
+if (window.location.protocol != "https:") {
+    var url = window.location.href;
+    url = url.replace(/createrainforest.org/, "schafft-lebenswald.de");
+    url = url.replace(/^http:/, "https:");
+    window.location = url;
+}
+
 function check_form() {
 
     var email = $('#email');
@@ -56,10 +63,6 @@ function changeSqmCount(event, ui)
 }
 
 $(document).ready(function () {
-    if (window.location.protocol != "https:") {
-        window.location = window.location.href.replace(/^http:/, "https:");
-    }
-
     // Make sure that all our input and form elements ave an id
     // attribute, required by form validator.
     $(':input, form').each(function () {
