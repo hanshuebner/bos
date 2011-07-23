@@ -1,5 +1,6 @@
 if (window.location.protocol != "https:") {
     var url = window.location.href;
+    url = url.replace(/:\/\/www\./, "://");
     url = url.replace(/createrainforest.org/, "schafft-lebenswald.de");
     url = url.replace(/^http:/, "https:");
     window.location = url;
