@@ -7,7 +7,9 @@
     xmlns:bknr="http://bknr.net"
     xmlns:bos="http://headcraft.de/bos"
     >
-  <div class="headline">
-    Sie haben den Bezahlvorgang abgebrochen!
-  </div>
+  <p class="headline">Sie haben die Zahlung abgebrochen</p>
+  <a href="index" class="more">
+    <img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
+    Zurück zur Home Page
+  </a>
 </bknr:toplevel>

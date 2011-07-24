@@ -91,11 +91,11 @@
       <!-- container content_main -->
       <div id="content_main">
         <div id="textbox_content_big" >
-          <table id="formTable" width="95%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-              <td colspan="3"><span class="headline">Sie haben die Zahlung abgebrochen</span></td>
-            </tr>
-          </table>
+          <p class="headline">Sie haben die Zahlung abgebrochen</p>
+          <a href="index" class="more">
+            <img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
+            Zurück zur Home Page
+          </a>
         </div>
       </div>
       <div id="content_right">
