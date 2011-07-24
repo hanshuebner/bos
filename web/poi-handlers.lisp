@@ -388,22 +388,24 @@
           (or (sponsor-country (contract-sponsor contract)) "de")
           (length (contract-m2s contract))))
 
-(defun poi-handle-if-modified-since (&optional (pois (class-instances 'poi)))
-  (let ((pois-last-change (reduce #'max pois
-                                  :key (lambda (poi) (store-object-last-change poi 1))
-                                  :initial-value 0)))
-    (hunchentoot:handle-if-modified-since pois-last-change)
-    (setf (hunchentoot:header-out :last-modified)
-          (hunchentoot:rfc-1123-date pois-last-change))))
+(defun last-poi-change-time (&optional (pois (class-instances 'poi)))
+  (reduce #'max pois
+          :key (lambda (poi) (store-object-last-change poi 1))
+          :initial-value 0))
 
-(defun last-contracts-handle-if-modified-since ()
-  (hunchentoot:handle-if-modified-since
-   (reduce #'max (last-paid-contracts)
-           :key (lambda (contract) (store-object-last-change contract 0)))))
+(defun handle-if-modified-since (&rest times)
+  (let ((last-modified (reduce #'max times)))
+    (hunchentoot:handle-if-modified-since last-modified)
+    (setf (hunchentoot:header-out :last-modified)
+          (hunchentoot:rfc-1123-date last-modified))))
+
+(defun last-m2-sale-time ()
+  (reduce #'max (last-paid-contracts)
+          :key (lambda (contract) (store-object-last-change contract 0))))
 
 (defmethod handle ((handler poi-javascript-handler))
-  (poi-handle-if-modified-since)
-  (last-contracts-handle-if-modified-since)
+  (handle-if-modified-since (last-m2-sale-time) (last-poi-change-time))
+  (setf (hunchentoot:header-out :cache-control) "max-age=300")
   (with-http-response (:content-type "text/html; charset=UTF-8")
     (with-http-body ()
       (html
@@ -481,13 +483,10 @@
 
 
 (defmethod handle-object ((handler poi-xml-handler) poi)
-  (let ((timestamp (store-object-last-change poi 1)))
-    (hunchentoot:handle-if-modified-since timestamp)
-    (setf (hunchentoot:header-out :last-modified)
-          (hunchentoot:rfc-1123-date timestamp))
-    (with-query-params ((lang "en"))
-      (with-xml-response (:xsl-stylesheet-name "/static/poi.xsl")
-        (write-poi-xml poi lang)))))
+  (handle-if-modified-since (store-object-last-change poi 1))
+  (with-query-params ((lang "en"))
+    (with-xml-response (:xsl-stylesheet-name "/static/poi.xsl")
+      (write-poi-xml poi lang))))
 
 (defmethod handle-object ((handler poi-xml-handler) (poi (eql :ptdefault)))
   "ptviewer will request /poi-xml/PTDefault.html"
@@ -627,7 +626,7 @@
 
   (let* ((relevant-pois (remove-if-not #'(lambda (poi) (and (poi-area poi) (poi-published-earth poi)))
                                        (class-instances 'poi))))
-    (poi-handle-if-modified-since relevant-pois)
+    (handle-if-modified-since (last-poi-change-time relevant-pois))
     (with-query-params ((lang "en"))
       (with-xml-response ()
         ;; (sax:processing-instruction cxml::*sink* "xml-stylesheet" "href=\"/static/tri.xsl\" type=\"text/xsl\"")
@@ -649,24 +648,21 @@
   (:default-initargs :object-class 'poi :query-function #'find-poi))
 
 (defmethod handle-object ((handler poi-kml-look-at-handler) poi)
-  (let ((poi-last-change (store-object-last-change poi 0)))
-    (hunchentoot:handle-if-modified-since poi-last-change)
-    (setf (hunchentoot:header-out :last-modified)
-          (hunchentoot:rfc-1123-date poi-last-change)
-          (hunchentoot:header-out :content-disposition)
-          (format nil "attachment; filename=look-at-~A.kml" (store-object-id poi)))
-    (destructuring-bind (lon lat)
-        (poi-center-lon-lat poi)
-      (with-xml-response (:content-type "application/vnd.google-earth.kml+xml; charset=utf-8")
-        (with-namespace (nil "http://earth.google.com/kml/2.1")
-          (with-element "kml"
-            (with-element "Document"
-              (with-element "LookAt"
-                (with-element "longitude" (text (format nil "~,20F" lon)))
-                (with-element "latitude" (text (format nil "~,20F" lat)))
-                (with-element "range" (text "253"))
-                (with-element "tilt" (text "0"))
-                (with-element "heading" (text "0"))))))))))
+  (handle-if-modified-since (store-object-last-change poi 0))
+  (setf (hunchentoot:header-out :content-disposition)
+        (format nil "attachment; filename=look-at-~A.kml" (store-object-id poi)))
+  (destructuring-bind (lon lat)
+      (poi-center-lon-lat poi)
+    (with-xml-response (:content-type "application/vnd.google-earth.kml+xml; charset=utf-8")
+      (with-namespace (nil "http://earth.google.com/kml/2.1")
+        (with-element "kml"
+          (with-element "Document"
+            (with-element "LookAt"
+              (with-element "longitude" (text (format nil "~,20F" lon)))
+              (with-element "latitude" (text (format nil "~,20F" lat)))
+              (with-element "range" (text "253"))
+              (with-element "tilt" (text "0"))
+              (with-element "heading" (text "0")))))))))
 
 ;;; poi-image-handler
 (defclass poi-image-handler (object-handler)
@@ -693,7 +689,7 @@
   ())
 
 (defmethod handle ((handler poi-json-handler))
-  (poi-handle-if-modified-since)
+  (handle-if-modified-since (last-poi-change-time))
   (with-json-response ()
     (json:with-object-element ("pois")
       (bos.m2:pois-as-json (request-language)))))
