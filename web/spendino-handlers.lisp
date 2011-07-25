@@ -45,6 +45,19 @@
     "178.63.163.33")                ; netzhansa.com
   "List of IP addresses that may invoke the /spendino-status handler")
 
+(defun mail-status-change-report (contract status)
+  (let* ((contract-id (store-object-id contract)))
+    (bos.m2::send-system-mail
+     :to (bos.m2::contract-office-email contract)
+     :subject (format nil "Spendino status change for contract ~A" contract-id)
+     :text (format nil "The status of contract ~A/edit-sponsor/~A has changed:~%~%~A"
+                   bos.web::*website-url*
+                   contract-id
+                   (ecase status
+                     (3 "The payment has previously been canceled, but is now confirmed. (3)")
+                     (4 "The payment has been canceled. (4)")
+                     (5 "The payment was rejected, presumably because the payment information was invalid. (5)"))))))
+
 (defmethod handle-contract ((handler status-handler) contract)
 
   ;; This handler is called when Spendino's backend detects a
@@ -56,6 +69,12 @@
 
   (with-query-params (status)
     (format t "/spendino-status invoked, contract ~A status ~A~%" contract status)
+    (let ((status (parse-integer status)))
+      (when (or (eql status 4)
+                (eql status 5)
+                (and (eql status 3)
+                     (not (contract-paidp contract))))
+        (send-to-postmaster #'mail-status-change-report contract status)))
     (html
      (:html
       (:head
