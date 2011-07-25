@@ -98,7 +98,10 @@
 
 (defmethod handle-contract ((handler buy-failure-handler) contract)
   ;; When a payment is canceled, users are redirected to this page by Spendino.
-  (delete-object contract)
+  (let ((sponsor (contract-sponsor contract)))
+    (delete-object contract)
+    (unless (sponsor-contracts sponsor)
+      (delete-object sponsor)))
   (html
    (:html
     (:head
