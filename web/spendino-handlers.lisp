@@ -65,16 +65,22 @@
   ;; interaction.
 
   (unless (member (hunchentoot:header-in* :x-forwarded-for) *status-allowed-peers* :test #'equal)
-    (error "/spendino-status invoked from illegal source"))
+    (error "/spendino-status invoked from illegal source ~A" (hunchentoot:header-in* :x-forwarded-for)))
 
   (with-query-params (status)
     (format t "/spendino-status invoked, contract ~A status ~A~%" contract status)
     (let ((status (parse-integer status)))
-      (when (or (eql status 4)
-                (eql status 5)
-                (and (eql status 3)
-                     (not (contract-paidp contract))))
-        (send-to-postmaster #'mail-status-change-report contract status)))
+      (cond
+        ((or (eql status 4)
+             (eql status 5)
+             (and (eql status 3)
+                  (not (contract-paidp contract))))
+         (send-to-postmaster #'mail-status-change-report contract status))
+        ((eql status 6)
+         (let ((sponsor (contract-sponsor contract)))
+           (delete-object contract)
+           (unless (sponsor-contracts sponsor)
+             (delete-object sponsor))))))
     (html
      (:html
       (:head
@@ -117,10 +123,6 @@
 
 (defmethod handle-contract ((handler buy-failure-handler) contract)
   ;; When a payment is canceled, users are redirected to this page by Spendino.
-  (let ((sponsor (contract-sponsor contract)))
-    (delete-object contract)
-    (unless (sponsor-contracts sponsor)
-      (delete-object sponsor)))
   (html
    (:html
     (:head
