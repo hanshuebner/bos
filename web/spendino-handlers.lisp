@@ -74,7 +74,7 @@
         ((or (eql status 4)
              (eql status 5)
              (and (eql status 3)
-                  (not (contract-paidp contract))))
+                  (contract-paidp contract)))
          (send-to-postmaster #'mail-status-change-report contract status))
         ((eql status 6)
          (let ((sponsor (contract-sponsor contract)))
