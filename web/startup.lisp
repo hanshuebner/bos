@@ -51,6 +51,7 @@
         ;; a different User-Agent -- (when requesting PTDefault.html)
         hunchentoot:*use-user-agent-for-sessions* nil)
   (setq *webserver* (make-instance 'bknr.web:bknr-acceptor
+                                   :address "127.0.0.1"
                                    :port *port*
                                    :taskmaster (make-instance 'hunchentoot:single-threaded-taskmaster)
                                    :persistent-connections-p nil))
