@@ -17,7 +17,7 @@ while (my $client = $daemon->accept) {
 	my $content = $request->content;
 
 	my $is_test = ($content =~ /testMode=100/);
-	my $host = $is_test ? "test.createrainforest.org" : "createrainforest.org";
+	my $host = $is_test ? "test.createrainforest.org" : "localhost";
 
 	$ua->default_header('Content-Type', $request->header('Content-Type'));
 	my $response = $ua->get("http://" . $host . ":8080/handle-sale?" . $content);
