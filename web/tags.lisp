@@ -295,9 +295,31 @@ document.write(unescape('%3Cscript src=%22' + gaJsHost + 'google-analytics.com/g
       (html ((:link :rel "stylesheet" :href css-url))))))
 
 (define-bknr-tag spendino-payment ()
-  (with-contract-data-from-session (contract-id amount email)
-    (html ((:script :src #?"https://api.spendino.de/admanager/ads/display/437?xtxid=$(contract-id)&xamount=$(amount)00&xemail=$(email)")
-           " "))))
+  (let ((spendino-url (format nil "https://api.spendino.de/admanager/ads/display/437?~{~A~^&~}"
+                              (with-contract-data-from-session (contract-id amount email
+                                                                            title academic-title
+                                                                            firstname lastname
+                                                                            street number
+                                                                            zip city)
+                                (loop
+                                   for (cgi-var value)
+                                   on (list "xtxid" contract-id
+                                            "xamount" (format nil "~A00" amount)
+                                            "xemail" email
+                                            "xtitle" academic-title
+                                            "xsalutation" title
+                                            "xfirstname" firstname
+                                            "xlastname" lastname
+                                            "xstreet" street
+                                            "xstreetnumber" number
+                                            "xzip" zip
+                                            "xcity" city
+                                            "xcountry" "DE")
+                                   by #'cddr
+                                   when value
+                                   collect (format nil "~A=~A" cgi-var (url-rewrite:url-encode (princ-to-string value))))))))
+    (format t "spendino url: ~A~%" spendino-url)
+    (html ((:script :src spendino-url) " "))))
 
 (define-bknr-tag infosystem ()
   (with-template-vars (__sponsorid)
