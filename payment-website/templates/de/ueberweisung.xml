@@ -10,7 +10,8 @@
     >
   <bos:contract-template-vars-from-session/>
   <div class="headline">
-    Bitte überweisen Sie den Spendenbetrag von $(amount) Euro auf das Spendenkonto "Samboja Lestari" von BOS Deutschland e.V.
+    Bitte überweisen Sie den Spendenbetrag von $(amount) Euro auf das
+    Spendenkonto "Samboja Lestari" von BOS Deutschland e.V.
   </div>
   <div id="kontoinfo">
     <table border="0">
@@ -23,20 +24,27 @@
     <strong>Bitte unbedingt den Verwendungszweck "SL ID
     $(contract-id)" auf dem Überweisungsformular angeben!</strong>
   </p>
-  <p id="download-cert-only">
-    Sobald die Zahlung bei uns eingegangen ist, senden wir Ihnen
-    eine Email mit Ihren Zugangsdaten.
-  </p>
-  <p id="printed-cert">
-    Sobald die Zahlung bei uns eingegangen ist, senden wir Ihnen
-    Ihre Lebenswaldurkunde per Post zu.
-  </p>
+  <div>
+    <p id="download-cert-only">
+      Sobald die Zahlung bei uns eingegangen ist, senden wir Ihnen
+      eine Email mit Ihren Zugangsdaten.
+    </p>
+    <p id="printed-cert">
+      Sobald die Zahlung bei uns eingegangen ist, senden wir Ihnen
+      Ihre Lebenswaldurkunde per Post zu.
+    </p>
+    <div class="infoPopup">
+      Mit Ihren Zugangsdaten können Sie sich in Ihr Profil auf der
+      Website einloggen und dort z.B. einen Grußtext hinterlegen.
+    </div>
+  </div>
   <form action="mail-transfer" method="post" name="ueberweisung-form">
     <div>
       Bitte geben Sie den Namen ein, der auf der Regenwaldurkunde
       erscheinen soll:
       <p>
-        <input type="text" name="cert-name" id="cert-name" class="validate[required]" value="$(firstname) $(lastname)" />
+        <input type="text" name="cert-name" id="cert-name"
+               class="validate[required]" value="$(firstname) $(lastname)" />
       </p>
       <div class="infoPopup">
         Wenn Sie die Urkunde verschenken wollen, geben Sie hier den
@@ -67,14 +75,20 @@
           <input type="hidden" name="academic-title-default" value="$(academic-title)"/>
         </div>
         <div>
-          <input name="firstname" type="text" class="validate[required]" title="Vorname" size="27" value="$(firstname)"/>
-          <input name="lastname" type="text" class="validate[required]" title="Nachname" size="27" value="$(lastname)"/>
+          <input name="firstname" type="text" class="validate[required]" title="Vorname"
+                 size="27" value="$(firstname)"/>
+          <input name="lastname" type="text" class="validate[required]" title="Nachname"
+                 size="27" value="$(lastname)"/>
           <br/>
-          <input name="street" type="text" class="validate[required]" title="Strasse" size="50" value="$(street)"/>
-          <input name="number" type="text" class="validate[required]" title="Nr." size="4" value="$(number)"/>
+          <input name="street" type="text" class="validate[required]" title="Strasse"
+                 size="50" value="$(street)"/>
+          <input name="number" type="text" class="validate[required]" title="Nr."
+                 size="4" value="$(number)"/>
           <br/>
-          <input name="zip" type="text" class="validate[required]" title="PLZ" size="4" value="$(zip)"/>
-          <input name="city" type="text" class="validate[required]" title="Ort" size="50" value="$(city)"/>
+          <input name="zip" type="text" class="validate[required]" title="PLZ"
+                 size="4" value="$(zip)"/>
+          <input name="city" type="text" class="validate[required]" title="Ort"
+                 size="50" value="$(city)"/>
         </div>
       </div>
       <div class="infoPopup">
