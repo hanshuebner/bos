@@ -111,9 +111,12 @@
         <div class="infoPopup">
           <p>
             Ihre Zahlungsdaten werden elektronisch über unseren
-            Partner Spendino erfasst und bearbeitet.  Die
-            Bestimmungen des Datenschutzgesetzes werden
-            eingehalten. Daten werden nicht an Dritte weitergegeben.
+            Zahlungsanbieter <a href="http://www.spendino.de/">Spendino</a> in
+            Zusammenarbeit mit dem Finanzdienstleister <a
+            href="http://www.ogone.de/">Ogone</a> erfasst und
+            bearbeitet.  Die Bestimmungen des Datenschutzgesetzes
+            werden eingehalten. Daten werden nicht an Dritte
+            weitergegeben.
           </p>
           <p>
             Spendino ist ein auf Spenden spezialisierter
