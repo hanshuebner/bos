@@ -54,7 +54,6 @@
                    bos.web::*website-url*
                    contract-id
                    (ecase status
-                     (3 "The payment has previously been canceled, but is now confirmed. (3)")
                      (4 "The payment has been canceled. (4)")
                      (5 "The payment was rejected, presumably because the payment information was invalid. (5)"))))))
 
@@ -72,9 +71,7 @@
     (let ((status (parse-integer status)))
       (cond
         ((or (eql status 4)
-             (eql status 5)
-             (and (eql status 3)
-                  (contract-paidp contract)))
+             (eql status 5))
          (send-to-postmaster #'mail-status-change-report contract status))
         ((eql status 6)
          (let ((sponsor (contract-sponsor contract)))
