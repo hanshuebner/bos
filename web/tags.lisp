@@ -317,7 +317,7 @@ document.write(unescape('%3Cscript src=%22' + gaJsHost + 'google-analytics.com/g
                                             "xcountry" "DE")
                                    by #'cddr
                                    when value
-                                   collect (format nil "~A=~A" cgi-var (url-rewrite:url-encode (princ-to-string value))))))))
+                                   collect (format nil "~A=~A" cgi-var (hunchentoot:url-encode (princ-to-string value) :utf-8)))))))
     (format t "spendino url: ~A~%" spendino-url)
     (html ((:script :src spendino-url) " "))))
 
