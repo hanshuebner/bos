@@ -63,7 +63,7 @@
 			</div>
 			<!-- /content left-->
 			<!-- container content_main -->
-			<bos:process-payment>
+			<bos:process-worldpay-payment>
 				<div id="content_main">
 					<div id="textbox_content_big">
 						<form name="formular" method="post" action="versand_quittung">
@@ -144,7 +144,7 @@ $(country)</textarea>
 						 </form>
 					</div>
 				</div>
-			</bos:process-payment>
+			</bos:process-worldpay-payment>
 			<div id="content_right">
 				<div id="helpbox">		
 					<br></br><br></br>

@@ -77,7 +77,7 @@
 			<!-- container content_main -->
 			<div id="content_main">
 				<div id="textbox_content_big" >
-					<bos:process-payment>
+					<bos:process-worldpay-payment>
 						<form method="post" action="generate-cert">
 							<input type="hidden" name="contract-id" value="$(cartId)" />
 							<input type="hidden" name="__sponsorid" value="$(sponsor-id)" />
@@ -136,7 +136,7 @@
 								</tr>
 							</table>
 						 </form>
-					</bos:process-payment>
+					</bos:process-worldpay-payment>
 				</div>
 			</div>
 			<div id="content_right">
