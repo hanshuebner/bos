@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-  template="toplevel_main"
-  title="RAINFOREST for SAMBOJA LESTARI"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+    template="toplevel_main"
+    title="RAINFOREST for SAMBOJA LESTARI"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:bknr="http://bknr.net"
+    xmlns:bos="http://headcraft.de/bos"
+    >
   <bos:set-cachable/>
-	<!-- container content_main -->
-	<div id="content_main">
-		<div id="textbox_content_bigger">
-			<table border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td colspan="2">
-						<span class="headline">
-							Agriculture, reforestation and protection
- <br /> - a good combination
-						</span>
-					</td>
-					<td align="center"><img src="/images/pfeil_back.gif" width="10" height="9" alt="" />
-						<a href="#" onclick="history.back()" class="titlegray">
-							back
-						</a>
-					</td>		
-				</tr>
-				<tr>
-					<td height="6" width="150"><img src="/images/trans.gif" width="160" height="6" alt="" /> </td>
-					<td><img src="/images/trans.gif" width="150" height="6" alt="" /></td>
-					<td width="150"><img src="/images/trans.gif" width="150" height="6" alt="" /></td>
-				</tr>				
-				<tr>
-					<td align="left"><img src="/images/pic_headline1b_big.jpg" width="149" height="180" alt="" border="0" /></td>
-					<td colspan="2">
-During the early stage of reforestion Indonesian farmers plant profitable agricultural products among the newly planted trees.
-					<br /><br />
-Agriculture and reforestation influence each other in many positive ways: agricultural products protect the young tropical trees from getting overgrown by elephant grass. Trees enrich the quality of the soil and provide shade.
-					<br /><br />
-BOS guarantees to buy fruit like papaya and pineapples from the farmers, market them regionally or use them for self-supply. The supply of the orangutans in Wanariset rehabilitation center alone takes about 1000 kg of fruit daily. 
-					</td>
-					<td></td>			
-				</tr>
-				<tr><td height="6"></td></tr>
-				<tr>
-					<td colspan="3">				
-					</td>			
-				</tr>	
-				<tr><td height="6"> </td></tr>
-				<tr>
-					<td colspan="2"><span class="headline">The Protection (circle)</span></td>
-					<td rowspan="3">
+  <!-- container content_main -->
+  <div id="content_main">
+    <div id="textbox_content_bigger">
+      <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td colspan="2">
+            <span class="headline">
+              Agriculture, reforestation and protection
+              <br /> - a good combination
+            </span>
+          </td>
+          <td align="center"><img src="/images/pfeil_back.gif" width="10" height="9" alt="" />
+          <a href="#" onclick="history.back()" class="titlegray">
+            back
+          </a>
+          </td>		
+        </tr>
+        <tr>
+          <td height="6" width="150"><img src="/images/trans.gif" width="160" height="6" alt="" /> </td>
+          <td><img src="/images/trans.gif" width="150" height="6" alt="" /></td>
+          <td width="150"><img src="/images/trans.gif" width="150" height="6" alt="" /></td>
+        </tr>				
+        <tr>
+          <td align="left"><img src="/images/pic_headline1b_big.jpg" width="149" height="180" alt="" border="0" /></td>
+          <td colspan="2">
+            During the early stage of reforestion Indonesian farmers plant profitable agricultural products among the newly planted trees.
+            <br /><br />
+            Agriculture and reforestation influence each other in many positive ways: agricultural products protect the young tropical trees from getting overgrown by elephant grass. Trees enrich the quality of the soil and provide shade.
+            <br /><br />
+            BOS guarantees to buy fruit like papaya and pineapples from the farmers, market them regionally or use them for self-supply. The supply of the orangutans in Wanariset rehabilitation center alone takes about 1000 kg of fruit daily.
+          </td>
+          <td></td>			
+        </tr>
+        <tr><td height="6"></td></tr>
+        <tr>
+          <td colspan="3">				
+          </td>			
+        </tr>	
+        <tr><td height="6"> </td></tr>
+        <tr>
+          <td colspan="2"><span class="headline">The Protection (circle)</span></td>
+          <td rowspan="3">
 
-						<img src="/images/ring_en.jpg" width="215" height="150" border="0" alt="" />
-					</td>
-				</tr>
-				<tr><td height="6"> </td></tr>
-				<tr>
-					<td colspan="2">
+            <img src="/images/ring_en.jpg" width="215" height="150" border="0" alt="" />
+          </td>
+        </tr>
+        <tr><td height="6"> </td></tr>
+        <tr>
+          <td colspan="2">
 
- A <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" /> <a  href="javascript:window_ringdetail();"
-class="content_green">circle of sugar-palm plantations</a> is being planted all around the nature reserve. 
-Sugar as a main product is supposed to support hundreds of families in the future. And - the circle forms a barrier against the much feared forest fires.
-					<br /><br />
-An inner wall of thick thorny salak palms is supposed to prevent the intrusion of cattle into the nature reserve as well as the breakout of orangutans.  
-Moreover, the fruit of these palms provides pleasant tasting food for humans and animals.
-					</td>
-				</tr>
-				<tr><td colspan="3">
+            A <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" /> <a  href="javascript:window_ringdetail();"
+            class="content_green">circle of sugar-palm plantations</a> is being planted all around the nature reserve.
+            Sugar as a main product is supposed to support hundreds of families in the future. And - the circle forms a barrier against the much feared forest fires.
+            <br /><br />
+            An inner wall of thick thorny salak palms is supposed to prevent the intrusion of cattle into the nature reserve as well as the breakout of orangutans.
+            Moreover, the fruit of these palms provides pleasant tasting food for humans and animals.
+          </td>
+        </tr>
+        <tr><td colspan="3">
 
-					</td>
-				</tr>	
-			</table>		
-		</div>	
-	</div>	
+        </td>
+        </tr>	
+      </table>		
+    </div>	
+  </div>	
 </bknr:toplevel>
