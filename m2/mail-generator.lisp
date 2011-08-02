@@ -461,6 +461,7 @@ Donationcert yearly: ~A
 
 (defun send-instructions-to-sponsor (contract email-address template &key (language "de"))
   "Send the instructions email to the sponsor, using the email-address provided"
+  (declare (ignore language))
   (let ((sponsor (contract-sponsor contract)))
     (send-system-mail :to email-address
                       :subject "Ihre Quadratmeter"
