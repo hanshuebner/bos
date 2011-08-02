@@ -2,66 +2,66 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 <bknr:toplevel template="toplevel_main" title="Regnskov i SAMBOJA LESTARI" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
   <bos:set-cachable/>
-	<!-- container content_main -->
-	<div id="content_main">
-		<div id="textbox_content_bigger">
-			<table border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td colspan="2">
-						<span class="headline">
-							Landbrug, skovrejsning og beskyttelse
- <br></br> - en god kombination
-						</span>
-					</td>
-					<td align="center"><img src="/images/pfeil_back.gif" width="10" height="9" alt=""></img>
-						<a href="#" onclick="history.back()" class="titlegray">
-							tilbage
-						</a>
-					</td>		
-				</tr>
-				<tr>
-					<td height="6" width="150"><img src="/images/trans.gif" width="160" height="6" alt=""></img> </td>
-					<td><img src="/images/trans.gif" width="150" height="6" alt=""></img></td>
-					<td width="150"><img src="/images/trans.gif" width="150" height="6" alt=""></img></td>
-				</tr>				
-				<tr>
-					<td align="left"><img src="/images/pic_headline1b_big.jpg" width="149" height="180" alt="" border="0"></img></td>
-					<td colspan="2">
-I de tidlige stadier af skovrejsningen planter Indonesiske landmænd overskudsgivende afgrøder imellem de nyplantede træer.
-					<br></br><br></br>
-Landbrug og skovrejsning påvirker hinanden på mange positive måder: afgrøderne beskytter de unge træer imod at blive overgroet af elefantgræsser. Og træer gøder jorden og giver skygge.
-					<br></br><br></br>
-BOS garanterer at købe landmændenes frugt som papaya og ananas, afsætte dem på det regionale marked eller bruge dem til egne forsyninger. Alene forsyningerne til orangutangerne på rehabiliteringscenteret Wanariset er på omkring 1000 kg. frugt dagligt.
-					</td>
-					<td></td>			
-				</tr>
-				<tr><td height="6"></td></tr>
-				<tr>
-					<td colspan="3">				
-					</td>			
-				</tr>	
-				<tr><td height="6"> </td></tr>
-				<tr>
-					<td colspan="2"><span class="headline">Beskyttelsen </span></td>
-					<td rowspan="3">
+  <!-- container content_main -->
+  <div id="content_main">
+    <div id="textbox_content_bigger">
+      <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td colspan="2">
+            <span class="headline">
+              Landbrug, skovrejsning og beskyttelse
+              <br></br> - en god kombination
+            </span>
+          </td>
+          <td align="center"><img src="/images/pfeil_back.gif" width="10" height="9" alt=""></img>
+          <a href="#" onclick="history.back()" class="titlegray">
+            tilbage
+          </a>
+          </td>		
+        </tr>
+        <tr>
+          <td height="6" width="150"><img src="/images/trans.gif" width="160" height="6" alt=""></img> </td>
+          <td><img src="/images/trans.gif" width="150" height="6" alt=""></img></td>
+          <td width="150"><img src="/images/trans.gif" width="150" height="6" alt=""></img></td>
+        </tr>				
+        <tr>
+          <td align="left"><img src="/images/pic_headline1b_big.jpg" width="149" height="180" alt="" border="0"></img></td>
+          <td colspan="2">
+            I de tidlige stadier af skovrejsningen planter Indonesiske landmænd overskudsgivende afgrøder imellem de nyplantede træer.
+            <br></br><br></br>
+            Landbrug og skovrejsning påvirker hinanden på mange positive måder: afgrøderne beskytter de unge træer imod at blive overgroet af elefantgræsser. Og træer gøder jorden og giver skygge.
+            <br></br><br></br>
+            BOS garanterer at købe landmændenes frugt som papaya og ananas, afsætte dem på det regionale marked eller bruge dem til egne forsyninger. Alene forsyningerne til orangutangerne på rehabiliteringscenteret Wanariset er på omkring 1000 kg. frugt dagligt.
+          </td>
+          <td></td>			
+        </tr>
+        <tr><td height="6"></td></tr>
+        <tr>
+          <td colspan="3">				
+          </td>			
+        </tr>	
+        <tr><td height="6"> </td></tr>
+        <tr>
+          <td colspan="2"><span class="headline">Beskyttelsen </span></td>
+          <td rowspan="3">
 
-						<img src="/images/ring_en.jpg" width="215" height="150" border="0" alt=""></img>
-					</td>
-				</tr>
-				<tr><td height="6"> </td></tr>
-				<tr>
-					<td colspan="2">
+            <img src="/images/ring_en.jpg" width="215" height="150" border="0" alt=""></img>
+          </td>
+        </tr>
+        <tr><td height="6"> </td></tr>
+        <tr>
+          <td colspan="2">
 
- En <img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img> <a href="#" onclick="window_ringdetail();" class="content_green">cirkel af sukkerpalme plantager bliver plantet hele vejen rundt om naturreservatet. Over 650 familier vil profitere fra hovedproduktet; sukker. Og cirklen skaber samtidig en barriere mod de meget frygtede skovbrænde. </a> 
-					<br></br><br></br>
-At menneskene bryder ind i natur reservatet, eller at orangutangerne bryder ud, er forhindret af en indre beskyttelsesvæg af tyktvoksende og stikkende, klæbrige palmer. Ydermere er frugten fra disse palmer en velsmagende fødekilde for både mennesker og dyr. 
-					</td>
-				</tr>
-				<tr><td colspan="3">
-Ultralyds fly og moderne satellit teknik støtter den permanente overvågning af BOS projekter, hvilket altsammen hjælper til at bekæmpe "slash-and-burn" og ulovlig skovhugst mere effektivt. 
-					</td>
-				</tr>	
-			</table>		
-		</div>	
-	</div>	
+            En <img src="/images/pfeil_link_on.gif" width="10" height="9" alt=""></img> <a href="#" onclick="window_ringdetail();" class="content_green">cirkel af sukkerpalme plantager bliver plantet hele vejen rundt om naturreservatet. Over 650 familier vil profitere fra hovedproduktet; sukker. Og cirklen skaber samtidig en barriere mod de meget frygtede skovbrænde. </a> 
+            <br></br><br></br>
+            At menneskene bryder ind i natur reservatet, eller at orangutangerne bryder ud, er forhindret af en indre beskyttelsesvæg af tyktvoksende og stikkende, klæbrige palmer. Ydermere er frugten fra disse palmer en velsmagende fødekilde for både mennesker og dyr. 
+          </td>
+        </tr>
+        <tr><td colspan="3">
+          Ultralyds fly og moderne satellit teknik støtter den permanente overvågning af BOS projekter, hvilket altsammen hjælper til at bekæmpe "slash-and-burn" og ulovlig skovhugst mere effektivt. 
+        </td>
+        </tr>	
+      </table>		
+    </div>	
+  </div>	
 </bknr:toplevel>
