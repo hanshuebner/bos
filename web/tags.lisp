@@ -90,6 +90,7 @@
                                             street number
                                             zip city)
                            :language "de")
+      (send-to-postmaster #'mail-spendino-sponsor-data contract (hunchentoot:session-value :contract-plist))
       (bknr.web::redirect-request :target (format nil "profil_setup?name=~A&email=~A&sponsor-id=~A"
                                                   (encode-urlencoded name) (encode-urlencoded email)
                                                   (store-object-id (contract-sponsor contract)))))))

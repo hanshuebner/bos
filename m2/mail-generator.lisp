@@ -42,7 +42,7 @@
 (defparameter *country->office-email* '(("DK" . "bosdanmark.regnskov@gmail.com")
                                         ("SE" . "bosdanmark.regnskov@gmail.com")))
 
-(defparameter *catch-all-mail-address* "test-sl@neu.schafft-lebenswald.de")
+(defparameter *catch-all-mail-address* "hans@netzhansa.com")
 
 (defun country->office-email (country)
   (or (cdr (assoc country *country->office-email* :test #'string-equal))
@@ -449,6 +449,19 @@ Donationcert yearly: ~A
                       (make-contract-xml-part contract-id params)
                       (make-vcard-part contract-id (worldpay-callback-params-to-vcard params)))))
     (mail-contract-data contract "WorldPay" parts)))
+
+(defun mail-spendino-sponsor-data (contract contract-plist)
+  (mail-contract-data contract "Spendino"
+                      (list (make-html-part (format nil "
+<table border=\"1\">
+ <tr>
+  <th>Parameter</th>
+  <th>Wert</th></tr>
+ </tr>
+ ~{<tr><td>~A</td><td>~A</td></tr>~}
+</table>
+"
+                                                    contract-plist)))))
 
 (defun moustache-expand (template &rest vars)
   (cl-ppcre:regex-replace-all

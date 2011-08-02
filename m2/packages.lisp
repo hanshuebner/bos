@@ -260,6 +260,7 @@
            #:mail-manual-sponsor-data
            #:mail-backoffice-sponsor-data
            #:mail-worldpay-sponsor-data
+           #:mail-spendino-sponsor-data
            #:mail-print-pdf
            #:send-instructions-to-sponsor
 
