@@ -22,3 +22,6 @@
 [submodule "lib/jQuery-Validation-Engine"]
 	path = lib/jQuery-Validation-Engine
 	url = https://github.com/posabsolute/jQuery-Validation-Engine.git
+[submodule "lib/jump"]
+	path = lib/jump
+	url = git@github.com:hanshuebner/jump.git
