@@ -174,7 +174,7 @@
                     ((eq language :de)
                      "spendino")
                     (t
-                     (format nil "https://select.worldpay.com/wcc/purchase?instId=~A&cartId=~A&amount=~A&currency=~A&lang=~A&desc=~A&MC_sponsorid=~A&MC_password=~A&MC_donationcert-yearly=~A~@[~A~]"
+                     (format nil "https://select.worldpay.com/wcc/purchase?instId=~A&cartId=~A&amount=~A&currency=~A&lang=~(~A~)&desc=~A&MC_sponsorid=~A&MC_password=~A&MC_donationcert-yearly=~A~@[~A~]"
                              *worldpay-installation-id*
                              (store-object-id contract)
                              price
