@@ -57,6 +57,17 @@
                      (4 "The payment has been canceled. (4)")
                      (5 "The payment was rejected, presumably because the payment information was invalid. (5)"))))))
 
+(defun send-web-flow-interrupted-mail (contract status)
+  (let* ((contract-id (store-object-id contract)))
+    (bos.m2::send-system-mail
+     :to (bos.m2::contract-office-email contract)
+     :subject (format nil "Spendino-Zahlung nicht komplett durchgelaufen - SL-ID ~A" contract-id)
+     :text (format nil "Spendino hat eine Statusaenderung auf Status ~
+                        ~A fuer die SL-ID ~A gemeldet, aber der ~
+                        Spendenvorgang ist nicht vollstaendig ~
+                        durchgelaufen.  Bitte Kontakt mit dem Spender ~
+                        aufnehmen!" status contract-id))))
+
 (defmethod handle-contract ((handler status-handler) contract)
 
   ;; This handler is called when Spendino's backend detects a
@@ -68,6 +79,9 @@
 
   (with-query-params (status)
     (format t "/spendino-status invoked, contract ~A status ~A~%" contract status)
+    (unless (contract-paidp contract)
+      (contract-set-paidp contract (format nil "Paid by Spendino, Web flow interrupted?"))
+      (send-web-flow-interrupted-mail contract status))
     (let ((status (parse-integer status)))
       (cond
         ((or (eql status 4)
