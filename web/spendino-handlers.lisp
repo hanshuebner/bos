@@ -83,7 +83,7 @@
                         Bitte die Urkunde manuell mit den Adressdaten aus dem ~
                         Spendino-Cockpit erzeugen und versenden.~]"
                    status (gethash status *spendino-status-doc*) contract-id
-                   (contract-printed-cert-p contract)))))
+                   (not (contract-download-only contract))))))
 
 (defparameter *status-allowed-peers*
   '("89.238.64.138" "89.238.76.182" ; spendino

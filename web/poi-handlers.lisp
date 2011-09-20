@@ -403,6 +403,9 @@
   (reduce #'max (last-paid-contracts)
           :key (lambda (contract) (store-object-last-change contract 0))))
 
+(defun last-contracts-handle-if-modified-since ()
+  (handle-if-modified-since (last-m2-sale-time)))
+
 (defmethod handle ((handler poi-javascript-handler))
   (handle-if-modified-since (last-m2-sale-time) (last-poi-change-time))
   (setf (hunchentoot:header-out :cache-control) "max-age=300")

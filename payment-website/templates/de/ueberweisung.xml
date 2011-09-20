@@ -40,18 +40,6 @@
   </div>
   <form action="mail-transfer" method="post" name="ueberweisung-form">
     <div>
-      Bitte geben Sie den Namen ein, der auf der Regenwaldurkunde
-      erscheinen soll:
-      <p>
-        <input type="text" name="cert-name" id="cert-name"
-               class="validate[required]" value="$(firstname) $(lastname)" />
-      </p>
-      <div class="infoPopup">
-        Wenn Sie die Urkunde verschenken wollen, geben Sie hier den
-        Namen der oder des Beschenkten ein.
-      </div>
-    </div>
-    <div>
       <input type="checkbox" name="spendenbescheinigung" value="1" />
       <label for="spendenbescheinigung">Ich benötige eine Spendenbescheinigung</label>
       <div id="anschrift">

@@ -266,7 +266,6 @@
    (download-only :update)
    (cert-issued :read)
    (cert-name :update)
-   (printed-cert-p :update)
    (worldpay-trans-id :update)
    (spendino-status-log :update :initform nil)
    (expires :read :documentation "universal time which specifies the
@@ -280,7 +279,6 @@
     :color (random-elt *claim-colors*)
     :cert-issued nil
     :cert-name nil
-    :printed-cert-p nil
     :worldpay-trans-id nil
     :spendino-status-log nil
     :expires (+ (get-universal-time) *manual-contract-expiry-time*)))
@@ -518,7 +516,6 @@ Note that this function takes also diagonally connected m2s into account."
                       &key (date (get-universal-time))
                       paidp
                       cert-name
-                      printed-cert-p
                       (expires (+ (get-universal-time) *manual-contract-expiry-time*))
                       download-only)
   (unless (and (integerp m2-count)
@@ -541,7 +538,6 @@ Sponsor-ID: ~A
       (make-instance 'contract
                      :sponsor sponsor
                      :cert-name cert-name
-                     :printed-cert-p printed-cert-p
                      :date date
                      :m2s m2s
                      :area area

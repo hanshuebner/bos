@@ -116,7 +116,7 @@
 
 (define-bknr-tag buy-sqm ()
   (handler-case
-      (with-template-vars (numsqm numsqm1 action donationcert-yearly download-only email printed-cert cert-name
+      (with-template-vars (numsqm numsqm1 action donationcert-yearly email printed-cert cert-name
                                   title academic-title firstname lastname street number zip city)
         (let* ((numsqm (parse-integer (or numsqm numsqm1 (error "numsqm ~A and numsqm1 ~A not set" numsqm numsqm1))))
                ;; Wer ueber dieses Formular bestellt, ist ein neuer
@@ -131,11 +131,9 @@
                (language (make-keyword-from-string (request-language)))
                (sponsor (make-sponsor :language language :email email))
                (download-only (or (< (* +price-per-m2+ numsqm) *mail-amount*)
-                                  download-only))
-               (printed-cert (and (not download-only) printed-cert))
+                                  (not printed-cert)))
                (contract (make-contract sponsor numsqm
                                         :cert-name cert-name
-                                        :printed-cert-p (when printed-cert t)
                                         :download-only download-only
                                         :expires (+ (if manual-transfer
                                                         bos.m2::*manual-contract-expiry-time*
@@ -162,7 +160,6 @@
                         :numsqm numsqm
                         :email email
                         :language language
-                        :printed-cert printed-cert
                         :title title
                         :academic-title academic-title
                         :firstname firstname
@@ -202,13 +199,12 @@
       (bknr.web::redirect-request :target "allocation-areas-exhausted"))))
 
 (define-bknr-tag mail-transfer (&key (language "de"))
-  (with-query-params (cert-name title academic-title firstname lastname street number zip city)
-    (with-contract-data-from-session (contract printed-cert)
+  (with-query-params (title academic-title firstname lastname street number zip city)
+    (with-contract-data-from-session (contract)
       (with-transaction (:prepare-before-mail)
-        (setf (contract-download-only contract) (not printed-cert))
         (setf (sponsor-country (contract-sponsor contract)) language))
       (contract-issue-cert contract
-                           :name cert-name
+                           :name (contract-cert-name contract)
                            :address (format nil "~A~@[ ~A~] ~A ~A~%~A ~A~%~A ~A"
                                             title academic-title
                                             firstname lastname

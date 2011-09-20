@@ -161,7 +161,6 @@
            #:contract-set-paidp
            #:contract-set-download-only-p
            #:contract-price
-           #:contract-printed-cert-p
            #:contract-issue-cert
            #:contract-certificates-generated-p
            #:contract-worldpay-trans-id
