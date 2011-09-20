@@ -148,6 +148,7 @@
            #:contract-date
            #:contract-m2s
            #:contract-bounding-box
+           #:contract-cert-name
            #:contracts-bounding-box
            #:contract-area
            #:contract-polygon
@@ -160,9 +161,11 @@
            #:contract-set-paidp
            #:contract-set-download-only-p
            #:contract-price
+           #:contract-printed-cert-p
            #:contract-issue-cert
            #:contract-certificates-generated-p
            #:contract-worldpay-trans-id
+           #:contract-spendino-status-log
            #:contract-pdf-pathname
            #:contract-pdf-url
            #:contract-download-only-p

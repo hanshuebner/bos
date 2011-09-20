@@ -13,6 +13,8 @@
     ((:table :border "0")
      (:tr (:td "sponsor")
           (:td (html-edit-link (contract-sponsor contract))))
+     (:tr (:td "cert-name")
+          (:td (:princ-safe (or (contract-cert-name contract) ""))))
      (:tr (:td "date")
           (:td (:princ-safe (format-date-time (contract-date contract)))))
      (:tr (:td "paid?")

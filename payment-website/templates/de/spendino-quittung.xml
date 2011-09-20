@@ -79,12 +79,12 @@
                   <td colspan="3" height="10"> </td>
                 </tr>
                 <tr>
-                  <td colspan="3" height="15">Auf welchen Namen sollen wir Ihre Regenwald-Urkunde ausstellen? </td>
+                  <td colspan="3" height="15">Auf welchen Namen sollen wir Ihre Regenwald-Urkunde ausstellen?</td>
                 </tr>	
                 <tr>
                   <td height="30">Name:</td>
                   <td></td>
-                  <td><input type="text" class="form_big" size="35" name="name" value="$(name)" /></td>
+                  <td><input type="text" class="form_big" size="35" name="name" value="$(cert-name)" /></td>
                 </tr>
                 <tr>
                   <td colspan="3" height="10"> </td>

@@ -55,7 +55,10 @@
         (contract-set-paidp contract (format nil "~A: paid via Spendino" (format-date-time)))))
     (bos.m2:send-instructions-to-sponsor contract email
                                          (merge-pathnames (format nil "instructions-email-~(~A~).txt" (request-language))
-                                                          *website-directory*)))
+                                                          *website-directory*))
+    (setf (get-template-var :cert-name)
+          (or (contract-cert-name contract)
+              (get-template-var :cert-name))))
   (emit-tag-children))
 
 (define-bknr-tag worldpay-generate-cert ()
@@ -64,7 +67,7 @@
     (let ((contract (find-store-object (parse-integer (get-template-var :contract-id)))))
       (when (equal want-print "no")
         (contract-set-download-only-p contract t))
-      (contract-issue-cert contract name :address address :language (request-language))
+      (contract-issue-cert contract :name name :address address :language (request-language))
       (send-to-postmaster #'mail-worldpay-sponsor-data contract)
       (bknr.web::redirect-request
        :target (puri:merge-uris (format nil "/~A/profil_setup?name=~A&email=~A&sponsor-id=~A"
@@ -83,7 +86,8 @@
                                       street number
                                       zip city)
       (contract-set-download-only-p contract (not printed-cert))
-      (contract-issue-cert contract name
+      (contract-issue-cert contract
+                           :name name
                            :address (format nil "~A~@[ ~A~] ~A ~A~%~A ~A~%~A ~A"
                                             title academic-title
                                             firstname lastname
@@ -112,7 +116,7 @@
 
 (define-bknr-tag buy-sqm ()
   (handler-case
-      (with-template-vars (numsqm numsqm1 action donationcert-yearly download-only email printed-cert
+      (with-template-vars (numsqm numsqm1 action donationcert-yearly download-only email printed-cert cert-name
                                   title academic-title firstname lastname street number zip city)
         (let* ((numsqm (parse-integer (or numsqm numsqm1 (error "numsqm ~A and numsqm1 ~A not set" numsqm numsqm1))))
                ;; Wer ueber dieses Formular bestellt, ist ein neuer
@@ -125,11 +129,13 @@
                ;; eventuell noch mal prüfen und sicher stellen.
                (manual-transfer (scan #?r"(rweisen|weisung|verf)" action))
                (language (make-keyword-from-string (request-language)))
-               (sponsor (make-sponsor :language language))
+               (sponsor (make-sponsor :language language :email email))
                (download-only (or (< (* +price-per-m2+ numsqm) *mail-amount*)
                                   download-only))
                (printed-cert (and (not download-only) printed-cert))
                (contract (make-contract sponsor numsqm
+                                        :cert-name cert-name
+                                        :printed-cert-p (when printed-cert t)
                                         :download-only download-only
                                         :expires (+ (if manual-transfer
                                                         bos.m2::*manual-contract-expiry-time*
@@ -201,7 +207,8 @@
       (with-transaction (:prepare-before-mail)
         (setf (contract-download-only contract) (not printed-cert))
         (setf (sponsor-country (contract-sponsor contract)) language))
-      (contract-issue-cert contract cert-name
+      (contract-issue-cert contract
+                           :name cert-name
                            :address (format nil "~A~@[ ~A~] ~A ~A~%~A ~A~%~A ~A"
                                             title academic-title
                                             firstname lastname

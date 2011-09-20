@@ -265,7 +265,10 @@
    (color :read)
    (download-only :update)
    (cert-issued :read)
-   (worldpay-trans-id :update :initform nil)
+   (cert-name :update)
+   (printed-cert-p :update)
+   (worldpay-trans-id :update)
+   (spendino-status-log :update :initform nil)
    (expires :read :documentation "universal time which specifies the
      time the contract expires (is deleted) when it has not been paid for"
                   :initform nil)
@@ -276,6 +279,10 @@
     :download-only nil
     :color (random-elt *claim-colors*)
     :cert-issued nil
+    :cert-name nil
+    :printed-cert-p nil
+    :worldpay-trans-id nil
+    :spendino-status-log nil
     :expires (+ (get-universal-time) *manual-contract-expiry-time*)))
 
 (defmethod print-object ((object contract) stream)
@@ -370,7 +377,7 @@
     (delete-file (contract-pdf-pathname contract))
     (delete-file (contract-pdf-pathname contract :print t))))
 
-(defmethod contract-issue-cert ((contract contract) name &key address language)
+(defmethod contract-issue-cert ((contract contract) &key name address language)
   (when (contract-cert-issued contract)
     (warn "re-issuing cert for ~A" contract))
   (contract-delete-certificate-files contract)
@@ -510,6 +517,8 @@ Note that this function takes also diagonally connected m2s into account."
 (defun make-contract (sponsor m2-count
                       &key (date (get-universal-time))
                       paidp
+                      cert-name
+                      printed-cert-p
                       (expires (+ (get-universal-time) *manual-contract-expiry-time*))
                       download-only)
   (unless (and (integerp m2-count)
@@ -531,6 +540,8 @@ Sponsor-ID: ~A
         (error 'allocation-areas-exhausted :numsqm m2-count))
       (make-instance 'contract
                      :sponsor sponsor
+                     :cert-name cert-name
+                     :printed-cert-p printed-cert-p
                      :date date
                      :m2s m2s
                      :area area

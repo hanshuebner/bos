@@ -112,7 +112,7 @@
                                     :date (get-universal-time)
                                     :download-only (or (< (* +price-per-m2+ numsqm) *mail-amount*)
                                                        (not want-print)))))
-      (contract-issue-cert contract name :address address :language language)
+      (contract-issue-cert contract :name name :address address :language language)
       (send-to-postmaster #'mail-backoffice-sponsor-data contract numsqm country email name address language (all-request-params))
       (when (and email
                  (length email))
@@ -315,7 +315,7 @@
      ((:form :name "form")
       ((:table)
        (:tr (:td "Name")
-            (:td (text-field "name" :size 40)))
+            (:td (text-field "name" :size 40 :value (contract-cert-name contract))))
        (:tr (:td "Language")
             (:td (language-selector contract)))
        (unless (contract-download-only-p contract)
@@ -327,7 +327,7 @@
 
 (defmethod handle-object-form ((handler cert-regen-handler) (action (eql :regenerate)) (contract contract))
   (with-query-params (name address language)
-    (contract-issue-cert contract name :address address :language language))
+    (contract-issue-cert contract :name name :address address :language language))
   (redirect #?"/cert-regen/$((store-object-id contract))?action=wait"))
 
 (defmethod handle-object-form ((handler cert-regen-handler) (action (eql :wait)) (contract contract))

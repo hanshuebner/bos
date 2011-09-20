@@ -15,6 +15,23 @@
 
 (enable-interpol-syntax)
 
+(defparameter *spendino-status-doc* (make-hash-table))
+(defmacro define-spendino-status (symbol status text)
+  `(progn
+     (defconstant ,symbol ,status)
+     (setf (gethash ,status *spendino-status-doc*) ,text)))
+
+(define-spendino-status +status-accepted+ 2
+  "Zahlung wurde von spendino akzeptiert. Durchfuehrung der Zahlung durch das entsprechende Institut wird eingeleitet.")
+(Define-spendino-status +status-executed+ 3
+  "Zahlung wurde durchgefuehrt. Die Transaktion ist damit erfolgreich abgeschlossen, kann aber noch storniert werden.")
+(define-spendino-status +status-reverted+ 4
+  "Zahlung wurde rueckgaengig gemacht.")
+(define-spendino-status +status-rejected+ 5
+  "Zahlung wurde von spendino abgelehnt. Die angegebenen persoenlichen Daten oder Zahlungsdaten sind vermutlich falsch.")
+(define-spendino-status +status-canceled+ 6
+  "Zahlung wurde vom Nutzer abgebrochen.")
+
 (defclass html-page-handler (page-handler)
   ())
 
@@ -40,33 +57,37 @@
 (defclass status-handler (contract-handler html-page-handler)
   ())
 
-(defparameter *status-allowed-peers*
-  '("89.238.64.138" "89.238.76.182" ; spendino
-    "178.63.163.33")                ; netzhansa.com
-  "List of IP addresses that may invoke the /spendino-status handler")
-
 (defun mail-status-change-report (contract status)
   (let* ((contract-id (store-object-id contract)))
     (bos.m2::send-system-mail
      :to (bos.m2::contract-office-email contract)
-     :subject (format nil "Spendino status change for contract ~A" contract-id)
-     :text (format nil "The status of contract ~A/edit-sponsor/~A has changed:~%~%~A"
+     :subject (format nil "Spendino Status-Aenderung fuer Contract ~A" contract-id)
+     :text (format nil "Der Status des Contracs ~A/edit-sponsor/~A hat sich geaendert:~%~%~A (~A)"
                    bos.web::*website-url*
                    contract-id
-                   (ecase status
-                     (4 "The payment has been canceled. (4)")
-                     (5 "The payment was rejected, presumably because the payment information was invalid. (5)"))))))
+                   status (gethash status *spendino-status-doc*)))))
 
 (defun send-web-flow-interrupted-mail (contract status)
-  (let* ((contract-id (store-object-id contract)))
+  (let ((contract-id (store-object-id contract)))
     (bos.m2::send-system-mail
      :to (bos.m2::contract-office-email contract)
      :subject (format nil "Spendino-Zahlung nicht komplett durchgelaufen - SL-ID ~A" contract-id)
      :text (format nil "Spendino hat eine Statusaenderung auf Status ~
-                        ~A fuer die SL-ID ~A gemeldet, aber der ~
+                        ~A (~A) fuer die SL-ID ~A gemeldet, aber der ~
                         Spendenvorgang ist nicht vollstaendig ~
-                        durchgelaufen.  Bitte Kontakt mit dem Spender ~
-                        aufnehmen!" status contract-id))))
+                        durchgelaufen.  Die Urkunde wurde erzeugt und ~
+                        die Anleitung wurde verschickt~%~%~
+                        ~@[Der Spender hat eine Print-Urkunde angefordert, ~
+                        die jedoch nicht vollstaendig erzeugt werden konnte.  ~
+                        Bitte die Urkunde manuell mit den Adressdaten aus dem ~
+                        Spendino-Cockpit erzeugen und versenden.~]"
+                   status (gethash status *spendino-status-doc*) contract-id
+                   (contract-printed-cert-p contract)))))
+
+(defparameter *status-allowed-peers*
+  '("89.238.64.138" "89.238.76.182" ; spendino
+    "178.63.163.33")                ; netzhansa.com
+  "List of IP addresses that may invoke the /spendino-status handler")
 
 (defmethod handle-contract ((handler status-handler) contract)
 
@@ -77,21 +98,28 @@
   (unless (member (hunchentoot:header-in* :x-forwarded-for) *status-allowed-peers* :test #'equal)
     (error "/spendino-status invoked from illegal source ~A" (hunchentoot:header-in* :x-forwarded-for)))
 
+
   (with-query-params (status)
     (format t "/spendino-status invoked, contract ~A status ~A~%" contract status)
-    (unless (contract-paidp contract)
-      (contract-set-paidp contract (format nil "Paid by Spendino, Web flow interrupted?"))
-      (send-web-flow-interrupted-mail contract status))
-    (let ((status (parse-integer status)))
-      (cond
-        ((or (eql status 4)
-             (eql status 5))
-         (send-to-postmaster #'mail-status-change-report contract status))
-        ((eql status 6)
-         (let ((sponsor (contract-sponsor contract)))
-           (delete-object contract)
-           (unless (sponsor-contracts sponsor)
-             (delete-object sponsor))))))
+    (with-transaction (:update-spendino-status)
+      (push (format nil "~A ~A" (bknr.utils:format-date-time) status) (contract-spendino-status-log contract)))
+
+    (ecase (parse-integer status)
+      ((#.+status-accepted+ #.+status-executed+)
+       (unless (contract-paidp contract)
+         (contract-set-paidp contract (format nil "Paid by Spendino, Web flow interrupted"))
+         (bos.m2:send-instructions-to-sponsor contract (bknr.user:user-email (contract-sponsor contract))
+                                              (merge-pathnames (format nil "instructions-email-de.txt")
+                                                               bos.web::*website-directory*))
+         (contract-issue-cert contract :name (contract-cert-name contract) :language "de")
+         (send-web-flow-interrupted-mail contract status)))
+      ((#.+status-reverted+ #.+status-rejected+)
+       (send-to-postmaster #'mail-status-change-report contract status))
+      (#.+status-canceled+
+       (let ((sponsor (contract-sponsor contract)))
+         (delete-object contract)
+         (unless (sponsor-contracts sponsor)
+           (delete-object sponsor)))))
     (html
      (:html
       (:head

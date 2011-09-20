@@ -101,6 +101,19 @@
       </label>
     </div>
     <div>
+      <div>
+        <input type="text" name="cert-name" id="cert-name" style="width: 97%"
+               title="Name, der auf der Lebenswaldurkunde erscheinen soll"
+               class="validate[required]"/>
+        <div class="infoPopup">
+          Bitte geben Sie den Namen an, der auf Ihrer
+          Lebenswaldurkunde erscheinen soll.  Wenn Sie die
+          Quadratmeter verschenken wollen, geben Sie den Namen der
+          oder des Beschenkten ein.
+        </div>
+      </div>
+    </div>
+    <div>
       Bitte wählen Sie Ihre Zahlungsmethode:
     </div>
     <div>
