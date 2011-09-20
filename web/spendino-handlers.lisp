@@ -15,9 +15,10 @@
 
 (enable-interpol-syntax)
 
-(defparameter *spendino-status-doc* (make-hash-table))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defparameter *spendino-status-doc* (make-hash-table)))
 (defmacro define-spendino-status (symbol status text)
-  `(progn
+  `(eval-when (:compile-toplevel :load-toplevel :execute)
      (defconstant ,symbol ,status)
      (setf (gethash ,status *spendino-status-doc*) ,text)))
 
