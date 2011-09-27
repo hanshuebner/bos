@@ -1,14 +1,7 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<bknr:toplevel
-  template="toplevel_main"
-  title="REGENWALD für SAMBOJA LESTARI"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
-  <bos:set-cachable/>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<bknr:toplevel template="toplevel_main" title="REGENWALD für SAMBOJA LESTARI" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
+  <bos:set-cachable></bos:set-cachable>
   
 	<!-- container content_main -->
 	<div id="content_main">
@@ -17,7 +10,7 @@
 				<tr>
 					<td colspan="3">
 						<a href="idea" class="titlegreen">
-							Samboja Lestari - kreative Aufforstung in Borneo. <br />
+							Samboja Lestari - kreative Aufforstung in Borneo. <br></br>
 							Eine Zufluchtstätte für bedrohte Tierarten
 						</a>
 					</td>
@@ -27,7 +20,7 @@
 				<tr>
 					<td colspan="3" align="left">
 						<a href="idea" class="titlegreen">
-							<img src="/images/start_pic_headline1.jpg" width="363" height="120" alt="" border="0" />
+							<img src="/images/start_pic_headline1.jpg" width="363" height="120" alt="" border="0"></img>
 						</a>
 					</td>
 					<td></td>			
@@ -37,14 +30,14 @@
 					<td colspan="3">
 BOS regeneriert durch ein einzigartiges Aufforstungskonzept nicht nur den Regenwald, 
 sondern schafft gleichzeitig auch eine Zufluchtstätte für Orang-Utans, Malaienbären und andere bedrohte Arten auf Borneo.  
-Die Fortschritte können Sie auf dieser Webseite und über google earth beobachten. 
-					<br />
+Die Fortschritte können Sie auf dieser Webseite und über Google Earth beobachten. 
+					<br></br>
 					...
 					<a href="idea" class="more">
 						mehr
 					</a>
-					<br />
-					<br />
+					<br></br>
+					<br></br>
 					</td>
 					<td></td>				
 				</tr>
@@ -68,13 +61,13 @@ Die Fortschritte können Sie auf dieser Webseite und über google earth beobacht
 				<tr>
 					<td align="left">
 						<a href="headline2" class="titlegreen">
-							<img src="/images/start_pic_headline2b.jpg" width="175" height="92" alt="" border="0" />
+							<img src="/images/start_pic_headline2b.jpg" width="175" height="92" alt="" border="0"></img>
 						</a>
 					</td>
-					<td><img src="/images/trans.gif" width="16" height="1" alt="" border="0" /></td>
+					<td><img src="/images/trans.gif" width="16" height="1" alt="" border="0"></img></td>
 					<td align="left">
 						<a href="headline3" class="titlegreen">
-							<img src="/images/start_pic_headline3.jpg" width="175" height="92" border="0" alt="" />
+							<img src="/images/start_pic_headline3.jpg" width="175" height="92" border="0" alt=""></img>
 						</a>
 					</td>
 					<td></td>			
@@ -82,7 +75,7 @@ Die Fortschritte können Sie auf dieser Webseite und über google earth beobacht
 				<tr><td height="6"></td></tr>
 				<tr>
 					<td>Naturschutz und Bedürfnisse der Bevölkerung dürfen sich nicht im Wege stehen. 
-						<br />
+						<br></br>
 						...
 						<a href="headline2" class="more">
 							mehr
@@ -90,7 +83,7 @@ Die Fortschritte können Sie auf dieser Webseite und über google earth beobacht
 					</td>
 					<td></td>
 					<td>Orang-Utans gehören zu den unmittelbar vom Aussterben bedrohten Menschenaffen. 
-					<br />
+					<br></br>
 					...
 					<a href="headline3" class="more">
 						mehr
@@ -102,21 +95,21 @@ Die Fortschritte können Sie auf dieser Webseite und über google earth beobacht
 		</div>	
 	</div>
 	<div id="content_right">
-		<bos:news-headlines />
+		<bos:news-headlines></bos:news-headlines>
 		<div id="newsarchive">
-			<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
+			<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt=""></img>
 			<a href="#" onclick="window_news('archive')" class="menue">
 				<strong>NEWS im ARCHIV</strong>
 			</a> 
 		</div>	
 		<div id="subscribe">
 			<form style="margin:0px" name="form" method="post">
-				<input value="news" name="list" type="hidden"/>
-				<strong>Infos direkt nach Hause? </strong><br /><br />
+				<input value="news" name="list" type="hidden"></input>
+				<strong>Infos direkt nach Hause? </strong><br></br><br></br>
 					Ihre E-Mail-Adresse:
-					<br /><br />
-					<input type="text" class="form_big" name="email" size="20" maxlength="40" value="" />
-					<input value="ja" class="form_big" name="action" type="submit" onclick="return send_info_request();" />
+					<br></br><br></br>
+					<input type="text" class="form_big" name="email" size="20" maxlength="40" value=""></input>
+					<input value="ja" class="form_big" name="action" type="submit" onclick="return send_info_request();"></input>
 			</form> 
 		</div>
 
@@ -128,9 +121,9 @@ Die Fortschritte können Sie auf dieser Webseite und über google earth beobacht
 				<tr><td height="6"> </td></tr>
 				<tr><td>
 	<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="165" height="100" id="blueten_sl" align="middle">
-	<param name="allowScriptAccess" value="sameDomain" />
-	<param name="allowFullScreen" value="false" />
-	<param name="movie" value="/images/blueten_sl.swf" /><param name="quality" value="high" /><param name="bgcolor" value="#ffffff" />	<embed src="/images/blueten_sl.swf" quality="high" bgcolor="#ffffff" width="165" height="100" name="blueten_sl" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.adobe.com/go/getflashplayer_de" />
+	<param name="allowScriptAccess" value="sameDomain"></param>
+	<param name="allowFullScreen" value="false"></param>
+	<param name="movie" value="/images/blueten_sl.swf"></param><param name="quality" value="high"></param><param name="bgcolor" value="#ffffff"></param>	<embed src="/images/blueten_sl.swf" quality="high" bgcolor="#ffffff" width="165" height="100" name="blueten_sl" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.adobe.com/go/getflashplayer_de"></embed>
 	</object>
 				</td></tr>
 			</table>

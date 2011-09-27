@@ -17,11 +17,13 @@ und "Ihre" Quadratmeter lokalisieren.  Die Zugangsdaten können in der
 linken unteren Ecke der Satellitenkarte unter Sponsoren ID und
 Kennwort (oder Mastercode) eingegeben werden.  Sie gelangen in ihr
 Profil indem sie nach dem Eingeben der Daten das an gleicher Stelle
-erscheinende "Profil-Feld" anklicken.  Es besteht zusätzlich die
-Möglichkeit für Sie, einen Grußtext zu hinterlegen, welcher für jeden
-Besucher dieser Webseite sichtbar wird, sofern dieser Besucher auf
-Ihre Quadratmeter in dem Vergrößerungsfenster klickt.  Wählen Sie in
-Ihrem Profil, ob Sie anonym bleiben wollen oder nicht.
+erscheinende "Profil-Feld" anklicken.  Auf Ihrem Profil können Sie
+Ihre Lebenswaldurkunde als PDF ansehen und ausdrucken.  Es besteht
+zusätzlich die Möglichkeit für Sie, einen Grußtext zu hinterlegen,
+welcher für jeden Besucher dieser Webseite sichtbar wird, sofern
+dieser Besucher auf Ihre Quadratmeter in dem Vergrößerungsfenster
+klickt.  Wählen Sie in Ihrem Profil, ob Sie anonym bleiben wollen oder
+nicht.
 
 Inzwischen gibt es auch einen Link von der Webseite zu Google
 Earth. Sie „fliegen“ direkt zu „Ihren“ Quadratmetern, können über zwei
