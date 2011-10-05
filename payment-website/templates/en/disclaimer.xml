@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-  template="toplevel_extra"
-  title="RAINFOREST for SAMBOJA LESTARI - DISCLAIMEr"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
-	<p class="text_content">
+    template="toplevel_extra"
+    title="RAINFOREST for SAMBOJA LESTARI - DISCLAIMEr"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:bknr="http://bknr.net"
+    xmlns:bos="http://headcraft.de/bos">
+  <p class="text_content">
 
-		<p><b>Disclaimer</b></p>
+    <p><b>Disclaimer</b></p>
 
-		<p>
-No sponsor of one or more square metres of renewable rainforest of the forestation and nature protection project Samboja Lestari (Borneo, Indonesia) 
-has any claims or other rights to the respective land.  You help financing the lease respectively the concession of land, ecological reforestation, 
-a nursery, ecological agriculture, sugar palm plantations, wages for Indonesian employees, surveillance and protection of the area, fire fighting, 
-environmental education, infrastructure, research and arboretum, orangutan islands, and sunbear areas.   
-With your donation you have no duties whatsoever. This is a mere symbolic act of an informative nature. BOS guarantees that the land will  
-exclusively be reserved for the benefit of sustainable nature- and wildlife protection.
-		</p>
-	</p>					
+    <p>
+      The reforestation in Samboja Lestari is now, after
+      10 years, of work nearly completed. However, there
+      is still the need to maintain the planted juvenile
+      trees and to protect them from fire in the dry
+      season. Beside that your donation is urgently needed
+      to support the sun bear enclosure, and to finance
+      the rehabilitation process of the orangutans in the
+      rehabilitation stations. The first releases of
+      orangutans from Samboja Lestari are planned for the
+      year 2012; for the preliminaries large sums are
+      needed.  Please note: With your donation you are not
+      purchasing any piece of land or any rights toward
+      this land, and your donation does not result in any
+      duties whatsoever. BOS guarantees that the land will
+      exclusively be reserved for the benefit of
+      sustainable nature- and wildlife protection.
+    </p>
+  </p>					
 </bknr:toplevel>
