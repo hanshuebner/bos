@@ -80,12 +80,11 @@
   (bknr-session)
   (with-template-vars (name)
     (with-contract-data-from-session (contract
-                                      email printed-cert
+                                      email
                                       title academic-title
                                       firstname lastname
                                       street number
                                       zip city)
-      (contract-set-download-only-p contract (not printed-cert))
       (contract-issue-cert contract
                            :name name
                            :address (format nil "~A~@[ ~A~] ~A ~A~%~A ~A~%~A ~A"
