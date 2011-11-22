@@ -15,7 +15,7 @@
   (find language (website-languages) :test #'string-equal :key #'car))
 
 (defun language-from-url (path)
-  (register-groups-bind (language) (#?r"^/(..)/" path)
+  (register-groups-bind (language) (#?r"/(..)/" path)
     (when (website-supports-language language)
       language)))
 
