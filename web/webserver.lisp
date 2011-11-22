@@ -143,6 +143,8 @@
         (or (query-param "language")
             (query-param "lang")
             (language-from-url (hunchentoot:request-uri*))
+            (when (hunchentoot:header-in* :referer)
+              (language-from-url (hunchentoot:header-in* :referer)))
             (hunchentoot:session-value :language)
             (find-browser-prefered-language)
             *default-language*)))
