@@ -10,7 +10,7 @@
     >
   <bos:set-cachable/>
   <div id="content_main">
-    <div id="textbox_content">
+    <div id="textbox_content" class="slim-body">
       <h1>BOS Foundation</h1>
       <p>
         Die Borneo Orangutan Survival Foundation (BOS) ist eine

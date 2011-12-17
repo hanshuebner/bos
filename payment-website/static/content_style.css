@@ -580,7 +580,7 @@ ul.grey  {
     font-size: 10pt;
 }
 
-.slim-body p, .slim-body a {
+.slim-body p, .slim-body a, .slim-body li {
     font: normal normal 9pt Verdana, Geneva, Arial, Helvetica, sans-serif;
 }
 
