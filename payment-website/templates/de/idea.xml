@@ -1,117 +1,49 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-  template="toplevel_main"
-  title="REGENWALD für SAMBOJA LESTARI"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos">
-        <bos:set-cachable/>
-	<!-- container content_main -->
-	<div id="content_main">
-		<div id="textbox_content">
-			<table  border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td colspan="3">
-						<span class="headline">
-							Samboja Lestari - kreative Aufforstung
-							<br />
-							und Zufluchtstätte für bedrohte Tierarten. 
-						</span>
-					</td>
-				</tr>
-				<tr><td height="6"> </td></tr>				
-				<tr>
-					<td colspan="3" align="left"><img src="/images/start_pic_headline1.jpg" width="363" height="120" alt="" border="0" /></td>
-					<td></td>			
-				</tr>
-				<tr><td height="6"></td></tr>
-				<tr>
-					<td colspan="3">
-						BOS regeneriert durch ein einzigartiges Aufforstungskonzept nicht nur den Regenwald, 
-sondern schafft gleichzeitig auch eine Zufluchtstätte für Orang-Utans, Malaienbären und andere bedrohte Arten auf Borneo. Die Fortschritte 
-können Sie anhand von Satellitenbildern auf dieser Webseite und über google earth beobachten.
-						
-<br />Der ehemals artenreiche Regenwald von
-						<a href="/de/satmap" class="titlegreen">
-							Samboja Lestari
-						</a>
-						wurde in den letzten Jahrzehnten rücksichtslos gerodet und abgebrannt. Nährstoffzehrendes Alang-Alang-Gras breitete
-						sich flächendeckend aus. Zurück blieb eine ökologische Wüste. Doch schon heute kann man deutlich erkennen, dass
-						dies nicht so bleiben muss - denn BOS schafft seit 2001 neuen Regenwald. Das Gebiet von rund 18,5 Millionen m² wird 
-durch ein innovatives Aufforstungs- und Schutzkonzept langfristig  wieder in naturnahen Lebensraum verwandelt.  Im tropischen
-						Borneo wachsen Pflanzen um ein Vielfaches schneller als in Europa. Schon nach wenigen Jahren konnten die ersten 
-Orang-Utans auf künstlichen Inseln ihre neue Freiheit genießen. Orang-Utan-Jungtiere trainieren  in der Waldschule in Samboja Lestari für ihre spätere Auswilderung.  In Samboja Lestari
-						("ewiges Samboja") entsteht ein Naturschutzgebiet zum dauerhaften Nutzen für Menschen, Tiere und Pflanzen.
-					</td>
-					<td></td>				
-				</tr>				
-			</table>		
-		</div>	
-	</div>
-	<div id="content_right">
-		<div id="textbox_right_top">
-			<table border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td colspan="2">
-						<a href="idea_subtitle1" class="titlegreen">
-							Landwirtschaft, Aufforstung und Schutz
-						</a>
-					</td>
-				</tr>	
-				<tr><td height="6"></td></tr>			
-				<tr>
-					<td>Während der frühen Aufforstungs- phase bauen die indonesischen Landwirte gewinnbringende Agrarprodukte zwischen den </td>
-					<td valign="top" align="right">
-						<a href="idea_subtitle1" class="titlegreen">
-							<img src="/images/projekt_pic_headline1b.jpg" width="69" height="120" alt="" border="0" />
-						</a>
-					</td>
-				</tr>
-				
-				<tr>
-					<td colspan="2">
-						neu gepflanzten Bäumen an. Landwirtschaft und Aufforstung beeinflussen sich positiv...
-						<br />
-						...
-						<a href="idea_subtitle1" class="more">
-							mehr
-						</a>
-					</td>
-				</tr>	
-				<tr><td height="10"> </td></tr>		
-			</table>
-		
-			<table border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td colspan="2">
-						<a href="idea_subtitle2" class="titlegreen">
-							Ein m², der es in sich hat
-						</a>
-					</td>
-				</tr>	
-				<tr><td height="6"> </td></tr>			
-				<tr>
-					<td>
-						<a href="idea_subtitle2" class="titlegreen">
-							<img src="/images/projekt_pic_headline1c.gif" width="163" height="80" border="0" alt="" />
-						</a>
-					</td>
-				</tr>
-				<tr><td height="4"> </td></tr>
-				
-				<tr>
-					<td colspan="2">
-						Zur Finanzierung des Naturreservates hat BOS ein System zum symbolischen Landkauf entwickelt.
-						<br />
-						...
-						<a href="idea_subtitle2" class="more">
-							mehr
-						</a>
-					</td>
-				</tr>			
-			</table>
-		</div>	
-	</div>
+    template="toplevel_main"
+    title="REGENWALD für SAMBOJA LESTARI"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:bknr="http://bknr.net"
+    xmlns:bos="http://headcraft.de/bos">
+  <bos:set-cachable/>
+  <div class="slim-body with-left-bar">
+    <h1>10 Jahre Samboja Lestari</h1>
+    <p>
+      <img src="/images/startseite-oben.jpg" width="364" height="120" alt="" border="0" />
+    </p>
+    <p>
+      Samboja Lestari ist ein 1850 Hektar großes Gebiet in
+      Ost-Kalimantan, einer Provinz im indonesischen Teil
+      Borneos. Durch Holzeinschlag und Brände wurde es zu einer
+      nährstoffarmen Grassteppe degradiert. Der BOS Foundation ist
+      es in den letzten zehn Jahren durch Aufforstung und
+      Feuerschutz gelungen, das Land wieder in einen artenreichen
+      Lebensraum zu verwandeln.
+    </p>
+    <p>
+      Heute werden in Samboja Lestari eine Auffang- und
+      Rehabilitationsstation für Orang-Utans und eine
+      Malaienbärenstation betrieben. Für das Jahr 2012 sind erste
+      Auswilderungen von Orang- Utans aus Samboja Lestari in <a
+      href="javascript:window_extra('kehje-sewen')">geeignete
+      Regenwaldgebiete</a> geplant. Um in Freiheit überleben zu
+      können, trainieren unsere rothaarigen Verwandten in der
+      Waldschule Samboja Lestaris und werden gesundheitlich „auf Herz
+      und Nieren“ geprüft. Einige Tiere sind zu krank oder zu
+      beeinträchtigt für die Auswilderung. Daher müssen Gehege gebaut
+      und unterhalten werden, die ihnen ein würdiges Leben
+      ermöglichen. Einige von Wassergräben umgebene Inseln bieten
+      zudem kranken und behinderten Orang-Utans einen dauerhaften
+      Platz zum Leben.
+    </p>
+    <p>
+      Heute konzentriert sich die Arbeit der BOS Foundation in Samboja
+      Lestari auf den Erhalt des Gebietes und die Pflege der Tiere. <a
+      href="/de/bestellung" class="spenden">Helfen Sie den Orang-Utans und
+      Malaienbären durch den symbolischen Erwerb von Quadratmetern in
+      Samboja Lestari!</a>
+    </p>
+  </div>
 </bknr:toplevel>

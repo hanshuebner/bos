@@ -30,7 +30,7 @@ body {
 	background-repeat : no-repeat;
 }
 
-/* header für Extra- und News-Fenster */
+/* header fuer Extra- und News-Fenster */
 #header_extra {
 	position: relative;
 	z-index: 2;
@@ -45,7 +45,7 @@ body {
 	background-repeat : no-repeat;
 }
 
-/* header für Infosystem Satellitenbild */
+/* header fuer Infosystem Satellitenbild */
 #header_infosystem {
 	position: relative;
 	z-index: 2;
@@ -110,7 +110,7 @@ body {
 	display: block;
 	color : Gray;
 }
-/* menueleiste im header - neue version - rechter bereich hauptmenü */
+/* menueleiste im header - neue version - rechter bereich hauptmenue */
 #menue_header_right
 {
 	position: absolute;
@@ -347,7 +347,7 @@ body {
 	max-width: 160px;
 }
 
-/* Container im unteren Bereich - ältere Version */
+/* Container im unteren Bereich - ueltere Version */
 #footer {
 	position: relative;
 	z-index: 14;

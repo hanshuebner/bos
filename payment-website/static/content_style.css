@@ -6,7 +6,7 @@ body {
 
 
 /* textboxes for content */
-/* Box fuer Spenden und Infosystem-->  weiß mit Rand*/
+/* Box fuer Spenden und Infosystem-->  weiss mit Rand*/
 
 #textbox_left_top {
 	position: relative;
@@ -26,7 +26,7 @@ body {
 	text-decoration : none;
 }
 
-/* Box fuer Infos auf den Zahlungsformularen -->  ohne Rand und höher*/
+/* Box fuer Infos auf den Zahlungsformularen -->  ohne Rand und hoeher*/
 #textbox_left_form {
 	position: relative;
 	z-index: 20;
@@ -560,3 +560,38 @@ ul.grey  {
 
 #content img { border: none; }
 
+/* new styles for slimmed down pages */
+
+.with-left-bar {
+    margin-left: 200px;
+}
+
+.slim-body h1, .slim-body h2 {
+    color: #256F16;
+    font: normal bold 11pt Verdana, Geneva, Arial, Helvetica, sans-serif;
+    margin-left: 8px;
+}
+
+.slim-body h1 {
+    font-size: 11pt;
+}
+
+.slim-body h2 {
+    font-size: 10pt;
+}
+
+.slim-body p, .slim-body a {
+    font: normal normal 9pt Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+.slim-body a {
+    color: #256F16;
+}
+
+.slim-body a.spenden {
+    color: red;
+}
+
+.slim-body .extra-header-image {
+    margin: 10px;
+}

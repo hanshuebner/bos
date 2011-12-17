@@ -2,134 +2,130 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 <bknr:toplevel template="toplevel_main" title="REGENWALD für SAMBOJA LESTARI" xmlns="http://www.w3.org/1999/xhtml" xmlns:bknr="http://bknr.net" xmlns:bos="http://headcraft.de/bos">
   <bos:set-cachable></bos:set-cachable>
-  
-	<!-- container content_main -->
-	<div id="content_main">
-		<div id="textbox_content">
-			<table border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td colspan="3">
-						<a href="idea" class="titlegreen">
-							Samboja Lestari - kreative Aufforstung in Borneo. <br></br>
-							Eine Zufluchtstätte für bedrohte Tierarten
-						</a>
-					</td>
-					<td></td>				
-				</tr>
-				<tr><td height="6"> </td></tr>				
-				<tr>
-					<td colspan="3" align="left">
-						<a href="idea" class="titlegreen">
-							<img src="/images/start_pic_headline1.jpg" width="363" height="120" alt="" border="0"></img>
-						</a>
-					</td>
-					<td></td>			
-				</tr>
-				<tr><td height="6"></td></tr>
-				<tr>
-					<td colspan="3">
-BOS regeneriert durch ein einzigartiges Aufforstungskonzept nicht nur den Regenwald, 
-sondern schafft gleichzeitig auch eine Zufluchtstätte für Orang-Utans, Malaienbären und andere bedrohte Arten auf Borneo.  
-Die Fortschritte können Sie auf dieser Webseite und über Google Earth beobachten. 
-					<br></br>
-					...
-					<a href="idea" class="more">
-						mehr
-					</a>
-					<br></br>
-					<br></br>
-					</td>
-					<td></td>				
-				</tr>
-				<tr><td height="10"></td></tr>
-				
-				<tr>
-					<td>
-						<a href="headline2" class="titlegreen">
-							Der Schlüssel zum Erfolg - die lokale Bevölkerung
-						</a>
-					</td>
-					<td></td>
-					<td>
-						<a href="headline3" class="titlegreen">
-							Orang-Utan, Malaienbär und Nashornvogel
-						</a>
-					</td>
-					<td></td>				
-				</tr>
-				<tr><td height="6"> </td></tr>				
-				<tr>
-					<td align="left">
-						<a href="headline2" class="titlegreen">
-							<img src="/images/start_pic_headline2b.jpg" width="175" height="92" alt="" border="0"></img>
-						</a>
-					</td>
-					<td><img src="/images/trans.gif" width="16" height="1" alt="" border="0"></img></td>
-					<td align="left">
-						<a href="headline3" class="titlegreen">
-							<img src="/images/start_pic_headline3.jpg" width="175" height="92" border="0" alt=""></img>
-						</a>
-					</td>
-					<td></td>			
-				</tr>
-				<tr><td height="6"></td></tr>
-				<tr>
-					<td>Naturschutz und Bedürfnisse der Bevölkerung dürfen sich nicht im Wege stehen. 
-						<br></br>
-						...
-						<a href="headline2" class="more">
-							mehr
-						</a>						
-					</td>
-					<td></td>
-					<td>Orang-Utans gehören zu den unmittelbar vom Aussterben bedrohten Menschenaffen. 
-					<br></br>
-					...
-					<a href="headline3" class="more">
-						mehr
-					</a> 
-					</td>
-					<td></td>				
-				</tr>
-			</table>		
-		</div>	
-	</div>
-	<div id="content_right">
-		<bos:news-headlines></bos:news-headlines>
-		<div id="newsarchive">
-			<img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt=""></img>
-			<a href="#" onclick="window_news('archive')" class="menue">
-				<strong>NEWS im ARCHIV</strong>
-			</a> 
-		</div>	
-		<div id="subscribe">
-			<form style="margin:0px" name="form" method="post">
-				<input value="news" name="list" type="hidden"></input>
-				<strong>Infos direkt nach Hause? </strong><br></br><br></br>
-					Ihre E-Mail-Adresse:
-					<br></br><br></br>
-					<input type="text" class="form_big" name="email" size="20" maxlength="40" value=""></input>
-					<input value="ja" class="form_big" name="action" type="submit" onclick="return send_info_request();"></input>
-			</form> 
-		</div>
 
+  <!-- container content_main -->
+  <div id="content_main">
+    <div id="textbox_content">
+      <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td colspan="3">
+            <a href="idea" class="titlegreen">
+              10 Jahre Samboja Lestari
+            </a>
+          </td>
+          <td></td>				
+        </tr>
+        <tr><td height="6"> </td></tr>				
+        <tr>
+          <td colspan="3" align="left">
+            <a href="idea" class="titlegreen">
+              <img src="/images/startseite-oben.jpg" width="364" height="120" alt="" border="0" />
+            </a>
+          </td>
+          <td></td>			
+        </tr>
+        <tr><td height="6"></td></tr>
+        <tr>
+          <td colspan="3">
+            Samboja Lestari ist ein 1850 Hektar großes Gebiet in
+            Ost-Kalimantan, einer Provinz im indonesischen Teil
+            Borneos. Durch Holzeinschlag und Brände wurde es zu einer
+            nährstoffarmen Grassteppe degradiert. Der BOS Foundation
+            ist es in den letzten zehn Jahren durch Aufforstung und
+            Feuerschutz gelungen, das Land wieder in einen
+            artenreichen Lebensraum zu verwandeln.<br></br> ...
+            <a href="idea" class="more">
+              mehr
+            </a>
+            <br></br>
+            <br></br>
+          </td>
+          <td></td>				
+        </tr>
+        <tr><td height="10"></td></tr>
 
-<!-- M.K. 12.04.2010 Verweise auf bos-deutschland/blueten  blueten_sl.swf liegt in /images -->
-		<div id="advertisement">
-				<table border="0" cellpadding="0" cellspacing="0">
-				<tr><td><a href="http://www.bos-deutschland.de/blueten" target="_blank" class="titlegreen">Die Blütenwelt von Samboja Lestari</a></td></tr>
-				<tr><td height="6"> </td></tr>
-				<tr><td>
-	<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="165" height="100" id="blueten_sl" align="middle">
-	<param name="allowScriptAccess" value="sameDomain"></param>
-	<param name="allowFullScreen" value="false"></param>
-	<param name="movie" value="/images/blueten_sl.swf"></param><param name="quality" value="high"></param><param name="bgcolor" value="#ffffff"></param>	<embed src="/images/blueten_sl.swf" quality="high" bgcolor="#ffffff" width="165" height="100" name="blueten_sl" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.adobe.com/go/getflashplayer_de"></embed>
-	</object>
-				</td></tr>
-			</table>
-		</div>
-<!-- M.K. 12.04.2010 ENDE-->
-
-			
-	</div>
+        <tr>
+          <td>
+            <a href="headline2" class="titlegreen">
+              Aufforstungsarbeiten abgeschlossen
+            </a>
+          </td>
+          <td></td>
+          <td>
+            <a href="headline3" class="titlegreen">
+              Die lokale Bevölkerung
+            </a>
+          </td>
+          <td></td>				
+        </tr>
+        <tr><td height="6"> </td></tr>				
+        <tr>
+          <td align="left">
+            <a href="headline2" class="titlegreen">
+              <img src="/images/startseite-unten-links.jpg" width="175" height="92" alt="" border="0"></img>
+            </a>
+          </td>
+          <td><img src="/images/trans.gif" width="16" height="1" alt="" border="0"></img></td>
+          <td align="left">
+            <a href="headline3" class="titlegreen">
+              <img src="/images/startseite-unten-rechts.jpg" width="175" height="92" border="0" alt=""></img>
+            </a>
+          </td>
+          <td></td>			
+        </tr>
+        <tr><td height="6"></td></tr>
+        <tr>
+          <td>Zahlreiche SpenderInnen haben dazu beigetragen, Samboja
+          Lestari aufzuforsten <br></br> ...
+          <a href="headline2" class="more">
+            mehr
+          </a>						
+          </td>
+          <td></td>
+          <td>Seit Beginn des Projektes wurde darauf geachtet, die
+          lokale Bevölkerung mit in die Projekte einzubinden <br></br>
+          ...
+          <a href="headline3" class="more">
+            mehr
+          </a>
+          </td>
+          <td></td>				
+        </tr>
+      </table>		
+    </div>	
+  </div>
+  <div id="content_right">
+    <bos:news-headlines></bos:news-headlines>
+    <div id="newsarchive">
+      <img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt=""></img>
+      <a href="#" onclick="window_news('archive')" class="menue">
+        <strong>NEWS im ARCHIV</strong>
+      </a>
+    </div>	
+    <div id="subscribe">
+      <form style="margin:0px" name="form" method="post">
+        <input value="news" name="list" type="hidden"></input>
+        <strong>Infos direkt nach Hause? </strong><br></br><br></br>
+        Ihre E-Mail-Adresse:
+        <br></br><br></br>
+        <input type="text" class="form_big" name="email" size="20" maxlength="40" value=""></input>
+        <input value="ja" class="form_big" name="action" type="submit" onclick="return send_info_request();"></input>
+      </form>
+    </div>
+    <!-- M.K. 12.04.2010 Verweise auf bos-deutschland/blueten  blueten_sl.swf liegt in /images -->
+    <div id="advertisement">
+      <table border="0" cellpadding="0" cellspacing="0">
+        <tr><td><a href="http://www.bos-deutschland.de/blueten" target="_blank" class="titlegreen">Die Blütenwelt von Samboja Lestari</a></td></tr>
+        <tr><td height="6"> </td></tr>
+        <tr><td>
+          <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="165" height="100" id="blueten_sl" align="middle">
+            <param name="allowScriptAccess" value="sameDomain"></param>
+            <param name="allowFullScreen" value="false"></param>
+            <param name="movie" value="/images/blueten_sl.swf"></param><param name="quality" value="high"></param><param name="bgcolor" value="#ffffff"></param>	<embed src="/images/blueten_sl.swf" quality="high" bgcolor="#ffffff" width="165" height="100" name="blueten_sl" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.adobe.com/go/getflashplayer_de"></embed>
+          </object>
+        </td></tr>
+      </table>
+    </div>
+    <!-- M.K. 12.04.2010 ENDE-->
+  </div>
 </bknr:toplevel>

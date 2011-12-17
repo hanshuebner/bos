@@ -1,91 +1,59 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-   template="toplevel_main"
-   title="REGENWALD für SAMBOJA LESTARI"
-   xmlns="http://www.w3.org/1999/xhtml"
-   xmlns:bknr="http://bknr.net"
-   xmlns:bos="http://headcraft.de/bos"
-   >
+    template="toplevel_main"
+    title="REGENWALD für SAMBOJA LESTARI"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:bknr="http://bknr.net"
+    xmlns:bos="http://headcraft.de/bos"
+    >
   <bos:set-cachable/>
-  <div id="content_main">
-    <div id="textbox_content_bigger">
-      <table border="0" cellpadding="0" cellspacing="0">
-	<tr>
-	  <td colspan="2">
-	    <span class="headline">
-	      Der Schlüssel zum Erfolg - die lokale Bevölkerung
-	    </span>
-	  </td>
-	  <td align="center" valign="top">
-	    <img src="../images/pfeil_back.gif" width="10" height="9" alt="" />
-	    <a href="#" onclick="history.back()" class="titlegray">
-	      zurück
-	    </a>  
-	  </td>		
-	</tr>
-	<tr>
-	  <td height="6"><img src="../images/trans.gif" width="120" height="10" alt="" />
-	  </td>
-	  <td><img src="../images/trans.gif" width="130" height="6" alt="" />
-	  </td>
- 	  <td width="150"><img src="../images/trans.gif" width="140" height="6" alt="" />
-	  </td>
-	</tr>		
-	<tr>
-	  <td  valign="top">
-	    Der Naturschutz und die Bedürfnisse der Bevölkerung dürfen
-	    sich nicht im Wege stehen.  <br /><br /> Das Naturreservat
-	    Samboja Lestari bietet der lokalen Bevölkerung ein
-	    gesichertes Einkommen, Gesundheit und Bildung. Landwirtschaft, Baumschule, Kompostproduktion,
-	    Aufforstung, Anpflanzung, Forschung und Aufbau der
-	    Infrastruktur bieten sichere Arbeitsplätze.  <br />
-	  </td>
-	  <td align="right" colspan="2"><img src="../images/pic_headline2_big.jpg" width="256" height="150" border="0" alt="" /></td>
-	</tr>
-	<tr>
-	  <td height="10">
-	  </td>
-	</tr>	
-	<tr>
-	  <td colspan="3">
-	    <b>"Auf diese Weise wird den Menschen eine Alternative
-	      geboten, und sie brauchen den Wald nicht mehr zu
-	      roden. So können wir der Welt zeigen, dass Natur und
-	      Menschen zusammenleben können und einander nicht
-	      auszuschließen brauchen."
-            </b>
-            <br /> sagt Dr. Willie Smits, Gründer der BOS Foundation
-            in Indonesien.  <br />
-	  </td>
-	  <td></td>			
-	</tr>
-	<tr>
-	  <td height="6">
-	  </td>
-	</tr>
-	<tr>
-	  <td colspan="3">				
-	  </td>			
-	</tr>				
-	<tr>
-	  <td height="6">
-	  </td>
-	</tr>				
-	<tr>
-	  <td height="6">
-	  </td>
-	</tr>
-	<tr>
-	  <td colspan="3">
-	    Die Sicherheit des Naturschutzreservates kann langfristig nur durch die Akzeptanz der lokalen Bevölkerung gewährleistet werden.
-	    Der Erfolg des Projektes garantiert einen besseren
-	    Lebensstandard und umgekehrt.
-	  </td>
-	</tr>
-	<tr><td height="16"></td></tr>	
-      </table>	
-    </div>	
+  <div class="slim-body with-left-bar">
+    <h1>Aufforstungsarbeiten abgeschlossen</h1>
+    <h2>10 Jahre Samboja Lestari – Vielen Dank für Ihre Unterstützung!</h2>
+    <p>
+      Zahlreiche SpenderInnen haben dazu beigetragen, Samboja Lestari
+      aufzuforsten. Vor zehn Jahren war das Gebiet noch vom
+      nährstoffzehrenden, alles dominierenden Alang-Alang-Gras
+      (Imperata Cylindrica) überwuchert. Durch den neuen Baumbestand
+      haben sich das Mikroklima, die Bodenstruktur und der
+      Wasserhaushalt deutlich verbessert. Die neu entstandene
+      Vegetationsschicht kann Wasser besser speichern und dieses zur
+      Trockenzeit bereitstellen, in der Regenzeit wird dagegen die
+      Überschwemmungsgefahr vermindert.
+    </p>
+    <p>
+      Auch die Artenvielfalt ist wieder angestiegen. Unter anderem
+      wurden Baumarten gepflanzt, die in der Natur mitunter schon
+      ausgestorben sind. Außerdem lässt sich beobachten, dass sich
+      immer mehr Tierarten auf dem Gebiet wieder neu ansiedeln. Durch
+      die Aufforstung konnte innerhalb von zehn Jahren ein Zustand
+      hergestellt werden, der sich durch natürliche Sukzession erst
+      über mehrere Jahrzehnte entwickelt hätte!
+    </p>
+    <p>
+      Die Baumpflanzarbeiten in Samboja Lestari sind nun im
+      Wesentlichen abgeschlossen. Knapp 1.200 Hektar wurden mit über
+      einer halben Millionen Bäumen und über 750 Arten bepflanzt, 413
+      Hektar werden der natürlichen Entwicklung überlassen. Die
+      Waldschule umfasst 75 Hektar, das Arboretum 18 Hektar. Hinzu
+      kommen das Malaienbären-Gehege und die Orang-Utan-Inseln mit
+      jeweils 58 und 7 Hektar.
+    </p>
+    <p>
+      In Samboja Lestari konnte degradiertes Land wieder erfolgreich
+      renaturiert werden. Dennoch muss der Schutz ursprünglichen
+      Regenwaldes an allererster Stelle stehen! Wiederaufforstung ist
+      zeit-, kosten- und arbeitsaufwändig und kann niemals den Wert
+      eines Millionen Jahre alten, ursprünglichen Waldes
+      ersetzen. Deshalb ist es der BOS Foundation wichtig, vom
+      indonesischen Staat Naturschutz-Konzessionen für <a
+      href="javascript:window_extra('kehje-sewen')">intakte
+      Regenwald-Gebiete</a> zu erwerben und deren Erhalt zu
+      ermöglichen. Denn nur in ausgedehnten, ursprünglichen oder sehr
+      naturnahen Wäldern können fortpflanzungsfähige Populationen von
+      Orang-Utans überleben.
+    </p>
   </div>
 </bknr:toplevel>

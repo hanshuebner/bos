@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
@@ -9,54 +9,35 @@
   xmlns:bos="http://headcraft.de/bos"
   >
   <bos:set-cachable/>
-	<!-- container content_main -->
-	<div id="content_main">
-		<div id="textbox_content_bigger">
-			<table border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td colspan="2">
-						<span class="headline">
-							Orang-Utan, Malaienbär und Nashornvogel
-						</span>
-					</td>
-					<td align="center" valign="top">
-						<img src="/images/pfeil_back.gif" width="10" height="9" alt="" />
-						<a href="#" onclick="history.back()" class="titlegray">
-							zurück
-						</a>
-				  	</td>
-				</tr>
-				<tr>
-					<td><img src="/images/trans.gif" width="120" height="15" alt="" /></td>
-					<td><img src="/images/trans.gif" width="130" height="10" alt="" /></td>
-					<td width="150"><img src="/images/trans.gif" width="140" height="10" alt="" /></td>
-				</tr>
-				<tr>
-					<td colspan="3">
-						Orang-Utans, auch Menschen des Waldes genannt, gehören zu den unmittelbar vom Aussterben bedrohten Menschenaffen.
-						<br /><br />
-						Orang-Utans gehören nicht nur zu unseren nahen Verwandten im Tierreich, sie sind als Samenverbreiter auch unentbehrlich
-						für die Vielfalt des Regenwaldes - sie sind eine so genannte Schirmspezies. Somit dient der Schutz dieser faszinierenden
-						Menschenaffen gleichzeitig auch dem Erhalt des Waldökosystems.
-						<br /><br />
-						Heute leben Orang-Utans nur noch auf Sumatra und Borneo. Massive Regenwaldzerstörung und skrupelloser Tierhandel
-						könnten bald das Ende ihrer Art bedeuten. Auch die Malaienbären verlieren ihren Lebensraum. Das Naturreservat Samboja Lestari
-						bietet zahlreichen Tieren eine Zuflucht - eine Chance zum Überleben. Bereits heute leben dort 52 Malaienbären in abgegrenzten Arealen. 
-Auf künstlichen Inseln leben kranke Orang-Utans, die nicht mehr ausgewildert werden können. In der Waldschule trainieren Orang-Utan-Jungtiere für ihre spätere Auswilderung.
-						<br /><br />
-						Seltene Arten wie z.B. Nashornvogel, Zwerghirsch und Königskobra können heute schon wieder in Samboja Lestari beobachtet werden.
- 					</td>
-				</tr>
-				<tr><td height="50"></td></tr>		
-				<tr>
-					<td valign="top" colspan="3">
-						<img src="/images/pic_h3_orangutan.jpg" width="169" height="88" border="0" alt="" />
-						<img src="/images/pic_h3_baer.jpg" width="169" height="88" border="0" alt="" />
-						<img src="/images/pic_h3_vogel.jpg" width="169" height="88" alt="" />
-					</td>
-				</tr>			
-				<tr><td height="20"></td></tr>	
-			</table>	
-		</div>	
-	</div><!-- /container content_main -->
+  <div class="slim-body with-left-bar">
+    <h1>Die lokale Bevölkerung</h1>
+    <p>
+      Seit Beginn des Projektes wurde darauf geachtet, die lokale
+      Bevölkerung mit in die Projekte einzubinden. Nahezu alle
+      Beschäftigten stammen aus der Umgebung. Dadurch wird das Projekt
+      akzeptiert und es konnten in den letzten zehn Jahren
+      Arbeitsplätze geschaffen werden, die zum großen Teil auch heute
+      noch existieren. So pflanzten lokale Bauern die Bäume, andere
+      stellen Kompost her, arbeiten in der Samboja-Lodge oder für den
+      Feuerschutz, betreuen die Orang-Utans und die
+      Malaienbären. Durch das Agroforst-Prinzip hatten die Bauern die
+      Möglichkeit, zwischen den Pflanzungen ihre Kulturpflanzen
+      anzubauen. Der Ertrag diente der Fütterung der
+      Orang-Utans. Dadurch arbeiteten alle Beteiligten Hand in Hand
+      und zum gegenseitigen Nutzen. Gleichzeitig verhinderte die
+      landwirtschaftliche Nutzung, dass das dominante Alang-Alang-Gras
+      die jungen Setzlinge überwuchert und verdrängt.
+    </p>
+    <p>
+      Nach wie vor verzehren die Orang-Utans in Samboja Lestari
+      gewaltige Mengen Obst und Gemüse, welches – soweit möglich - von
+      den Bauern der Umgebung bezogen wird. Zudem konnte durch
+      Schulungen die landwirtschaftliche Arbeitsweise der Bauern
+      verbessert werden. So wurde das Eggen der Felder als Alternative
+      zur gängigen Praxis des Abbrennens der Ernterückstände oder des
+      Alang-Alang-Grases aufgezeigt. Dadurch konnte dem Problem
+      entgegengewirkt werden, dass immer wieder unkontrolliert Brände
+      entstehen.
+    </p>
+  </div>
 </bknr:toplevel>

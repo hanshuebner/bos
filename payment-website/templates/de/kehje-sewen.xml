@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:bknr="http://bknr.net"
+    xmlns:bos="http://headcraft.de/bos"
+    >
+  <head>
+    <link rel="stylesheet" href="/static/toplevel_style.css" />
+    <link rel="stylesheet" href="/static/content_style.css" />
+    <script src="/static/bos.js" type="text/javascript"><!-- x -->	
+    </script> 
+    <title>Ringschema</title>
+  </head>
+  <body bos:lang="$(language)">
+    <div class="slim-body">
+      <img class="extra-header-image" src="/images/header_extra.gif"/>
+      <h1>Kehje Sewen</h1>
+      <p>
+        86.000 Hektar Regenwald für die Auswilderungen – die BOS
+        Foundation konnte bereits Ende des Jahres 2009
+        Nutzungskonzessionen für Kehje Sewen („Orang-Utan-Wald“ in der
+        Dayak-Sprache) für zunächst 60 Jahre erwerben. Ein großer
+        Erfolg, denn für die Auswilderungen von Orang-Utans aus den
+        Stationen werden dringend intakte Regenwaldflächen
+        benötigt. Das Gebiet ist hierfür gut geeignet, da es alle nach
+        IUCN (The International Union for Conservation of Nature)
+        erforderlichen Voraussetzungen erfüllt. Kehje Sewen eignet
+        sich als Lebensraum für etwa 130 Orang-Utans.
+      </p>
+      <p>
+        Der Erwerb einer derartigen Nutzungskonzession vom
+        indonesischen Staat ist rechtlich nur für Unternehmen
+        möglich. Daher hat die BOS Foundation eine Firma gegründet (PT
+        Restorasi Habitat Orangutan Indonesia, RHOI), die für BOS die
+        Konzession halten wird und einen detaillierten mittelfristigen
+        Entwicklungsplan für das Gebiet vorgelegt hat.  Im Jahr 2012
+        sollen die ersten Orang-Utans aus Samboja Lestari in das
+        Gebiet Kejeh Sewen ausgewildert werden.
+      </p>
+    </div>
+    <div style="padding:10px">
+      <img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
+      <a href="#" onclick="window.close()" class="more">
+        Fenster schließen
+      </a>
+    </div>
+    <bos:google-analytics-track />
+  </body>
+</html>

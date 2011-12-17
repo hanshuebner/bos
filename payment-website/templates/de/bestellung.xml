@@ -11,11 +11,11 @@
   <form name="bestellformular" method="post" action="buy-sqm">
     <div>
       <span class="headline">
-        Ich bin dabei und möchte sehen, wie Samboja Lestari grüner
-        wird.  Ich schaffe
+        Ich bin dabei und möchte die Orang-Utans, die Malaienbären und
+        den Erhalt Samboja Lestaris durch den symbolischen Erwerb von
         <input name="numsqm" class="validate[required,custom[integer]]" size="4" value="10"/>
         m² Regenwald für <span
-        id="amount">30</span> Euro.
+        id="amount">30</span> Euro unterstützen..
       </span>
       <div id="sliderContainer">
         <div id="legend10">10m²</div>
