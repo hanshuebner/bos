@@ -1,99 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-  template="toplevel_main"
-  title="RAINFOREST for SAMBOJA LESTARI - about BOS"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+    template="toplevel_main"
+    title="RAINFOREST for SAMBOJA LESTARI - about BOS"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:bknr="http://bknr.net"
+    xmlns:bos="http://headcraft.de/bos"
+    >
   <bos:set-cachable/>
-	<div id="content_main">
-		<div id="textbox_content">
-			<table border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td colspan="3"><span class="headline">The BOS Foundation</span></td>
-					<td></td>				
-				</tr>
-				<tr>
-					<td height="15"></td>
-				</tr>
-				<tr>
-					<td>
-						The <b>Borneo Orangutan Survival Foundation</b> (BOS) is the largest organisation worldwide fighting 
-						against the extinction of orangutans. Their habitat, the rainforest with its biological diversity, 
-						is being protected in collaboration with the local people. 
-						BOS is an Indonesian not-for-profit foundation, founded in 1991.
-						<br /><br />
-						The main aspects of BOS work in Indonesia are the following:
-						<br /><br />
-						<ul>
-							<li>
-                Confiscation of illegally kept orangutans, Malaysian bears and other species
-							</li>
-							<li>
-								Rehabilitation of orangutans in stations
-							</li>
-							<li>
-								Release of animals into protected rainforest areas
-							</li>
-							<li>
-								Rescue and relocation of endangered orangutans and other species
-							</li>
-							<li>
-								Forestation and protection of the rainforest 
-							</li>
-							<li>
-								Creation of alternatives for the local people
-							</li>
-							<li>
-								Ecological education of the local people
-							</li>
-							<li>
-								Monitoring of protected areas
-							</li> 
-							<li>
-								Analysis of satellite photos
-							</li>
-							<li>
-								and many more.
-							</li>
-						</ul>
-						<br />
-						The projects run by BOS are mainly sponsored by foreign donors due to the difficult economic situation of Indonesia. 
- 					</td>
-				</tr>				
-			</table>		
-		</div>	
-	</div>
-	<div id="content_right">
-		<div id="textbox_right_top">
-			<table id="rightTable" border="0" cellpadding="0" cellspacing="0">
-				
-				<tr><td height="30"></td></tr>			
-				<tr>
-					<td colspan="2"><img src="/images/bos-logo.gif" width="116" height="85" alt="" /></td>
-				</tr>	
-				<tr>
-					<td colspan="2">Would you like to know more about projects run by BOS?
-					<br /><br />
-					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-					<a href="http://www.savetheorangutan.info" target="_blank" class="more">
-						savetheorangutan.info
-					</a>
-					<br />
-					<img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
-					<a href="http://www.bos-deutschland.de" target="_blank" class="more">
-						bos-deutschland.de
-					</a>
-					<br /><br />
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2">On these webpages you will also find links to our BOS partner organisations worldwide.</td>
-				</tr>		
-			</table>			
-		</div>
-	</div>
+  <div id="content_main">
+    <div id="textbox_content" class="slim-body">
+      <h1>BOS Foundation</h1>
+      <p>
+        The Borneo Orangutan Survival Foundation (BOS Foundation) is
+        an Indonesian and non-governmental organization that is
+        dedicated to the conservation of the highly endangered
+        orangutans and their rainforest habitat.
+      </p>
+      <p>
+        BOS Foundation was founded 1991 and manages the largest
+        primate conservation project in the world. Their main
+        activities are:
+      </p>
+      <ul>
+        <li>
+          Seizure, rehabilitation and the reintroduction of orangutans
+          to the wild
+        </li>
+        <li>
+          Protection of the orangutans' and many other animal species'
+          habitat
+        </li>
+        <li>
+          Public relations, environmental education, awareness
+          raising, involvement of the local population and creating
+          alternative livelihoods for local people
+        </li>
+        <li>
+          Planting and cultivation activities, water management, fire
+          protection and monitoring of the rainforest as protection
+          against illegal logging
+        </li>
+      </ul>
+      <p>
+        BOS employs more than 400 people and provides local people
+        with economic alternatives to the exploitation of nature.
+      </p>
+      <p>
+        The projects run by BOS are mainly sponsored by
+        international donors and partner organisations like BOS
+        Germany.
+      </p>
+    </div>
+  </div>
+  <div id="content_right">
+    <div id="textbox_right_top">
+      <table id="rightTable" border="0" cellpadding="0" cellspacing="0">
+
+        <tr><td height="30"></td></tr>
+        <tr>
+          <td colspan="2"><img src="/images/bos-logo.gif" width="116" height="85" alt="" /></td>
+        </tr>
+        <tr>
+          <td colspan="2">Would you like to know more about projects run by BOS?
+          <br /><br />
+          <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+          <a href="http://www.savetheorangutan.info" target="_blank" class="more">
+            savetheorangutan.info
+          </a>
+          <br />
+          <img src="/images/pfeil_link_on.gif" width="10" height="9" alt="" />
+          <a href="http://www.bos-deutschland.de" target="_blank" class="more">
+            bos-deutschland.de
+          </a>
+          <br /><br />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">On these webpages you will also find links to our BOS partner organisations worldwide.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </bknr:toplevel>

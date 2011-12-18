@@ -1,121 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <bknr:toplevel
-  template="toplevel_main"
-  title="RAINFOREST for SAMBOJA LESTARI"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
+    template="toplevel_main"
+    title="RAINFOREST for SAMBOJA LESTARI"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:bknr="http://bknr.net"
+    xmlns:bos="http://headcraft.de/bos"
+    >
   <bos:set-cachable/>
-	<!-- container content_main -->
-	<div id="content_main">
-		<div id="textbox_content">
-			<table  border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td colspan="2">
-						<span class="headline">
-							Samboja Lestari - Creative reforestation
-							<br />
-							A sancutary for endangered species.
-						</span>
-					</td>
-					<td align="center"><img src="/images/pfeil_back.gif" width="10" height="9" alt="" />
-						<a href="#" onclick="history.back()" class="titlegray">
-							back
-						</a>
-					</td>		
-				</tr>
-				<tr><td height="6"> </td></tr>				
-				<tr>
-					<td colspan="3" align="left"><img src="/images/start_pic_headline1.jpg" width="363" height="120" alt="" border="0" /></td>
-					<td></td>			
-				</tr>
-				<tr><td height="6"></td></tr>
-				<tr>
-					<td colspan="3">
-						BOS regenerates rainforest  through an unique concept of afforestation and at the same time creates a sanctuary for 
-orangutans, sunbears and other endangered species on Borneo. 
-Satellite pictures here on the internet make it possible to observe the progress of this concept on this website and in Google Earth
-						<br /><br />
-						During the last decades the once species-rich rainforest of 
-						<a href="/en/satmap" class="titlegreen">
-							Samboja Lestari
-						</a>
-						was cleared and burnt down relentlessly.
-Nutrient-consuming elephant grass took over completely. What remained was an ecological waste land.
-Nowadays it is already visible that this doesn't have to stay - since 2001 BOS is creating new rainforest. 
-In  the long term an innovative concept of reforestation and protection is converting this area of more than 18.5 mio sqm into a natural habitat again. 
-In tropical Borneo plants grow much faster than in Europe. 
-Already after a few years the first orangutans enjoy their new freedom on artificial islands. Young orang-utans train in the forest school of Samboja-Lestari for their future release.   
-A nature reserve is being created for the permanent use of humans, animals and plants in Samboja Lestari ("eternal Samboja").
-					</td>
-					<td></td>				
-				</tr>				
-			</table>		
-		</div>	
-	</div>
-	<div id="content_right">
-		<div id="textbox_right_top">
-			<table border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td colspan="2">
-						<a href="idea_subtitle1" class="titlegreen">
-							Agriculture, reforestation and protection
-						</a>
-					</td>
-				</tr>	
-				<tr><td height="6"></td></tr>			
-				<tr>
-					<td> During the early stage of reforestion Indonesian farmers plant profitable agricultural products among the newly planted trees.</td>
-					<td valign="top" align="right">
-						<a href="idea_subtitle1" class="titlegreen">
-							<img src="/images/projekt_pic_headline1b.jpg" width="69" height="120" alt="" border="0" />
-						</a>
-					</td>
-				</tr>
-				
-				<tr>
-					<td colspan="2">
-						...
-						<a href="idea_subtitle1" class="more">
-							more
-						</a>
-					</td>
-				</tr>	
-				<tr><td height="10"> </td></tr>		
-			</table>
-		
-			<table border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td colspan="2">
-						<a href="idea_subtitle2" class="titlegreen">
-							A square metre with a certain knack
-						</a>
-					</td>
-				</tr>	
-				<tr><td height="6"> </td></tr>			
-				<tr>
-					<td>
-						<a href="idea_subtitle2" class="titlegreen">
-							<img src="/images/projekt_pic_headline1c.gif" width="163" height="80" border="0" alt="" />
-						</a>
-					</td>
-				</tr>
-				<tr><td height="4"> </td></tr>
-				
-				<tr>
-					<td colspan="2">
-						 To finance the nature reserve, BOS has created a system of symbolical land-purchasing.
-						<br />
-						...
-						<a href="idea_subtitle2" class="more">
-							more
-						</a>
-					</td>
-				</tr>			
-			</table>
-		</div>	
-	</div>
+  <div class="slim-body with-left-bar">
+    <h1>10 Jahre Samboja Lestari</h1>
+    <p>
+      <img src="/images/startseite-oben.jpg" width="364" height="120" alt="" border="0" />
+    </p>
+    <p>
+      Samboja Lestari is a 1850 hectare area in East Kalimantan, a
+      province in the Indonesian part of Borneo. Through logging and
+      fires it was downgraded to a nutrient-poor grassland. Over the
+      past ten years BOS Foundation has succeeded in turning the land
+      back into a species-rich habitat through reforestation and fire
+      protection.
+    </p>
+    <p>
+      Today a rescue and rehabilitation station is being run for
+      orangutans and sun bears in Samboja Lestari. The first
+      reintroductions of orangutans from Samboja Lestari to <a
+      href="javascript:window_extra('kehje-sewen')">appropriate areas
+      of rainforest</a> are planned for 2012. In order to survive in
+      freedom, our red-headed relatives receive training in the forest
+      school of Samboja Lestari and are given a thorough health
+      examination.  Some animals are too ill or too disturbed for
+      re-introduction. For this reason enclosures which enable them to
+      lead a dignified life need to be built and maintained.  A few
+      islands surrounded by moats also offer the sick and disabled
+      orangutans a permanent place to live.
+    </p>
+    <p>
+      Today BOS Foundation's work in Samboja Lestari is focused on the
+      preservation of the area and taking care of the animals.  <a
+      href="/de/bestellung" class="spenden">Help the orangutans and
+      sun bears through the acquisition of symbolic square metres in
+      Samboja Lestari!</a>
+    </p>
+  </div>
 </bknr:toplevel>

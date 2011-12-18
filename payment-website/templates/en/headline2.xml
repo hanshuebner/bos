@@ -9,80 +9,49 @@
    xmlns:bos="http://headcraft.de/bos"
    >
   <bos:set-cachable/>
-  <div id="content_main">
-    <div id="textbox_content_bigger">
-      <table border="0" cellpadding="0" cellspacing="0">
-	<tr>
-	  <td colspan="2">
-	    <span class="headline">
-	      The key to success - the local population
-	    </span>
-	  </td>
-	  <td align="center" valign="top">
-	    <img src="../images/pfeil_back.gif" width="10" height="9" alt="" />
-	    <a href="#" onclick="history.back()" class="titlegray">
-	      back
-	    </a>  
-	  </td>		
-	</tr>
-	<tr>
-	  <td height="6"><img src="../images/trans.gif" width="120" height="10" alt="" />
-	  </td>
-	  <td><img src="../images/trans.gif" width="130" height="6" alt="" />
-	  </td>
- 	  <td width="150"><img src="../images/trans.gif" width="140" height="6" alt="" />
-	  </td>
-	</tr>		
-	<tr>
-	  <td  valign="top">
-	    Nature conservation and the needs of the population must not be in conflict with each other.
-	    <br /><br />
-	    The nature reserve Samboja Lestari offers a safe income, health and education to the local population. 
-Agriculture, nursery, production of compost, reforestation and the creation of infrastructure provide safe workplaces. 
-	    <br />
-	  </td>
-	  <td align="right" colspan="2"><img src="../images/pic_headline2_big.jpg" width="256" height="150" border="0" alt="" /></td>
-	</tr>
-	<tr>
-	  <td height="10">
-	  </td>
-	</tr>	
-	<tr>
-	  <td colspan="3">
-	    <b>
-              "This offers an alternative to the people, so that they
-	      don't have to clear the forest any more. Thus we can show
-	      the world, that nature and humans are able to coexist and
-	      don't have to exclude each other."
-            </b> <br /> says Dr. Willie Smits, founder of BOS
-	    Indonesia.  <br />
-	  </td>
-	  <td></td>			
-	</tr>
-	<tr>
-	  <td height="6">
-	  </td>
-	</tr>
-	<tr>
-	  <td colspan="3">				
-	  </td>			
-	</tr>				
-	<tr>
-	  <td height="6">
-	  </td>
-	</tr>				
-	<tr>
-	  <td height="6">
-	  </td>
-	</tr>
-	<tr>
-	  <td colspan="3">
-	    The safety of the nature reserve can be guaranteed in the long run only by the acceptance through the local people. 
-The success of the project guarantees a better standard of living and vice versa.
-	  </td>
-	</tr>
-	<tr><td height="16"></td></tr>	
-      </table>	
-    </div>	
+  <div class="slim-body with-left-bar">
+    <h1>Reforestation completed</h1>
+    <h2>10 years Samboja Lestari - Thank you for your support!</h2>
+    <p>
+      A great number of donors have helped to reforest Samboja
+      Lestari. Ten years ago the area was still predominantly
+      overgrown with the nutrient-poor, all dominating, alang-alang
+      grass (Imperata cylindrica) With the new trees, the micro
+      climate, soil structure and water balance have improved
+      significantly. The newly formed layer of vegetation can store
+      water more efficiently, making it available in the dry season
+      and reducing the risk of flooding during the rainy season.
+    </p>
+    <p>
+      The biodiversity has also increased once more. Among the trees
+      planted were included species which had died out in the
+      wild. Observations show also that more and more species of
+      animals are colonizing the area again. Through reforestation a
+      state was reached over a period of ten years, which would have
+      taken decades to develop on its own.
+    </p>
+    <p>
+      The tree planting in Samboja Lestari is now practically
+      complete. Nearly 1,200 acres have been planted with over half a
+      million trees and over 750 species, 413 hectares will be left to
+      natural development. The school is comprised of 75 hectares of
+      forest and the arboretum is 18 hectares. Then there is the sun
+      bear enclosure and the orangutan islands, each with 58 and 7
+      acres.
+    </p>
+    <p>
+      In Samboja Lestari degraded land could be successfully restored
+      to its natural state. Nevertheless, the protection of virgin
+      rainforests comes first and foremost! Reforestation is
+      time-consuming, expensive and labour-consuming and can never
+      replace the value of a million years old, original
+      forest. That's why it is important for BOS Foundation to acquire
+      conservation concessions for <a
+      href="javascript:window_extra('kehje-sewen')">intact rain
+      forest</a> areas from the Indonesian government and to
+      facilitate their preservation, since it is only in extensive,
+      original or very natural forests that orangutans can
+      successfully reproduce and survive.
+    </p>
   </div>
 </bknr:toplevel>
