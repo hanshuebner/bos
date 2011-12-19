@@ -12,8 +12,20 @@
   <div class="slim-body with-left-bar">
     <h1>Reforestation completed</h1>
     <h2>10 years Samboja Lestari - Thank you for your support!</h2>
+    <div class="right">
+      <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+              codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0"
+              width="190" height="205" id="schafft_lebenswald" align="middle">
+        <param name="allowScriptAccess" value="sameDomain" />
+        <param name="movie" value="schafft_lebenswald.swf" />
+        <param name="quality" value="high" /><param name="bgcolor" value="#ffffff" />
+        <embed src="/static/schafft_lebenswald.swf" quality="high" bgcolor="#ffffff" width="190"
+               height="205" name="schafft_lebenswald" align="middle" allowScriptAccess="sameDomain"
+               type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+      </object>
+    </div>
     <p>
-      A great number of donors have helped to reforest Samboja
+      A large number of donors have helped to reforest Samboja
       Lestari. Ten years ago the area was still predominantly
       overgrown with the nutrient-poor, all dominating, alang-alang
       grass (Imperata cylindrica) With the new trees, the micro
@@ -37,17 +49,14 @@
       natural development. The school is comprised of 75 hectares of
       forest and the arboretum is 18 hectares. Then there is the sun
       bear enclosure and the orangutan islands, each with 58 and 7
-      acres.
-    </p>
-    <p>
-      In Samboja Lestari degraded land could be successfully restored
-      to its natural state. Nevertheless, the protection of virgin
-      rainforests comes first and foremost! Reforestation is
+      acres.  In Samboja Lestari degraded land could be successfully
+      restored to its natural state. Nevertheless, the protection of
+      virgin rainforests comes first and foremost! Reforestation is
       time-consuming, expensive and labour-consuming and can never
       replace the value of a million years old, original
       forest. That's why it is important for BOS Foundation to acquire
-      conservation concessions for <a
-      href="javascript:window_extra('kehje-sewen')">intact rain
+      conservation concessions for <a href="#"
+      onclick="javascript:window_extra('kehje-sewen')">intact rain
       forest</a> areas from the Indonesian government and to
       facilitate their preservation, since it is only in extensive,
       original or very natural forests that orangutans can

@@ -11,12 +11,13 @@
     <link rel="stylesheet" href="/static/content_style.css" />
     <script src="/static/bos.js" type="text/javascript"><!-- x -->	
     </script> 
-    <title>Ringschema</title>
+    <title>Kehje Sewen</title>
   </head>
   <body bos:lang="$(language)">
     <div class="slim-body">
       <img class="extra-header-image" src="/images/header_extra.gif"/>
       <h1>Kehje Sewen</h1>
+      <img class="extra-header-image" src="/images/kehje-sewen.jpg"/>
       <p>
         86.000 Hektar Regenwald für die Auswilderungen – die BOS
         Foundation konnte bereits Ende des Jahres 2009
@@ -39,12 +40,12 @@
         sollen die ersten Orang-Utans aus Samboja Lestari in das
         Gebiet Kejeh Sewen ausgewildert werden.
       </p>
-    </div>
-    <div style="padding:10px">
-      <img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
-      <a href="#" onclick="window.close()" class="more">
-        Fenster schließen
-      </a>
+      <div style="padding-left:10px">
+        <img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
+        <a href="#" onclick="window.close()" class="more">
+          Fenster schließen
+        </a>
+      </div>
     </div>
     <bos:google-analytics-track />
   </body>

@@ -11,7 +11,7 @@
   <div class="slim-body with-left-bar">
     <h1>10 Jahre Samboja Lestari</h1>
     <p>
-      <img src="/images/startseite-oben.jpg" width="364" height="120" alt="" border="0" />
+      <img src="/images/ten-years-banner.jpg" border="0" />
     </p>
     <p>
       Samboja Lestari ist ein 1850 Hektar großes Gebiet in
@@ -27,7 +27,8 @@
       Rehabilitationsstation für Orang-Utans und eine
       Malaienbärenstation betrieben. Für das Jahr 2012 sind erste
       Auswilderungen von Orang-Utans aus Samboja Lestari in <a
-      href="javascript:window_extra('kehje-sewen')">geeignete
+      href="#"
+      onclick="javascript:window_extra('kehje-sewen')">geeignete
       Regenwaldgebiete</a> geplant. Um in Freiheit überleben zu
       können, trainieren unsere rothaarigen Verwandten in der
       Waldschule Samboja Lestaris und werden gesundheitlich „auf Herz

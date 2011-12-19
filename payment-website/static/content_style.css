@@ -566,6 +566,11 @@ ul.grey  {
     margin-left: 200px;
 }
 
+.slim-body p {
+    margin-top: 0em;
+    margin-bottom: 0.3em;
+}
+
 .slim-body h1, .slim-body h2 {
     color: #256F16;
     font: normal bold 11pt Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -586,6 +591,7 @@ ul.grey  {
 
 .slim-body a {
     color: #256F16;
+    text-decoration: none;
 }
 
 .slim-body a.spenden {
@@ -594,4 +600,9 @@ ul.grey  {
 
 .slim-body .extra-header-image {
     margin: 10px;
+}
+
+.slim-body .right {
+    float: right;
+    margin: 0px 15px 10px 10px;
 }

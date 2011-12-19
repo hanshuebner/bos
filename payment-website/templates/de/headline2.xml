@@ -12,25 +12,33 @@
   <div class="slim-body with-left-bar">
     <h1>Aufforstungsarbeiten abgeschlossen</h1>
     <h2>10 Jahre Samboja Lestari – Vielen Dank für Ihre Unterstützung!</h2>
+    <div class="right">
+      <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+              codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0"
+              width="190" height="205" id="schafft_lebenswald" align="middle">
+        <param name="allowScriptAccess" value="sameDomain" />
+        <param name="movie" value="schafft_lebenswald.swf" />
+        <param name="quality" value="high" /><param name="bgcolor" value="#ffffff" />
+        <embed src="/static/schafft_lebenswald.swf" quality="high" bgcolor="#ffffff" width="190"
+               height="205" name="schafft_lebenswald" align="middle" allowScriptAccess="sameDomain"
+               type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+      </object>
+    </div>
     <p>
       Zahlreiche SpenderInnen haben dazu beigetragen, Samboja Lestari
-      aufzuforsten. Vor zehn Jahren war das Gebiet noch vom
-      nährstoffzehrenden, alles dominierenden Alang-Alang-Gras
-      (Imperata Cylindrica) überwuchert. Durch den neuen Baumbestand
-      haben sich das Mikroklima, die Bodenstruktur und der
-      Wasserhaushalt deutlich verbessert. Die neu entstandene
-      Vegetationsschicht kann Wasser besser speichern und dieses zur
-      Trockenzeit bereitstellen, in der Regenzeit wird dagegen die
-      Überschwemmungsgefahr vermindert.
+      aufzuforsten.  Durch den neuen Baumbestand haben sich das
+      Mikroklima, die Bodenstruktur und der Wasserhaushalt deutlich
+      verbessert. Die neu entstandene Vegetationsschicht kann Wasser
+      besser speichern und dieses zur Trockenzeit bereitstellen, in
+      der Regenzeit wird dagegen die Überschwemmungsgefahr vermindert.
     </p>
     <p>
       Auch die Artenvielfalt ist wieder angestiegen. Unter anderem
       wurden Baumarten gepflanzt, die in der Natur mitunter schon
-      ausgestorben sind. Außerdem lässt sich beobachten, dass sich
-      immer mehr Tierarten auf dem Gebiet wieder neu ansiedeln. Durch
-      die Aufforstung konnte innerhalb von zehn Jahren ein Zustand
-      hergestellt werden, der sich durch natürliche Sukzession erst
-      über mehrere Jahrzehnte entwickelt hätte!
+      ausgestorben sind. Zahlreiche Tierarten siedeln sich neu an.
+      Durch die Aufforstung konnte innerhalb von zehn Jahren ein
+      Zustand hergestellt werden, der sich durch natürliche Sukzession
+      erst über mehrere Jahrzehnte entwickelt hätte!
     </p>
     <p>
       Die Baumpflanzarbeiten in Samboja Lestari sind nun im
@@ -39,17 +47,13 @@
       Hektar werden der natürlichen Entwicklung überlassen. Die
       Waldschule umfasst 75 Hektar, das Arboretum 18 Hektar. Hinzu
       kommen das Malaienbären-Gehege und die Orang-Utan-Inseln mit
-      jeweils 58 und 7 Hektar.
-    </p>
-    <p>
-      In Samboja Lestari konnte degradiertes Land wieder erfolgreich
-      renaturiert werden. Dennoch muss der Schutz ursprünglichen
-      Regenwaldes an allererster Stelle stehen! Wiederaufforstung ist
-      zeit-, kosten- und arbeitsaufwändig und kann niemals den Wert
-      eines Millionen Jahre alten, ursprünglichen Waldes
-      ersetzen. Deshalb ist es der BOS Foundation wichtig, vom
-      indonesischen Staat Naturschutz-Konzessionen für <a
-      href="javascript:window_extra('kehje-sewen')">intakte
+      jeweils 58 und 7 Hektar.  In Samboja Lestari konnte degradiertes
+      Land wieder erfolgreich renaturiert werden.  Dennoch ist
+      Wiederaufforstung zeit-, kosten- und arbeitsaufwändig und kann
+      niemals den Wert eines Millionen Jahre alten, ursprünglichen
+      Regenwaldes ersetzen. Deshalb ist es der BOS Foundation wichtig,
+      vom indonesischen Staat Naturschutz-Konzessionen für <a href="#"
+      onclick="javascript:window_extra('kehje-sewen')">intakte
       Regenwald-Gebiete</a> zu erwerben und deren Erhalt zu
       ermöglichen. Denn nur in ausgedehnten, ursprünglichen oder sehr
       naturnahen Wäldern können fortpflanzungsfähige Populationen von

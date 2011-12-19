@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:bknr="http://bknr.net"
+    xmlns:bos="http://headcraft.de/bos"
+    >
+  <head>
+    <link rel="stylesheet" href="/static/toplevel_style.css" />
+    <link rel="stylesheet" href="/static/content_style.css" />
+    <script src="/static/bos.js" type="text/javascript"><!-- x -->	
+    </script> 
+    <title>Kehje Sewen</title>
+  </head>
+  <body bos:lang="$(language)">
+    <div class="slim-body">
+      <img class="extra-header-image" src="/images/header_extra.gif"/>
+      <h1>Kehje Sewen</h1>
+      <img class="extra-header-image" src="/images/kehje-sewen.jpg"/>
+      <p>
+        <b>86 000 hectares of rainforest for reintroductions</b> - At the end
+        of 2009 BOS Foundation was able to acquire concessions for the
+        use of Kehje Sewen ("Orangutan Forest" in the Dayak language),
+        initially for 60 years. A great success, since intact
+        rainforests are urgently needed for the reintroductions of
+        orangutans from the stations. The area is well suited for this
+        because it meets all the necessary IUCN (International Union
+        for Conservation of Nature) conditions.
+      </p>
+      <p>
+        <b>Kehje Sewen is a suitable habitat for about 130 orangutans.</b>
+      </p>
+      <p>
+        The acquisition of such concessionary use from the Indonesian
+        government is only possible for companies. To this end BOS
+        Foundation has founded a company (PT Restorasi Habitat
+        Orangutan Indonesia, RHOI), which will hold the concession for
+        BOS and which has submitted a detailed medium-term development
+        plan for the are.
+      </p>
+      <p>
+        In 2012, the first orangutans from Samboja Lestari will be
+        reintroduced to the area Kejeh Sewen.
+      </p>
+    </div>
+    <div style="padding:10px">
+      <img src="/images/pfeil_link_on.gif" width="10" height="9" border="0" alt="" />
+      <a href="#" onclick="window.close()" class="more">
+        Fenster schließen
+      </a>
+    </div>
+    <bos:google-analytics-track />
+  </body>
+</html>

@@ -2,7 +2,7 @@
 
 // ***  extrafenster fuer impressum, kontakt etc. *** //
 function window_extra(target) {
-    mywin=open(target,"detailwin","width=482,height=600,status=no,toolbar=no,menubar=no,resizable=yes,scrollbars=yes,left=100,top=100");
+    mywin=open(target,"detailwin","width=485,height=600,status=no,toolbar=no,menubar=no,resizable=yes,scrollbars=yes,left=100,top=100");
     mywin.focus();
 
     return false;
