@@ -10,13 +10,13 @@
   >
 	<h1 class="extra">Hilfe zur Satellitenkarte</h1>
 	<p class="text_content">
-		<p> Sie befinden sich in der Detailansicht für das Quadratmeter-Verkaufsgebiet.  Hier können Sie sehen, wie viele
-		Quadratmeter schon verkauft wurden.  Weiterhin können Sie die Profile der Sponsoren und die von ihnen dort hinterlegten
+		<p> Sie befinden sich in der Detailansicht für das Quadratmeter-Sponsorgebiet.  Hier können Sie sehen, wie viele
+		Quadratmeter schon gesponsert wurden.  Weiterhin können Sie die Profile der Sponsoren und die von ihnen dort hinterlegten
 		Mitteilungen sehen.</p>
 		<p> Wenn Sie angemeldet sind, werden Ihre "eigenen" Quadratmeter in der Satellitenkarte durch ein Icon (<img src="/images/qm.gif"
-		border="0" />) markiert.  Die "verkauften" Quadratmeter werden in der Satellitenkarte farbig hervorgehoben.  Durch Klick in die
+		border="0" />) markiert.  Die gesponserten Quadratmeter werden in der Satellitenkarte farbig hervorgehoben.  Durch Klick in die
 		Satellitenkarte in der Mitte des Bildschirms können Sie die "Quadratmeterlupe" verschieben.  Der so angeklickte, rot umrahmte
-		Bereich wird rechts oben vergrößert dargestellt.  Durch Klick auf einen "verkauften" und farbig hervorgehobenen Quadratmeterbereich
+		Bereich wird rechts oben vergrößert dargestellt.  Durch Klick auf einen gesponserten und farbig hervorgehobenen Quadratmeterbereich
 		in der vergrößerten Darstellung können Sie das zugehörige Sponsorenprofil aufrufen.  Es wird unter dem Vergrößerungsbereich angezeigt
 		und kann "aufgezogen" werden, indem man die Maus hinein bewegt.</p>
 		<p> Unten rechts in der Satellitenkarte finden Sie das Ebenenauswahl-Menü, in dem sie einzelne Darstellungsebenen der Satellitenkarte
@@ -25,8 +25,8 @@
 		<p style="margin-left: 40px; margin-right: 40px;"> 
 		  <bl>
 		    <li><strong>Sat-Karte</strong> Die Satelliten-Karte stellt den Hintergrund der Karte dar </li>
-		    <li><strong>Verkaufsgebiete</strong> Gebiete mit zu verkaufenden Quadratmetern werden in grau dargestellt </li>
-		    <li><strong>Verkauft</strong> Verkaufte Quadratmeter werden unterschiedlich farbig dargestellt</li>
+		    <li><strong>Sponsorgebiete</strong> Gebiete mit zu sponsernden Quadratmetern werden in grau dargestellt </li>
+		    <li><strong>Gesponsert</strong> Gesponserte Quadratmeter werden unterschiedlich farbig dargestellt</li>
 		  </bl>
 		</p>
 		<p> Durch Klick auf die Übersichtskarte links oben gelangen Sie wieder zurück zur POI-Übersicht.</p>
