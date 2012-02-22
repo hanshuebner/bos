@@ -53,7 +53,7 @@ Download-Urkunden erzeugt werden sollen")
 ;; Mail-Stuff
 (defparameter *mail-sender* "mxm-automail@create-rainforest.org"
   "Absender für automatisch generierte Mails")
-(defparameter *office-mail-address* "mxm-office@bos-deutschland.de"
+(defparameter *office-mail-address* "bos-mxm@vegmail.de"
   "Empfänger für Office-Mails")
 
 ;; Urkundenerzeugung
