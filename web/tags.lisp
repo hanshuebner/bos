@@ -149,6 +149,7 @@
                                           email (subseq target-string (aref reg-starts 1) (aref reg-ends 1)))))
           (destructuring-bind (price currency)
               (case language
+                #+(or)
                 (:da (list (* numsqm 24) "DKK"))
                 (t   (list (* numsqm 3)  "EUR")))
             
@@ -186,6 +187,7 @@
                                                         numsqm
                                                         (case language
                                                           (:de "qm Regenwald in")
+                                                          #+(or)
                                                           (:da "m2 Regnskov i")
                                                           (t "sqm rain forest in"))))
                              (store-object-id sponsor)
