@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<bos:buy-sqm
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:bknr="http://bknr.net"
-  xmlns:bos="http://headcraft.de/bos"
-  >
-  <bknr:redirect-request target="$(payment-url)"/>
-</bos:buy-sqm>
