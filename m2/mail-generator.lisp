@@ -39,16 +39,12 @@
   (bt:with-lock-held (*postmaster-queue-lock*)
     (enqueue (list function contract args) *postmaster-queue*)))
 
-(defparameter *country->office-email*
-  #-(or) nil
-  #+(or) '(("DK" . "bosdanmark.regnskov@gmail.com")
-           ("SE" . "bosdanmark.regnskov@gmail.com")))
-
 (defparameter *catch-all-mail-address* "hans@netzhansa.com")
 
 (defun country->office-email (country)
-  (or (cdr (assoc country *country->office-email* :test #'string-equal))
-      *office-mail-address*))
+  ;; multiple country offices not currently supported
+  (declare (ignore country))
+  *office-mail-address*)
 
 (defun contract-office-email (contract)
   "Return the email address of the MXM office responsible for handling a contract"
