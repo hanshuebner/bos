@@ -44,11 +44,7 @@
                              ((equal "C" transStatus)
                               #?"/$(lang)/sponsor_canceled")
                              ((< (contract-price contract) *mail-certificate-threshold*)
-                              #?"/$(lang)/worldpay-quittung")
-                             (t
-                              (when (<= *mail-fiscal-certificate-threshold* (contract-price contract))
-                                (mail-fiscal-certificate-to-office contract name address country))
-                              #?"/$(lang)/versand_info")))))
+                              #?"/$(lang)/worldpay-quittung")))))
                       ((equal "" template-name)
                        "de/index")
                       (t
