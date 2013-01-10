@@ -81,7 +81,11 @@
              ~%So I'd like to enforce this here."))
 
 (defun start (&key (swank-port 4005))
-  #+sbcl (ensure-sbcl-home)
+  #+sbcl
+  (ensure-sbcl-home)
+  #+sbcl
+  (sb-alien:alien-funcall
+   (sb-alien:extern-alien "disable_lossage_handler" (function sb-alien:void)))
   (env-ascii-check)
   ;; check for changes that are not yet in the core
   (asdf:oos 'asdf:load-op :bos.web)
