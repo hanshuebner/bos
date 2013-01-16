@@ -87,6 +87,7 @@
 
 (defparameter *status-allowed-peers*
   '("89.238.64.138" "89.238.76.182" ; spendino
+    "212.91.243.116" "212.91.243.120" ; spendino neu
     "178.63.163.33")                ; netzhansa.com
   "List of IP addresses that may invoke the /spendino-status handler")
 
