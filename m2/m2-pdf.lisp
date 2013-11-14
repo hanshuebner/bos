@@ -10,8 +10,7 @@
 
 (defun make-m2-pdf (contract &key print template)
   (flet ((render-m2s ()
-           (pdf:in-text-mode
-             (destructuring-bind (bb-x bb-y bb-width bb-height) (contract-bounding-box contract)
+           (destructuring-bind (bb-x bb-y bb-width bb-height) (contract-bounding-box contract)
                (let* ((m2s (sort (copy-list (contract-m2s contract))
                                  (lambda (a b)
                                    (if (= (m2-y a) (m2-y b))
@@ -55,7 +54,7 @@
                      (pdf:line-to (1+ x) (1+ y))
                      (pdf:line-to (1+ x) y)
                      (pdf:line-to x y)
-                     (pdf:close-fill-and-stroke)))))))
+                     (pdf:close-fill-and-stroke))))))
          (save-pdf ()
            (pdf:write-document (contract-m2-pdf-pathname contract :print print))))
     (if template
