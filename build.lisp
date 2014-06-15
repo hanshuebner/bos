@@ -94,7 +94,7 @@
   (mapcar #'cl-gd::load-foreign-library ; for now...
           '("/usr/lib/libcrypto.so"
             "/usr/lib/libssl.so"
-            "/usr/local/lib/libgd.so"
+            "/usr/lib/x86_64-linux-gnu/libgd.so"
             ))
   (format t "BOS Online-System~%")
   ;; slime
